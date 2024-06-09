@@ -338,7 +338,6 @@ public class ODBlocks {
             envDisabled |= Env.scorching;
             drawer = new DrawMulti(
             new DrawRegion("-bottom"),
-            new DrawLiquidTile(Liquids.water),
             new DrawMixer(),
             new DrawDefault(),
             new DrawRegion("-top")
@@ -347,7 +346,6 @@ public class ODBlocks {
             consumeLiquid(Liquids.water,1);
             consumeItem(corallite,3);
             consumePower(1);
-
         }};
     }
 }
