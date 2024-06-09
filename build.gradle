@@ -41,7 +41,7 @@ task runMindustry(type: JavaExec, dependsOn: copyJar) {
     description = 'Mindustry RunClient'
 
     // Mindustry path (I use the Mindustry from a github to test things
-    classpath = files("C:/Users/User/Desktop/Mindustry.jar")
+    classpath = files("Mindustry.jar")
     main = 'mindustry.desktop.DesktopLauncher'
 }
 
