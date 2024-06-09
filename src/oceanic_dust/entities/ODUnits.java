@@ -1,4 +1,4 @@
-package oceanic_dust.units;
+package oceanic_dust.entities;
 
 import arc.graphics.*;
 import mindustry.ai.types.*;
@@ -36,15 +36,13 @@ public class ODUnits {
             hitSize = 8f;
 
             ammoType = new PowerAmmoType(900);
-
             abilities.add(new RepairFieldAbility(5f, 60f * 8, 80f));
-
-            weapons.add(new Weapon("marine-weapon"){{
+            weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
-                y = 1f;
-                x = 3.75f;
+                y = -1.25f;
+                x = 6.5f;
                 reload = 10f;
-                ejectEffect = Fx.none;
+                ejectEffect = Fx.absorb;
                 recoil = 2f;
                 shootSound = Sounds.missile;
                 velocityRnd = 0f;
@@ -52,7 +50,6 @@ public class ODUnits {
                 alternate = true;
                 fogRadius = 0;
                 lightRadius = 8;
-
                 bullet = new MissileBulletType(5f, 9){{
                     homingPower = 0.08f;
                     weaveMag = 4;
@@ -67,11 +64,10 @@ public class ODUnits {
 
                     healPercent = 0.5f;
                     collidesTeam = true;
-                    backColor = Pal.bulletYellowBack;
-                    trailColor = Pal.bulletYellowBack;
+                    backColor = Pal.heal;
+                    trailColor = Pal.heal;
                 }};
             }});
         }};
-
     }
 }
