@@ -1,12 +1,14 @@
 package oceanic_dust.planets;
 
 import arc.struct.*;
+import mindustry.content.SerpuloTechTree;
 import mindustry.game.*;
 import mindustry.type.*;
 
 import static mindustry.Vars.content;
 import static mindustry.content.TechTree.*;
 import static oceanic_dust.blocks.ODBlocks.*;
+import static oceanic_dust.sectors.ODSectorPresets.crystalShores;
 import static oceanic_dust.sectors.ODSectorPresets.divingPoint;
 
 public class AtlacianTechTree {
@@ -24,7 +26,9 @@ public class AtlacianTechTree {
                 node(beacon);
             });
 
-            node(sulfurator);
+            node(sulfurator,Seq.with(new Objectives.SectorComplete(crystalShores)),() -> {
+
+            });
 
             node(lowTierPump,() -> {
                 node(waterDiffuser,() -> {
@@ -43,7 +47,13 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
+                node(crystalShores,Seq.with(
+                        new Objectives.SectorComplete(divingPoint),
+                        new Objectives.Research(whirl),
+                        new Objectives.Research(ceramicBurner)
+                ),() -> {
 
+                });
             });
         });
     }

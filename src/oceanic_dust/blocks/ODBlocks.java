@@ -176,6 +176,11 @@ public class ODBlocks {
 
         lowTierPump = new Pump("lead-pump") {{
             requirements(Category.liquid, with(spaclanium, 8));
+            researchCost = with(
+                    spaclanium, 5
+            );
+
+
             envDisabled |= Env.scorching;
 
             pumpAmount = 8f / 60f;

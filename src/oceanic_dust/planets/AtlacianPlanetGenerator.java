@@ -144,6 +144,10 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             sector.info.attack = false;
             sector.generateEnemyBase = false;
         }
+        if(sector.id == 15) {
+            sector.info.attack = false;
+            sector.generateEnemyBase = false;
+        }
         float length = width/2.55f - rand.random(13, 23);
         int offset = rand.nextInt(360);
         int angleStep = 5;
@@ -367,8 +371,12 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         }
 
         if(sector.hasEnemyBase()){
-            basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), state.rules.waveTeam, sector, difficulty);
-            state.rules.attackMode = sector.info.attack = true;
+            try {
+                basegen.generate(tiles, enemies.map(r -> tiles.getn(r.x, r.y)), tiles.get(spawn.x, spawn.y), state.rules.waveTeam, sector, difficulty);
+                state.rules.attackMode = sector.info.attack = true;
+            } catch(Exception e) {
+
+            }
         }else{
             state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(difficulty * 10, 1);
         }
