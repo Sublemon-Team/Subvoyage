@@ -64,7 +64,7 @@ public class ODBlocks {
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             ammo(
-            phosphorus, new BasicBulletType(3f, 12){{
+            phosphorus, new BasicBulletType(3f, 36){{
                 width = 7f;
                 height = 12f;
                 lifetime = 60f;
