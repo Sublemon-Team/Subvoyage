@@ -264,7 +264,6 @@ public class ODBlocks {
 
             unitCapModifier = 12;
         }};
-        ((CoreBlock) coreShard).unitType = ODUnits.marine;
 
 
 

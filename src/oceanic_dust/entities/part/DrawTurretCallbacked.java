@@ -12,7 +12,7 @@ public class DrawTurretCallbacked extends DrawTurret {
 
     @Override
     public void draw(Building build) {
-        super.draw(build);
         onDraw.accept(build,this);
+        super.draw(build);
     }
 }

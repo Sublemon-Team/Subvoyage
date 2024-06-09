@@ -14,13 +14,15 @@ import oceanic_dust.Environment;
 import oceanic_dust.blocks.ODBlocks;
 import oceanic_dust.items.ODItems;
 
+import static mindustry.content.Planets.*;
+
 public class ODPlanets {
     public static Planet atlacian;
 
     public static void load() {
 
 
-        atlacian = new Planet("atlacian", Planets.serpulo, 0.6f, 2) {{
+        atlacian = new Planet("atlacian", serpulo, 0.6f, 2) {{
             generator = new AtlacianPlanetGenerator();
             orbitSpacing = 0.003f;
             meshLoader = () -> new HexMesh(this, 6);
@@ -64,5 +66,8 @@ public class ODPlanets {
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
                     .removeAll(ODItems.atlacianItems);
         }};
+
+        serpulo.hiddenItems.addAll(ODItems.atlacianItems);
+        erekir.hiddenItems.addAll(ODItems.atlacianItems);
     }
 }
