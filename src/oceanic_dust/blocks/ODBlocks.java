@@ -203,7 +203,7 @@ public class ODBlocks {
 
             drawer = new DrawMulti(
             new DrawDefault(),
-            new DrawLiquidTile(Liquids.water)
+            new DrawLiquidRegion(Liquids.water)
             );
             consumeLiquid(Liquids.water, 1/60f);
             envDisabled |= Env.scorching;
