@@ -1,43 +1,31 @@
 package oceanic_dust.blocks;
 
-import static mindustry.content.Blocks.*;
-
-import arc.graphics.Color;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
-
-import mindustry.entities.bullet.BasicBulletType;
-import mindustry.entities.part.DrawPart;
-import mindustry.entities.part.RegionPart;
-import mindustry.gen.Sounds;
-import mindustry.graphics.Pal;
-import mindustry.type.Category;
-import mindustry.type.ItemStack;
-import mindustry.type.LiquidStack;
-import mindustry.world.Block;
-import mindustry.world.blocks.defense.turrets.ItemTurret;
-import mindustry.world.blocks.distribution.Duct;
-import mindustry.world.blocks.liquid.Conduit;
-import mindustry.world.blocks.power.ConsumeGenerator;
-import mindustry.world.blocks.production.GenericCrafter;
-import mindustry.world.blocks.production.Pump;
-import mindustry.world.blocks.production.Separator;
-import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.entities.bullet.*;
+import mindustry.entities.part.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.world.blocks.defense.turrets.*;
+import mindustry.world.blocks.distribution.*;
+import mindustry.world.blocks.liquid.*;
+import mindustry.world.blocks.power.*;
+import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.storage.*;
 import mindustry.world.draw.*;
-import mindustry.world.meta.BuildVisibility;
-import mindustry.world.meta.Env;
+import mindustry.world.meta.*;
 import oceanic_dust.*;
-import oceanic_dust.blocks.c.Beacon;
-import oceanic_dust.blocks.c.Buoy;
-import oceanic_dust.blocks.shoot.ShootWhirl;
+import oceanic_dust.blocks.c.*;
+import oceanic_dust.blocks.shoot.*;
 import oceanic_dust.entities.part.*;
-import oceanic_dust.liquids.ODLiquids;
-import oceanic_dust.units.ODUnits;
-
-import static oceanic_dust.items.ODItems.*;
+import oceanic_dust.liquids.*;
+import oceanic_dust.units.*;
 
 import static mindustry.type.ItemStack.with;
+import static oceanic_dust.items.ODItems.*;
 
 public class ODBlocks {
     public static Block
@@ -47,8 +35,7 @@ public class ODBlocks {
             //CRAFTERS
             waterMetallizer, ceramicBurner, argonCentrifuge,
             //LIQUIDS
-            waterDiffuser,waterSifter,
-                    clayConduit, lowTierPump,
+            waterDiffuser,waterSifter, clayConduit, lowTierPump,
             //ENERGY
             sulfurator,
             //TRANSPORTATION

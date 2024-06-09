@@ -1,7 +1,7 @@
 package oceanic_dust.blocks.shoot;
 
-import arc.math.Mathf;
-import arc.util.Nullable;
+import arc.math.*;
+import arc.util.*;
 import mindustry.entities.pattern.*;
 
 public class ShootWhirl extends ShootPattern{

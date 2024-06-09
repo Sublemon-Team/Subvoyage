@@ -7,7 +7,7 @@ import arc.util.*;
 import mindustry.entities.part.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.world.draw.DrawTurret;
+import mindustry.world.draw.*;
 
 public class ODRegionPart extends RegionPart{
     public @Nullable Liquid liquidDraw;

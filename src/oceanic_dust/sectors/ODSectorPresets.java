@@ -1,11 +1,8 @@
 package oceanic_dust.sectors;
 
-import mindustry.content.SectorPresets;
-import mindustry.game.MapObjectives;
-import mindustry.maps.generators.FileMapGenerator;
-import mindustry.type.SectorPreset;
+import mindustry.type.*;
 
-import static oceanic_dust.planets.ODPlanets.*;
+import static oceanic_dust.planets.ODPlanets.atlacian;
 
 public class ODSectorPresets {
     public static SectorPreset divingPoint;

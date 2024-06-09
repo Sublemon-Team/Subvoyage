@@ -1,9 +1,8 @@
 package oceanic_dust.blocks.c;
 
-import mindustry.content.Blocks;
-import mindustry.game.Team;
-import mindustry.world.Block;
-import mindustry.world.Tile;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.world.*;
 
 public class Buoy extends Block {
 

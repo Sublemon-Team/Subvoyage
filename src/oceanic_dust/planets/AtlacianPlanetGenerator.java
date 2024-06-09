@@ -1,46 +1,20 @@
 package oceanic_dust.planets;
 
-import arc.graphics.Color;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.math.geom.Geometry;
-import arc.math.geom.Point2;
-import arc.math.geom.Vec2;
-import arc.math.geom.Vec3;
-import arc.struct.FloatSeq;
-import arc.struct.ObjectMap;
-import arc.struct.ObjectSet;
-import arc.struct.Seq;
-import arc.util.Tmp;
-import arc.util.noise.Ridged;
-import arc.util.noise.Simplex;
-import mindustry.ai.Astar;
-import mindustry.ai.BaseRegistry;
-import mindustry.content.Blocks;
-import mindustry.content.Loadouts;
-import mindustry.content.Planets;
-import mindustry.content.SectorPresets;
-import mindustry.game.Schematic;
-import mindustry.game.Schematics;
-import mindustry.game.Team;
-import mindustry.game.Waves;
-import mindustry.maps.generators.BaseGenerator;
-import mindustry.maps.generators.PlanetGenerator;
-import mindustry.type.ItemSeq;
-import mindustry.type.ItemStack;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.TileGen;
-import mindustry.world.Tiles;
-import mindustry.world.blocks.environment.TallBlock;
-import oceanic_dust.blocks.ODBlocks;
-import oceanic_dust.blocks.ODWorldBlocks;
+import arc.graphics.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
+import arc.util.noise.*;
+import mindustry.ai.*;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.maps.generators.*;
+import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
 
 import static mindustry.Vars.*;
 import static oceanic_dust.blocks.ODWorldBlocks.*;
-import static oceanic_dust.items.ODItems.corallite;
-import static oceanic_dust.items.ODItems.phosphorus;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
     BaseGenerator basegen = new BaseGenerator();

@@ -1,17 +1,14 @@
 package oceanic_dust.blocks.c;
 
-import arc.graphics.g2d.Draw;
-import arc.util.Time;
-import mindustry.content.Blocks;
-import mindustry.game.Team;
-import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
-import mindustry.logic.Ranged;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.blocks.units.RepairTurret;
-import mindustry.world.meta.Env;
+import arc.graphics.g2d.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.graphics.*;
+import mindustry.logic.*;
+import mindustry.world.*;
+import mindustry.world.blocks.units.*;
+import mindustry.world.meta.*;
 
 public class Beacon extends RepairTurret {
 

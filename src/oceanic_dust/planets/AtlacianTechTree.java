@@ -1,14 +1,13 @@
 package oceanic_dust.planets;
 
-import arc.struct.ObjectFloatMap;
-import arc.struct.Seq;
-import mindustry.game.Objectives;
-import mindustry.type.Item;
+import arc.struct.*;
+import mindustry.game.*;
+import mindustry.type.*;
 
 import static mindustry.Vars.content;
-import static oceanic_dust.blocks.ODBlocks.*;
 import static mindustry.content.TechTree.*;
-import static oceanic_dust.sectors.ODSectorPresets.*;
+import static oceanic_dust.blocks.ODBlocks.*;
+import static oceanic_dust.sectors.ODSectorPresets.divingPoint;
 
 public class AtlacianTechTree {
 
