@@ -3,6 +3,7 @@ package oceanic_dust.blocks;
 import static mindustry.content.Blocks.*;
 
 import arc.graphics.Color;
+import arc.graphics.g2d.TextureRegion;
 import mindustry.content.*;
 
 import mindustry.entities.bullet.BasicBulletType;
@@ -80,7 +81,7 @@ public class ODBlocks {
 
             size = 3;
 
-            drawer = new DrawTurret(){{
+            drawer = new DrawTurret() {{
                 parts.add(new RegionPart("-blade-mid"){{
                     progress = PartProgress.recoil;
                     under = false;
