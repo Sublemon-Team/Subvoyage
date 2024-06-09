@@ -28,16 +28,15 @@ public class AtlacianTechTree {
             node(sulfurator);
 
             node(lowTierPump,() -> {
+                node(waterDiffuser,() -> {
+                    node(waterSifter);
+                    node(waterMetallizer);
+                });
                 node(clayConduit);
             });
 
             node(ceramicBurner,() -> {
                 node(argonCentrifuge);
-            });
-
-            node(waterDiffuser,() -> {
-                node(waterSifter);
-                node(waterMetallizer);
             });
 
             node(whirl);
