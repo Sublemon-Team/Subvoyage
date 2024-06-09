@@ -27,6 +27,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.draw.*;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
+import oceanic_dust.*;
 import oceanic_dust.blocks.c.Beacon;
 import oceanic_dust.blocks.c.Buoy;
 import oceanic_dust.blocks.shoot.ShootWhirl;
@@ -68,8 +69,8 @@ public class ODBlocks {
                 width = 7f;
                 height = 12f;
                 lifetime = 60f;
-                shootEffect = Fx.sparkShoot;
-                smokeEffect = Fx.shootBigSmoke;
+                shootEffect = ODFx.pulverize;
+                smokeEffect = Fx.none;
                 hitColor = backColor = trailColor = Pal.suppress;
                 frontColor = Color.white;
                 trailWidth = 3f;
