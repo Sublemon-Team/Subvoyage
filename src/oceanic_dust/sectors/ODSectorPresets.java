@@ -28,7 +28,7 @@ public class ODSectorPresets {
             startWaveTimeMultiplier = 0f;
         }};
         crystalShores = new SectorPreset("crystalShores",atlacian,15) {{
-            overrideLaunchDefaults = true;
+            overrideLaunchDefaults = false;
             rules = (r) -> {
                 r.attackMode = false;
             };
