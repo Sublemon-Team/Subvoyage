@@ -231,7 +231,7 @@ public class ODBlocks {
 
         //energy
         sulfurator = new ConsumeGenerator("sulfurator") {{
-            requirements(Category.power, with(corallite, 40, clay, 30));
+            requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
             powerProduction = 1f;
             itemDuration = 120f;
 
