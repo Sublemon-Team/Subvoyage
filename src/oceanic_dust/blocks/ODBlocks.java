@@ -182,6 +182,23 @@ public class ODBlocks {
         }};
 
         //liquids
+
+        lowTierPump = new Pump("lead-pump") {{
+            requirements(Category.liquid, with(phosphorus, 8));
+            envDisabled |= Env.scorching;
+
+            pumpAmount = 8f / 60f;
+            size = 1;
+        }};
+
+
+        clayConduit = new Conduit("clay-conduit") {{
+            requirements(Category.liquid, with(clay, 1));
+            envDisabled |= Env.scorching;
+
+            health = 45;
+        }};
+
         waterDiffuser = new Separator("water-diffuser") {{
             requirements(Category.liquid, with(phosphorus, 20, corallite, 5));
             craftTime = 60f*2.5f;
@@ -202,20 +219,19 @@ public class ODBlocks {
             );
         }};
 
-        lowTierPump = new Pump("lead-pump") {{
-            requirements(Category.liquid, with(phosphorus, 8));
+        waterSifter = new Separator("water-sifter") {{
+            requirements(Category.liquid, with(phosphorus,50, corallite, 60,clay,30));
+            craftTime = 60f*0.3f;
+            itemCapacity = 50;
+            size = 2;
+            consumeLiquid(Liquids.water, 12/60f);
             envDisabled |= Env.scorching;
-
-            pumpAmount = 8f / 60f;
-            size = 1;
-        }};
-
-
-        clayConduit = new Conduit("clay-conduit") {{
-            requirements(Category.liquid, with(clay, 1));
-            envDisabled |= Env.scorching;
-
-            health = 45;
+            results = with(
+                    phosphorus,3,
+                    corallite, 2,
+                    fineSand, 4,
+                    sulfur, 2
+            );
         }};
 
         //energy
@@ -341,21 +357,6 @@ public class ODBlocks {
             consumeItem(corallite,3);
             consumePower(1);
 
-        }};
-
-        waterSifter = new Separator("water-sifter") {{
-            requirements(Category.liquid, with(phosphorus,50, corallite, 60,clay,30));
-            craftTime = 60f*0.3f;
-            itemCapacity = 50;
-            size = 2;
-            consumeLiquid(Liquids.water, 12/60f);
-            envDisabled |= Env.scorching;
-            results = with(
-                    phosphorus,3,
-                    corallite, 2,
-                    fineSand, 4,
-                    sulfur, 2
-            );
         }};
     }
 }
