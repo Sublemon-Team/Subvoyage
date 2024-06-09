@@ -113,7 +113,13 @@ public class ODBlocks {
             shootY = 5f;
             recoil = 1f;
             rotate = false;
-            shoot = new ShootWhirl();
+            shoot = new ShootWhirl(){{
+                barrels = new float[]{
+                -6, 2.5f, 0,
+                6, 2.5f, 0
+                };
+                shotDelay = 5f;
+            }};
 
             range = 170f;
             scaledHealth = 200;
