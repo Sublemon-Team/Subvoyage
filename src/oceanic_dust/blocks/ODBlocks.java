@@ -51,7 +51,7 @@ public class ODBlocks {
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             ammo(
-            phosphorus, new BasicBulletType(3f, 36){{
+            spaclanium, new BasicBulletType(3f, 36){{
                 width = 7f;
                 height = 12f;
                 lifetime = 60f;
@@ -119,7 +119,7 @@ public class ODBlocks {
 
         //exploration
         buoy = new Buoy("buoy") {{
-            requirements(Category.effect,with(phosphorus,20));
+            requirements(Category.effect,with(spaclanium,20));
 
             alwaysUnlocked =true;
 
@@ -147,7 +147,7 @@ public class ODBlocks {
         }};
 
         beacon = new Beacon("beacon") {{
-            requirements(Category.effect,with(phosphorus,300,clay, 50,sulfur,200));
+            requirements(Category.effect,with(spaclanium,300,clay, 50,sulfur,200));
 
             lightRadius = 70f;
             fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
@@ -175,7 +175,7 @@ public class ODBlocks {
         //liquids
 
         lowTierPump = new Pump("lead-pump") {{
-            requirements(Category.liquid, with(phosphorus, 8));
+            requirements(Category.liquid, with(spaclanium, 8));
             envDisabled |= Env.scorching;
 
             pumpAmount = 8f / 60f;
@@ -191,34 +191,34 @@ public class ODBlocks {
         }};
 
         waterDiffuser = new Separator("water-diffuser") {{
-            requirements(Category.liquid, with(phosphorus, 20, corallite, 5));
+            requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
             craftTime = 60f*2.5f;
             itemCapacity = 50;
             size = 1;
 
             researchCost = with(
-                    phosphorus, 20,
+                    spaclanium, 20,
                     corallite , 10
             );
 
             consumeLiquid(Liquids.water, 1/60f);
             envDisabled |= Env.scorching;
             results = with(
-                    phosphorus,3,
+                    spaclanium,3,
                     corallite,3,
                     fineSand,2
             );
         }};
 
         waterSifter = new Separator("water-sifter") {{
-            requirements(Category.liquid, with(phosphorus,50, corallite, 60,clay,30));
+            requirements(Category.liquid, with(spaclanium,50, corallite, 60,clay,30));
             craftTime = 60f*0.3f;
             itemCapacity = 50;
             size = 2;
             consumeLiquid(Liquids.water, 12/60f);
             envDisabled |= Env.scorching;
             results = with(
-                    phosphorus,3,
+                    spaclanium,3,
                     corallite, 2,
                     fineSand, 4,
                     sulfur, 2
@@ -249,7 +249,7 @@ public class ODBlocks {
 
         //core
         corePuffer = new CoreBlock("core-puffer"){{
-            requirements(Category.effect, with(phosphorus,300,corallite,200));
+            requirements(Category.effect, with(spaclanium,600,corallite,600,clay,300,sulfur,300));
 
             alwaysUnlocked = true;
 
@@ -285,7 +285,7 @@ public class ODBlocks {
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
 
-            requirements(Category.crafting,with(phosphorus,30,corallite,70,fineSand,30));
+            requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
 
             craftEffect = Fx.absorb;
             craftTime = 60f*2;
@@ -302,7 +302,7 @@ public class ODBlocks {
         }};
 
         argonCentrifuge = new GenericCrafter("argon-centrifuge") {{
-           requirements(Category.crafting, with(phosphorus,60,corallite,200,sulfur,30));
+           requirements(Category.crafting, with(spaclanium,60,corallite,200,sulfur,30));
 
            itemCapacity = 10;
            size = 2;
@@ -324,7 +324,7 @@ public class ODBlocks {
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
-            requirements(Category.crafting, with(phosphorus,100,corallite,60));
+            requirements(Category.crafting, with(spaclanium,100,corallite,60));
 
             craftEffect = Fx.pulverizeMedium;
             outputLiquid = new LiquidStack(ODLiquids.meta_water, 1);

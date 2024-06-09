@@ -10,7 +10,7 @@ public class ODWorldBlocks {
         orePhosphorus,oreCorallite,oreSulfur;
 
     public static void load() {
-        orePhosphorus = new OreBlock(ODItems.phosphorus){{
+        orePhosphorus = new OreBlock(ODItems.spaclanium){{
             oreDefault = true;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;

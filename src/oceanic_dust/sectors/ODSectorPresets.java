@@ -1,5 +1,6 @@
 package oceanic_dust.sectors;
 
+import arc.struct.Seq;
 import mindustry.type.*;
 
 import static oceanic_dust.planets.ODPlanets.atlacian;
@@ -14,12 +15,15 @@ public class ODSectorPresets {
             overrideLaunchDefaults = true;
             captureWave = 0;
 
+            addStartingItems = false;
+
 
             difficulty = 0;
 
             rules = (r) -> {
                 r.attackMode = false;
                 r.canGameOver = false;
+                r.loadout = new Seq<>();
             };
 
             startWaveTimeMultiplier = 0f;
