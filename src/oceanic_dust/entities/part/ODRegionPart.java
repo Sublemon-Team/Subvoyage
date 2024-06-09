@@ -3,22 +3,28 @@ package oceanic_dust.entities.part;
 import arc.*;
 import arc.graphics.g2d.*;
 import arc.util.*;
+import mindustry.Vars;
 import mindustry.entities.part.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.world.draw.DrawTurret;
 
 public class ODRegionPart extends RegionPart{
     public @Nullable Liquid liquidDraw;
     public TextureRegion liquid;
+    public DrawTurret drawer;
+
     public float liquidAlpha = 1f;
 
-    public ODRegionPart(String region){
+    public ODRegionPart(DrawTurret drawer, String region){
         this.suffix = region;
+        this.drawer = drawer;
     }
 
     @Override
     public void draw(PartParams params){
         super.draw(params);
+
         float prog = progress.getClamp(params), sclProg = growProgress.getClamp(params);
         float mr = moveRot * prog + rotation,
         gx = growX * sclProg, gy = growY * sclProg;
@@ -35,6 +41,7 @@ public class ODRegionPart extends RegionPart{
             rot = mr * sign + params.rotation - 90;
             if(liquid.found()){
                 Liquid toDraw = liquidDraw;
+                if(toDraw == null) return;
                 Drawf.liquid(liquid, rx, ry, liquidAlpha, toDraw.color.write(Tmp.c1).a(1f), rot);
             }
         }

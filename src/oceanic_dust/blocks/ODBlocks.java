@@ -82,15 +82,10 @@ public class ODBlocks {
             );
 
             size = 3;
-            drawer = new DrawTurret(){{
+            drawer = new DrawTurretCallbacked(){{
                 DrawTurret draw = (DrawTurret)drawer;
-                parts.add(new RegionPart("-blade-mid"){{
-                    heatColor = Color.sky.cpy().a(0.42f);
-                    heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
-                    progress = PartProgress.recoil;
-                    moveY = -1.25f;
-                }});
-                parts.add(new ODRegionPart("-blade"){{
+
+                ODRegionPart liquidPart = new ODRegionPart(draw,"-blade"){{
                     heatColor = Color.sky.cpy().a(0.42f);
                     heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
                     mirror = true;
@@ -102,8 +97,18 @@ public class ODBlocks {
                     liquidDraw = draw.liquidDraw;
                     liquid = draw.liquid;
                     liquidAlpha = 1;
+                }};
+
+                parts.add(new RegionPart("-blade-mid"){{
+                    heatColor = Color.sky.cpy().a(0.42f);
+                    heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
+                    progress = PartProgress.recoil;
+                    moveY = -1.25f;
                 }});
+                parts.add(liquidPart);
+                onDraw = (build,drawer) -> liquidPart.liquidDraw = build.liquids.current();
             }};
+
 
             shootSound = Sounds.blaster;
             reload = 35f;
