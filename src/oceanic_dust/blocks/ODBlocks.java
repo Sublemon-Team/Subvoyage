@@ -4,6 +4,7 @@ import static mindustry.content.Blocks.*;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
+import arc.math.*;
 import mindustry.content.*;
 
 import mindustry.entities.bullet.BasicBulletType;
@@ -29,6 +30,7 @@ import mindustry.world.meta.Env;
 import oceanic_dust.blocks.c.Beacon;
 import oceanic_dust.blocks.c.Buoy;
 import oceanic_dust.blocks.shoot.ShootWhirl;
+import oceanic_dust.entities.part.*;
 import oceanic_dust.liquids.ODLiquids;
 import oceanic_dust.units.ODUnits;
 
@@ -62,38 +64,44 @@ public class ODBlocks {
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             ammo(
-                    phosphorus,new BasicBulletType(3f, 12){{
-                        width = 7f;
-                        height = 12f;
-                        lifetime = 60f;
-                        shootEffect = Fx.sparkShoot;
-                        smokeEffect = Fx.shootBigSmoke;
-                        hitColor = backColor = trailColor = Pal.suppress;
-                        frontColor = Color.white;
-                        trailWidth = 3f;
-                        trailLength = 5;
-                        hitEffect = despawnEffect = Fx.hitBulletColor;
+            phosphorus, new BasicBulletType(3f, 12){{
+                width = 7f;
+                height = 12f;
+                lifetime = 60f;
+                shootEffect = Fx.sparkShoot;
+                smokeEffect = Fx.shootBigSmoke;
+                hitColor = backColor = trailColor = Pal.suppress;
+                frontColor = Color.white;
+                trailWidth = 3f;
+                trailLength = 5;
+                hitEffect = despawnEffect = Fx.hitBulletColor;
 
-                        homingPower = 0.08f;
-                        homingRange = 50f;
-                    }}
+                homingPower = 0.08f;
+                homingRange = 50f;
+            }}
             );
 
             size = 3;
-
-            drawer = new DrawTurret() {{
+            drawer = new DrawTurret(){{
+                DrawTurret draw = (DrawTurret)drawer;
                 parts.add(new RegionPart("-blade-mid"){{
+                    heatColor = Color.sky.cpy().a(0.42f);
+                    heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
                     progress = PartProgress.recoil;
-                    under = false;
                     moveY = -1.25f;
                 }});
-                parts.add(new RegionPart("-blade"){{
-                    heatProgress = PartProgress.warmup;
-                    heatColor = Color.sky.cpy().a(0.9f);
+                parts.add(new ODRegionPart("-blade"){{
+                    heatColor = Color.sky.cpy().a(0.42f);
+                    heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
                     mirror = true;
                     under = true;
                     moveX = 1.5f;
                     moveRot = -8;
+
+                    // попытки чета сделать
+                    liquidDraw = draw.liquidDraw;
+                    liquid = draw.liquid;
+                    liquidAlpha = 1;
                 }});
             }};
 
@@ -105,7 +113,6 @@ public class ODBlocks {
             shoot = new ShootWhirl();
 
             range = 170f;
-
             scaledHealth = 200;
             coolant = consumeCoolant(0.2f);
             researchCostMultiplier = 0.05f;
