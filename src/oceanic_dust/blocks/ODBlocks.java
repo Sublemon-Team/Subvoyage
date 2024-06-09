@@ -101,7 +101,10 @@ public class ODBlocks {
                 }});
 
                 parts.add(liquidPart);
-                onDraw = (build,drawer) -> liquidPart.liquidDraw = build.liquids.current();
+                onDraw = (build,drawer) -> {
+                    liquidPart.liquidDraw = build.liquids.current();
+                    liquidPart.liquidAlpha = build.liquids.get(liquidPart.liquidDraw) / build.block.liquidCapacity;
+                };
             }};
 
 
