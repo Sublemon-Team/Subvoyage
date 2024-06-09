@@ -2,8 +2,8 @@ package oceanic_dust.entities.part;
 
 import arc.*;
 import arc.graphics.g2d.*;
+import arc.math.*;
 import arc.util.*;
-import mindustry.Vars;
 import mindustry.entities.part.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -13,7 +13,6 @@ public class ODRegionPart extends RegionPart{
     public @Nullable Liquid liquidDraw;
     public TextureRegion liquid;
     public DrawTurret drawer;
-
     public float liquidAlpha = 1f;
 
     public ODRegionPart(DrawTurret drawer, String region){
@@ -24,10 +23,8 @@ public class ODRegionPart extends RegionPart{
     @Override
     public void draw(PartParams params){
         super.draw(params);
-
         float prog = progress.getClamp(params), sclProg = growProgress.getClamp(params);
-        float mr = moveRot * prog + rotation,
-        gx = growX * sclProg, gy = growY * sclProg;
+        float mx = moveX * prog, my = moveY * prog, mr = moveRot * prog + rotation, gx = growX * sclProg, gy = growY * sclProg;
 
         int len = mirror && params.sideOverride == -1 ? 2 : 1;
         Draw.xscl *= xScl + gx;
@@ -35,15 +32,19 @@ public class ODRegionPart extends RegionPart{
         for(int s = 0; s < len; s++){
             int i = params.sideOverride == -1 ? s : params.sideOverride;
             float sign = (i == 0 ? 1 : -1) * params.sideMultiplier;
-            float
-            rx = params.x + Tmp.v1.x,
-            ry = params.y + Tmp.v1.y,
+            Tmp.v1.set((x + mx) * sign, y + my).rotateRadExact((params.rotation - 90) * Mathf.degRad);
+
+            float rx = params.x + Tmp.v1.x, ry = params.y + Tmp.v1.y,
             rot = mr * sign + params.rotation - 90;
+
+            Draw.xscl *= sign;
             if(liquid.found()){
                 Liquid toDraw = liquidDraw;
                 if(toDraw == null) return;
                 Drawf.liquid(liquid, rx, ry, liquidAlpha, toDraw.color.write(Tmp.c1).a(1f), rot);
             }
+
+            Draw.xscl *= sign;
         }
     }
 

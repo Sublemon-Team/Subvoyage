@@ -84,7 +84,6 @@ public class ODBlocks {
             size = 3;
             drawer = new DrawTurretCallbacked(){{
                 DrawTurret draw = (DrawTurret)drawer;
-
                 ODRegionPart liquidPart = new ODRegionPart(draw,"-blade"){{
                     heatColor = Color.sky.cpy().a(0.42f);
                     heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
@@ -92,11 +91,6 @@ public class ODBlocks {
                     under = true;
                     moveX = 1.5f;
                     moveRot = -8;
-
-                    // попытки чета сделать
-                    liquidDraw = draw.liquidDraw;
-                    liquid = draw.liquid;
-                    liquidAlpha = 1;
                 }};
 
                 parts.add(new RegionPart("-blade-mid"){{
@@ -105,6 +99,7 @@ public class ODBlocks {
                     progress = PartProgress.recoil;
                     moveY = -1.25f;
                 }});
+
                 parts.add(liquidPart);
                 onDraw = (build,drawer) -> liquidPart.liquidDraw = build.liquids.current();
             }};
@@ -257,8 +252,6 @@ public class ODBlocks {
 
 
         //core
-
-
         corePuffer = new CoreBlock("core-puffer"){{
             requirements(Category.effect, with(phosphorus,300,corallite,200));
 
@@ -282,10 +275,7 @@ public class ODBlocks {
         }};
 
 
-
-
         //transport
-
         duct = new Duct("duct"){{
             requirements(Category.distribution, with(corallite, 1));
             health = 90;
@@ -297,7 +287,6 @@ public class ODBlocks {
 
 
         //crafters
-
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
 
             requirements(Category.crafting,with(phosphorus,30,corallite,70,fineSand,30));
