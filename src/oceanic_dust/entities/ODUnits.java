@@ -12,8 +12,6 @@ import mindustry.type.ammo.*;
 
 public class ODUnits {
     public static UnitType marine;
-
-
     public static void load() {
         marine = new UnitType("marine") {{
             aiController = BuilderAI::new;

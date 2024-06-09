@@ -1,5 +1,6 @@
 package oceanic_dust.blocks;
 
+import arc.*;
 import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
@@ -17,9 +18,9 @@ import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import oceanic_dust.*;
-import oceanic_dust.blocks.c.*;
-import oceanic_dust.blocks.shoot.*;
+import oceanic_dust.blocks.content.*;
+import oceanic_dust.blocks.content.world.*;
+import oceanic_dust.entities.shoot.*;
 import oceanic_dust.entities.*;
 import oceanic_dust.entities.part.*;
 import oceanic_dust.liquids.*;
@@ -122,11 +123,10 @@ public class ODBlocks {
             requirements(Category.effect,with(spaclanium,20));
 
             alwaysUnlocked =true;
-
             lightRadius = 10f;
             fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
+            customShadowRegion = Core.atlas.find(name + "-shadow");
 
-            size = 1;
             envDisabled |= Env.scorching;
             destructible = true;
             destroyBullet = new BasicBulletType(2f,10f) {{
@@ -180,11 +180,8 @@ public class ODBlocks {
                     spaclanium, 5
             );
 
-
             envDisabled |= Env.scorching;
-
             pumpAmount = 8f / 60f;
-            size = 1;
         }};
 
 
@@ -199,13 +196,15 @@ public class ODBlocks {
             requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
             craftTime = 60f*2.5f;
             itemCapacity = 50;
-            size = 1;
-
             researchCost = with(
                     spaclanium, 20,
                     corallite , 10
             );
 
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawLiquidTile(Liquids.water)
+            );
             consumeLiquid(Liquids.water, 1/60f);
             envDisabled |= Env.scorching;
             results = with(
@@ -285,11 +284,8 @@ public class ODBlocks {
             envDisabled |= Env.scorching;
         }};
 
-
-
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
-
             requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
 
             craftEffect = Fx.absorb;
@@ -330,8 +326,6 @@ public class ODBlocks {
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting, with(spaclanium,100,corallite,60));
-
-            craftEffect = Fx.pulverizeMedium;
             outputLiquid = new LiquidStack(ODLiquids.meta_water, 1);
             craftTime = 20f;
 
@@ -342,6 +336,13 @@ public class ODBlocks {
             hasLiquids = true;
             hasPower = true;
             envDisabled |= Env.scorching;
+            drawer = new DrawMulti(
+            new DrawRegion("-bottom"),
+            new DrawLiquidTile(Liquids.water),
+            new DrawMixer(),
+            new DrawDefault(),
+            new DrawRegion("-top")
+            );
 
             consumeLiquid(Liquids.water,1);
             consumeItem(corallite,3);

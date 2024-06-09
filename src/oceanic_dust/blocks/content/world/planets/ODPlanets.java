@@ -1,4 +1,4 @@
-package oceanic_dust.planets;
+package oceanic_dust.blocks.content.world.planets;
 
 import arc.graphics.*;
 import mindustry.content.*;
@@ -7,8 +7,8 @@ import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
-import oceanic_dust.*;
 import oceanic_dust.blocks.*;
+import oceanic_dust.blocks.content.world.*;
 import oceanic_dust.items.*;
 
 import static mindustry.content.Planets.*;

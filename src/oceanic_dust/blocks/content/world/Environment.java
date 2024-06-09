@@ -1,4 +1,4 @@
-package oceanic_dust;
+package oceanic_dust.blocks.content.world;
 
 import mindustry.world.meta.*;
 

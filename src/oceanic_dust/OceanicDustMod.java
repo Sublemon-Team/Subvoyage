@@ -5,11 +5,12 @@ import arc.util.*;
 import mindustry.game.EventType.*;
 import mindustry.mod.*;
 import oceanic_dust.blocks.*;
+import oceanic_dust.blocks.content.world.*;
 import oceanic_dust.entities.*;
 import oceanic_dust.items.*;
 import oceanic_dust.liquids.*;
-import oceanic_dust.planets.*;
-import oceanic_dust.sectors.*;
+import oceanic_dust.blocks.content.world.planets.*;
+import oceanic_dust.blocks.content.world.sectors.*;
 
 public class OceanicDustMod extends Mod {
 

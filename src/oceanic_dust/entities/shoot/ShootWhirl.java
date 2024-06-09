@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.shoot;
+package oceanic_dust.entities.shoot;
 
 import arc.math.*;
 import arc.util.*;
