@@ -25,5 +25,13 @@ public class ODFx{
 
         randLenVectors(e.id + 1, 4, 18 * e.finpow(), (x, y) ->
         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f));
+    }),
+
+    smokePuff = new Effect(18, e -> {
+        color(e.color.a(0.2f));
+        randLenVectors(e.id, 6, 30f * e.finpow(), (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, e.fout() * 2f);
+            Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
+        });
     });
 }

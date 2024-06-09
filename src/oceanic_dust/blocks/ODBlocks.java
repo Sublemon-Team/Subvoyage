@@ -288,11 +288,17 @@ public class ODBlocks {
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
             requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
 
-            craftEffect = Fx.absorb;
+            craftEffect = ODFx.smokePuff;
             craftTime = 60f*2;
 
             hasItems = true;
             hasLiquids = true;
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawBurner(),
+            new DrawRegion("-top"),
+            new DrawBurnerHeat()
+            );
 
             outputItem = new ItemStack(clay,2);
             itemCapacity = 3;
@@ -318,7 +324,6 @@ public class ODBlocks {
            consumePower(0.8f);
 
            outputLiquid = new LiquidStack(ODLiquids.argon, 8/60f);
-
            hasLiquids = true;
 
            drawer = new DrawMulti(new DrawDefault(), new DrawLiquidRegion());
