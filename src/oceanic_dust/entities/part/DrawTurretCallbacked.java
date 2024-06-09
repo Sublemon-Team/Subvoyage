@@ -1,10 +1,9 @@
 package oceanic_dust.entities.part;
 
-import mindustry.gen.Building;
-import mindustry.world.draw.DrawTurret;
+import mindustry.gen.*;
+import mindustry.world.draw.*;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 public class DrawTurretCallbacked extends DrawTurret {
 

@@ -2,18 +2,14 @@ package oceanic_dust;
 
 import arc.*;
 import arc.util.*;
-import mindustry.content.Planets;
 import mindustry.game.EventType.*;
 import mindustry.mod.*;
-import oceanic_dust.blocks.ODBlocks;
-import oceanic_dust.blocks.ODWorldBlocks;
-import oceanic_dust.items.ODItems;
-import oceanic_dust.liquids.ODLiquids;
-import oceanic_dust.planets.AtlacianTechTree;
-import oceanic_dust.planets.ODLoadouts;
-import oceanic_dust.planets.ODPlanets;
-import oceanic_dust.sectors.ODSectorPresets;
-import oceanic_dust.units.ODUnits;
+import oceanic_dust.blocks.*;
+import oceanic_dust.items.*;
+import oceanic_dust.liquids.*;
+import oceanic_dust.planets.*;
+import oceanic_dust.sectors.*;
+import oceanic_dust.units.*;
 
 public class OceanicDustMod extends Mod {
 

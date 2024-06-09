@@ -1,22 +1,9 @@
 package oceanic_dust;
 
-import arc.Core;
-import arc.graphics.Blending;
-import arc.graphics.Color;
-import arc.graphics.Texture;
-import arc.graphics.g2d.Draw;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.util.Time;
-import mindustry.content.Planets;
-import mindustry.graphics.EnvRenderers;
-import mindustry.graphics.Layer;
-import mindustry.type.Weather;
-
-
-import static arc.Core.camera;
-import static mindustry.Vars.renderer;
-import static mindustry.Vars.world;
+import arc.*;
+import arc.graphics.*;
+import arc.math.*;
+import mindustry.graphics.*;
 
 public class EnvRenderer extends EnvRenderers {
     public static void init(){

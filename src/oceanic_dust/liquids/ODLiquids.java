@@ -1,10 +1,8 @@
 package oceanic_dust.liquids;
 
-import arc.graphics.Color;
-import mindustry.content.Blocks;
-import mindustry.content.Liquids;
-import mindustry.content.StatusEffects;
-import mindustry.type.Liquid;
+import arc.graphics.*;
+import mindustry.content.*;
+import mindustry.type.*;
 
 public class ODLiquids {
     public static Liquid

@@ -1,7 +1,6 @@
 package oceanic_dust.planets;
 
-import mindustry.game.Schematic;
-import mindustry.game.Schematics;
+import mindustry.game.*;
 
 public class ODLoadouts {
     public static Schematic

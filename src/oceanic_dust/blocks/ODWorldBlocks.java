@@ -1,10 +1,8 @@
 package oceanic_dust.blocks;
 
-import mindustry.content.Blocks;
-import mindustry.content.Items;
-import mindustry.world.Block;
-import mindustry.world.blocks.environment.OreBlock;
-import oceanic_dust.items.ODItems;
+import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
+import oceanic_dust.items.*;
 
 public class ODWorldBlocks {
     public static Block

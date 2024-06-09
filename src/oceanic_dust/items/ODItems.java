@@ -1,9 +1,8 @@
 package oceanic_dust.items;
 
-import arc.graphics.Color;
-import arc.struct.Seq;
-import static mindustry.content.Items.*;
-import mindustry.type.Item;
+import arc.graphics.*;
+import arc.struct.*;
+import mindustry.type.*;
 
 public class ODItems {
     public static final Seq<Item> atlacianItems = new Seq<>();
