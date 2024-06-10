@@ -48,7 +48,6 @@ public class ODBlocks {
             //CORES
             corePuffer;
 
-
     public static void load() {
         //drills
         submersibleDrill = new Drill("submersible-drill") {{
@@ -56,15 +55,13 @@ public class ODBlocks {
             tier = 2;
             drillTime = 400;
             size = 2;
-
-            blockedItem = Items.sand; //idi nahuy eblan vanilni
+            blockedItem = Items.sand;
+            drillEffect = Fx.turbinegenerate;
 
             consumeLiquid(ODLiquids.polygen, 5/60f);
         }};
 
-
         //defense
-
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             ammo(
