@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content.world;
+package oceanic_dust.content.world.draw;
 
 import arc.*;
 import arc.graphics.*;

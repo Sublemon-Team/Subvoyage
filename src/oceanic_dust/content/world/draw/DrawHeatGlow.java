@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content.world;
+package oceanic_dust.content.world.draw;
 
 import arc.*;
 import arc.graphics.*;
@@ -9,7 +9,7 @@ import mindustry.graphics.*;
 import mindustry.world.*;
 import mindustry.world.draw.*;
 
-public class DrawBurnerHeat extends DrawBlock{
+public class DrawHeatGlow extends DrawBlock{
     public Color color = new Color(1f, 0.22f, 0.22f, 0.8f);
     public float pulse = 0.3f, pulseScl = 10f;
     public float layer = Layer.blockAdditive;
@@ -17,14 +17,14 @@ public class DrawBurnerHeat extends DrawBlock{
     public TextureRegion heat;
     public String suffix = "-heat";
 
-    public DrawBurnerHeat(float layer){
+    public DrawHeatGlow(float layer){
         this.layer = layer;
     }
 
-    public DrawBurnerHeat(String suffix){
+    public DrawHeatGlow(String suffix){
         this.suffix = suffix;
     }
-    public DrawBurnerHeat(){
+    public DrawHeatGlow(){
     }
 
     @Override

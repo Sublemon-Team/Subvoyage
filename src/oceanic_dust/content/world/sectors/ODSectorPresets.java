@@ -1,9 +1,9 @@
-package oceanic_dust.blocks.content.world.sectors;
+package oceanic_dust.content.world.sectors;
 
 import arc.struct.Seq;
 import mindustry.type.*;
 
-import static oceanic_dust.blocks.content.world.planets.ODPlanets.atlacian;
+import static oceanic_dust.content.world.planets.ODPlanets.atlacian;
 
 public class ODSectorPresets {
     public static SectorPreset divingPoint, crystalShores;

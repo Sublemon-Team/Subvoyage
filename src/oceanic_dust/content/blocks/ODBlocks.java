@@ -1,4 +1,4 @@
-package oceanic_dust.blocks;
+package oceanic_dust.content.blocks;
 
 import arc.*;
 import arc.graphics.*;
@@ -18,15 +18,16 @@ import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import oceanic_dust.blocks.content.*;
-import oceanic_dust.blocks.content.world.*;
+import oceanic_dust.content.world.*;
+import oceanic_dust.content.world.blocks.*;
+import oceanic_dust.content.world.draw.*;
 import oceanic_dust.entities.shoot.*;
 import oceanic_dust.entities.*;
 import oceanic_dust.entities.part.*;
-import oceanic_dust.liquids.*;
+import oceanic_dust.content.liquids.*;
 
 import static mindustry.type.ItemStack.with;
-import static oceanic_dust.items.ODItems.*;
+import static oceanic_dust.content.world.items.ODItems.*;
 
 public class ODBlocks {
     public static Block
@@ -121,7 +122,6 @@ public class ODBlocks {
         //exploration
         buoy = new Buoy("buoy") {{
             requirements(Category.effect,with(spaclanium,20));
-
             alwaysUnlocked =true;
             lightRadius = 10f;
             fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
@@ -287,7 +287,6 @@ public class ODBlocks {
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
             requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
-
             craftEffect = ODFx.smokePuff;
             craftTime = 60f*2;
 
@@ -297,7 +296,7 @@ public class ODBlocks {
             new DrawDefault(),
             new DrawBurner(),
             new DrawRegion("-top"),
-            new DrawBurnerHeat()
+            new DrawHeatGlow()
             );
 
             outputItem = new ItemStack(clay,2);

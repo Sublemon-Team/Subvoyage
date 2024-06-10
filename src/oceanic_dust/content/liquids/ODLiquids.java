@@ -1,4 +1,4 @@
-package oceanic_dust.liquids;
+package oceanic_dust.content.liquids;
 
 import arc.graphics.*;
 import mindustry.content.*;

@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content.world.planets;
+package oceanic_dust.content.world.planets;
 
 import mindustry.game.*;
 

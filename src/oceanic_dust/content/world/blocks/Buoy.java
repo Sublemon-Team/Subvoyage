@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content;
+package oceanic_dust.content.world.blocks;
 
 import mindustry.content.*;
 import mindustry.game.*;

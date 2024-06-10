@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content.world.planets;
+package oceanic_dust.content.world.planets;
 
 import arc.graphics.*;
 import arc.math.*;
@@ -14,7 +14,7 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 
 import static mindustry.Vars.*;
-import static oceanic_dust.blocks.ODWorldBlocks.*;
+import static oceanic_dust.content.blocks.ODWorldBlocks.*;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
     BaseGenerator basegen = new BaseGenerator();

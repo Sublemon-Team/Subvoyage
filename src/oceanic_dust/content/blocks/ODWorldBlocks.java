@@ -1,8 +1,8 @@
-package oceanic_dust.blocks;
+package oceanic_dust.content.blocks;
 
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
-import oceanic_dust.items.*;
+import oceanic_dust.content.world.items.*;
 
 public class ODWorldBlocks {
     public static Block

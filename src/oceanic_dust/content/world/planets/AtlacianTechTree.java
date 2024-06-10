@@ -1,4 +1,4 @@
-package oceanic_dust.blocks.content.world.planets;
+package oceanic_dust.content.world.planets;
 
 import arc.struct.*;
 import mindustry.game.*;
@@ -6,9 +6,9 @@ import mindustry.type.*;
 
 import static mindustry.Vars.content;
 import static mindustry.content.TechTree.*;
-import static oceanic_dust.blocks.ODBlocks.*;
-import static oceanic_dust.blocks.content.world.sectors.ODSectorPresets.crystalShores;
-import static oceanic_dust.blocks.content.world.sectors.ODSectorPresets.divingPoint;
+import static oceanic_dust.content.blocks.ODBlocks.*;
+import static oceanic_dust.content.world.sectors.ODSectorPresets.crystalShores;
+import static oceanic_dust.content.world.sectors.ODSectorPresets.divingPoint;
 
 public class AtlacianTechTree {
 
