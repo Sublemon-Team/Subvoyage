@@ -413,8 +413,7 @@ public class ODBlocks {
             );
 
             consumeLiquid(Liquids.water,1);
-            consumeItem(corallite,3);
-            consumePower(1);
+            consumeItem(corallite,1);
         }};
     }
 }
