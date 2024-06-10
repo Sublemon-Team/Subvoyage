@@ -3,7 +3,7 @@ package oceanic_dust.content.world.planets;
 import arc.struct.*;
 import mindustry.game.*;
 import mindustry.type.*;
-import oceanic_dust.liquids.ODLiquids;
+import oceanic_dust.content.liquids.*;
 
 import static mindustry.Vars.content;
 import static mindustry.content.TechTree.*;
