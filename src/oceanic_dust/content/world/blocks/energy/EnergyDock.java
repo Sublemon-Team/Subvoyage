@@ -320,6 +320,7 @@ public class EnergyDock extends PowerBlock {
         public void created(){ // Called when one is placed/loaded in the world
             if(autolink && range > maxRange) maxRange = range;
 
+            power = new EnergyDockPowerModule();
             super.created();
         }
 
