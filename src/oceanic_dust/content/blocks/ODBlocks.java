@@ -57,6 +57,8 @@ public class ODBlocks {
             drillTime = 400;
             size = 2;
 
+            blockedItem = Items.sand; //idi nahuy eblan vanilni
+
             consumeLiquid(ODLiquids.polygen, 5/60f);
         }};
 
