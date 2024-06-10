@@ -18,7 +18,7 @@ import static oceanic_dust.content.blocks.ODWorldBlocks.*;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
     float ocean = -0.4f;
-    public static float liqThresh = 0.64f, liqScl = 37f;
+    public static float liqThresh = 0.3f, liqScl = 240f;
     Block[][] arr = {
     {Blocks.carbonStone, legartyteStone, agaryteStone, Blocks.carbonStone, legartyteStone, Blocks.carbonStone, agaryteStone, Blocks.carbonStone, Blocks.carbonStone}
     };
@@ -90,11 +90,11 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         median(2, 0.6);
         cells(4);
         pass((x, y) -> {
-            if(floor == Blocks.beryllicStone && noise(x, y, 3, 0.4f, 13f, 1f) > 0.59f){
+            if(floor == Blocks.beryllicStone && noise(x, y, 3, 0.4f, 8f, 0.8f) > 0.45f){
                 block = Blocks.beryllicStoneWall;
             }
 
-            if(floor == Blocks.carbonStone && noise(x, y, 6, 0.2f, 8f, 1f) > 0.6f){
+            if(floor == Blocks.carbonStone && noise(x, y, 6, 0.2f, 12f, 0.8f) > 0.45f){
                 block = Blocks.carbonWall;
             }
 
@@ -109,7 +109,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
             if(floor != Blocks.carbonStone) return;
             if(nearWall(x, y)) return;
-            float noise = noise(x + 300, y - x*1.6f + 100, 3, 0.8f, liqScl, 1f);
+            float noise = noise(-x + 300, -y -x*1.6f + 100, 2, 0.8f, liqScl/2, 2f);
             if(noise > liqThresh){
                 floor = Blocks.water;
             }
@@ -127,6 +127,20 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         erase(spawnX, spawnY, 15);
         brush(pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan), 9);
         erase(endX, endY, 15);
+
+        //TODO terrain(Blocks.carbonWall,69.86,0.35,);
+        noise(legartyteStone,agaryteWall,3,0.5f,87.3f,0.59f);
+        //TODO other stuff nahuy
+        /*
+        [
+        {class:terrain,seed:21548882,scl:69.86,threshold:0.79999995,
+            octaves:1.485,falloff:0.49499997,magnitude:0.35999998,circleScl:1.545,tilt:-0.84,block:carbon-wall},
+        {class:noise,seed:599460571,scl:87.325,threshold:0.59,octaves:3.015,
+            floor:oceanic_dust-legartyte-stone,block:oceanic_dust-agaryte-wall},
+        {class:riverNoise,seed:277412702,scl:82.335,threshold2:0.099999994,
+            floor2:darksand-water,block:oceanic_dust-agaryte-wall}]
+         */
+
         Schematics.placeLaunchLoadout(width / 2, height / 2);
     }
 
