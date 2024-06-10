@@ -4,5 +4,5 @@ import mindustry.world.meta.*;
 
 public class Environment extends Env {
     public static final int
-        underwatering = 1 << 18;
+        legarytic = 1 << 18;
 }

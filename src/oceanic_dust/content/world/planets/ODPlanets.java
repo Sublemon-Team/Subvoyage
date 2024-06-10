@@ -17,8 +17,6 @@ public class ODPlanets {
     public static Planet atlacian;
 
     public static void load() {
-
-
         atlacian = new Planet("atlacian", serpulo, 0.6f, 2) {{
             generator = new AtlacianPlanetGenerator();
             orbitSpacing = 0.003f;
@@ -55,7 +53,7 @@ public class ODPlanets {
             atmosphereRadIn = 0.03f;
             atmosphereRadOut = 0.1f;
             startSector = 7;
-            defaultEnv = Environment.underwater | Environment.underwatering | Env.terrestrial;
+            defaultEnv = Environment.legarytic | Env.terrestrial;
 
 
             alwaysUnlocked = true;
