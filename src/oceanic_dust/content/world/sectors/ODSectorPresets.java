@@ -6,14 +6,14 @@ import mindustry.type.*;
 import static oceanic_dust.content.world.planets.ODPlanets.atlacian;
 
 public class ODSectorPresets {
-    public static SectorPreset divingPoint, crystalShores;
+    public static SectorPreset divingPoint, crystalShores, furtherInstallation;
 
     public static void load() {
         divingPoint = new SectorPreset("divingpoint",atlacian,7) {{
             alwaysUnlocked = true;
 
             overrideLaunchDefaults = true;
-            captureWave = 0;
+            captureWave = 1;
 
 
             addStartingItems = false;
@@ -32,6 +32,17 @@ public class ODSectorPresets {
             rules = (r) -> {
                 r.attackMode = false;
             };
+            captureWave = 15;
+            difficulty = 2;
+        }};
+
+        furtherInstallation = new SectorPreset("furtherInstallation",atlacian,3) {{
+            overrideLaunchDefaults = false;
+            rules = (r) -> {
+                r.attackMode = false;
+            };
+            captureWave = 25;
+            difficulty = 3;
         }};
     }
 }

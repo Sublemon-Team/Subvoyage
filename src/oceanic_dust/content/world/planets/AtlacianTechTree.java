@@ -1,6 +1,7 @@
 package oceanic_dust.content.world.planets;
 
 import arc.struct.*;
+import mindustry.content.SectorPresets;
 import mindustry.game.*;
 import mindustry.type.*;
 import oceanic_dust.content.liquids.*;
@@ -8,8 +9,8 @@ import oceanic_dust.content.liquids.*;
 import static mindustry.Vars.content;
 import static mindustry.content.TechTree.*;
 import static oceanic_dust.content.blocks.ODBlocks.*;
-import static oceanic_dust.content.world.sectors.ODSectorPresets.crystalShores;
-import static oceanic_dust.content.world.sectors.ODSectorPresets.divingPoint;
+import static oceanic_dust.content.world.items.ODItems.*;
+import static oceanic_dust.content.world.sectors.ODSectorPresets.*;
 
 public class AtlacianTechTree {
 
@@ -60,7 +61,14 @@ public class AtlacianTechTree {
                         new Objectives.Research(whirl),
                         new Objectives.Research(ceramicBurner)
                 ),() -> {
+                    node(furtherInstallation, Seq.with(
+                            new Objectives.SectorComplete(crystalShores),
+                            new Objectives.Research(sulfurator),
+                            new Objectives.Research(submersibleDrill),
+                            new Objectives.Produce(iridium)
+                    ),() -> {
 
+                    });
                 });
             });
         });
