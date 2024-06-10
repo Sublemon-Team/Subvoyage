@@ -129,6 +129,15 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         //TODO terrain(Blocks.carbonWall,69.86,0.35,);
         noise(legartyteStone,agaryteWall,3,0.5f,87.3f,0.59f);
         //TODO other stuff nahuy
+        /*
+        [
+        {class:terrain,seed:21548882,scl:69.86,threshold:0.79999995,
+            octaves:1.485,falloff:0.49499997,magnitude:0.35999998,circleScl:1.545,tilt:-0.84,block:carbon-wall},
+        {class:noise,seed:599460571,scl:87.325,threshold:0.59,octaves:3.015,
+            floor:oceanic_dust-legartyte-stone,block:oceanic_dust-agaryte-wall},
+        {class:riverNoise,seed:277412702,scl:82.335,threshold2:0.099999994,
+            floor2:darksand-water,block:oceanic_dust-agaryte-wall}]
+         */
 
         Schematics.placeLaunchLoadout(width / 2, height / 2);
     }
