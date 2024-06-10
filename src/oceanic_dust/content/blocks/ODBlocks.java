@@ -38,11 +38,11 @@ public class ODBlocks {
             //CRAFTERS
             waterMetallizer, ceramicBurner, argonCentrifuge,
             //LIQUIDS
-            waterDiffuser,waterSifter, clayConduit, lowTierPump,
+            waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
             sulfurator,
             //TRANSPORTATION
-            duct,
+            duct,ductRouter,ductBridge,ductSorter,
             //EXPLORATION
             buoy,beacon,
             //CORES
@@ -211,6 +211,25 @@ public class ODBlocks {
             health = 45;
         }};
 
+        conduitRouter = new LiquidRouter("liquid-router") {{
+            requirements(Category.liquid, with(corallite, 4, clay, 2));
+            liquidCapacity = 20f;
+            underBullets = true;
+            solid = false;
+
+            envDisabled |= Env.scorching;
+        }};
+
+        conduitBridge = new LiquidBridge("bridge-conduit"){{
+            requirements(Category.liquid, with(corallite, 4, clay, 8));
+            fadeIn = moveArrows = false;
+            arrowSpacing = 6f;
+            range = 4;
+            hasPower = false;
+
+            envDisabled |= Env.scorching;
+        }};
+
         waterDiffuser = new Separator("water-diffuser") {{
             requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
             craftTime = 60f*2.5f;
@@ -240,6 +259,10 @@ public class ODBlocks {
             size = 2;
             consumeLiquid(Liquids.water, 12/60f);
             envDisabled |= Env.scorching;
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawLiquidRegion(Liquids.water)
+            );
             results = with(
                     spaclanium,3,
                     corallite, 2,
@@ -302,6 +325,23 @@ public class ODBlocks {
             researchCost = with(corallite, 5);
             envDisabled |= Env.scorching;
         }};
+        ductRouter = new Router("duct-router") {{
+            requirements(Category.distribution, with(corallite, 3));
+            envDisabled |= Env.scorching;
+        }};
+        ductBridge = new DuctBridge("duct-bridge") {{
+            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
+            envDisabled |= Env.scorching;
+            health = 90;
+            speed = 4f;
+        }};
+        ductSorter = new Sorter("duct-sorter"){{
+            requirements(Category.distribution, with(corallite, 2, spaclanium, 2));
+            buildCostMultiplier = 3f;
+            envDisabled |= Env.scorching;
+        }};
+
+
 
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
@@ -344,7 +384,10 @@ public class ODBlocks {
            outputLiquid = new LiquidStack(ODLiquids.argon, 8/60f);
            hasLiquids = true;
 
-           drawer = new DrawMulti(new DrawDefault(), new DrawLiquidRegion());
+           drawer = new DrawMulti(
+                   new DrawDefault(),
+                   new DrawLiquidRegion(ODLiquids.argon)
+           );
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{

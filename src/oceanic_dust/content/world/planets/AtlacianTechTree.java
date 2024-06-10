@@ -21,7 +21,12 @@ public class AtlacianTechTree {
             for(var item : content.items()) costMultipliers.put(item, 0.4f);
             context().researchCostMultipliers = costMultipliers;
 
-            node(duct);
+            node(duct,() -> {
+                node(ductRouter,() -> {
+                    node(ductSorter);
+                });
+                node(ductBridge);
+            });
 
             node(buoy,() -> {
                 node(beacon);
@@ -34,7 +39,6 @@ public class AtlacianTechTree {
             node(submersibleDrill,Seq.with(new Objectives.SectorComplete(crystalShores),
                     new Objectives.Research(waterMetallizer),
                     new Objectives.Produce(ODLiquids.polygen)),() -> {
-
             });
 
             node(lowTierPump,() -> {
@@ -42,7 +46,10 @@ public class AtlacianTechTree {
                     node(waterSifter);
                     node(waterMetallizer);
                 });
-                node(clayConduit);
+                node(clayConduit,() -> {
+                    node(conduitRouter);
+                    node(conduitBridge);
+                });
             });
 
             node(ceramicBurner,() -> {

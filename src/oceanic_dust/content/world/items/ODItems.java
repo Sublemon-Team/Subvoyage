@@ -7,7 +7,7 @@ import mindustry.type.*;
 public class ODItems {
     public static final Seq<Item> atlacianItems = new Seq<>();
 
-    public static Item clay,phosphorus, fineSand, spaclanium, corallite, sulfur, iridium;
+    public static Item clay,fineSand, spaclanium, corallite, sulfur, iridium;
 
     public static void load() {
 
