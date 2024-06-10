@@ -1,4 +1,4 @@
-package oceanic_dust.entities;
+package oceanic_dust.content.unit;
 
 import arc.graphics.*;
 import mindustry.ai.types.*;
@@ -13,10 +13,11 @@ import mindustry.type.ammo.*;
 public class ODUnits {
     public static UnitType marine;
     public static void load() {
-        marine = new UnitType("marine") {{
+        marine = new AtlacianUnitType("marine") {{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
             isEnemy = false;
+            coreUnitDock = true;
 
             lowAltitude = true;
             flying = true;

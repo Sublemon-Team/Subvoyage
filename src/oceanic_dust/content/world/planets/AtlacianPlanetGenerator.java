@@ -10,6 +10,7 @@ import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
+import mindustry.type.Weather.*;
 import mindustry.world.*;
 
 import static mindustry.Vars.*;
@@ -63,7 +64,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
     @Override
     public void addWeather(Sector sector, Rules rules){
-        //no weather... yet
+        rules.weather.add(new WeatherEntry(Weathers.rain));
+        rules.weather.add(new WeatherEntry(Weathers.fog));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package oceanic_dust.content.blocks;
 
-import arc.*;
 import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
@@ -18,12 +17,12 @@ import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import oceanic_dust.content.unit.*;
 import oceanic_dust.content.world.*;
 import oceanic_dust.content.world.blocks.*;
 import oceanic_dust.content.world.blocks.energy.EnergyDock;
 import oceanic_dust.content.world.draw.*;
 import oceanic_dust.entities.shoot.*;
-import oceanic_dust.entities.*;
 import oceanic_dust.entities.part.*;
 import oceanic_dust.content.liquids.*;
 
@@ -140,8 +139,6 @@ public class ODBlocks {
             alwaysUnlocked =true;
             lightRadius = 10f;
             fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
-            customShadowRegion = Core.atlas.find(name + "-shadow");
-
             envDisabled |= Env.scorching;
             destructible = true;
             destroyBullet = new BasicBulletType(2f,10f) {{
