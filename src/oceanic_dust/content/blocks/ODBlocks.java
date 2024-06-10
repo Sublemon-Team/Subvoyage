@@ -20,6 +20,7 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import oceanic_dust.content.world.*;
 import oceanic_dust.content.world.blocks.*;
+import oceanic_dust.content.world.blocks.energy.EnergyDock;
 import oceanic_dust.content.world.draw.*;
 import oceanic_dust.entities.shoot.*;
 import oceanic_dust.entities.*;
@@ -40,7 +41,7 @@ public class ODBlocks {
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
-            sulfurator,
+            energyDock,sulfurator,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter,
             //EXPLORATION
@@ -269,6 +270,11 @@ public class ODBlocks {
         }};
 
         //energy
+        energyDock = new EnergyDock("energy-dock") {{
+            requirements(Category.power,with(iridium,3,corallite, 2));
+            maxNodes = 10;
+            range = 10;
+        }};
         sulfurator = new ConsumeGenerator("sulfurator") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
             powerProduction = 1f;
