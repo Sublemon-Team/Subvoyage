@@ -7,13 +7,13 @@ import mindustry.type.*;
 public class ODLiquids {
     public static Liquid
             //liquid
-            meta_water,
+            polygen,
             //gas
             argon
     ;
 
     public static void load() {
-        meta_water = new Liquid("meta-water", Color.valueOf("8997FF")) {{
+        polygen = new Liquid("meta-water", Color.valueOf("8997FF")) {{
             heatCapacity = 1.5f;
             effect = StatusEffects.overdrive;
             boilPoint = 0.5f;

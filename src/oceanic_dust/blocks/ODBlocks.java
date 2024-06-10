@@ -30,6 +30,8 @@ import static oceanic_dust.items.ODItems.*;
 
 public class ODBlocks {
     public static Block
+            //DRILLS
+            submersibleDrill,
             //DEFENSE
             whirl,
             //CRAFTERS
@@ -47,6 +49,17 @@ public class ODBlocks {
 
 
     public static void load() {
+        //drills
+        submersibleDrill = new Drill("submersible-drill") {{
+            requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
+            tier = 2;
+            drillTime = 400;
+            size = 2;
+
+            consumeLiquid(ODLiquids.polygen, 5/60f);
+        }};
+
+
         //defense
 
         whirl = new ItemTurret("whirl"){{
@@ -109,6 +122,8 @@ public class ODBlocks {
                 shotDelay = 5f;
             }};
 
+            priority = 0;
+
             range = 170f;
             scaledHealth = 200;
             coolant = consumeCoolant(0.2f);
@@ -140,6 +155,8 @@ public class ODBlocks {
                 //standard bullet damage is far too much for lightning
                 lightningDamage = 20;
             }};
+
+            priority = 0;
 
             placeEffect = Fx.healWave;
 
@@ -331,7 +348,7 @@ public class ODBlocks {
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting, with(spaclanium,100,corallite,60));
-            outputLiquid = new LiquidStack(ODLiquids.meta_water, 1);
+            outputLiquid = new LiquidStack(ODLiquids.polygen, 1);
             craftTime = 20f;
 
             itemCapacity = 30;

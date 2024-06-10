@@ -3,6 +3,7 @@ package oceanic_dust.blocks.content.world.planets;
 import arc.struct.*;
 import mindustry.game.*;
 import mindustry.type.*;
+import oceanic_dust.liquids.ODLiquids;
 
 import static mindustry.Vars.content;
 import static mindustry.content.TechTree.*;
@@ -29,6 +30,12 @@ public class AtlacianTechTree {
 
             });
 
+            node(submersibleDrill,Seq.with(new Objectives.SectorComplete(crystalShores),
+                    new Objectives.Research(waterMetallizer),
+                    new Objectives.Produce(ODLiquids.polygen)),() -> {
+
+            });
+
             node(lowTierPump,() -> {
                 node(waterDiffuser,() -> {
                     node(waterSifter);
@@ -38,7 +45,9 @@ public class AtlacianTechTree {
             });
 
             node(ceramicBurner,() -> {
-                node(argonCentrifuge);
+                node(argonCentrifuge,Seq.with(new Objectives.Research(waterMetallizer)),() -> {
+
+                });
             });
 
             node(whirl,Seq.with(new Objectives.SectorComplete(divingPoint)),() -> {
