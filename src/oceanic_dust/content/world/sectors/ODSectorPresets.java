@@ -15,7 +15,6 @@ public class ODSectorPresets {
             overrideLaunchDefaults = true;
             captureWave = 1;
 
-
             addStartingItems = false;
             difficulty = 0;
 
@@ -24,8 +23,6 @@ public class ODSectorPresets {
                 r.canGameOver = false;
                 r.loadout = new Seq<>();
             };
-
-            startWaveTimeMultiplier = 0f;
         }};
         crystalShores = new SectorPreset("crystalShores",atlacian,15) {{
             overrideLaunchDefaults = false;
