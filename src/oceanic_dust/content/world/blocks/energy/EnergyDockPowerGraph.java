@@ -8,6 +8,7 @@ import mindustry.world.blocks.power.PowerGraph;
 
 public class EnergyDockPowerGraph extends PowerGraph {
     private final WindowedMean powerBalance = new WindowedMean(60);
+    private final WindowedMean powerBalanceVisual = new WindowedMean(60);
     private float lastPowerProduced, lastPowerNeeded, lastPowerStored;
     private float lastScaledPowerIn, lastScaledPowerOut, lastCapacity;
 
@@ -48,6 +49,15 @@ public class EnergyDockPowerGraph extends PowerGraph {
     }
 
     @Override
+    public float getPowerBalance() {
+        return powerBalance.rawMean();
+    }
+
+    public float getPowerBalanceVisual() {
+        return powerBalanceVisual.rawMean();
+    }
+
+    @Override
     public void transferPower(float amount) {
         isTransferring = true;
         isInProgress = true;
@@ -83,6 +93,9 @@ public class EnergyDockPowerGraph extends PowerGraph {
 
         float powerNeeded = getPowerNeeded();
         float powerProduced = getPowerProduced();
+
+        powerBalanceVisual.add((powerProduced - powerNeeded + energyDelta) / Time.delta);
+
         if(isTransferring) timePassed+=Time.delta;
         if((powerNeeded == 0 && powerProduced == 0) || isTransferring) {
             isInProgress = isTransferring;

@@ -18,6 +18,7 @@ import arc.struct.Seq;
 import arc.util.*;
 import mindustry.Vars;
 import mindustry.core.Renderer;
+import mindustry.core.UI;
 import mindustry.core.World;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
@@ -155,7 +156,12 @@ public class EnergyDock extends PowerBlock {
     @Override
     public void setBars() {
         super.setBars();
-        addBar("power",makePowerBalance());
+        addBar("power",entity -> new Bar(() ->
+                Core.bundle.format("bar.powerbalance",
+                        ((((EnergyDockPowerGraph) entity.power.graph).getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(entity.power.graph.getPowerBalance() * 60)))),
+                () -> Pal.powerBar,
+                () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
+        ));
         addBar("batteries", makeBatteryBalance());
 
         addBar("connections", entity -> new Bar(() ->
