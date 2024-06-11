@@ -64,6 +64,7 @@ public class ODBlocks {
         //defense
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
+            outlineColor = Pal.darkOutline;
             ammo(
             spaclanium, new BasicBulletType(3f, 36){{
                 width = 7f;
@@ -108,7 +109,6 @@ public class ODBlocks {
                 };
             }};
 
-
             shootSound = Sounds.blaster;
             reload = 35f;
             shootY = 5f;
@@ -123,7 +123,6 @@ public class ODBlocks {
             }};
 
             priority = 0;
-
             range = 170f;
             scaledHealth = 200;
             coolant = consumeCoolant(0.2f);
@@ -154,18 +153,14 @@ public class ODBlocks {
             }};
 
             priority = 0;
-
             placeEffect = Fx.healWave;
-
             health = 120;
         }};
 
         beacon = new Beacon("beacon") {{
             requirements(Category.effect,with(spaclanium,300,clay, 50,sulfur,200));
-
             lightRadius = 70f;
             fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
-
             size = 3;
             envDisabled |= Env.scorching;
             destructible = true;
@@ -180,9 +175,7 @@ public class ODBlocks {
             super.coolantMultiplier = 2f;
             super.acceptCoolant = true;
 
-
             placeEffect = Fx.healWaveDynamic;
-
             health = 450;
         }};
 
@@ -249,15 +242,17 @@ public class ODBlocks {
 
         waterSifter = new Separator("water-sifter") {{
             requirements(Category.liquid, with(spaclanium,50, corallite, 60,clay,30));
-            craftTime = 60f*0.3f;
+            craftTime = 20f;
             itemCapacity = 50;
             size = 2;
             consumeLiquid(Liquids.water, 12/60f);
             envDisabled |= Env.scorching;
             drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawLiquidRegion(Liquids.water)
+                new DrawDefault(),
+                new DrawLiquidRegion(Liquids.water),
+                new WarmupDrawRegion("-top", true)
             );
+
             results = with(
                     spaclanium,3,
                     corallite, 2,
@@ -269,16 +264,19 @@ public class ODBlocks {
         //energy
         energyDock = new EnergyDock("energy-dock") {{
             requirements(Category.power,with(iridium,3,corallite, 2));
+            size = 2;
             maxNodes = 10;
             range = 10;
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawHeatGlow("-glow")
+            );
         }};
+
         sulfurator = new ConsumeGenerator("sulfurator") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
             powerProduction = 1f;
             itemDuration = 120f;
-
-            size = 1;
-
             envDisabled |= Env.scorching;
 
             ambientSound = Sounds.smelter;
@@ -292,15 +290,11 @@ public class ODBlocks {
             consumeItem(sulfur);
         }};
 
-
         //core
         corePuffer = new CoreBlock("core-puffer"){{
             requirements(Category.effect, with(spaclanium,600,corallite,600,clay,300,sulfur,300));
-
             alwaysUnlocked = true;
-
             buildVisibility = BuildVisibility.editorOnly;
-
             isFirstTier = true;
             unitType = ODUnits.marine;
             health = 6000;
@@ -308,14 +302,9 @@ public class ODBlocks {
             size = 5;
 
             requiresCoreZone = false;
-
             envDisabled |= Env.scorching;
-
-
-
             unitCapModifier = 12;
         }};
-
 
         //transport
         duct = new Duct("duct"){{
@@ -325,23 +314,24 @@ public class ODBlocks {
             researchCost = with(corallite, 5);
             envDisabled |= Env.scorching;
         }};
+
         ductRouter = new Router("duct-router") {{
             requirements(Category.distribution, with(corallite, 3));
             envDisabled |= Env.scorching;
         }};
+
         ductBridge = new DuctBridge("duct-bridge") {{
             requirements(Category.distribution, with(corallite, 4,spaclanium,2));
             envDisabled |= Env.scorching;
             health = 90;
             speed = 4f;
         }};
+
         ductSorter = new Sorter("duct-sorter"){{
             requirements(Category.distribution, with(corallite, 2, spaclanium, 2));
             buildCostMultiplier = 3f;
             envDisabled |= Env.scorching;
         }};
-
-
 
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
@@ -368,22 +358,17 @@ public class ODBlocks {
 
         argonCentrifuge = new GenericCrafter("argon-centrifuge") {{
            requirements(Category.crafting, with(spaclanium,60,corallite,200,sulfur,30));
-
            itemCapacity = 10;
            size = 2;
-
            craftEffect = Fx.smokePuff;
            craftTime = 60f;
-
            envDisabled |= Env.scorching;
 
            consumeItem(sulfur,1);
            consumeItem(corallite, 2);
            consumePower(0.8f);
-
            outputLiquid = new LiquidStack(ODLiquids.argon, 8/60f);
            hasLiquids = true;
-
            drawer = new DrawMulti(
                    new DrawDefault(),
                    new DrawLiquidRegion(ODLiquids.argon)

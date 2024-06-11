@@ -15,6 +15,7 @@ public class Beacon extends RepairTurret {
     public Beacon(String name) {
         super(name);
         size = 3;
+        outlineColor = Pal.darkOutline;
         envDisabled |= Env.scorching;
         destructible = true;
     }
@@ -41,8 +42,7 @@ public class Beacon extends RepairTurret {
             Drawf.shadow(region, x - (size / 2f), y - (size / 2f), rotation - 90);
 
             if(shouldConsume()) Draw.scl(1.2f);
-
-            Draw.rect(region, x, y, (t * 90) % 360);
+            Drawf.spinSprite(region, x, y, (t * 90) % 360);
 
             if(shouldConsume()) Draw.scl();
 

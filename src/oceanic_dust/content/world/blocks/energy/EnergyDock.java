@@ -31,6 +31,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
 import mindustry.world.blocks.power.PowerNode;
+import mindustry.world.draw.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
@@ -51,23 +52,32 @@ public class EnergyDock extends PowerBlock {
     public Color laserColor2 = Pal.powerLight;
     public TextureRegion laser;
     public TextureRegion laserEnd;
+    public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
-
 
     @Override
     public void load() {
         super.load();
         laser = Core.atlas.find(name + "-laser","laser");
         laserEnd = Core.atlas.find(name + "-laser-end","laser-end");
+        drawer.load(this);
+    }
+
+    @Override
+    public TextureRegion[] icons(){
+        return drawer.finalIcons(this);
     }
 
     @Override
     public void init(){
         super.init();
-
         clipSize = Math.max(clipSize, range * tilesize);
     }
 
+    @Override
+    public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list){
+        drawer.drawPlan(this, plan, list);
+    }
 
     public EnergyDock(String name) {
         super(name);
@@ -79,7 +89,6 @@ public class EnergyDock extends PowerBlock {
         schematicPriority = -10;
         drawDisabled = true;
         destructible = true;
-
         config(Integer.class, (entity, value) -> {
             PowerModule power = entity.power;
             Building other = world.build(value);
@@ -307,14 +316,6 @@ public class EnergyDock extends PowerBlock {
         return Intersector.overlaps(Tmp.cr1.set(src.worldx() + offset, src.worldy() + offset, range * tilesize), Tmp.r1.setSize(size * tilesize).setCenter(other.worldx() + offset, other.worldy() + offset));
     }
 
-
-
-
-
-
-
-
-
     public class EnergyDockBuild extends Building {
         @Override
         public void created(){ // Called when one is placed/loaded in the world
@@ -328,7 +329,6 @@ public class EnergyDock extends PowerBlock {
         @Override
         public void placed(){
             if(net.client() || power.links.size > 0) return;
-
             getNodeLinks(tile, tile.block(), team, other -> {
                             if(!power.links.contains(other.pos())){
                                 configureAny(other.pos());
@@ -384,9 +384,7 @@ public class EnergyDock extends PowerBlock {
 
         @Override
         public void drawConfigure(){
-
             Drawf.circles(x, y, tile.block().size * tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f));
-
             if(drawRange){
                 Drawf.circles(x, y, range * tilesize);
 
@@ -418,7 +416,7 @@ public class EnergyDock extends PowerBlock {
         @Override
         public void draw(){
             super.draw();
-
+            drawer.draw(this);
             if(Mathf.zero(Renderer.laserOpacity) || isPayload()) return;
 
             Draw.z(Layer.power);
@@ -435,6 +433,12 @@ public class EnergyDock extends PowerBlock {
             }
 
             Draw.reset();
+        }
+
+        @Override
+        public void drawLight(){
+            super.drawLight();
+            drawer.drawLight(this);
         }
 
         protected boolean linked(Building other){

@@ -1,4 +1,4 @@
-package oceanic_dust.entities.part;
+package oceanic_dust.content.world.draw;
 
 import mindustry.gen.*;
 import mindustry.world.draw.*;
