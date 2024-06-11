@@ -47,7 +47,7 @@ public class EnergyDock extends PowerBlock {
 
     protected static BuildPlan otherReq;
     protected static float maxRange;
-    public int maxNodes = 3;
+    public static int maxNodes = 3;
     public float range;
     public boolean autolink = true, drawRange = true;
     public float laserScale = 0.25f;
@@ -225,13 +225,16 @@ public class EnergyDock extends PowerBlock {
         Draw.color(laserColor1, laserColor2, (1f - satisfaction) * 0.86f + Mathf.absin(3f, 0.1f));
         Draw.alpha(Renderer.laserOpacity);
     }
+    protected static int returnInt;
+    public void getNodeLinks(Tile tile, Block block, Team team, Cons<Building> others){
+        if(!autolink) return;
 
-    public static void getNodeLinks(Tile tile, Block block, Team team, Cons<Building> others){
         Boolf<Building> valid = other -> other != null && other.tile() != tile && other.block instanceof EnergyDock node &&
-                node.autolink &&
-                other.power.links.size < node.maxNodes &&
-                node.overlaps(other.x, other.y, tile, block, node.range * tilesize) && other.team == team
-                && !graphs.contains(other.power.graph) &&
+                other instanceof EnergyDockBuild dock &&
+                dock.power.links.size < maxNodes &&
+                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile(), range * tilesize) && other.team == team
+                && !graphs.contains(dock.power.graph) &&
+                !(dock.power.links.size >= maxNodes) &&
                 !EnergyDock.insulated(tile, other.tile) &&
                 !Structs.contains(Edges.getEdges(block.size), p -> { //do not link to adjacent buildings
                     var t = world.tile(tile.x + p.x, tile.y + p.y);
@@ -244,8 +247,7 @@ public class EnergyDock extends PowerBlock {
         //add conducting graphs to prevent double link
         for(var p : Edges.getEdges(block.size)){
             Tile other = tile.nearby(p);
-            if(other != null && other.team() == team && other.build != null && other.build.power != null
-                    && !(block.consumesPower && other.block().consumesPower && !block.outputsPower && !other.block().outputsPower)){
+            if(other != null && other.team() == team && other.build != null && other.build.power != null){
                 graphs.add(other.build.power.graph);
             }
         }
@@ -254,7 +256,11 @@ public class EnergyDock extends PowerBlock {
             graphs.add(tile.build.power.graph);
         }
 
-        var rangeWorld = maxRange * tilesize;
+        graphs.forEach(e -> {
+            
+        });
+
+        var rangeWorld = range * tilesize;
         var tree = team.data().buildingTree;
         if(tree != null){
             tree.intersect(tile.worldx() - rangeWorld, tile.worldy() - rangeWorld, rangeWorld * 2, rangeWorld * 2, build -> {
@@ -270,9 +276,13 @@ public class EnergyDock extends PowerBlock {
             return Float.compare(a.dst2(tile), b.dst2(tile));
         });
 
+        returnInt = 0;
+
         tempBuilds.each(valid, t -> {
-            graphs.add(t.power.graph);
-            others.get(t);
+            if(returnInt++ < maxNodes) {
+                graphs.add(t.power.graph);
+                others.get(t);
+            }
         });
     }
 
@@ -307,7 +317,7 @@ public class EnergyDock extends PowerBlock {
         });
     }
 
-    protected boolean overlaps(float srcx, float srcy, Tile other, Block otherBlock, float range){
+    protected static boolean overlaps(float srcx, float srcy, Tile other, Block otherBlock, float range){
         return Intersector.overlaps(Tmp.cr1.set(srcx, srcy, range), Tmp.r1.setCentered(other.worldx() + otherBlock.offset, other.worldy() + otherBlock.offset,
                 otherBlock.size * tilesize, otherBlock.size * tilesize));
     }
