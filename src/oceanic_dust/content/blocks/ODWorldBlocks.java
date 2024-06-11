@@ -1,7 +1,6 @@
 package oceanic_dust.content.blocks;
 
 import mindustry.world.*;
-import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
 import oceanic_dust.content.world.items.*;
@@ -9,7 +8,7 @@ import oceanic_dust.content.world.items.*;
 public class ODWorldBlocks {
     public static Block
     //ores
-    orePhosphorus,oreCorallite,oreSulfur,oreIridium,
+            oreSpaclanium,oreCorallite,oreSulfur,oreIridium,
     // floors
     legartyteStone, darkLegartyteStone, agaryteStone,
     // walls
@@ -17,7 +16,7 @@ public class ODWorldBlocks {
 
 
     public static void load() {
-        orePhosphorus = new OreBlock(ODItems.spaclanium){{
+        oreSpaclanium = new OreBlock(ODItems.spaclanium){{
             oreDefault = false;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
