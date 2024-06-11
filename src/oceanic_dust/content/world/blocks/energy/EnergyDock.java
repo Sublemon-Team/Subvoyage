@@ -444,6 +444,7 @@ public class EnergyDock extends PowerBlock {
                 Building link = world.build(power.links.get(i));
                 if(!linkValid(this, link)) continue;
                 if(isInProgress) {
+                    progress = 0.4f; //vot eto udalish posle testa
                     float consumerX = link.x;
                     float consumerY = link.y;
                     float thisX = x;
@@ -465,13 +466,14 @@ public class EnergyDock extends PowerBlock {
                     if(distanceToPoints < 12f)
                         alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
 
-                    Draw.z(Layer.power + 2);
                     Draw.alpha(alpha);
+
+                    Draw.z(Layer.power + 2);
                     Draw.rect(ship,shipX,shipY,angle);
-                    Draw.z(Layer.power);
 
                     Draw.z(Layer.power + 1);
-                    drawEngine(shipX - 6, shipY, 2, 6, angle, Pal.techBlue, Color.white);
+                    drawEngine(shipX, shipY,-3, 0, 2, 0.5f, angle,4f, Pal.techBlue, Color.white);
+
                     Draw.z(Layer.power);
                     Draw.alpha(1);
                 }
@@ -484,20 +486,21 @@ public class EnergyDock extends PowerBlock {
             Draw.reset();
         }
 
-        public void drawEngine(float x, float y, float scale, float radius, float rot, Color color, Color engineColorInner){
-            Tmp.v1.set(x, y).rotate(rot);
-            float ex = Tmp.v1.x, ey = Tmp.v1.y;
+        public void drawEngine(float originX, float originY, float x, float y, float scale, float radius, float rot, float vectorRotMultiplier, Color color, Color engineColorInner){
+            Tmp.v2.set(x, y).nor().times(new Vec2(vectorRotMultiplier,vectorRotMultiplier)).rotate(rot);
+            float ex = Tmp.v2.x, ey = Tmp.v2.y;
+            System.out.println(x+" "+ex);
             Draw.color(color);
             Fill.circle(
-            x + ex,
-            y + ey,
+            originX+ ex,
+            originY+ ey,
             (radius + Mathf.absin(Time.time, 2f, radius / 4f)) * scale
             );
 
             Draw.color(engineColorInner);
             Fill.circle(
-            x + ex - Angles.trnsx(rot + rotation, 1f),
-            y + ey - Angles.trnsy(rot + rotation, 1f),
+            originX+ ex,
+            originY+ ey,
             (radius + Mathf.absin(Time.time, 2f, radius / 4f)) / 2f  * scale
             );
         }
