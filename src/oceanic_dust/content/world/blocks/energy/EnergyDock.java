@@ -449,8 +449,10 @@ public class EnergyDock extends PowerBlock {
                     float shipX = Mathf.lerp(thisX,consumerX,progress);
                     float shipY = Mathf.lerp(thisY,consumerY,progress);
                     float endAngle = new Vec2(shipX,shipY).sub(thisX,thisY).nor().angle();
-                    float starterAngle = 180-endAngle;
-                    float angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
+                    float starterAngle =  new Vec2(thisX,thisY).sub(shipX,shipY).nor().angle();
+                    float angle;
+                    if(endAngle < starterAngle) angle = Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
+                    else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
                     Draw.rect(ship,shipX,shipY,angle);
                 };
 
