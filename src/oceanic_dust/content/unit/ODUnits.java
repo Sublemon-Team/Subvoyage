@@ -9,6 +9,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
+import oceanic_dust.content.world.*;
 
 public class ODUnits {
     public static UnitType marine;
@@ -31,40 +32,36 @@ public class ODUnits {
             fogRadius = 0f;
             itemCapacity = 30;
             health = 400f;
-            engineOffset = 6f;
+            engineOffset = 6.5f;
             hitSize = 8f;
 
             ammoType = new PowerAmmoType(900);
-            abilities.add(new RepairFieldAbility(5f, 60f * 8, 80f));
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
                 y = -1.25f;
                 x = 6.5f;
                 reload = 10f;
-                ejectEffect = Fx.absorb;
+                ejectEffect = Fx.casing1;
                 recoil = 2f;
-                shootSound = Sounds.missile;
+                shootSound = Sounds.lasershoot;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
                 alternate = true;
                 fogRadius = 0;
                 lightRadius = 8;
-                bullet = new MissileBulletType(5f, 9){{
+                bullet = new ArtilleryBulletType(3f, 9){{
+                    trailSize = 1;
                     homingPower = 0.08f;
                     weaveMag = 4;
                     weaveScale = 1;
-                    lifetime = 50f;
+                    lifetime = 42f;
                     keepVelocity = false;
-                    shootEffect = Fx.shootHealYellow;
-                    smokeEffect = Fx.hitLaser;
-                    hitEffect = despawnEffect = Fx.hitLaser;
+                    smokeEffect = ODFx.hitLaserOrange;
+                    hitEffect = despawnEffect = ODFx.hitLaserOrange;
                     frontColor = Color.white;
                     hitSound = Sounds.none;
-
-                    healPercent = 0.5f;
                     collidesTeam = true;
-                    backColor = Pal.heal;
-                    trailColor = Pal.heal;
+                    backColor = Pal.lightOrange;
                 }};
             }});
         }};

@@ -1,9 +1,11 @@
 package oceanic_dust.content.world;
 
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
 import mindustry.entities.*;
+import mindustry.graphics.*;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.*;
@@ -33,5 +35,13 @@ public class ODFx{
             Fill.circle(e.x + x, e.y + y, e.fout() * 2f);
             Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
         });
+    }),
+
+    hitLaserOrange = new Effect(8, e -> {
+        color(Color.white, Pal.lightOrange, e.fin());
+        stroke(0.5f + e.fout());
+        Lines.circle(e.x, e.y, e.fin() * 5f);
+
+        Drawf.light(e.x, e.y, 23f, Pal.lightOrange, e.fout() * 0.7f);
     });
 }

@@ -208,10 +208,8 @@ public class ODBlocks {
             envDisabled |= Env.scorching;
         }};
 
-        conduitBridge = new LiquidBridge("bridge-conduit"){{
+        conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
             requirements(Category.liquid, with(corallite, 4, clay, 8));
-            fadeIn = moveArrows = false;
-            arrowSpacing = 6f;
             range = 4;
             hasPower = false;
 
@@ -308,8 +306,16 @@ public class ODBlocks {
         }};
 
         //transport
+        ductBridge = new DuctBridge("duct-bridge") {{
+            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
+            envDisabled |= Env.scorching;
+            health = 90;
+            speed = 4f;
+        }};
+
         duct = new Duct("duct"){{
             requirements(Category.distribution, with(corallite, 1));
+            bridgeReplacement = ODBlocks.ductBridge;
             health = 90;
             speed = 4f;
             researchCost = with(corallite, 5);
@@ -320,14 +326,7 @@ public class ODBlocks {
             requirements(Category.distribution, with(corallite, 3));
             envDisabled |= Env.scorching;
         }};
-
-        ductBridge = new DuctBridge("duct-bridge") {{
-            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
-            envDisabled |= Env.scorching;
-            health = 90;
-            speed = 4f;
-        }};
-
+        
         ductSorter = new Sorter("duct-sorter"){{
             requirements(Category.distribution, with(corallite, 2, spaclanium, 2));
             buildCostMultiplier = 3f;

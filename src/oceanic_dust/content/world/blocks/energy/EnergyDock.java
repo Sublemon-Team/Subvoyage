@@ -4,9 +4,7 @@ import arc.Core;
 import arc.func.Boolf;
 import arc.func.Cons;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Lines;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Intersector;
@@ -22,11 +20,13 @@ import mindustry.core.UI;
 import mindustry.core.World;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
-import mindustry.gen.Building;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
+import mindustry.type.*;
+import mindustry.type.UnitType.*;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Edges;
@@ -113,7 +113,6 @@ public class EnergyDock extends PowerBlock {
 
                 //reflow from this point, covering all tiles on this side
                 newgraph.reflow(entity);
-
                 if(valid && other.power.graph != newgraph){
                     //create new graph for other end
                     PowerGraph og = new EnergyDockPowerGraph();
@@ -163,7 +162,6 @@ public class EnergyDock extends PowerBlock {
                 () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
         ));
         addBar("batteries", makeBatteryBalance());
-
         addBar("connections", entity -> new Bar(() ->
                 Core.bundle.format("bar.powerlines", entity.power.links.size, maxNodes),
                 () -> Pal.items,
@@ -389,11 +387,8 @@ public class EnergyDock extends PowerBlock {
         @Override
         public void drawSelect(){
             super.drawSelect();
-
             if(!drawRange) return;
-
             Lines.stroke(1f);
-
             Draw.color(Pal.accent);
             Drawf.circles(x, y, range * tilesize);
             Draw.reset();
@@ -404,11 +399,9 @@ public class EnergyDock extends PowerBlock {
             Drawf.circles(x, y, tile.block().size * tilesize / 2f + 1f + Mathf.absin(Time.time, 4f, 1f));
             if(drawRange){
                 Drawf.circles(x, y, range * tilesize);
-
                 for(int x = (int)(tile.x - range - 2); x <= tile.x + range + 2; x++){
                     for(int y = (int)(tile.y - range - 2); y <= tile.y + range + 2; y++){
                         Building link = world.build(x, y);
-
                         if(link != this && linkValid(this, link, false)){
                             boolean linked = linked(link);
 
@@ -444,14 +437,11 @@ public class EnergyDock extends PowerBlock {
             }
 
             EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
-
             float progress = graph.timePassed/graph.transferTime;
             boolean isInProgress = graph.isInProgress;
             setupColor(progress);
-
             for(int i = 0; i < power.links.size; i++){
                 Building link = world.build(power.links.get(i));
-
                 if(!linkValid(this, link)) continue;
                 if(isInProgress) {
                     float consumerX = link.x;
@@ -467,19 +457,24 @@ public class EnergyDock extends PowerBlock {
                     float angle;
                     if(endAngle < starterAngle) angle = 360-Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
                     else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
-
                     float distanceToPoints = Math.min(
                             Mathf.dst(shipX,shipY,thisX,thisY),
                             Mathf.dst(shipX,shipY,consumerX,consumerY));
-                    float alpha = 0.5f;
+                    float alpha = 0.75f;
 
                     if(distanceToPoints < 12f)
                         alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
 
+                    Draw.z(Layer.power + 2);
                     Draw.alpha(alpha);
                     Draw.rect(ship,shipX,shipY,angle);
+                    Draw.z(Layer.power);
+
+                    Draw.z(Layer.power + 1);
+                    drawEngine(shipX - 6, shipY, 2, 6, angle, Pal.techBlue, Color.white);
+                    Draw.z(Layer.power);
                     Draw.alpha(1);
-                };
+                }
 
                 if(link.block instanceof EnergyDock && link.id >= id) continue;
 
@@ -487,6 +482,24 @@ public class EnergyDock extends PowerBlock {
             }
 
             Draw.reset();
+        }
+
+        public void drawEngine(float x, float y, float scale, float radius, float rot, Color color, Color engineColorInner){
+            Tmp.v1.set(x, y).rotate(rot);
+            float ex = Tmp.v1.x, ey = Tmp.v1.y;
+            Draw.color(color);
+            Fill.circle(
+            x + ex,
+            y + ey,
+            (radius + Mathf.absin(Time.time, 2f, radius / 4f)) * scale
+            );
+
+            Draw.color(engineColorInner);
+            Fill.circle(
+            x + ex - Angles.trnsx(rot + rotation, 1f),
+            y + ey - Angles.trnsy(rot + rotation, 1f),
+            (radius + Mathf.absin(Time.time, 2f, radius / 4f)) / 2f  * scale
+            );
         }
 
         @Override
