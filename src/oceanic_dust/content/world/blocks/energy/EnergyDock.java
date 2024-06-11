@@ -11,6 +11,7 @@ import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
+import arc.math.geom.Vec2;
 import arc.struct.IntSeq;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
@@ -49,17 +50,22 @@ public class EnergyDock extends PowerBlock {
     public boolean autolink = true, drawRange = true;
     public float laserScale = 0.25f;
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = Pal.powerLight;
+    public Color laserColor2 = Color.valueOf("D9F2FF");
     public TextureRegion laser;
     public TextureRegion laserEnd;
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
+    public TextureRegion ship;
+
+    public int transferTime = 60;
+
 
     @Override
     public void load() {
         super.load();
         laser = Core.atlas.find(name + "-laser","laser");
         laserEnd = Core.atlas.find(name + "-laser-end","laser-end");
+        ship = Core.atlas.find(name + "-ship");
         drawer.load(this);
     }
 
@@ -99,14 +105,14 @@ public class EnergyDock extends PowerBlock {
                 power.links.removeValue(value);
                 if(valid) other.power.links.removeValue(entity.pos());
 
-                PowerGraph newgraph = new PowerGraph();
+                PowerGraph newgraph = new EnergyDockPowerGraph();
 
                 //reflow from this point, covering all tiles on this side
                 newgraph.reflow(entity);
 
                 if(valid && other.power.graph != newgraph){
                     //create new graph for other end
-                    PowerGraph og = new PowerGraph();
+                    PowerGraph og = new EnergyDockPowerGraph();
                     //reflow from other end
                     og.reflow(other);
                 }
@@ -322,6 +328,7 @@ public class EnergyDock extends PowerBlock {
             if(autolink && range > maxRange) maxRange = range;
 
             power = new EnergyDockPowerModule();
+            ((EnergyDockPowerGraph) power.graph).transferTime = transferTime;
             super.created();
         }
 
@@ -421,13 +428,33 @@ public class EnergyDock extends PowerBlock {
 
             Draw.z(Layer.power);
             setupColor(power.graph.getSatisfaction());
+            if(!(power.graph instanceof EnergyDockPowerGraph))
+                power.graph = new EnergyDockPowerGraph();
+
+            EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
+
+            float progress = graph.timePassed/graph.transferTime;
+            boolean isInProgress = graph.isInProgress;
+            setupColor(progress);
 
             for(int i = 0; i < power.links.size; i++){
                 Building link = world.build(power.links.get(i));
 
                 if(!linkValid(this, link)) continue;
+                if(isInProgress) {
+                    float consumerX = link.x;
+                    float consumerY = link.y;
+                    float thisX = x;
+                    float thisY = y;
+                    float shipX = Mathf.lerp(thisX,consumerX,progress);
+                    float shipY = Mathf.lerp(thisY,consumerY,progress);
+                    float endAngle = new Vec2(shipX,shipY).sub(thisX,thisY).nor().angle();
+                    float starterAngle = 180-endAngle;
+                    float angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
+                    Draw.rect(ship,shipX,shipY,angle);
+                };
 
-                if(link.block instanceof PowerNode && link.id >= id) continue;
+                if(link.block instanceof EnergyDock && link.id >= id) continue;
 
                 drawLaser(x, y, link.x, link.y, size, link.block.size);
             }
