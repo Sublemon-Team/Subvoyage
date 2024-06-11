@@ -61,14 +61,13 @@ public class EnergyDock extends PowerBlock {
 
     public int transferTime = 60;
 
-
     @Override
     public void load() {
         super.load();
+        drawer.load(this);
         laser = Core.atlas.find(name + "-laser","laser");
         laserEnd = Core.atlas.find(name + "-laser-end","laser-end");
         ship = Core.atlas.find(name + "-ship");
-        drawer.load(this);
     }
 
     @Override
@@ -425,7 +424,6 @@ public class EnergyDock extends PowerBlock {
 
         @Override
         public void draw(){
-            super.draw();
             drawer.draw(this);
             if(Mathf.zero(Renderer.laserOpacity) || isPayload()) return;
 
