@@ -442,7 +442,6 @@ public class EnergyDock extends PowerBlock {
                 Building link = world.build(power.links.get(i));
                 if(!linkValid(this, link)) continue;
                 if(isInProgress) {
-                    progress = 0.4f; //vot eto udalish posle testa
                     float consumerX = link.x;
                     float consumerY = link.y;
                     float thisX = x;
@@ -465,12 +464,11 @@ public class EnergyDock extends PowerBlock {
                         alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
 
                     Draw.alpha(alpha);
-
                     Draw.z(Layer.power + 2);
                     Draw.rect(ship,shipX,shipY,angle);
 
                     Draw.z(Layer.power + 1);
-                    drawEngine(shipX, shipY,-3, 0, 2, 0.5f, angle,4f, Pal.techBlue, Color.white);
+                    drawEngine(shipX, shipY,-1.85f, -0.7f, 2, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
 
                     Draw.z(Layer.power);
                     Draw.alpha(1);
@@ -484,11 +482,11 @@ public class EnergyDock extends PowerBlock {
             Draw.reset();
         }
 
-        public void drawEngine(float originX, float originY, float x, float y, float scale, float radius, float rot, float vectorRotMultiplier, Color color, Color engineColorInner){
+        public void drawEngine(float originX, float originY, float x, float y, float scale, float radius, float alpha, float rot, float vectorRotMultiplier, Color color, Color engineColorInner){
             Tmp.v2.set(x, y).nor().times(new Vec2(vectorRotMultiplier,vectorRotMultiplier)).rotate(rot);
             float ex = Tmp.v2.x, ey = Tmp.v2.y;
-            System.out.println(x+" "+ex);
             Draw.color(color);
+            Draw.alpha(alpha);
             Fill.circle(
             originX+ ex,
             originY+ ey,
@@ -496,11 +494,14 @@ public class EnergyDock extends PowerBlock {
             );
 
             Draw.color(engineColorInner);
+            Draw.alpha(alpha);
             Fill.circle(
             originX+ ex,
             originY+ ey,
             (radius + Mathf.absin(Time.time, 2f, radius / 4f)) / 2f  * scale
             );
+
+            Draw.alpha(1);
         }
 
         @Override

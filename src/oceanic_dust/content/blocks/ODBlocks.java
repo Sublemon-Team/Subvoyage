@@ -153,7 +153,6 @@ public class ODBlocks {
             }};
 
             priority = 0;
-            placeEffect = Fx.healWave;
             health = 120;
         }};
 
