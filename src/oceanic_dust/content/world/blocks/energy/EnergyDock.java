@@ -14,7 +14,7 @@ import arc.struct.IntSeq;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
 import arc.util.*;
-import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.core.Renderer;
 import mindustry.core.UI;
 import mindustry.core.World;
@@ -25,8 +25,6 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
-import mindustry.type.*;
-import mindustry.type.UnitType.*;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Edges;
@@ -39,9 +37,10 @@ import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
-import static mindustry.world.blocks.power.PowerNode.makePowerBalance;
 
 public class EnergyDock extends PowerBlock {
 
@@ -58,6 +57,7 @@ public class EnergyDock extends PowerBlock {
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
     public TextureRegion ship;
+    public TextureRegion shipWave;
 
     public int transferTime = 60;
 
@@ -68,6 +68,7 @@ public class EnergyDock extends PowerBlock {
         laser = Core.atlas.find(name + "-laser","laser");
         laserEnd = Core.atlas.find(name + "-laser-end","laser-end");
         ship = Core.atlas.find(name + "-ship");
+        shipWave = Core.atlas.find(name + "-ship-wave");
     }
 
     @Override
@@ -229,14 +230,13 @@ public class EnergyDock extends PowerBlock {
     public void getNodeLinks(Tile tile, Block block, Team team, Cons<Building> others){
         if(!autolink) return;
 
-        Boolf<Building> valid = other -> other != null && other.tile() != tile && other.block instanceof EnergyDock node &&
-                other instanceof EnergyDockBuild dock &&
-                dock.power.links.size < maxNodes &&
-                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile(), range * tilesize) && other.team == team
-                && !graphs.contains(dock.power.graph) &&
-                !(dock.power.links.size >= maxNodes) &&
+        Boolf<Building> valid = other -> other != null && other.tile() != tile && other.block.connectedPower && other.power != null &&
+                (other.block instanceof EnergyDock) &&
+                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile(), range * tilesize) && other.team == team &&
+                !graphs.contains(other.power.graph) &&
                 !EnergyDock.insulated(tile, other.tile) &&
-                !Structs.contains(Edges.getEdges(block.size), p -> { //do not link to adjacent buildings
+                !(other instanceof EnergyDockBuild obuild && obuild.power.links.size >= maxNodes) &&
+                !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
                     var t = world.tile(tile.x + p.x, tile.y + p.y);
                     return t != null && t.build == other;
                 });
@@ -245,7 +245,7 @@ public class EnergyDock extends PowerBlock {
         graphs.clear();
 
         //add conducting graphs to prevent double link
-        for(var p : Edges.getEdges(block.size)){
+        for(var p : Edges.getEdges(size)){
             Tile other = tile.nearby(p);
             if(other != null && other.team() == team && other.build != null && other.build.power != null){
                 graphs.add(other.build.power.graph);
@@ -256,14 +256,10 @@ public class EnergyDock extends PowerBlock {
             graphs.add(tile.build.power.graph);
         }
 
-        graphs.forEach(e -> {
-            
-        });
-
-        var rangeWorld = range * tilesize;
+        var worldRange = range * tilesize;
         var tree = team.data().buildingTree;
         if(tree != null){
-            tree.intersect(tile.worldx() - rangeWorld, tile.worldy() - rangeWorld, rangeWorld * 2, rangeWorld * 2, build -> {
+            tree.intersect(tile.worldx() - worldRange, tile.worldy() - worldRange, worldRange * 2, worldRange * 2, build -> {
                 if(valid.get(build) && !tempBuilds.contains(build)){
                     tempBuilds.add(build);
                 }
@@ -279,7 +275,7 @@ public class EnergyDock extends PowerBlock {
         returnInt = 0;
 
         tempBuilds.each(valid, t -> {
-            if(returnInt++ < maxNodes) {
+            if(returnInt ++ < maxNodes){
                 graphs.add(t.power.graph);
                 others.get(t);
             }
@@ -291,11 +287,11 @@ public class EnergyDock extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
+        if(tile == link || link == null /*|| !(link.block instanceof EnergyDock)*/ || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
 
         if(overlaps(tile, link, range * tilesize) || (link.block instanceof EnergyDock node && overlaps(link, tile, node.range * tilesize))){
             if(checkMaxNodes && link.block instanceof EnergyDock node){
-                return link.power.links.size < node.maxNodes || link.power.links.contains(tile.pos());
+                return link.power.links.size < maxNodes || link.power.links.contains(tile.pos());
             }
             return true;
         }
@@ -469,6 +465,10 @@ public class EnergyDock extends PowerBlock {
                             Mathf.dst(shipX,shipY,thisX,thisY),
                             Mathf.dst(shipX,shipY,consumerX,consumerY));
                     float alpha = 0.75f;
+                    boolean isEngined = true;
+
+                    Block currentBlock = world.tileWorld(shipX,shipY).floor();
+                    if (currentBlock == Blocks.water || currentBlock == Blocks.darksandWater) isEngined = false;
 
                     if(distanceToPoints < 12f)
                         alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
@@ -477,8 +477,19 @@ public class EnergyDock extends PowerBlock {
                     Draw.z(Layer.power + 2);
                     Draw.rect(ship,shipX,shipY,angle);
 
-                    Draw.z(Layer.power + 1);
-                    drawEngine(shipX, shipY,-1.85f, -0.7f, 2, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
+                    if(isEngined) {
+                        Draw.z(Layer.power + 1);
+                        drawEngine(shipX, shipY,-1.85f, -0.7f, 4, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
+                    } else {
+                        float shipXPrev = Mathf.lerp(thisX,consumerX,progress/1.05f);
+                        float shipYPrev = Mathf.lerp(thisY,consumerY,progress/1.05f);
+                        float wave = Mathf.absin(Time.time, 2f, 1f);
+                        Draw.alpha(0.3f);
+                        Draw.scl(1.05f,1.01f+(0.05f*wave*4));
+                        Draw.rect(shipWave,shipXPrev,shipYPrev,angle);
+                        Draw.scl();
+                        Draw.alpha(1f);
+                    }
 
                     Draw.z(Layer.power);
                     Draw.alpha(1);
