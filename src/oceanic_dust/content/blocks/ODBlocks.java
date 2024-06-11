@@ -268,7 +268,7 @@ public class ODBlocks {
             transferTime = 40;
             drawer = new DrawMulti(
             new DrawDefault(),
-            new DrawHeatGlow("-glow")
+            new DrawEnergyGlow()
             );
         }};
 
@@ -285,7 +285,6 @@ public class ODBlocks {
             generateEffect = Fx.pulverizeSmall;
 
             drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
-
             consumeItem(sulfur);
         }};
 

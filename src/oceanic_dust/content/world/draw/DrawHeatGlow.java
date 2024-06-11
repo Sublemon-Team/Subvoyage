@@ -24,6 +24,7 @@ public class DrawHeatGlow extends DrawBlock{
     public DrawHeatGlow(String suffix){
         this.suffix = suffix;
     }
+
     public DrawHeatGlow(){
     }
 
