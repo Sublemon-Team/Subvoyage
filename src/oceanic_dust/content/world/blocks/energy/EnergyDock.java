@@ -100,6 +100,7 @@ public class EnergyDock extends PowerBlock {
             PowerModule power = entity.power;
             Building other = world.build(value);
             boolean contains = power.links.contains(value), valid = other != null && other.power != null;
+            if(other == null) return;
             if(!(other.block() instanceof EnergyDock)) return;
             if(contains){
                 //unlink
@@ -107,6 +108,7 @@ public class EnergyDock extends PowerBlock {
                 if(valid) other.power.links.removeValue(entity.pos());
 
                 PowerGraph newgraph = new EnergyDockPowerGraph();
+                ((EnergyDockPowerGraph) newgraph).transferTime = transferTime;
 
                 //reflow from this point, covering all tiles on this side
                 newgraph.reflow(entity);
@@ -114,6 +116,7 @@ public class EnergyDock extends PowerBlock {
                 if(valid && other.power.graph != newgraph){
                     //create new graph for other end
                     PowerGraph og = new EnergyDockPowerGraph();
+                    ((EnergyDockPowerGraph) newgraph).transferTime = transferTime;
                     //reflow from other end
                     og.reflow(other);
                 }
@@ -429,8 +432,10 @@ public class EnergyDock extends PowerBlock {
 
             Draw.z(Layer.power);
             setupColor(power.graph.getSatisfaction());
-            if(!(power.graph instanceof EnergyDockPowerGraph))
+            if(!(power.graph instanceof EnergyDockPowerGraph)) {
                 power.graph = new EnergyDockPowerGraph();
+                ((EnergyDockPowerGraph) power.graph).transferTime = transferTime;
+            }
 
             EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
 
@@ -454,7 +459,7 @@ public class EnergyDock extends PowerBlock {
                     float endAngle = shipPos.sub(thisPos).nor().angle();
                     float starterAngle =  thisPos.sub(shipPos).nor().angle();
                     float angle;
-                    if(endAngle < starterAngle) angle = Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
+                    if(endAngle < starterAngle) angle = 360-Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
                     else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
 
                     float distanceToPoints = Math.min(

@@ -267,6 +267,7 @@ public class ODBlocks {
             size = 2;
             maxNodes = 10;
             range = 10;
+            transferTime = 40;
             drawer = new DrawMulti(
             new DrawDefault(),
             new DrawHeatGlow("-glow")
