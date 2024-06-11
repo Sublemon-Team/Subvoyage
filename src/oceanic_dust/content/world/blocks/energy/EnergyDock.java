@@ -16,6 +16,7 @@ import arc.struct.IntSeq;
 import arc.struct.ObjectSet;
 import arc.struct.Seq;
 import arc.util.*;
+import mindustry.Vars;
 import mindustry.core.Renderer;
 import mindustry.core.World;
 import mindustry.entities.units.BuildPlan;
@@ -448,12 +449,25 @@ public class EnergyDock extends PowerBlock {
                     float thisY = y;
                     float shipX = Mathf.lerp(thisX,consumerX,progress);
                     float shipY = Mathf.lerp(thisY,consumerY,progress);
-                    float endAngle = new Vec2(shipX,shipY).sub(thisX,thisY).nor().angle();
-                    float starterAngle =  new Vec2(thisX,thisY).sub(shipX,shipY).nor().angle();
+                    Vec2 shipPos = new Vec2(shipX,shipY);
+                    Vec2 thisPos = new Vec2(thisX,thisY);
+                    float endAngle = shipPos.sub(thisPos).nor().angle();
+                    float starterAngle =  thisPos.sub(shipPos).nor().angle();
                     float angle;
                     if(endAngle < starterAngle) angle = Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
                     else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
+
+                    float distanceToPoints = Math.min(
+                            Mathf.dst(shipX,shipY,thisX,thisY),
+                            Mathf.dst(shipX,shipY,consumerX,consumerY));
+                    float alpha = 0.5f;
+
+                    if(distanceToPoints < 12f)
+                        alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
+
+                    Draw.alpha(alpha);
                     Draw.rect(ship,shipX,shipY,angle);
+                    Draw.alpha(1);
                 };
 
                 if(link.block instanceof EnergyDock && link.id >= id) continue;
