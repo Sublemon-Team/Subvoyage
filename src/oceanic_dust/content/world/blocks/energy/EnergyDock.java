@@ -459,9 +459,9 @@ public class EnergyDock extends PowerBlock {
                     }
                 });
 
-                Log.warn("["+ new Date() +"] Created new energy dock graph for block at "+x+", "+y);
+                //Log.warn("["+ new Date() +"] Created new energy dock graph for block at "+x+", "+y);
             }
-
+            if(!(power.graph instanceof EnergyDockPowerGraph)) return;
             EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
             float progress = graph.timePassed/graph.transferTime;
             boolean isInProgress = graph.isInProgress;
