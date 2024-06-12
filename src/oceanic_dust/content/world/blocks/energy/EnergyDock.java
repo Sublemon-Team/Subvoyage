@@ -482,7 +482,6 @@ public class EnergyDock extends PowerBlock {
             EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
             float progress = graph.timePassed/graph.transferTime;
             boolean isInProgress = graph.isInProgress;
-            setupColor(progress);
             for(int i = 0; i < power.links.size; i++){
                 Building link = world.build(power.links.get(i));
                 if(!linkValid(this, link)) continue;
@@ -539,6 +538,7 @@ public class EnergyDock extends PowerBlock {
                 }
 
                 if(link.block instanceof EnergyDock && link.id >= id) continue;
+                setupColor(power.graph.getSatisfaction());
                 drawLaser(x, y, link.x, link.y, size, link.block.size);
             }
 

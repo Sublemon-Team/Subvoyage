@@ -38,7 +38,7 @@ public class EnergyCross extends PowerBlock {
     public TextureRegion laserEnd;
 
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = Color.valueOf("B9CDEB");
+    public Color laserColor2 = Color.valueOf("D9F2FF");
     public float pulseScl = 7, pulseMag = 0.05f;
     public float laserWidth = 0.4f;
 
