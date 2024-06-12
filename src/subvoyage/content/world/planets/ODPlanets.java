@@ -17,9 +17,10 @@ public class ODPlanets {
     public static Planet atlacian;
 
     public static void load() {
+
+        serpulo.orbitSpacing = 3f;
         atlacian = new Planet("atlacian", serpulo, 0.6f, 2) {{
             generator = new AtlacianPlanetGenerator();
-            orbitSpacing = 0.003f;
             meshLoader = () -> new HexMesh(this, 6);
             cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.25f), 2, 0.45f, 0.9f, 0.38f),

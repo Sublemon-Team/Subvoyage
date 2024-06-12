@@ -408,7 +408,7 @@ public class ODBlocks {
         }};
 
         //core
-        corePuffer = new CoreBlock("core-puffer"){{
+        corePuffer = new SubvoyageCoreBlock("core-puffer"){{
             requirements(Category.effect, with(spaclanium,600,corallite,600,clay,300,sulfur,300));
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
@@ -422,6 +422,8 @@ public class ODBlocks {
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
+
+            bannedItems.addAll(spaclanium);
         }};
 
         //transport
