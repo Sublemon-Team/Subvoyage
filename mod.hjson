@@ -1,17 +1,17 @@
 #the mod name as displayed in-game
-displayName: "Oceanic Dust"
+displayName: "Subvoyage"
 
 #the internal name of your mod
-name: "oceanic_dust"
+name: "subvoyage"
 
 #your name
-author: "Skoow"
+author: "Skoow, IriDark"
 
 #the fully qualified main class of the mod
-main: "oceanic_dust.OceanicDustMod"
+main: "subvoyage.SubvoyageMod"
 
 #the mod description as seen in the mod dialog
-description: "A Mindustry Java mod template."
+description: "Aquatic-stylized mod with new planet and unique mechanics"
 
 #the mod version
 version: 1.0
