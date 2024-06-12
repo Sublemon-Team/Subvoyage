@@ -35,6 +35,7 @@ import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
 import oceanic_dust.content.world.*;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static mindustry.Vars.*;
@@ -96,6 +97,7 @@ public class EnergyDock extends PowerBlock {
         schematicPriority = -10;
         drawDisabled = true;
         destructible = true;
+
         config(Integer.class, (entity, value) -> {
             PowerModule power = entity.power;
             Building other = world.build(value);
@@ -107,15 +109,15 @@ public class EnergyDock extends PowerBlock {
                 power.links.removeValue(value);
                 if(valid) other.power.links.removeValue(entity.pos());
 
-                PowerGraph newgraph = new EnergyDockPowerGraph();
-                ((EnergyDockPowerGraph) newgraph).transferTime = transferTime;
+                EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
+                newGraph.transferTime = transferTime;
 
                 //reflow from this point, covering all tiles on this side
-                newgraph.reflow(entity);
-                if(valid && other.power.graph != newgraph){
+                newGraph.reflow(entity);
+                if(valid && other.power.graph != newGraph){
                     //create new graph for other end
                     PowerGraph og = new EnergyDockPowerGraph();
-                    ((EnergyDockPowerGraph) newgraph).transferTime = transferTime;
+                    ((EnergyDockPowerGraph) og).transferTime = transferTime;
                     //reflow from other end
                     og.reflow(other);
                 }
@@ -154,12 +156,21 @@ public class EnergyDock extends PowerBlock {
     @Override
     public void setBars() {
         super.setBars();
-        addBar("power",entity -> new Bar(() ->
+        addBar("power",entity -> {
+            if(!(entity.power.graph instanceof EnergyDockPowerGraph))
+                return new Bar(() ->
+                        Core.bundle.format("bar.powerbalance",
+                                ((entity.power.graph.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long)(entity.power.graph.getPowerBalance() * 60)))),
+                        () -> Pal.powerBar,
+                        () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
+                );
+            return new Bar(() ->
                 Core.bundle.format("bar.powerbalance",
                         ((((EnergyDockPowerGraph) entity.power.graph).getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(((EnergyDockPowerGraph) entity.power.graph).getPowerBalanceVisual() * 60)))),
                 () -> Pal.powerBar,
                 () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
-        ));
+            );
+        });
         addBar("batteries", makeBatteryBalance());
         addBar("connections", entity -> new Bar(() ->
                 Core.bundle.format("bar.powerlines", entity.power.links.size, maxNodes),
@@ -339,8 +350,11 @@ public class EnergyDock extends PowerBlock {
         public void created(){ // Called when one is placed/loaded in the world
             if(autolink && range > maxRange) maxRange = range;
 
-            power = new EnergyDockPowerModule();
-            ((EnergyDockPowerGraph) power.graph).transferTime = transferTime;
+            EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
+            newGraph.transferTime = transferTime;
+            newGraph.reflow(this);
+            power.graph = newGraph;
+
             super.created();
         }
 
@@ -353,7 +367,6 @@ public class EnergyDock extends PowerBlock {
                                 configureAny(other.pos());
                             }
                         });
-            super.placed();
         }
 
         @Override
@@ -435,8 +448,18 @@ public class EnergyDock extends PowerBlock {
             Draw.z(Layer.power);
             setupColor(power.graph.getSatisfaction());
             if(!(power.graph instanceof EnergyDockPowerGraph)) {
-                power.graph = new EnergyDockPowerGraph();
-                ((EnergyDockPowerGraph) power.graph).transferTime = transferTime;
+                EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
+                newGraph.transferTime = transferTime;
+                newGraph.reflow(this);
+                power.graph = newGraph;
+
+                getNodeLinks(tile, tile.block(), team, other -> {
+                    if(!power.links.contains(other.pos())){
+                        configureAny(other.pos());
+                    }
+                });
+
+                Log.warn("["+ new Date() +"] Created new energy dock graph for block at "+x+", "+y);
             }
 
             EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;

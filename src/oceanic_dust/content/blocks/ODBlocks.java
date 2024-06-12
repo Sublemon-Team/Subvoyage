@@ -21,6 +21,7 @@ import mindustry.world.meta.*;
 import oceanic_dust.content.unit.*;
 import oceanic_dust.content.world.*;
 import oceanic_dust.content.world.blocks.*;
+import oceanic_dust.content.world.blocks.energy.EnergyCross;
 import oceanic_dust.content.world.blocks.energy.EnergyDock;
 import oceanic_dust.content.world.draw.*;
 import oceanic_dust.entities.shoot.*;
@@ -41,7 +42,7 @@ public class ODBlocks {
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
-            energyDock,sulfurator,
+            energyDock,energyCross,sulfurator,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter,
             //EXPLORATION
@@ -272,6 +273,16 @@ public class ODBlocks {
             new DrawDefault(),
             new DrawEnergyGlow()
             );
+        }};
+
+        energyCross = new EnergyCross("energy-cross") {{
+            requirements(Category.power, with(iridium, 18));
+            consumesPower = outputsPower = true;
+            health = 90;
+            range = 5;
+            researchCost = with(iridium,5);
+
+            consumePowerBuffered(1000f);
         }};
 
         sulfurator = new ConsumeGenerator("sulfurator") {{
