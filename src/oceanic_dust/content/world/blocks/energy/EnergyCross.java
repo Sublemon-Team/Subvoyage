@@ -46,8 +46,8 @@ public class EnergyCross extends PowerBlock {
     @Override
     public void load() {
         super.load();
-        laser = Core.atlas.find(name+"-beam","power-beam");
-        laserEnd = Core.atlas.find(name+"-beam-end","power-beam-end");
+        laser = Core.atlas.find(this.name + "-beam","power-beam");
+        laserEnd = Core.atlas.find(this.name + "-beam-end","power-beam-end");
     }
 
     public EnergyCross(String name){
@@ -63,7 +63,6 @@ public class EnergyCross extends PowerBlock {
     @Override
     public void setBars(){
         super.setBars();
-
         addBar("power", PowerNode.makePowerBalance());
         addBar("batteries", PowerNode.makeBatteryBalance());
     }

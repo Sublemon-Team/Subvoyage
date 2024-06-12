@@ -88,7 +88,7 @@ public class ODBlocks {
             );
 
             size = 3;
-            drawer = new DrawTurretCallbacked(){{
+            drawer = new DrawTurretCallbacked("atlacian-"){{
                 DrawTurret draw = (DrawTurret)drawer;
                 ODRegionPart liquidPart = new ODRegionPart(draw,"-blade"){{
                     heatColor = Color.sky.cpy().a(0.42f);
@@ -183,7 +183,6 @@ public class ODBlocks {
         }};
 
         //liquids
-
         lowTierPump = new Pump("lead-pump") {{
             requirements(Category.liquid, with(spaclanium, 8));
             researchCost = with(
