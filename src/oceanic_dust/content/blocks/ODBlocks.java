@@ -42,7 +42,7 @@ public class ODBlocks {
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
-            energyDock,energyCross,sulfurator,
+            energyDock, energyDistributor,sulfurator,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter,
             //EXPLORATION
@@ -275,7 +275,7 @@ public class ODBlocks {
             );
         }};
 
-        energyCross = new EnergyCross("energy-cross") {{
+        energyDistributor = new EnergyCross("energy-distributor") {{
             requirements(Category.power, with(iridium, 18));
             consumesPower = outputsPower = true;
             health = 90;

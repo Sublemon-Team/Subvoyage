@@ -34,6 +34,7 @@ public class AtlacianTechTree {
 
             node(sulfurator,Seq.with(new Objectives.SectorComplete(crystalShores)),() -> {
                 node(energyDock);
+                node(energyDistributor);
             });
 
             node(submersibleDrill,Seq.with(new Objectives.SectorComplete(crystalShores),
