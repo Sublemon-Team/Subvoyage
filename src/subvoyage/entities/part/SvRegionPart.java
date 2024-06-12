@@ -9,13 +9,13 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.draw.*;
 
-public class ODRegionPart extends RegionPart{
+public class SvRegionPart extends RegionPart{
     public @Nullable Liquid liquidDraw;
     public TextureRegion liquid;
     public DrawTurret drawer;
     public float liquidAlpha = 1f;
 
-    public ODRegionPart(DrawTurret drawer, String region){
+    public SvRegionPart(DrawTurret drawer, String region){
         this.suffix = region;
         this.drawer = drawer;
     }

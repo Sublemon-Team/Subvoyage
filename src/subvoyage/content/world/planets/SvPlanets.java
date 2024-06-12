@@ -13,7 +13,7 @@ import subvoyage.content.world.items.*;
 
 import static mindustry.content.Planets.*;
 
-public class ODPlanets {
+public class SvPlanets{
     public static Planet atlacian;
 
     public static void load() {
@@ -28,8 +28,8 @@ public class ODPlanets {
                     new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.25f), 4, 0.6f, 2f, 0.41f)
             );
 
-            defaultCore = ODBlocks.corePuffer;
-            unlockedOnLand.add(ODBlocks.corePuffer);
+            defaultCore = SvBlocks.corePuffer;
+            unlockedOnLand.add(SvBlocks.corePuffer);
 
             sectorSeed = 6;
             allowWaves = true;
@@ -60,10 +60,10 @@ public class ODPlanets {
             alwaysUnlocked = true;
             landCloudColor = Color.valueOf("4F4CB5");
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
-                    .removeAll(ODItems.atlacianItems);
+                    .removeAll(SvItems.atlacianItems);
         }};
 
-        serpulo.hiddenItems.addAll(ODItems.atlacianItems);
-        erekir.hiddenItems.addAll(ODItems.atlacianItems);
+        serpulo.hiddenItems.addAll(SvItems.atlacianItems);
+        erekir.hiddenItems.addAll(SvItems.atlacianItems);
     }
 }

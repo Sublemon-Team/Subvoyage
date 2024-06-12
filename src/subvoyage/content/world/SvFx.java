@@ -11,7 +11,7 @@ import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
 
-public class ODFx{
+public class SvFx{
     public static final Rand rand = new Rand();
     public static final Vec2 v = new Vec2();
 

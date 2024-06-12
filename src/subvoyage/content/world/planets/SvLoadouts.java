@@ -2,7 +2,7 @@ package subvoyage.content.world.planets;
 
 import mindustry.game.*;
 
-public class ODLoadouts {
+public class SvLoadouts{
     public static Schematic
         basicPuffer;
 

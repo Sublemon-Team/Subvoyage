@@ -25,18 +25,18 @@ public class SubvoyageMod extends Mod {
     @Override
     public void loadContent(){
         Log.info("Poof-poof, Subvoyage loads up!");
-        ODItems.load();
-        ODLiquids.load();
+        SvItems.load();
+        SvLiquids.load();
 
-        ODUnits.load();
+        SvUnits.load();
 
-        ODWorldBlocks.load();
-        ODBlocks.load();
+        SvWorldBlocks.load();
+        SvBlocks.load();
 
-        ODLoadouts.load();
-        ODPlanets.load();
+        SvLoadouts.load();
+        SvPlanets.load();
 
-        ODSectorPresets.load();
+        SvSectorPresets.load();
 
         EnvRenderer.init();
 

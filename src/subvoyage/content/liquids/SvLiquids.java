@@ -4,7 +4,7 @@ import arc.graphics.*;
 import mindustry.content.*;
 import mindustry.type.*;
 
-public class ODLiquids {
+public class SvLiquids{
     public static Liquid
             //liquid
             polygen,

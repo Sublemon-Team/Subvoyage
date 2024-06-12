@@ -5,33 +5,34 @@ import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
 import subvoyage.content.world.items.*;
 
-public class ODWorldBlocks {
+public class SvWorldBlocks{
     public static Block
     //ores
-            oreSpaclanium,oreCorallite,oreSulfur,oreIridium,
+    oreSpaclanium,oreCorallite,oreSulfur,oreIridium,
     // floors
     legartyteStone, darkLegartyteStone, agaryteStone,
     // walls
-    legartyteWall, agaryteWall;
-
+    legartyteWall, agaryteWall,
+    // boulders
+    agaryteBoulder, agaryteBlocks, hauntedTree;
 
     public static void load() {
-        oreSpaclanium = new OreBlock(ODItems.spaclanium){{
+        oreSpaclanium = new OreBlock(SvItems.spaclanium){{
             oreDefault = false;
             oreThreshold = 0.81f;
             oreScale = 23.47619f;
         }};
-        oreCorallite = new OreBlock(ODItems.corallite){{
+        oreCorallite = new OreBlock(SvItems.corallite){{
             oreDefault = false;
             oreThreshold = 0.83f;
             oreScale = 23.17619f;
         }};
-        oreSulfur = new OreBlock(ODItems.sulfur){{
+        oreSulfur = new OreBlock(SvItems.sulfur){{
             oreDefault = false;
             oreThreshold = 0.83f;
             oreScale = 22.17619f;
         }};
-        oreIridium = new OreBlock(ODItems.iridium){{
+        oreIridium = new OreBlock(SvItems.iridium){{
             oreDefault = false;
             oreThreshold = 0.41f;
             oreScale = 12.42614f;
@@ -55,6 +56,23 @@ public class ODWorldBlocks {
         agaryteWall = new StaticWall("agaryte-wall"){{
             agaryteStone.asFloor().wall = this;
             variants = 3;
+        }};
+
+        agaryteBoulder = new Prop("agaryte-boulder"){{
+            variants = 2;
+            agaryteStone.asFloor().decoration = this;
+        }};
+
+        agaryteBlocks = new TallBlock("agaryte-blocks"){{
+            variants = 2;
+            clipSize = 128f;
+            shadowAlpha = 0.5f;
+            shadowOffset = -2.5f;
+        }};
+
+        hauntedTree = new TreeBlock("haunted-tree"){{
+            clipSize = 128f;
+            shadowOffset = -2.5f;
         }};
     }
 }

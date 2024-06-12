@@ -12,11 +12,11 @@ import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
-import mindustry.type.Weather.*;
 import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
 
 import static mindustry.Vars.*;
-import static subvoyage.content.blocks.ODWorldBlocks.*;
+import static subvoyage.content.blocks.SvWorldBlocks.*;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
     float ocean = -0.4f;
@@ -28,7 +28,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
     };
 
     {
-        defaultLoadout = ODLoadouts.basicPuffer;
+        defaultLoadout = SvLoadouts.basicPuffer;
         baseSeed = 1;
     }
 
@@ -47,9 +47,6 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             ores.add(oreIridium);
         }
 
-        /*if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 2, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.7f*addscl){
-            ores.add(Blocks.oreThorium);
-        }*/
         return ores;
     };
 
@@ -88,27 +85,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
     }
 
     @Override
-    public void addWeather(Sector sector, Rules rules){
-        rules.weather.add(new WeatherEntry(Weathers.rain));
-        rules.weather.add(new WeatherEntry(Weathers.fog));
-    }
-
-    @Override
     public void genTile(Vec3 position, TileGen tile){
         tile.floor = getBlock(position);
-
-        if(tile.floor == Blocks.redmat && rand.chance(0.25)){
-            tile.block = Blocks.redweed;
-        }
-
-        if(tile.floor == Blocks.bluemat && rand.chance(0.35)){
-            tile.block = Blocks.purbush;
-        }
-
-        if(tile.floor == Blocks.bluemat && rand.chance(0.4)){
-            tile.block = Blocks.yellowCoral;
-        }
-
         if(tile.block == Blocks.sandWall) tile.block = legartyteWall;
     }
 
@@ -150,10 +128,12 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             if(noise > liqThresh || secondNoise < liqThresh*2){
                 floor = Blocks.water;
             }
+
             if(thirdNoise > liqThresh/2) {
                 block = Blocks.water;
                 floor = Blocks.water;
             }
+
             if(fourthNoise > liqThresh/2) {
                 floor = Blocks.water;
             }
@@ -161,19 +141,16 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
         pass((x, y) -> {
             if(block.solid) return;
-
             Vec3 v = sector.rect.project(x, y);
-
             float rr = Simplex.noise2d(sector.id, (float)2, 0.6f, 1f / 7f, x, y) * 0.1f;
             float value = Ridged.noise3d(2, v.x, v.y, v.z, 1, 1f / 55f) + rr - rawHeight(v) * 0f;
-            float rrscl = rr * 44 - 2;
             if(value < 0.17f) return;
+
             //do not place rivers on ice, they're frozen
             //ignore pre-existing liquids
             floor = Blocks.water;
         });
 
-        //blend(agaryteStone, Blocks.water, 6);
         median(5, 0.4);
         terrain(Blocks.carbonWall,69.86f,0.35f,1.1f);
         blend(legartyteStone, darkLegartyteStone, 6);
@@ -188,9 +165,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         brush(path, 13);
         brushWithBlock(path,9, Blocks.water);
         erase(endX, endY, 15);
-
         blend(Blocks.water, Blocks.darksandWater, 4);
-
         distort(10f, 16f);
 
         Seq<Block> ores = getOres();
@@ -205,6 +180,32 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 ore = oreSpaclanium;
                 return;
             }
+
+            if(block == agaryteWall && rand.chance(0.6) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
+                block = agaryteBlocks;
+            }
+
+            if(block == agaryteStone && rand.chance(0.052)){
+                block = agaryteBoulder;
+            }
+
+            if(block == legartyteStone || block == darkLegartyteStone || block == agaryteStone && rand.chance(0.075)){
+                block = hauntedTree;
+            }
+
+            boolean allowed = floor == Blocks.water || floor == Blocks.darksandWater;
+            if(allowed && rand.chance(0.0005)){
+                block = Blocks.redweed;
+            }
+
+            if(allowed && rand.chance(0.0015)){
+                block = Blocks.purbush;
+            }
+
+            if(allowed && rand.chance(0.0025)){
+                block = Blocks.yellowCoral;
+            }
+
             for(int i = ores.size - 1; i >= 0; i--){
                 Block entry = ores.get(i);
                 float freq = frequencies.get(i);
@@ -216,7 +217,12 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             }
         });
 
-
+        //remove props near ores, they're too annoying
+        pass((x, y) -> {
+            if(ore.asFloor().wallOre || block.itemDrop != null || (block == Blocks.air && ore != Blocks.air)){
+                removeWall(x, y, 3, b -> b instanceof TallBlock);
+            }
+        });
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
         tiles.get(endX,endY).setOverlay(Blocks.spawn);

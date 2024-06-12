@@ -15,7 +15,6 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.storage.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.unit.*;
@@ -29,9 +28,9 @@ import subvoyage.entities.part.*;
 import subvoyage.content.liquids.*;
 
 import static mindustry.type.ItemStack.with;
-import static subvoyage.content.world.items.ODItems.*;
+import static subvoyage.content.world.items.SvItems.*;
 
-public class ODBlocks {
+public class SvBlocks{
     public static Block
             //DRILLS
             submersibleDrill, tectonicDrill,
@@ -63,7 +62,7 @@ public class ODBlocks {
             fogRadius = 2;
             squareSprite = false;
 
-            consumeLiquid(ODLiquids.polygen, 5/60f);
+            consumeLiquid(SvLiquids.polygen, 5/60f);
         }};
 
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
@@ -112,7 +111,7 @@ public class ODBlocks {
                 width = 7f;
                 height = 12f;
                 lifetime = 60f;
-                shootEffect = ODFx.pulverize;
+                shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
                 hitColor = backColor = trailColor = Pal.suppress;
                 frontColor = Color.white;
@@ -128,7 +127,7 @@ public class ODBlocks {
             size = 3;
             drawer = new DrawTurretCallbacked("atlacian-"){{
                 DrawTurret draw = (DrawTurret)drawer;
-                ODRegionPart liquidPart = new ODRegionPart(draw,"-blade"){{
+                SvRegionPart liquidPart = new SvRegionPart(draw,"-blade"){{
                     heatColor = Color.sky.cpy().a(0.42f);
                     heatProgress = PartProgress.warmup.add(-0.2f).add(p -> Mathf.sin(9f, 0.2f) * p.warmup);
                     mirror = true;
@@ -189,7 +188,7 @@ public class ODBlocks {
                 width = 6f;
                 height = 12f;
                 lifetime = 120f;
-                shootEffect = ODFx.pulverize;
+                shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
                 hitColor = backColor = trailColor = Pal.plastaniumFront;
                 frontColor = Color.white;
@@ -203,7 +202,7 @@ public class ODBlocks {
                 width = 6f;
                 height = 12f;
                 lifetime = 85f;
-                shootEffect = ODFx.pulverize;
+                shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
                 hitColor = backColor = trailColor = Pal.missileYellow;
                 frontColor = Color.white;
@@ -421,11 +420,12 @@ public class ODBlocks {
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
-            unitType = ODUnits.marine;
+            unitType = SvUnits.marine;
             health = 6000;
             itemCapacity = 5000;
             size = 5;
 
+            incinerateNonBuildable = true;
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
@@ -444,7 +444,7 @@ public class ODBlocks {
 
         duct = new Duct("duct"){{
             requirements(Category.distribution, with(corallite, 1));
-            bridgeReplacement = ODBlocks.ductBridge;
+            bridgeReplacement = SvBlocks.ductBridge;
             health = 90;
             speed = 4f;
             researchCost = with(corallite, 5);
@@ -483,7 +483,7 @@ public class ODBlocks {
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
             requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
-            craftEffect = ODFx.smokePuff;
+            craftEffect = SvFx.smokePuff;
             craftTime = 60f*2;
 
             hasItems = true;
@@ -514,17 +514,17 @@ public class ODBlocks {
            consumeItem(sulfur,1);
            consumeItem(corallite, 2);
            consumePower(0.8f);
-           outputLiquid = new LiquidStack(ODLiquids.argon, 8/60f);
+           outputLiquid = new LiquidStack(SvLiquids.argon, 8/60f);
            hasLiquids = true;
            drawer = new DrawMulti(
                    new DrawDefault(),
-                   new DrawLiquidRegion(ODLiquids.argon)
+                   new DrawLiquidRegion(SvLiquids.argon)
            );
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting, with(spaclanium,100,corallite,60));
-            outputLiquid = new LiquidStack(ODLiquids.polygen, 1);
+            outputLiquid = new LiquidStack(SvLiquids.polygen, 1);
             craftTime = 20f;
 
             itemCapacity = 30;

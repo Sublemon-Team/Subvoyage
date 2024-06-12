@@ -10,7 +10,7 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import subvoyage.content.world.*;
 
-public class ODUnits {
+public class SvUnits{
     public static UnitType marine;
     public static void load() {
         marine = new AtlacianUnitType("marine") {{
@@ -59,8 +59,8 @@ public class ODUnits {
                     weaveScale = 1;
                     lifetime = 42f;
                     keepVelocity = false;
-                    smokeEffect = ODFx.hitLaserOrange;
-                    hitEffect = despawnEffect = ODFx.hitLaserOrange;
+                    smokeEffect = SvFx.hitLaserOrange;
+                    hitEffect = despawnEffect = SvFx.hitLaserOrange;
                     frontColor = Color.white;
                     hitSound = Sounds.none;
                     backColor = Pal.lightOrange;

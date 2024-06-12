@@ -4,7 +4,7 @@ import arc.graphics.*;
 import arc.struct.*;
 import mindustry.type.*;
 
-public class ODItems {
+public class SvItems{
     public static final Seq<Item> atlacianItems = new Seq<>();
 
     public static Item clay,fineSand, spaclanium, corallite, sulfur, iridium, stone;
@@ -32,6 +32,8 @@ public class ODItems {
         }};
         stone = new Item("stone", Color.valueOf("393f42")) {{
             cost = 0.2f;
+            lowPriority = true;
+            buildable = false;
         }};
 
         atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, stone);

@@ -12,7 +12,7 @@ public class AtlacianUnitType extends UnitType{
         super(name);
         outlineColor = Pal.darkOutline;
         envDisabled = Env.space;
-        ammoType = new ItemAmmoType(ODItems.corallite);
+        ammoType = new ItemAmmoType(SvItems.corallite);
         researchCostMultiplier = 10f;
     }
 }
