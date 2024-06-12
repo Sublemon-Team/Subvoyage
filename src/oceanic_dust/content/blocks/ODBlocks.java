@@ -45,7 +45,7 @@ public class ODBlocks {
             //ENERGY
             energyDock, energyDistributor,sulfurator,
             //TRANSPORTATION
-            duct,ductRouter,ductBridge,ductSorter,
+            duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             //EXPLORATION
             buoy,beacon,
             //CORES
@@ -62,6 +62,7 @@ public class ODBlocks {
             blockedItem = Items.sand;
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             fogRadius = 4;
+            squareSprite = false;
 
             consumeLiquid(ODLiquids.polygen, 5/60f);
         }};
@@ -70,6 +71,7 @@ public class ODBlocks {
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             outlineColor = Pal.darkOutline;
+            squareSprite = false;
             ammo(
             spaclanium, new BasicBulletType(3f, 36){{
                 width = 7f;
@@ -145,6 +147,7 @@ public class ODBlocks {
             fogRadius = 6;
             targetGround = false;
             targetAir = true;
+            squareSprite = false;
             ammo(
             corallite, new BasicBulletType(6f, 16){{
                 inaccuracy = 2.5f;
@@ -238,6 +241,7 @@ public class ODBlocks {
             size = 3;
             envDisabled |= Env.scorching;
             destructible = true;
+            squareSprite = false;
 
             super.length = 6f;
             super.repairSpeed = 1f;
@@ -260,12 +264,22 @@ public class ODBlocks {
                     spaclanium, 5
             );
 
+            squareSprite = false;
             envDisabled |= Env.scorching;
             pumpAmount = 8f / 60f;
         }};
 
+        conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
+            requirements(Category.liquid, with(corallite, 4, clay, 8));
+            range = 4;
+            hasPower = false;
+
+            envDisabled |= Env.scorching;
+        }};
+
         clayConduit = new Conduit("clay-conduit") {{
             requirements(Category.liquid, with(clay, 1));
+            bridgeReplacement = conduitBridge;
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
 
@@ -277,14 +291,6 @@ public class ODBlocks {
             liquidCapacity = 20f;
             underBullets = true;
             solid = false;
-
-            envDisabled |= Env.scorching;
-        }};
-
-        conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
-            requirements(Category.liquid, with(corallite, 4, clay, 8));
-            range = 4;
-            hasPower = false;
 
             envDisabled |= Env.scorching;
         }};
@@ -318,6 +324,7 @@ public class ODBlocks {
             size = 2;
             consumeLiquid(Liquids.water, 12/60f);
             envDisabled |= Env.scorching;
+            squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),
                 new DrawLiquidRegion(Liquids.water),
@@ -339,6 +346,7 @@ public class ODBlocks {
             maxNodes = 10;
             range = 10;
             transferTime = 40;
+            squareSprite = false;
             drawer = new DrawMulti(
             new DrawDefault(),
             new DrawEnergyGlow()
@@ -351,6 +359,7 @@ public class ODBlocks {
             health = 90;
             range = 5;
             researchCost = with(iridium,5);
+            squareSprite = false;
 
             consumePowerBuffered(1000f);
         }};
@@ -382,6 +391,7 @@ public class ODBlocks {
             itemCapacity = 5000;
             size = 5;
 
+            squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
@@ -413,6 +423,24 @@ public class ODBlocks {
             requirements(Category.distribution, with(corallite, 2, spaclanium, 2));
             buildCostMultiplier = 3f;
             envDisabled |= Env.scorching;
+        }};
+
+        ductDistributor = new Router("duct-distributor"){{
+            requirements(Category.distribution, with(corallite, 4, spaclanium, 4));
+            buildCostMultiplier = 3f;
+            size = 2;
+            squareSprite = false;
+        }};
+
+        ductOverflow = new OverflowGate("duct-overflow-gate"){{
+            requirements(Category.distribution, with(corallite, 2, spaclanium, 4));
+            buildCostMultiplier = 3f;
+        }};
+
+        ductUnderflow = new OverflowGate("duct-underflow-gate"){{
+            requirements(Category.distribution, with(corallite, 2, spaclanium, 4));
+            buildCostMultiplier = 3f;
+            invert = true;
         }};
 
         //crafters
