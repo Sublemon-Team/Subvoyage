@@ -10,25 +10,22 @@ import arc.math.Mathf;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
 import arc.math.geom.Vec2;
-import arc.struct.IntSeq;
-import arc.struct.ObjectSet;
-import arc.struct.Seq;
+import arc.struct.*;
 import arc.util.*;
-import mindustry.content.Blocks;
+import mindustry.content.*;
 import mindustry.core.Renderer;
 import mindustry.core.UI;
 import mindustry.core.World;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.*;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
+import mindustry.graphics.*;
 import mindustry.input.Placement;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Edges;
 import mindustry.world.Tile;
+import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
 import mindustry.world.blocks.power.PowerNode;
@@ -36,6 +33,7 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
+import oceanic_dust.content.world.*;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -52,8 +50,7 @@ public class EnergyDock extends PowerBlock {
     public float laserScale = 0.25f;
     public Color laserColor1 = Color.white;
     public Color laserColor2 = Color.valueOf("D9F2FF");
-    public TextureRegion laser;
-    public TextureRegion laserEnd;
+    public TextureRegion laser, laserEnd, shadowRegion, outlineRegion;
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
     public TextureRegion ship;
@@ -69,6 +66,8 @@ public class EnergyDock extends PowerBlock {
         laserEnd = Core.atlas.find(name + "-laser-end","laser-end");
         ship = Core.atlas.find(name + "-ship");
         shipWave = Core.atlas.find(name + "-ship-wave");
+        outlineRegion = Core.atlas.find(name + "-ship-outline");
+        shadowRegion = Core.atlas.find(name + "-ship");
     }
 
     @Override
@@ -464,7 +463,7 @@ public class EnergyDock extends PowerBlock {
                     float distanceToPoints = Math.min(
                             Mathf.dst(shipX,shipY,thisX,thisY),
                             Mathf.dst(shipX,shipY,consumerX,consumerY));
-                    float alpha = 0.75f;
+                    float alpha = 1f;
                     boolean isEngined = true;
 
                     Block currentBlock = world.tileWorld(shipX,shipY).floor();
@@ -476,10 +475,11 @@ public class EnergyDock extends PowerBlock {
                     Draw.alpha(alpha);
                     Draw.z(Layer.power + 2);
                     Draw.rect(ship,shipX,shipY,angle);
-
+                    drawOutline(shipX, shipY, angle, 4f, alpha);
                     if(isEngined) {
                         Draw.z(Layer.power + 1);
                         drawEngine(shipX, shipY,-1.85f, -0.7f, 4, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
+                        drawShadow(shipX, shipY, angle, 4f, alpha);
                     } else {
                         float shipXPrev = Mathf.lerp(thisX,consumerX,progress/1.05f);
                         float shipYPrev = Mathf.lerp(thisY,consumerY,progress/1.05f);
@@ -489,18 +489,40 @@ public class EnergyDock extends PowerBlock {
                         Draw.rect(shipWave,shipXPrev,shipYPrev,angle);
                         Draw.scl();
                         Draw.alpha(1f);
-                    }
 
-                    Draw.z(Layer.power);
-                    Draw.alpha(1);
+                        Draw.z(Layer.power);
+                        drawShadow(shipX + 12, shipY + 11, angle, 4f, alpha);
+                    }
                 }
 
                 if(link.block instanceof EnergyDock && link.id >= id) continue;
-
                 drawLaser(x, y, link.x, link.y, size, link.block.size);
             }
 
             Draw.reset();
+        }
+
+        public void drawShadow(float originX, float originY, float rot, float vectorRotMultiplier, float alpha){
+            Tmp.v2.set(x, y).nor().times(new Vec2(vectorRotMultiplier,vectorRotMultiplier)).rotate(rot);
+            float e = Mathf.clamp(1, -1, 1f) * 1;
+            float x = originX - 12 * e, y = originY - 13 * e;
+            Floor floor = world.floorWorld(x, y);
+
+            float dest = floor.canShadow ? alpha : 0f;
+            Draw.color(Pal.shadow, Pal.shadow.a * dest);
+
+            Draw.rect(shadowRegion, x, y, rot);
+            Draw.color();
+        }
+
+        public void drawOutline(float originX, float originY, float rot, float vectorRotMultiplier, float alpha){
+            Tmp.v2.set(x, y).nor().times(new Vec2(vectorRotMultiplier,vectorRotMultiplier)).rotate(rot);
+            Draw.reset();
+            if(Core.atlas.isFound(outlineRegion)){
+                Draw.color(Pal.darkOutline, alpha);
+                Draw.rect(outlineRegion, originX, originY, rot);
+                Draw.reset();
+            }
         }
 
         public void drawEngine(float originX, float originY, float x, float y, float scale, float radius, float alpha, float rot, float vectorRotMultiplier, Color color, Color engineColorInner){

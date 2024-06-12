@@ -4,6 +4,7 @@ import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
+import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -50,13 +51,15 @@ public class ODBlocks {
 
     public static void load() {
         //drills
-        submersibleDrill = new Drill("submersible-drill") {{
+        submersibleDrill = new SubmersibleDrill("submersible-drill") {{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
             tier = 2;
             drillTime = 400;
             size = 2;
+            itemCapacity = 20;
             blockedItem = Items.sand;
-            drillEffect = Fx.turbinegenerate;
+            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.reactorPurple, 20f));
+            fogRadius = 4;
 
             consumeLiquid(ODLiquids.polygen, 5/60f);
         }};
