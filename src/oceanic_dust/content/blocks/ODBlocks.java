@@ -35,7 +35,7 @@ import static oceanic_dust.content.world.items.ODItems.*;
 public class ODBlocks {
     public static Block
             //DRILLS
-            submersibleDrill,
+            submersibleDrill, tectonicDrill,
             //DEFENSE
             whirl, rupture,
             //CRAFTERS
@@ -61,9 +61,37 @@ public class ODBlocks {
             itemCapacity = 20;
             blockedItem = Items.sand;
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
-            fogRadius = 4;
+            fogRadius = 2;
             squareSprite = false;
 
+            consumeLiquid(ODLiquids.polygen, 5/60f);
+        }};
+
+        tectonicDrill = new AttributeCrafter("tectonic-drill") {{
+            requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
+            craftTime = 400;
+            size = 3;
+            itemCapacity = 20;
+            craftEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
+            drawer = new DrawMulti(
+            new DrawRegion("-bottom"),
+            new DrawBlurSpin("-rotator", 4),
+            new DrawPistons() {{
+                sideOffset = 1.25F;
+            }},
+
+            new DrawGlowRegion(){{
+                alpha = 0.75f;
+                glowScale = 3f;
+                color = Color.valueOf("feb380");
+            }},
+
+            new DrawDefault(),
+            new DrawRegion("-top")
+            );
+
+            fogRadius = 4;
+            squareSprite = false;
             consumeLiquid(ODLiquids.polygen, 5/60f);
         }};
 
