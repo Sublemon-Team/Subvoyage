@@ -59,7 +59,7 @@ public class ODBlocks {
             size = 2;
             itemCapacity = 20;
             blockedItem = Items.sand;
-            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.reactorPurple, 20f));
+            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             fogRadius = 4;
 
             consumeLiquid(ODLiquids.polygen, 5/60f);

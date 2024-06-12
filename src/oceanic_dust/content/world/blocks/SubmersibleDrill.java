@@ -11,16 +11,14 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.draw.*;
 
 public class SubmersibleDrill extends Drill{
     public float shake = 1f;
     public Interp speedCurve = Interp.pow2In;
-
-    public TextureRegion topInvertRegion;
+    public TextureRegion topRegion;
     public TextureRegion glowRegion;
-    public Color glowColor = new Color(0.45f, 0.22f, 0.65f);
-
-    public float invertedTime = 200f;
+    public Color glowColor = new Color(0.65f, 0.35f, 0.25f);
     public Sound drillSound = Sounds.drillImpact;
     public float drillSoundVolume = 0.6f, drillSoundPitchRand = 0.1f;
 
@@ -37,7 +35,7 @@ public class SubmersibleDrill extends Drill{
     @Override
     public void load() {
         super.load();
-        topInvertRegion = Core.atlas.find(this.name + "-top");
+        topRegion = Core.atlas.find(this.name + "-top");
         glowRegion = Core.atlas.find(this.name + "-glow");
     }
 
@@ -54,15 +52,11 @@ public class SubmersibleDrill extends Drill{
     public class SubmersibleDrillBuild extends DrillBuild{
         //used so the lights don't fade out immediately
         public float smoothProgress = 0f;
-        public float invertTime = 0f;
-
         @Override
         public void updateTile(){
             if(dominantItem == null){
                 return;
             }
-
-            if(invertTime > 0f) invertTime -= delta() / invertedTime;
 
             if(timer(timerDump, dumpTime)){
                 dump(items.has(dominantItem) ? dominantItem : null);
@@ -90,9 +84,7 @@ public class SubmersibleDrill extends Drill{
                     offload(dominantItem);
                 }
 
-                invertTime = 1f;
                 progress %= drillTime;
-
                 if(wasVisible){
                     Effect.shake(shake, shake, this);
                     drillSound.at(x, y, 1f + Mathf.range(drillSoundPitchRand), drillSoundVolume);
@@ -115,16 +107,10 @@ public class SubmersibleDrill extends Drill{
         public void draw(){
             Draw.rect(region, x, y);
             drawDefaultCracks();
-            Draw.rect(topRegion, x, y);
-            if(invertTime > 0 && topInvertRegion.found()){
-                Draw.alpha(Interp.pow3Out.apply(invertTime));
-                Draw.rect(topInvertRegion, x, y);
-                Draw.color();
-            }
-
+            Drawf.spinSprite(topRegion, x, y, timeDrilled * rotateSpeed);
             if(dominantItem != null && drawMineItem){
                 Draw.color(dominantItem.color);
-                Draw.rect(itemRegion, x, y);
+                Drawf.spinSprite(itemRegion, x, y, timeDrilled * rotateSpeed);
                 Draw.color();
             }
 
