@@ -297,7 +297,7 @@ public class EnergyDock extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null /*|| !(link.block instanceof EnergyDock)*/ || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
+        if(tile == link || link == null || !(link.block instanceof EnergyDock) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
 
         if(overlaps(tile, link, range * tilesize) || (link.block instanceof EnergyDock node && overlaps(link, tile, node.range * tilesize))){
             if(checkMaxNodes && link.block instanceof EnergyDock node){
