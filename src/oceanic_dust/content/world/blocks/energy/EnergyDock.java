@@ -28,15 +28,12 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
-import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.draw.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
-import oceanic_dust.content.world.*;
 
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
@@ -345,6 +342,8 @@ public class EnergyDock extends PowerBlock {
         return Intersector.overlaps(Tmp.cr1.set(src.worldx() + offset, src.worldy() + offset, range * tilesize), Tmp.r1.setSize(size * tilesize).setCenter(other.worldx() + offset, other.worldy() + offset));
     }
 
+    public static int nodeCount = 0;
+
     public class EnergyDockBuild extends Building {
         @Override
         public void created(){ // Called when one is placed/loaded in the world
@@ -354,6 +353,11 @@ public class EnergyDock extends PowerBlock {
             newGraph.transferTime = transferTime;
             newGraph.reflow(this);
             power.graph = newGraph;
+
+            nodeCount = 0;
+            world.tiles.eachTile(e -> {
+                if(e.block() instanceof EnergyDock) nodeCount++;
+            });
 
             super.created();
         }
@@ -370,7 +374,20 @@ public class EnergyDock extends PowerBlock {
         }
 
         @Override
+        public void remove() {
+            super.remove();
+            nodeCount = 0;
+            world.tiles.eachTile(e -> {
+                if(e.block() instanceof EnergyDock) nodeCount++;
+            });
+        }
+
+        @Override
         public void dropped(){
+            nodeCount = 0;
+            world.tiles.eachTile(e -> {
+                if(e.block() instanceof EnergyDock) nodeCount++;
+            });
             power.links.clear();
             updatePowerGraph();
         }
@@ -487,6 +504,9 @@ public class EnergyDock extends PowerBlock {
                             Mathf.dst(shipX,shipY,thisX,thisY),
                             Mathf.dst(shipX,shipY,consumerX,consumerY));
                     float alpha = 1f;
+                    if(nodeCount > 4)  {alpha/=((nodeCount-3)/8f);
+                                        alpha = Mathf.clamp(alpha,0.4f,1f);}
+
                     boolean isEngined = true;
 
                     Block currentBlock = world.tileWorld(shipX,shipY).floor();
