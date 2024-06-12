@@ -72,18 +72,25 @@ public class ODBlocks {
             craftTime = 400;
             size = 3;
             itemCapacity = 20;
+            outputItem = new ItemStack(stone, 8);
+            hasPower = true;
+            hasLiquids = false;
+            displayEfficiency = false;
+            ambientSound = Sounds.drill;
+            ambientSoundVolume = 0.15f;
+
             craftEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             drawer = new DrawMulti(
             new DrawRegion("-bottom"),
+            new DrawGlowRegion(){{
+                alpha = 0.75f;
+                glowScale = 6f;
+                color = Color.valueOf("feb380");
+            }},
+
             new DrawBlurSpin("-rotator", 4),
             new DrawPistons() {{
                 sideOffset = 1.25F;
-            }},
-
-            new DrawGlowRegion(){{
-                alpha = 0.75f;
-                glowScale = 3f;
-                color = Color.valueOf("feb380");
             }},
 
             new DrawDefault(),
@@ -92,7 +99,8 @@ public class ODBlocks {
 
             fogRadius = 4;
             squareSprite = false;
-            consumeLiquid(ODLiquids.polygen, 5/60f);
+            consumeItems(with(sulfur, 4));
+            consumePower(2f);
         }};
 
         //defense

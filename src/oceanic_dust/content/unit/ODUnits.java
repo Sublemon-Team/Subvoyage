@@ -19,9 +19,9 @@ public class ODUnits {
             constructor = UnitEntity::create;
             isEnemy = false;
             coreUnitDock = true;
-
             lowAltitude = true;
             flying = true;
+
             mineSpeed = 8f;
             mineTier = 1;
             buildSpeed = 0.4f;
@@ -49,7 +49,11 @@ public class ODUnits {
                 alternate = true;
                 fogRadius = 0;
                 lightRadius = 8;
-                bullet = new ArtilleryBulletType(3f, 9){{
+                bullet = new ArtilleryBulletType(3f, 11){{
+                    collidesTiles = true;
+                    collides = true;
+                    collidesAir = true;
+
                     trailSize = 1;
                     homingPower = 0.08f;
                     weaveMag = 4;
@@ -60,7 +64,6 @@ public class ODUnits {
                     hitEffect = despawnEffect = ODFx.hitLaserOrange;
                     frontColor = Color.white;
                     hitSound = Sounds.none;
-                    collidesTeam = true;
                     backColor = Pal.lightOrange;
                 }};
             }});

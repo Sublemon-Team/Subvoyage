@@ -7,7 +7,7 @@ import mindustry.type.*;
 public class ODItems {
     public static final Seq<Item> atlacianItems = new Seq<>();
 
-    public static Item clay,fineSand, spaclanium, corallite, sulfur, iridium;
+    public static Item clay,fineSand, spaclanium, corallite, sulfur, iridium, stone;
 
     public static void load() {
 
@@ -30,8 +30,11 @@ public class ODItems {
             cost = 0.8f;
             charge = 0.4f;
         }};
+        stone = new Item("stone", Color.valueOf("393f42")) {{
+            cost = 0.2f;
+        }};
 
-        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium);
+        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, stone);
 
     }
 }
