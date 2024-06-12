@@ -60,7 +60,9 @@ public class AtlacianTechTree {
             });
 
             node(whirl,Seq.with(new Objectives.SectorComplete(divingPoint)),() -> {
+                node(rupture,Seq.with(new Objectives.SectorComplete(crystalShores)),() -> {
 
+                });
             });
 
             node(divingPoint, () -> {
