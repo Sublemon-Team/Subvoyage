@@ -44,7 +44,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             ores.add(oreSulfur);
         }
 
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.52f*addscl){
+        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.35f*addscl){
             ores.add(oreIridium);
         }
 
