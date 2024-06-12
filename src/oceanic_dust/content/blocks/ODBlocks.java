@@ -1,6 +1,7 @@
 package oceanic_dust.content.blocks;
 
 import arc.graphics.*;
+import arc.graphics.g2d.*;
 import arc.math.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
@@ -36,7 +37,7 @@ public class ODBlocks {
             //DRILLS
             submersibleDrill,
             //DEFENSE
-            whirl,
+            whirl, rupture,
             //CRAFTERS
             waterMetallizer, ceramicBurner, argonCentrifuge,
             //LIQUIDS
@@ -135,6 +136,76 @@ public class ODBlocks {
             limitRange(2);
         }};
 
+        rupture = new ItemTurret("rupture"){{
+            requirements(Category.turret, with(corallite, 45, clay, 25));
+            outlineColor = Pal.darkOutline;
+
+            size = 2;
+            shootCone = 360f;
+            fogRadius = 6;
+            targetGround = false;
+            targetAir = true;
+            ammo(
+            corallite, new BasicBulletType(6f, 16){{
+                inaccuracy = 2.5f;
+                width = 6f;
+                height = 12f;
+                lifetime = 120f;
+                shootEffect = ODFx.pulverize;
+                smokeEffect = Fx.none;
+                hitColor = backColor = trailColor = Pal.plastaniumFront;
+                frontColor = Color.white;
+                trailWidth = 2f;
+                trailLength = 4;
+                hitEffect = despawnEffect = Fx.hitBulletColor;
+            }},
+
+            sulfur, new BasicBulletType(3f, 50){{
+                reloadMultiplier = 0.3f;
+                width = 6f;
+                height = 12f;
+                lifetime = 85f;
+                shootEffect = ODFx.pulverize;
+                smokeEffect = Fx.none;
+                hitColor = backColor = trailColor = Pal.missileYellow;
+                frontColor = Color.white;
+                trailWidth = 2f;
+                trailLength = 6;
+                trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+                hitEffect = despawnEffect = Fx.hitBulletColor;
+
+                status = StatusEffects.slow;
+                statusDuration = 60f;
+            }}
+            );
+
+            drawer = new DrawTurret("atlacian-"){{
+                parts.add(new RegionPart("-blade"){{
+                    mirror = true;
+                    under = true;
+                    moveX = 1.5f;
+                    moveRot = -4;
+                    progress = PartProgress.recoil;
+                }});
+
+                parts.add(new RegionPart("-blade-mid"){{
+                    progress = PartProgress.recoil;
+                    moveY = -1.25f;
+                }});
+            }};
+
+            shootSound = Sounds.railgun;
+            reload = 15f;
+            shootY = 5f;
+            recoil = 0.5f;
+            priority = 0;
+            range = 260f;
+            scaledHealth = 200;
+            coolant = consumeCoolant(0.5f);
+            coolantMultiplier = 1f;
+            researchCostMultiplier = 0.05f;
+            limitRange(6);
+        }};
 
         //exploration
         buoy = new Buoy("buoy") {{
@@ -193,10 +264,10 @@ public class ODBlocks {
             pumpAmount = 8f / 60f;
         }};
 
-
         clayConduit = new Conduit("clay-conduit") {{
             requirements(Category.liquid, with(clay, 1));
             envDisabled |= Env.scorching;
+            botColor = Color.valueOf("54333c");
 
             health = 45;
         }};
