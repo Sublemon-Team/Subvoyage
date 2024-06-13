@@ -431,7 +431,7 @@ public class ODBlocks {
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
 
-            bannedItems.addAll(spaclanium);
+            bannedItems.addAll(stone);
         }};
 
         //transport
