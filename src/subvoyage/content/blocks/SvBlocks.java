@@ -247,10 +247,9 @@ public class SvBlocks{
 
         //exploration
         buoy = new Buoy("buoy") {{
-            requirements(Category.effect,with(spaclanium,20));
+            requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,20));
             alwaysUnlocked =true;
-            lightRadius = 10f;
-            fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
+            fogRadius = 32;
             envDisabled |= Env.scorching;
             destructible = true;
             destroyBullet = new BasicBulletType(2f,10f) {{
@@ -270,9 +269,8 @@ public class SvBlocks{
         }};
 
         beacon = new Beacon("beacon") {{
-            requirements(Category.effect,with(spaclanium,300,clay, 50,sulfur,200));
-            lightRadius = 70f;
-            fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
+            requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,300,clay, 50,sulfur,200));
+            fogRadius = 75;
             size = 3;
             envDisabled |= Env.scorching;
             destructible = true;
@@ -290,6 +288,8 @@ public class SvBlocks{
 
             placeEffect = Fx.healWaveDynamic;
             health = 450;
+
+            consumePower(0.15f);
         }};
 
         //liquids
