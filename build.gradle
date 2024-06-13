@@ -1,3 +1,4 @@
+
 buildscript {
     repositories {
         mavenLocal();
@@ -16,37 +17,65 @@ version '1.0'
 
 sourceSets.main.java.srcDirs = ["src"]
 
-task runClient() {
 
-}
+/** MINDUSTRY RUN CLIENT
+   * by Skoow (and thanks to IriDark for some code)
+   * change or add "mindustry_run_version" to gradle.properties to start
+     example: mindustry_run_version = v146
+*/ 
+import java.nio.channels.Channels
+import java.nio.channels.FileChannel
+import java.nio.channels.ReadableByteChannel
 
-
-/**
- *  Custom Run Client Code
- *  <p>
- *  Author: IriDark
- */
-task createModZip(type: Zip, dependsOn: jar) {
+task createModZip (type: Zip) {
+    dependsOn jar
     from { [zipTree("$buildDir/libs/${project.archivesBaseName}Desktop.jar")] }
     into("mod_contents")
 }
 
-task copyJar(type: Copy, dependsOn: createModZip) {
+task copyJar(type: Copy) {
+    dependsOn createModZip
     from("$buildDir/libs/${project.archivesBaseName}Desktop.jar")
-    into("${System.getProperty('user.home')}/AppData/Roaming/Mindustry/mods/")
+    into("${System.getProperty('user.home')}/AppData/Roaming/MindustryTesting/${project.archivesBaseName}/Mindustry/mods/")
 }
 
-task runMindustry(type: JavaExec, dependsOn: copyJar) {
-    group = 'application'
+task runClient(type: JavaExec) {
+    dependsOn copyJar
+    group = 'runs'
     description = 'Mindustry RunClient'
+    String githubClientUrl = "https://github.com/Anuken/Mindustry/releases/download/${mindustry_run_version}/Mindustry.jar"
+    String dataFolder = System.getenv("APPDATA") + "\\MindustryTesting";
+    File dataFolderFile = new File(dataFolder);
+    dataFolderFile.mkdir();
+    File clientFile = new File(dataFolderFile, "client-${mindustry_run_version}.jar");
+    println "\u001B[33mChecking for Mindustry \u001B[35m${mindustry_run_version} \u001B[33mclient..\u001B[0m";
+    if (!clientFile.exists()) {
+        println "\u001B[33mClient not found. Download started..\u001B[0m";
+        URL url = new URL(githubClientUrl);
+        ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+        FileOutputStream fileOutputStream = new FileOutputStream(clientFile);
+        FileChannel fileChannel = fileOutputStream.getChannel();
+        clientFile.createNewFile();
+        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 
-    // Mindustry path (I use the Mindustry from a github to test things
-    classpath = files("Mindustry.jar")
+        readableByteChannel.close();
+        fileOutputStream.close();
+        fileChannel.close();
+
+        println "\u001B[32mClient has been downloaded successfully.\u001B[0m";
+    }
+    println "\u001B[32mStarting Mindustry client..\u001B[0m"
+
+    environment "APPDATA", "${dataFolder}\\${project.archivesBaseName}";
+
+    classpath = files(clientFile.getAbsolutePath())
     main = 'mindustry.desktop.DesktopLauncher'
-}
-
-task deployModAndRunMindustry(dependsOn: [jar,copyJar, runMindustry]) {
-
+    doLast {
+        println "\u001B[32mDeleting temporary mod file..\u001B[0m"
+        String modsFolder = System.getenv("APPDATA") + "\\MindustryTesting\\${project.archivesBaseName}\\Mindustry\\mods";
+        File modFile = new File(modsFolder,"${project.archivesBaseName}Desktop.jar");
+        modFile.delete();
+    }
 }
 
 repositories{

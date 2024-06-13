@@ -30,12 +30,12 @@ public class AtlacianTechTree {
                 node(beacon);
             });
 
-            node(sulfurator,Seq.with(new Objectives.SectorComplete(crystalShores)),() -> {
+            node(sulfurator,Seq.with(/*new Objectives.SectorComplete(crystalShores)*/),() -> {
                 node(energyDock);
                 node(energyDistributor);
             });
 
-            node(submersibleDrill,Seq.with(new Objectives.SectorComplete(crystalShores),
+            node(submersibleDrill,Seq.with(/*new Objectives.SectorComplete(crystalShores),*/
                     new Objectives.Research(waterMetallizer),
                     new Objectives.Produce(SvLiquids.polygen)),() -> {
             });
@@ -57,8 +57,8 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(whirl,Seq.with(new Objectives.SectorComplete(divingPoint)),() -> {
-                node(rupture,Seq.with(new Objectives.SectorComplete(crystalShores)),() -> {
+            node(whirl,Seq.with(/*new Objectives.SectorComplete(divingPoint)*/),() -> {
+                node(rupture,Seq.with(/*new Objectives.SectorComplete(crystalShores)*/),() -> {
 
                 });
             });
