@@ -507,7 +507,7 @@ public class SvBlocks{
 
         terracottaBlaster = new GenericCrafter("terracotta-blaster") {{
             requirements(Category.crafting,with(spaclanium,100,corallite,200,fineSand,120,iridium,40));
-            craftEffect = ODFx.smokePuff;
+            craftEffect = SvFx.smokePuff;
             craftTime = 60f*1.3f;
 
             hasItems = true;

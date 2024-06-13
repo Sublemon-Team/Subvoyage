@@ -1,12 +1,11 @@
 package subvoyage.content.world.sectors;
 
 import arc.struct.Seq;
-import mindustry.logic.LExecutor;
 import mindustry.type.*;
 
-import static subvoyage.content.world.planets.ODPlanets.atlacian;
+import static subvoyage.content.world.planets.SvPlanets.atlacian;
 
-public class ODSectorPresets {
+public class SvSectorPresets {
     public static SectorPreset divingPoint, crystalShores, furtherInstallation;
 
     public static void load() {
