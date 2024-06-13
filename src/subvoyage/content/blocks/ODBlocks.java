@@ -39,7 +39,7 @@ public class ODBlocks {
             //DEFENSE
             whirl, rupture,
             //CRAFTERS
-            waterMetallizer, ceramicBurner, argonCentrifuge,
+            waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
@@ -503,6 +503,24 @@ public class ODBlocks {
             envDisabled |= Env.scorching;
             consumeLiquid(Liquids.water,1);
             consumeItem(fineSand, 1);
+        }};
+
+        terracottaBlaster = new GenericCrafter("terracotta-blaster") {{
+            requirements(Category.crafting,with(spaclanium,100,corallite,200,fineSand,120,iridium,40));
+            craftEffect = ODFx.smokePuff;
+            craftTime = 60f*1.3f;
+
+            hasItems = true;
+            hasLiquids = true;
+
+            outputItem = new ItemStack(clay,5);
+            itemCapacity = 12;
+
+            size = 3;
+            envDisabled |= Env.scorching;
+            consumeLiquid(Liquids.water, 2);
+            consumeItem(fineSand,2);
+            consumePower(2.3f);
         }};
 
         argonCentrifuge = new GenericCrafter("argon-centrifuge") {{

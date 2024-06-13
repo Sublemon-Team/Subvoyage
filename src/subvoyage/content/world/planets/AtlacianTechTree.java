@@ -56,6 +56,9 @@ public class AtlacianTechTree {
                 node(argonCentrifuge,Seq.with(new Objectives.Research(waterMetallizer)),() -> {
 
                 });
+                node(terracottaBlaster,Seq.with(new Objectives.Research(energyDistributor)),() -> {
+
+                });
             });
 
             node(whirl,Seq.with(/*new Objectives.SectorComplete(divingPoint)*/),() -> {
