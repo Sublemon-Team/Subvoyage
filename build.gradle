@@ -36,7 +36,7 @@ task createModZip (type: Zip) {
 task copyJar(type: Copy) {
     dependsOn createModZip
     from("$buildDir/libs/${project.archivesBaseName}Desktop.jar")
-    into("${System.getProperty('user.home')}/AppData/Roaming/Mindustry/mods/")
+    into("${System.getProperty('user.home')}/AppData/Roaming/MindustryTesting/${project.archivesBaseName}/Mindustry/mods/")
 }
 
 task runClient(type: JavaExec) {
@@ -44,7 +44,7 @@ task runClient(type: JavaExec) {
     group = 'runs'
     description = 'Mindustry RunClient'
     String githubClientUrl = "https://github.com/Anuken/Mindustry/releases/download/${mindustry_run_version}/Mindustry.jar"
-    String dataFolder = System.getenv("APPDATA") + "\\MindustryClients";
+    String dataFolder = System.getenv("APPDATA") + "\\MindustryTesting";
     File dataFolderFile = new File(dataFolder);
     dataFolderFile.mkdir();
     File clientFile = new File(dataFolderFile, "client-${mindustry_run_version}.jar");
@@ -57,14 +57,22 @@ task runClient(type: JavaExec) {
         FileChannel fileChannel = fileOutputStream.getChannel();
         clientFile.createNewFile();
         fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+        readableByteChannel.close();
+        fileOutputStream.close();
+        fileChannel.close();
+
         println "\u001B[32mClient has been downloaded successfully.\u001B[0m";
     }
     println "\u001B[32mStarting Mindustry client..\u001B[0m"
+
+    environment "APPDATA", "${dataFolder}\\${project.archivesBaseName}";
+
     classpath = files(clientFile.getAbsolutePath())
     main = 'mindustry.desktop.DesktopLauncher'
     doLast {
         println "\u001B[32mDeleting temporary mod file..\u001B[0m"
-        String modsFolder = System.getenv("APPDATA") + "\\Mindustry\\mods";
+        String modsFolder = System.getenv("APPDATA") + "\\MindustryTesting\\${project.archivesBaseName}\\Mindustry\\mods";
         File modFile = new File(modsFolder,"${project.archivesBaseName}Desktop.jar");
         modFile.delete();
     }
