@@ -7,7 +7,6 @@ import mindustry.world.meta.*;
 import subvoyage.content.world.items.*;
 
 public class AtlacianUnitType extends UnitType{
-
     public AtlacianUnitType(String name){
         super(name);
         outlineColor = Pal.darkOutline;
