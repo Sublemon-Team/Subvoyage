@@ -1,6 +1,7 @@
 package subvoyage.content.world.sectors;
 
 import arc.struct.Seq;
+import mindustry.logic.LExecutor;
 import mindustry.type.*;
 
 import static subvoyage.content.world.planets.ODPlanets.atlacian;
@@ -11,7 +12,7 @@ public class ODSectorPresets {
     public static void load() {
 
         //TODO UNCOMMENT WHEN SECTORS ARE RESTORED
-        /*divingPoint = new SectorPreset("divingpoint",atlacian,7) {{
+        divingPoint = new SectorPreset("divingPoint",atlacian,7) {{
             alwaysUnlocked = true;
 
             overrideLaunchDefaults = true;
@@ -25,7 +26,7 @@ public class ODSectorPresets {
                 r.canGameOver = false;
                 r.loadout = new Seq<>();
             };
-        }};
+        }};/*
         crystalShores = new SectorPreset("crystalShores",atlacian,15) {{
             overrideLaunchDefaults = false;
             rules = (r) -> {

@@ -6,6 +6,7 @@ import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.game.MapObjectives;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -433,6 +434,7 @@ public class ODBlocks {
 
             bannedItems.addAll(stone);
         }};
+
 
         //transport
         ductBridge = new DuctBridge("duct-bridge") {{
