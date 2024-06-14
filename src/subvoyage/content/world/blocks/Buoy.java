@@ -24,6 +24,7 @@ public class Buoy extends Radar {
         super(name);
         swapDiagonalPlacement = true;
         allowDiagonal = true;
+        outlineIcon = false;
     }
 
     @Override
@@ -37,20 +38,9 @@ public class Buoy extends Radar {
     }
 
     @Override
-    public TextureRegion[] icons(){
-        return new TextureRegion[]{region};
-    }
-
-    @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
         return tile.floor() == Blocks.water || tile.block() == Blocks.water || tile.block() == Blocks.darksandWater ||
                 tile.floor() == Blocks.darksandWater;
-    }
-
-    @Override
-    public void drawPlace(int x, int y, int rotation, boolean valid) {
-        super.drawPlace(x, y, rotation, valid);
-        Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, 6 * tilesize, Pal.accent.a(0.7f));
     }
 
     public class BuoyBuild extends RadarBuild{
@@ -60,17 +50,9 @@ public class Buoy extends Radar {
             if(fogRadius*progress < 6f) Drawf.dashCircle(x, y, 6 * tilesize, Pal.accent);
         }
 
-
-
-        @Override
-        public void draw(){
-            Draw.rect(region, x, y);
-        }
-
         @Override
         public void updateTile() {
             smoothEfficiency = Mathf.lerpDelta(smoothEfficiency, efficiency, 0.05f);
-
             if(Math.abs(fogRadius() - lastRadius) >= 0.5f){
                 Vars.fogControl.forceUpdate(team, this);
                 lastRadius = fogRadius();

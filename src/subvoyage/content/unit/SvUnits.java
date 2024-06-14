@@ -146,7 +146,7 @@ public class SvUnits{
             speed = 1.3f;
             rotateSpeed = 6f;
             accel = 0.25f;
-            health = 800f;
+            health = 1450f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -175,13 +175,15 @@ public class SvUnits{
             }}
             );
 
-            weapons.add(new Weapon(SubvoyageMod.ID + "-rocket-launcher"){{
-                x = 6f;
-                reload = 60f;
+            weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
+                x = 7f;
+                y = -2f;
+                reload = 80f;
                 recoil = 2f;
                 shootSound = Sounds.missileLaunch;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
+
                 top = false;
                 alternate = false;
                 bullet = new BulletType(){{
@@ -201,8 +203,8 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        splashDamageRadius = 10f;
-                        splashDamage = 40f;
+                        splashDamageRadius = 15f;
+                        splashDamage = 80f;
 
                         trailEffect = SvFx.missileTrailSmoke;
                         trailInterval = 3f;
@@ -244,9 +246,9 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(60f, 15f){{
+                            bullet = new ExplosionBulletType(splashDamage / 2, splashDamageRadius){{
                                 collidesAir = true;
-                                suppressionRange = 140f;
+                                suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
                                     lifetime = 50f;
                                     waveStroke = 5f;
