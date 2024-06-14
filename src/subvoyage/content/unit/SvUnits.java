@@ -94,7 +94,7 @@ public class SvUnits{
 
             RotatorRegionPart copter = new RotatorRegionPart(){{
                 outline = false;
-                layerOffset = Layer.flyingUnit + 1;
+                layerOffset = Layer.flyingUnitLow + 1;
                 xScl = 0.6f;
                 yScl = 0.6f;
                 y = -0.15f;
