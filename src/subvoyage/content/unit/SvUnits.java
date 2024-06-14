@@ -11,7 +11,6 @@ import mindustry.entities.part.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.type.UnitType.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import subvoyage.*;
@@ -25,10 +24,9 @@ public class SvUnits{
     //helicopters
     helio, harke;
 
-    public static int copterId = 0;
+    public static int mapHelicopter = 0;
     public static void load(){
-        copterId = EntityMapping.register("helio", HelicopterUnitEntity::new);
-        copterId = EntityMapping.register("harke", HelicopterUnitEntity::new);
+        helicopter("helio","harke");
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -270,5 +268,13 @@ public class SvUnits{
                 }};
             }});
         }};
+    }
+
+
+    public static void helicopter(String id) {
+        mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
+    }
+    public static void helicopter(String... ids) {
+        for (String id : ids) helicopter(id);
     }
 }

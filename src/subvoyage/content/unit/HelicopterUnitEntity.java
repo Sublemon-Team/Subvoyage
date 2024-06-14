@@ -24,7 +24,7 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     @Override
     public int classId() {
-        return SvUnits.copterId;
+        return SvUnits.mapHelicopter;
     }
 
     @Override
