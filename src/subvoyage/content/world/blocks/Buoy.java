@@ -1,13 +1,17 @@
 package subvoyage.content.world.blocks;
 
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.*;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
@@ -43,10 +47,39 @@ public class Buoy extends Radar {
                 tile.floor() == Blocks.darksandWater;
     }
 
+    @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+        Drawf.dashCircle(x * tilesize + offset, y * tilesize + offset, 6 * tilesize, Pal.accent.a(0.7f));
+    }
+
     public class BuoyBuild extends RadarBuild{
+        @Override
+        public void drawSelect() {
+            super.drawSelect();
+            if(fogRadius*progress < 6f) Drawf.dashCircle(x, y, 6 * tilesize, Pal.accent);
+        }
+
+
+
         @Override
         public void draw(){
             Draw.rect(region, x, y);
+        }
+
+        @Override
+        public void updateTile() {
+            smoothEfficiency = Mathf.lerpDelta(smoothEfficiency, efficiency, 0.05f);
+
+            if(Math.abs(fogRadius() - lastRadius) >= 0.5f){
+                Vars.fogControl.forceUpdate(team, this);
+                lastRadius = fogRadius();
+            }
+
+            progress += edelta() / discoveryTime * (fogRadius*progress < 6f ? 8 : 1);
+            progress = Mathf.clamp(progress);
+
+            totalProgress += efficiency * edelta();
         }
 
         @Override

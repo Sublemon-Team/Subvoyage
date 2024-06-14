@@ -9,7 +9,10 @@ import arc.util.*;
 import arc.util.io.*;
 import mindustry.*;
 import mindustry.content.*;
+import mindustry.entities.Units;
 import mindustry.game.*;
+import mindustry.gen.Unit;
+import mindustry.gen.UnitEntity;
 import mindustry.graphics.*;
 import mindustry.input.Placement;
 import mindustry.logic.*;
@@ -56,17 +59,8 @@ public class Beacon extends RepairTurret {
         public float totalProgress;
 
         @Override
-        public float fogRadius(){
-            return fogRadius * progress * smoothEfficiency;
-        }
-
-        @Override
-        public boolean canPickup(){
-            return false;
-        }
-
-        @Override
-        public void updateTile(){
+        public void update() {
+            laserColor = Pal.lightishOrange;
             smoothEfficiency = Mathf.lerpDelta(smoothEfficiency, efficiency, 0.05f);
 
             if(Math.abs(fogRadius() - lastRadius) >= 0.5f){
@@ -78,7 +72,54 @@ public class Beacon extends RepairTurret {
             progress = Mathf.clamp(progress);
 
             totalProgress += efficiency * edelta();
+            super.update();
         }
+
+        @Override
+        public void updateTile(){
+
+            float multiplier = 1f;
+            if(acceptCoolant){
+                multiplier = 1f + liquids.current().heatCapacity * coolantMultiplier * optionalEfficiency;
+            }
+
+            if(target != null && (target.dead() || target.dst(this) - target.hitSize/2f > repairRadius)){
+                target = null;
+            }
+
+            if(target == null){
+                offset.setZero();
+            }
+
+            boolean healed = false;
+
+            if(target != null && efficiency > 0){
+                float angle = Angles.angle(x, y, target.x + offset.x, target.y + offset.y);
+                if(Angles.angleDist(angle, rotation) < 30f){
+                    healed = true;
+                    target.heal(repairSpeed * strength * edelta() * multiplier);
+                    if(target instanceof UnitEntity e) e.apply(StatusEffects.fast,1f);
+                }
+                rotation = Mathf.slerpDelta(rotation, angle, 0.5f * efficiency * timeScale);
+            }
+
+            strength = Mathf.lerpDelta(strength, healed ? 1f : 0f, 0.08f * Time.delta);
+
+            if(timer(timerTarget, 20)){
+                target = Units.closest(team, x, y, repairRadius, (e) -> true);
+            }
+        }
+
+        @Override
+        public float fogRadius(){
+            return fogRadius * progress * smoothEfficiency;
+        }
+
+        @Override
+        public boolean canPickup(){
+            return false;
+        }
+
 
         @Override
         public void drawSelect(){

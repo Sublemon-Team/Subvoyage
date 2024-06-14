@@ -11,6 +11,7 @@ import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
+import mindustry.maps.planet.SerpuloPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
@@ -225,6 +226,17 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         });
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
+
+        float difficulty = sector.threat*1.2f;
+
+        //TODO: make custom Waves.generate with new units
+        Seq<SpawnGroup> spawns = Waves.generate(sector.threat+1.2f,new Rand(sector.id),state.rules.attackMode,false,true);
+        state.rules.spawns = spawns;
+        state.rules.waves = true;
+        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
+        state.rules.env = sector.planet.defaultEnv;
+        state.rules.fog = true;
+
         tiles.get(endX,endY).setOverlay(Blocks.spawn);
     }
 
