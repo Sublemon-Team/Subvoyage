@@ -59,5 +59,16 @@ public class SvFx{
                 Drawf.light(e.x + x, e.y + y, rad, b.color, 0.25f);
             }));
         }
-    }).layer(Layer.bullet - 1f);
+    }).layer(Layer.bullet - 1f),
+
+    shootLauncher = new Effect(70f, e -> {
+        rand.setSeed(e.id);
+        for(int i = 0; i < 6; i++){
+            v.trns(e.rotation + rand.range(15), rand.random(e.finpow() * 40f));
+            e.scaled(e.lifetime, b -> {
+                color(e.color, Pal.lightishGray, b.fin());
+                Fill.circle(e.x + v.x, e.y + v.y, b.fout());
+            });
+        }
+    });
 }

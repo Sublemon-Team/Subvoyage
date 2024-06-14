@@ -98,51 +98,52 @@ public class SvUnits{
             new UnitEngine(-16 / 4 , -engineOffset, 1.25f, -90)
             );
 
-            RotatorRegionPart copter = new RotatorRegionPart(){{
-                outline = false;
-                layerOffset = Layer.flyingUnitLow + 1;
-                xScl = 1.5f;
-                yScl = 1.5f;
-                y = -0.15f;
+            RotatorRegionPart copter = new RotatorRegionPart(){
+                {
+                    outline = false;
+                    layerOffset = Layer.flyingUnitLow;
+                    xScl = 1.5f;
+                    yScl = 1.5f;
+                    y = -0.15f;
+                    onUpdate = (e) -> moveRot = 90f + (90f * e.localAcceleration);
+                    rotation = 360f;
+                }
+            };
 
-                moveRot = 90f;
-                rotation = 360f;
-            }};
-
-            hitSize = 8f;
-            onUpdate = (e) -> copter.moveRot = 90f+(90f*e.localAcceleration);
             parts.add(copter);
-
+            hitSize = 8f;
             ammoType = new PowerAmmoType(900);
             weapons.add(new Weapon(SubvoyageMod.ID + "-marine-weapon"){{
-                top = false;
-                y = -1f;
-                x = 5.5f;
-                reload = 10f;
-                ejectEffect = Fx.casing1;
+                x = 5f;
+                layerOffset = -2;
+                reload = 60f;
                 recoil = 2f;
-                shootSound = Sounds.lasershoot;
+                shootSound = Sounds.missileLaunch;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
-                alternate = true;
                 fogRadius = 0;
                 lightRadius = 8;
-                bullet = new ArtilleryBulletType(3f, 11){{
-                    collidesTiles = true;
-                    collides = true;
-                    collidesAir = true;
 
-                    trailSize = 1;
-                    homingPower = 0.08f;
-                    weaveMag = 4;
-                    weaveScale = 1;
-                    lifetime = 42f;
-                    keepVelocity = false;
-                    smokeEffect = SvFx.hitLaserOrange;
-                    hitEffect = despawnEffect = SvFx.hitLaserOrange;
+                top = false;
+                alternate = false;
+                bullet = new BasicBulletType(3f, 40){{
+                    sprite = "missile-large";
+                    width = 6f;
+                    height = 13f;
+                    lifetime = 120f;
+                    hitSize = 6f;
+                    hitColor = backColor = trailColor = Color.valueOf("feb380");
                     frontColor = Color.white;
-                    hitSound = Sounds.none;
-                    backColor = Pal.lightOrange;
+                    trailWidth = 2f;
+                    trailLength = 8;
+                    hitEffect = despawnEffect = Fx.blastExplosion;
+                    smokeEffect = SvFx.shootLauncher;
+                    splashDamageRadius = 10f;
+                    splashDamage = 20f;
+
+                    trailEffect = SvFx.missileTrailSmoke;
+                    trailRotation = true;
+                    trailInterval = 3f;
                 }};
             }});
         }};

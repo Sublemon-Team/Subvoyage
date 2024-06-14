@@ -4,14 +4,11 @@ import arc.math.geom.Position;
 import mindustry.game.Team;
 import mindustry.gen.TimedKillc;
 import mindustry.gen.Unit;
-import mindustry.type.UnitType;
 
 import java.util.function.Consumer;
 
 public class HelicopterUnitType extends AtlacianUnitType {
-
     public Consumer<HelicopterUnitEntity> onUpdate = (e) -> {};
-
 
     public HelicopterUnitType(String name) {
         super(name);
@@ -21,12 +18,6 @@ public class HelicopterUnitType extends AtlacianUnitType {
     @Override
     public Unit spawn(Position pos) {
         return super.spawn(pos);
-    }
-
-    @Override
-    public void draw(Unit unit) {
-
-        super.draw(unit);
     }
 
     @Override
