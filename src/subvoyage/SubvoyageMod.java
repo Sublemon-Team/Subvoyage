@@ -13,6 +13,7 @@ import subvoyage.content.world.planets.*;
 import subvoyage.content.world.sectors.*;
 
 public class SubvoyageMod extends Mod {
+    public static String ID = "subvoyage";
 
     public SubvoyageMod(){
 

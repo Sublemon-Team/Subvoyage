@@ -1,25 +1,27 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
-import arc.util.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.bullet.*;
-import mindustry.entities.part.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
+import subvoyage.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 
 public class SvUnits{
-    public static UnitType marine, helio;
+    public static UnitType
+    // core
+    marine,
+    //helicopters
+    helio, harke;
+
     public static int copterId = 0;
     public static void load() {
-
         copterId = EntityMapping.register("helio",HelicopterUnitEntity::new);
-
         marine = new AtlacianUnitType("marine") {{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -99,8 +101,8 @@ public class SvUnits{
             RotatorRegionPart copter = new RotatorRegionPart(){{
                 outline = false;
                 layerOffset = Layer.flyingUnitLow + 1;
-                xScl = 0.6f;
-                yScl = 0.6f;
+                xScl = 1.5f;
+                yScl = 1.5f;
                 y = -0.15f;
 
                 moveRot = 90f;
@@ -112,10 +114,10 @@ public class SvUnits{
             parts.add(copter);
 
             ammoType = new PowerAmmoType(900);
-            weapons.add(new Weapon(name + "-weapon"){{
+            weapons.add(new Weapon(SubvoyageMod.ID + "-marine-weapon"){{
                 top = false;
-                y = -1.25f;
-                x = 6.5f;
+                y = -1f;
+                x = 5.5f;
                 reload = 10f;
                 ejectEffect = Fx.casing1;
                 recoil = 2f;

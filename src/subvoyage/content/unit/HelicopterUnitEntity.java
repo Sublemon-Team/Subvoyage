@@ -13,7 +13,6 @@ import mindustry.entities.EntityCollisions;
 import mindustry.entities.units.StatusEntry;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 
 import java.util.Iterator;
@@ -22,7 +21,6 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     public float localAcceleration = 0;
     public boolean isAccelerating = false;
-
 
     @Override
     public int classId() {
