@@ -91,6 +91,7 @@ public class SvUnits{
             accel = 0.1f;
             health = 800f;
             engineSize = 0;
+            hitSize = 12f;
 
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
@@ -106,7 +107,6 @@ public class SvUnits{
             };
 
             parts.add(copter);
-            hitSize = 8f;
             weapons.add(new Weapon(SubvoyageMod.ID + "-marine-weapon"){{
                 x = 5f;
                 layerOffset = -2;
@@ -150,6 +150,7 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
+            hitSize = 14f;
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
                     outline = false;
@@ -164,7 +165,6 @@ public class SvUnits{
             };
 
             parts.add(copter);
-            hitSize = 8f;
             abilities.add(
             new MoveEffectAbility(3, engineOffset - 1, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
                 teamColor = true;
