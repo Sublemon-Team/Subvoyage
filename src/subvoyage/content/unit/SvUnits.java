@@ -15,7 +15,11 @@ import subvoyage.entities.part.*;
 
 public class SvUnits{
     public static UnitType marine, helio;
+    public static int copterId = 0;
     public static void load() {
+
+        copterId = EntityMapping.register("helio",HelicopterUnitEntity::new);
+
         marine = new AtlacianUnitType("marine") {{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -72,7 +76,7 @@ public class SvUnits{
         }};
 
         helio = new HelicopterUnitType("helio") {{
-            aiController = FlyingAI::new;
+            aiController = FlyingFollowAI::new;
             constructor = HelicopterUnitEntity::create;
             isEnemy = false;
             coreUnitDock = true;
@@ -140,9 +144,5 @@ public class SvUnits{
                 }};
             }});
         }};
-    }
-
-    static {
-        EntityMapping.register("helio",HelicopterUnitEntity::new);
     }
 }

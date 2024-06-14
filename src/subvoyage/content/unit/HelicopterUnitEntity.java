@@ -25,6 +25,11 @@ public class HelicopterUnitEntity extends UnitEntity {
 
 
     @Override
+    public int classId() {
+        return SvUnits.copterId;
+    }
+
+    @Override
     public void draw() {
         this.drawBuilding();
         if (this.mining()) {
