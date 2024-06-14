@@ -73,58 +73,76 @@ public class SvUnits{
 
         helio = new HelicopterUnitType("helio") {{
             aiController = FlyingAI::new;
-            constructor = UnitEntity::create;
-            fogRadius = 25;
+            constructor = HelicopterUnitEntity::create;
+            isEnemy = false;
+            coreUnitDock = true;
+            lowAltitude = true;
+            flying = true;
+
             drag = 0.05f;
-            speed = 1.25f;
+            speed = 1.6f;
             rotateSpeed = 12f;
+            accel = 0.1f;
+            fogRadius = 0.5f;
             health = 800f;
-            engineOffset = 6.25f;
+
+            engineOffset = 6.5f;
             engineSize = 0;
             setEnginesMirror(
-            new UnitEngine(-14 / 4 , -engineOffset, 1.25f, -90)
+            new UnitEngine(-16 / 4 , -engineOffset, 1.25f, -90)
             );
 
-            outline = false;
-            xScl = 1.5f;
-            yScl = 1.5f;
-            y = -0.05f;
-            moveRot = 90f;
-            rotation = 360f;
+            RotatorRegionPart copter = new RotatorRegionPart(){{
+                outline = false;
+                layerOffset = Layer.flyingUnitLow + 1;
+                xScl = 0.6f;
+                yScl = 0.6f;
+                y = -0.15f;
+
+                moveRot = 90f;
+                rotation = 360f;
+            }};
+
             hitSize = 8f;
+            onUpdate = (e) -> copter.moveRot = 90f+(90f*e.localAcceleration);
+            parts.add(copter);
+
+            ammoType = new PowerAmmoType(900);
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
-                alternate = false;
-                fogRadius = 2.5f;
                 y = -1.25f;
                 x = 6.5f;
-                reload = 60f;
+                reload = 10f;
+                ejectEffect = Fx.casing1;
                 recoil = 2f;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.lasershoot;
+                velocityRnd = 0f;
+                inaccuracy = 0f;
+                alternate = true;
+                fogRadius = 0;
                 lightRadius = 8;
-                bullet = new BasicBulletType(3f, 6){{
-                    sprite = "missile-large";
-                    width = 4.5f;
-                    height = 6f;
-                    lifetime = 120f;
-                    hitSize = 6f;
-                    pierceCap = 2;
-                    pierce = true;
-                    pierceBuilding = true;
-                    hitColor = backColor = trailColor = Color.valueOf("feb380");
-                    frontColor = Color.white;
-                    trailWidth = 2f;
-                    trailLength = 8;
-                    hitEffect = despawnEffect = Fx.blastExplosion;
-                    smokeEffect = Fx.smokePuff;
-                    splashDamageRadius = 10f;
-                    splashDamage = 30f;
+                bullet = new ArtilleryBulletType(3f, 11){{
+                    collidesTiles = true;
+                    collides = true;
+                    collidesAir = true;
 
-                    trailEffect = SvFx.missileTrailSmoke;
-                    trailRotation = true;
-                    trailInterval = 3f;
+                    trailSize = 1;
+                    homingPower = 0.08f;
+                    weaveMag = 4;
+                    weaveScale = 1;
+                    lifetime = 42f;
+                    keepVelocity = false;
+                    smokeEffect = SvFx.hitLaserOrange;
+                    hitEffect = despawnEffect = SvFx.hitLaserOrange;
+                    frontColor = Color.white;
+                    hitSound = Sounds.none;
+                    backColor = Pal.lightOrange;
                 }};
             }});
         }};
+    }
+
+    static {
+        EntityMapping.register("helio",HelicopterUnitEntity::new);
     }
 }
