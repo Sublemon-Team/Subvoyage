@@ -33,6 +33,8 @@ public class RotatorRegionPart extends DrawPart{
         float gx = growX * sclProg, gy = growY * sclProg;
         float rx = params.x + x, ry = params.y + y, rot = (t * moveRot) % rotation;
 
+
+
         Draw.xscl *= xScl + gx;
         Draw.yscl *= yScl + gy;
         Draw.z(Draw.z() + layerOffset);

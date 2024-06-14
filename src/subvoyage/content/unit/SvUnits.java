@@ -71,9 +71,9 @@ public class SvUnits{
             }});
         }};
 
-        helio = new AtlacianUnitType("helio") {{
+        helio = new HelicopterUnitType("helio") {{
             aiController = FlyingAI::new;
-            constructor = UnitEntity::create;
+            constructor = HelicopterUnitEntity::create;
             isEnemy = false;
             coreUnitDock = true;
             lowAltitude = true;
@@ -92,9 +92,7 @@ public class SvUnits{
             new UnitEngine(-16 / 4 , -engineOffset, 1.25f, -90)
             );
 
-            hitSize = 8f;
-            parts.add(
-            new RotatorRegionPart(){{
+            RotatorRegionPart copter = new RotatorRegionPart(){{
                 outline = false;
                 layerOffset = Layer.flyingUnit + 1;
                 xScl = 0.6f;
@@ -103,7 +101,11 @@ public class SvUnits{
 
                 moveRot = 90f;
                 rotation = 360f;
-            }});
+            }};
+
+            hitSize = 8f;
+            onUpdate = (e) -> copter.moveRot = 90f+(90f*e.localAcceleration);
+            parts.add(copter);
 
             ammoType = new PowerAmmoType(900);
             weapons.add(new Weapon(name + "-weapon"){{
@@ -138,5 +140,9 @@ public class SvUnits{
                 }};
             }});
         }};
+    }
+
+    static {
+        EntityMapping.register("helio",HelicopterUnitEntity::new);
     }
 }
