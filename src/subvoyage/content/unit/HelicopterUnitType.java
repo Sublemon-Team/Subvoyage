@@ -13,6 +13,7 @@ public class HelicopterUnitType extends AtlacianUnitType {
     public HelicopterUnitType(String name) {
         super(name);
         flying = true;
+        lowAltitude = true;
     }
 
     @Override

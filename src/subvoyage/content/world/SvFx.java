@@ -61,6 +61,11 @@ public class SvFx{
         }
     }).layer(Layer.bullet - 1f),
 
+    missileTrailShort = new Effect(16, e -> {
+        color(e.color);
+        Fill.circle(e.x, e.y, e.rotation * e.fout() / 2);
+    }).layer(Layer.bullet - 0.001f),
+
     shootLauncher = new Effect(70f, e -> {
         rand.setSeed(e.id);
         for(int i = 0; i < 6; i++){

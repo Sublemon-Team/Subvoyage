@@ -26,7 +26,7 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void draw(PartParams params){
         if(rotator.found()){
-            Tmp.v1.set(x, y);
+            Tmp.v1.set(x, y).rotate(params.rotation);
             float t = Time.time / 60f;
             float rx = params.x + x, ry = params.y + y, rot = (t * moveRot) % rotation;
 
