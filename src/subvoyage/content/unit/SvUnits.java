@@ -163,14 +163,15 @@ public class SvUnits{
                     yScl = 1.5f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> {
-                        moveRot = 600f + (moveRot * e.localAcceleration);
-                        unitrot = e.rotation;
-                        unitX = e.x;
-                        unitY = e.y;
-                    };
                     rotation = 360f;
                 }
+            };
+
+            onUpdate = (e) -> {
+                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
+                copter.unitrot = e.prefRotation();
+                copter.unitX = e.x;
+                copter.unitY = e.y;
             };
 
             parts.add(copter);
@@ -450,6 +451,17 @@ public class SvUnits{
                     };
                     rotation = 360f;
                 }
+            };
+
+            onUpdate = (e) -> {
+                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
+                copter.unitrot = e.prefRotation();
+                copter.unitX = e.x;
+                copter.unitY = e.y;
+                copter2.moveRot = 600f + (copter.moveRot * e.localAcceleration);
+                copter2.unitrot = e.prefRotation();
+                copter2.unitX = e.x;
+                copter2.unitY = e.y;
             };
 
             parts.add(copter);
