@@ -1,13 +1,13 @@
 package subvoyage.content.unit.better;
 
-import arc.math.Mathf;
+import arc.math.*;
 import arc.math.geom.Vec2;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.entities.EntityCollisions;
 import subvoyage.content.unit.systematical.BaseUnit;
 
-public class HelicopterUnitEntity extends BaseUnit {
+public class HelicopterUnitEntityNew extends BaseUnit {
     public float acceleration = 0;
     private boolean isAccelerating = false;
 
@@ -68,7 +68,7 @@ public class HelicopterUnitEntity extends BaseUnit {
     }
 
 
-    public HelicopterUnitType type() {return (HelicopterUnitType) type;}
-    public static HelicopterUnitEntity create() {return new HelicopterUnitEntity();}
+    public HelicopterUnitTypeNew type() {return (HelicopterUnitTypeNew) type;}
+    public static HelicopterUnitEntityNew create() {return new HelicopterUnitEntityNew();}
 
 }

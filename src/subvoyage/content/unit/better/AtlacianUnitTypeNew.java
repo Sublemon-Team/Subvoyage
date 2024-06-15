@@ -6,8 +6,8 @@ import mindustry.world.meta.Env;
 import subvoyage.content.unit.systematical.BaseUType;
 import subvoyage.content.world.items.SvItems;
 
-public class AtlacianUnitType extends BaseUType {
-    public AtlacianUnitType(String name) {
+public class AtlacianUnitTypeNew extends BaseUType {
+    public AtlacianUnitTypeNew(String name) {
         super(name);
         outlineColor = Pal.darkOutline;
         envDisabled = Env.space;

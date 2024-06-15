@@ -3,12 +3,12 @@ package subvoyage.content.unit.better;
 import mindustry.gen.Unit;
 import subvoyage.content.unit.AtlacianUnitType;
 
-public class HelicopterUnitType extends AtlacianUnitType {
+public class HelicopterUnitTypeNew extends AtlacianUnitType {
 
     public float accelerationTime = 60f;
     public float accelerationInertia = 0.1f;
 
-    public HelicopterUnitType(String name) {
+    public HelicopterUnitTypeNew(String name) {
         super(name);
         flying = true;
         lowAltitude = true;
@@ -19,7 +19,7 @@ public class HelicopterUnitType extends AtlacianUnitType {
 
     @Override
     public void draw(Unit unit) {
-        if(!(unit instanceof HelicopterUnitEntity helicopter)) return;
+        if(!(unit instanceof HelicopterUnitEntityNew helicopter)) return;
 
         super.draw(unit);
     }
