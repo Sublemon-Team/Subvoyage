@@ -16,6 +16,7 @@ public class RotatorRegionPart extends DrawPart{
     public float moveRot;
     public float unitX;
     public float unitY;
+    public boolean mirror = false;
 
     public @Nullable Color color;
     public String suffix = SubvoyageMod.ID + "-base-rotator";
@@ -32,6 +33,8 @@ public class RotatorRegionPart extends DrawPart{
     public void draw(PartParams params){
         if(rotator.found()){
             Vec2 vec = Tmp.v2.set(x,y).rotate(unitrot);
+            // todo: mirror
+
             float t = Time.time / 60f;
             float rx = params.x, ry = params.y, rot = (t * moveRot) % rotation;
 

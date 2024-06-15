@@ -93,7 +93,6 @@ public class SvUnits{
             health = 800f;
             engineSize = 0;
             hitSize = 12f;
-
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
                     layerOffset = Layer.flyingUnitLow;
@@ -101,14 +100,15 @@ public class SvUnits{
                     yScl = 1.5f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> {
-                        moveRot = 600f + (moveRot * e.localAcceleration);
-                        unitrot = e.rotation;
-                        unitX = e.x;
-                        unitY = e.y;
-                    };
                     rotation = 360f;
                 }
+            };
+
+            onUpdate = (e) -> {
+                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
+                copter.unitrot = e.rotation;
+                copter.unitX = e.x;
+                copter.unitY = e.y;
             };
 
             parts.add(copter);
@@ -252,21 +252,20 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 14f;
-            RotatorRegionPart copter = new RotatorRegionPart(){
-                {
+            RotatorRegionPart copter = new RotatorRegionPart(){{
                     layerOffset = Layer.flyingUnitLow;
                     xScl = 2f;
                     yScl = 2f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> {
-                        moveRot = 600f + (moveRot * e.localAcceleration);
-                        unitrot = e.rotation;
-                        unitX = e.x;
-                        unitY = e.y;
-                    };
                     rotation = 360f;
-                }
+            }};
+
+            onUpdate = (e) -> {
+                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
+                copter.unitrot = e.rotation;
+                copter.unitX = e.x;
+                copter.unitY = e.y;
             };
 
             parts.add(copter);
@@ -417,55 +416,25 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 14f;
-            RotatorRegionPart copter = new RotatorRegionPart(){
-                {
+            RotatorRegionPart copter = new RotatorRegionPart(){{
+                    mirror = false;
                     layerOffset = Layer.flyingUnitLow;
                     xScl = 1.65f;
                     yScl = 1.65f;
                     x = 17f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> {
-                        moveRot = 600f + (moveRot * e.localAcceleration);
-                        unitrot = e.rotation;
-                        unitX = e.x;
-                        unitY = e.y;
-                    };
                     rotation = 360f;
-                }
-            };
-
-            RotatorRegionPart copter2 = new RotatorRegionPart(){
-                {
-                    layerOffset = Layer.flyingUnitLow;
-                    xScl = 1.65f;
-                    yScl = 1.65f;
-                    x = -17f;
-                    y = -0.15f;
-                    moveRot = 600f;
-                    onUpdate = (e) -> {
-                        moveRot = 600f + (moveRot * e.localAcceleration);
-                        unitrot = e.rotation;
-                        unitX = e.x;
-                        unitY = e.y;
-                    };
-                    rotation = 360f;
-                }
-            };
+            }};
 
             onUpdate = (e) -> {
                 copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
-                copter.unitrot = e.prefRotation();
+                copter.unitrot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
-                copter2.moveRot = 600f + (copter.moveRot * e.localAcceleration);
-                copter2.unitrot = e.prefRotation();
-                copter2.unitX = e.x;
-                copter2.unitY = e.y;
             };
 
             parts.add(copter);
-            parts.add(copter2);
             parts.add(new ShapePart(){{
                 layer = Layer.effect;
                 circle = true;
