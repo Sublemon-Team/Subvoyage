@@ -379,9 +379,9 @@ public class SvUnits{
             }});
         }};
 
-        callees = new HelicopterUnitType("callees"){{
+        callees = new subvoyage.content.unit.better.HelicopterUnitType("callees"){{
             aiController = FlyingFollowAI::new;
-            constructor = HelicopterUnitEntity::create;
+            constructor = subvoyage.content.unit.better.HelicopterUnitEntity::create;
             drag = 0.16f;
             speed = 2f;
             rotateSpeed = 1f;
@@ -401,12 +401,6 @@ public class SvUnits{
                     moveRot = 600f;
                     rotation = 360f;
             }};
-
-            onDraw = (e) -> {
-                copter.unitrot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
 
             parts.add(copter);
             parts.add(new ShapePart(){{

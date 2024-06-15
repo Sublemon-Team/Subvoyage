@@ -22,81 +22,7 @@ public class BaseUType extends UnitType {
 
     @Override
     public void draw(Unit unit) {
-        if(unit.inFogTo(Vars.player.team())) return;
-
-        boolean isPayload = !unit.isAdded();
-
-        Mechc mech = unit instanceof Mechc ? (Mechc)unit : null;
-        float z = isPayload ? Draw.z() : unit.elevation > 0.5f ? (lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit) : groundLayer + Mathf.clamp(hitSize / 4000f, 0, 0.01f);
-
-        if(unit.controller().isBeingControlled(player.unit())){
-            drawControl(unit);
-        }
-
-        if(!isPayload && (unit.isFlying() || shadowElevation > 0)){
-            Draw.z(Math.min(Layer.darkness, z - 1f));
-            drawShadow(unit);
-        }
-
-        Draw.z(z - 0.02f);
-
-        Vec2 legOffset = Vec2.ZERO;
-        try {
-            legOffset = (Vec2) super.getClass().getField("legOffset").get(this);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            throw new RuntimeException(e);
-        }
-        if(mech != null){
-            drawMech(mech);
-
-            //side
-            legOffset.trns(mech.baseRotation(), 0f, Mathf.lerp(Mathf.sin(mech.walkExtend(true), 2f/Mathf.PI, 1) * mechSideSway, 0f, unit.elevation));
-
-            //front
-            legOffset.add(Tmp.v1.trns(mech.baseRotation() + 90, 0f, Mathf.lerp(Mathf.sin(mech.walkExtend(true), 1f/Mathf.PI, 1) * mechFrontSway, 0f, unit.elevation)));
-
-            unit.trns(legOffset.x, legOffset.y);
-        }
-
-        if(unit instanceof Tankc){
-            drawTank((Unit & Tankc)unit);
-        }
-
-        if(unit instanceof Legsc && !isPayload){
-            drawLegs((Unit & Legsc)unit);
-        }
-
-        Draw.z(Math.min(z - 0.01f, Layer.bullet - 1f));
-
-        if(unit instanceof Payloadc){
-            drawPayload((Unit & Payloadc)unit);
-        }
-
-        drawSoftShadow(unit);
-
-        Draw.z(z);
-
-        if(unit instanceof Crawlc c){
-            drawCrawl(c);
-        }
-
-        if(drawBody) drawOutline(unit);
-        drawWeaponOutlines(unit);
-        if(engineLayer > 0) Draw.z(engineLayer);
-        if(trailLength > 0 && !naval && (unit.isFlying() || !useEngineElevation)){
-            drawTrail(unit);
-        }
-        if(engines.size > 0) drawEngines(unit);
-        Draw.z(z);
-        if(drawBody) drawBody(unit);
-        if(drawCell) drawCell(unit);
-        drawWeapons(unit);
-        if(drawItems) drawItems(unit);
-        drawLight(unit);
-
-        if(unit.shieldAlpha > 0 && drawShields){
-            drawShield(unit);
-        }
+        super.draw(unit);
 
         //TODO how/where do I draw under?
         if(parts.size > 0){
@@ -116,22 +42,8 @@ public class BaseUType extends UnitType {
 
                 if(part instanceof UnitDrawPart drawPart && unit instanceof BaseUnit base)
                     drawPart.draw(base,DrawPart.params);
-                else part.draw(DrawPart.params);
             }
         }
-
-        if(!isPayload){
-            for(Ability a : unit.abilities){
-                Draw.reset();
-                a.draw(unit);
-            }
-        }
-
-        if(mech != null){
-            unit.trns(-legOffset.x, -legOffset.y);
-        }
-
-        Draw.reset();
     }
 
     @Override

@@ -15,15 +15,15 @@ public class HelicopterUnitEntity extends BaseUnit {
     public void moveAt(Vec2 vector, float acceleration) {
         Vec2 t = tmp1.set(vector);
         tmp2.set(t).sub(this.vel).limit(acceleration * vector.len() * Time.delta);
-
-        this.vel.add(accelerate(tmp2));
+        if(t.len() >= 0.2f) accelerate();
+        this.vel.add(tmp2.times(new Vec2(acceleration(),acceleration())));
     }
 
     @Override
     public void move(float cx, float cy) {
         EntityCollisions.SolidPred check = this.solidity();
 
-        accelerate();
+        if(cx*cy >= 0.1f) accelerate();
 
         cx*=acceleration();
         cy*=acceleration();
@@ -45,20 +45,21 @@ public class HelicopterUnitEntity extends BaseUnit {
 
 
     public void tryDecelerate() {
-        if(isAccelerating) {isAccelerating = false; return;}
-        decelerate();
+        if(!isAccelerating) decelerate();
+        else isAccelerating = false;
     }
 
     public float acceleration() {return acceleration;}
-    public void acceleration(float acceleration) {this.acceleration = acceleration;}
+    public void acceleration(float acceleration) {this.acceleration = Mathf.clamp(acceleration);}
     public void accelerate() {
         isAccelerating = true;
         float step = Time.delta/(type().accelerationTime);
-        float newAcceleration = acceleration()*(1+step*type().accelerationInertia);
+        float newAcceleration = acceleration()*(1+step)+type().accelerationInertia;
         acceleration(newAcceleration);
     }
     public void decelerate() {
-        float step = Time.delta/(type().accelerationTime*2);
+        isAccelerating = false;
+        float step = Time.delta/(type().accelerationTime)*2;
         acceleration(acceleration()-step);
     }
     public Vec2 accelerate(Vec2 vec) {
