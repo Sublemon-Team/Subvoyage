@@ -32,9 +32,7 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void draw(PartParams params){
         if(rotator.found()){
-            Vec2 vec = Tmp.v2.set(x,y).rotate(unitrot);
-            // todo: mirror
-
+            Vec2 vec = Tmp.v2.set(x,y).rotate(unitrot - 90);
             float t = Time.time / 60f;
             float rx = params.x, ry = params.y, rot = (t * moveRot) % rotation;
 
@@ -46,8 +44,19 @@ public class RotatorRegionPart extends DrawPart{
                 Draw.z(outlineLayerOffset);
                 Draw.color(Pal.darkOutline);
                 Draw.rect(outlineR, vec.x + rx, vec.y + ry, rot);
-                Draw.reset();
                 Draw.z(Draw.z());
+            }
+
+            Vec2 mirrorVec = Tmp.v2.set(x,y).rotate(unitrot - 90).inv();
+            if(mirror) {
+                Draw.z(layerOffset);
+                Drawf.spinSprite(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
+                if(outline){
+                    Draw.z(outlineLayerOffset);
+                    Draw.color(Pal.darkOutline);
+                    Draw.rect(outlineR, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
+                    Draw.z(Draw.z());
+                }
             }
 
             Draw.reset();

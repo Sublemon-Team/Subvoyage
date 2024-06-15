@@ -191,8 +191,6 @@ public class SvUnits{
                 reload = 60f;
                 recoil = 2f;
                 shootSound = Sounds.mediumCannon;
-                velocityRnd = 0f;
-                inaccuracy = 0f;
 
                 top = false;
                 alternate = false;
@@ -316,9 +314,6 @@ public class SvUnits{
                 reload = 120f;
                 recoil = 2f;
                 shootSound = Sounds.missileLaunch;
-                velocityRnd = 0f;
-                inaccuracy = 0f;
-
                 bullet = new BulletType(){{
                     shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
@@ -336,9 +331,6 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        splashDamageRadius = 15f;
-                        splashDamage = 80f;
-
                         trailEffect = SvFx.missileTrailSmoke;
                         trailInterval = 3f;
                         trailWidth = 1f;
@@ -379,7 +371,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(splashDamage / 2, splashDamageRadius){{
+                            bullet = new ExplosionBulletType(60, 15){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
@@ -416,12 +408,12 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 14f;
-            RotatorRegionPart copter = new RotatorRegionPart(){{
-                    mirror = false;
+            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+                    mirror = true;
                     layerOffset = Layer.flyingUnitLow;
-                    xScl = 1.65f;
-                    yScl = 1.65f;
-                    x = 17f;
+                    xScl = 1.2f;
+                    yScl = 1.2f;
+                    x = 16.5f;
                     y = -0.15f;
                     moveRot = 600f;
                     rotation = 360f;
@@ -456,6 +448,99 @@ public class SvUnits{
             }}
             );
 
+            weapons.add(new Weapon(name + "-weapon"){{
+                top = false;
+                x = 13f;
+                y = 8f;
+                shoot.shots = 3;
+                shoot.shotDelay = 12f;
+
+                reload = 160f;
+                recoil = 2f;
+
+                rotate = true;
+                rotateSpeed = 0.4f;
+                layerOffset = -2f;
+                rotationLimit = 22f;
+                minWarmup = 0.95f;
+                shootWarmupSpeed = 0.1f;
+                inaccuracy = 28f;
+                shootCone = 40f;
+
+                shootSound = Sounds.missileLaunch;
+                parts.add(new RegionPart("-blade"){{
+                    heatProgress = PartProgress.warmup;
+                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
+                    heatColor = Color.valueOf("feb380");
+                    x = 5 / 4f;
+                    y = 0f;
+                    moveRot = -33f;
+                    moveY = -1f;
+                    moveX = -1f;
+                    under = true;
+                    mirror = true;
+                }});
+
+                bullet = new BulletType(){{
+                    shootEffect = Fx.sparkShoot;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    hitColor = Pal.suppress;
+                    shake = 1f;
+                    speed = 0f;
+                    keepVelocity = false;
+                    collidesAir = true;
+                    spawnUnit = new MissileUnitType("callees-missile"){{
+                        outlineColor = Pal.darkOutline;
+                        trailRotation = true;
+                        targetAir = true;
+                        physics = true;
+                        lowAltitude = true;
+
+                        hitEffect = despawnEffect = Fx.blastExplosion;
+                        smokeEffect = SvFx.shootLauncher;
+                        trailEffect = SvFx.missileTrailSmoke;
+                        trailInterval = 3f;
+                        trailWidth = 1f;
+                        trailLength = 6;
+
+                        speed = 4.6f;
+                        maxRange = 3f;
+                        health = 40;
+                        homingDelay = 5f;
+
+                        engineSize = 3f;
+                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        engineLayer = Layer.effect;
+                        deathExplosionEffect = Fx.none;
+                        loopSoundVolume = 0.1f;
+                        weapons.add(new Weapon(){{
+                            shootCone = 360f;
+                            mirror = false;
+                            reload = 1f;
+                            shootOnDeath = true;
+                            bullet = new ExplosionBulletType(120, 22f){{
+                                collidesAir = true;
+                                suppressionRange = 80f;
+                                shootEffect = new ExplosionEffect(){{
+                                    lifetime = 50f;
+                                    waveStroke = 5f;
+                                    waveLife = 8f;
+                                    waveColor = Color.white;
+                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    waveRad = 40f;
+                                    smokeSize = 4f;
+                                    smokes = 7;
+                                    smokeSizeBase = 0f;
+                                    sparks = 10;
+                                    sparkRad = 40f;
+                                    sparkLen = 6f;
+                                    sparkStroke = 2f;
+                                }};
+                            }};
+                        }});
+                    }};
+                }};
+            }});
         }};
 
     }
