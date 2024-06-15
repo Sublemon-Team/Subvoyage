@@ -31,9 +31,9 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void draw(PartParams params){
         if(rotator.found()){
-            Vec2 vec = Tmp.v2.set(x,y).nor().rotate(unitrot);
+            Vec2 vec = Tmp.v2.set(x,y).rotate(unitrot);
             float t = Time.time / 60f;
-            float rx = params.x + x, ry = params.y + y, rot = (t * moveRot) % rotation;
+            float rx = params.x, ry = params.y, rot = (t * moveRot) % rotation;
 
             Draw.xscl *= xScl;
             Draw.yscl *= yScl;
