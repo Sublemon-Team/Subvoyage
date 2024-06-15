@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 public class HelicopterUnitType extends AtlacianUnitType {
     public Consumer<HelicopterUnitEntity> onUpdate = (e) -> {};
+    public Consumer<HelicopterUnitEntity> onDraw = (e) -> {};
 
     public HelicopterUnitType(String name) {
         super(name);
@@ -24,6 +25,12 @@ public class HelicopterUnitType extends AtlacianUnitType {
     @Override
     public void update(Unit unit) {
         super.update(unit);
+    }
+
+    @Override
+    public void draw(Unit unit) {
+        if(unit instanceof HelicopterUnitEntity h) onDraw.accept(h);
+        super.draw(unit);
     }
 
     @Override

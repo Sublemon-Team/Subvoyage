@@ -427,7 +427,7 @@ public class SvUnits{
                     rotation = 360f;
             }};
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
                 copter.unitrot = e.rotation();
                 copter.unitX = e.x;
