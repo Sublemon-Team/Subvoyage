@@ -99,13 +99,13 @@ public class SvUnits{
                     xScl = 1.5f;
                     yScl = 1.5f;
                     y = -0.15f;
-                    moveRot = 600f;
-                    rotation = 360f;
+                    rotationSpeed = 600f;
+                    rotationRad = 360f;
                 }
             };
 
             onUpdate = (e) -> {
-                copter.unitrot = e.rotation;
+                copter.unitRot = e.rotation;
                 copter.unitX = e.x;
                 copter.unitY = e.y;
             };
@@ -160,8 +160,8 @@ public class SvUnits{
                 xScl = 1.27f;
                 yScl = 1.27f;
                 y = 2.47f;
-                moveRot = 600f;
-                rotation = 360f;
+                rotationSpeed = 600f;
+                rotationRad = 360f;
             }};
 
             RotatorRegionPart tail = new RotatorRegionPart(){{
@@ -169,16 +169,16 @@ public class SvUnits{
                 xScl = 0.75f;
                 yScl = 0.75f;
                 y = -10.5f;
-                moveRot = 600f;
-                rotation = 360f;
+                rotationSpeed = 600f;
+                rotationRad = 360f;
             }};
 
             onUpdate = (e) -> {
-                copter.unitrot = e.prefRotation();
+                copter.unitRot = e.prefRotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
 
-                tail.unitrot = e.prefRotation();
+                tail.unitRot = e.prefRotation();
                 tail.unitX = e.x;
                 tail.unitY = e.y;
             };
@@ -249,12 +249,12 @@ public class SvUnits{
                     xScl = 2f;
                     yScl = 2f;
                     y = -0.15f;
-                    moveRot = 600f;
-                    rotation = 360f;
+                    rotationSpeed = 600f;
+                    rotationRad = 360f;
             }};
 
             onUpdate = (e) -> {
-                copter.unitrot = e.rotation;
+                copter.unitRot = e.rotation;
                 copter.unitX = e.x;
                 copter.unitY = e.y;
             };
@@ -398,12 +398,12 @@ public class SvUnits{
                     yScl = 1.2f;
                     x = 16.5f;
                     y = -0.15f;
-                    moveRot = 600f;
-                    rotation = 360f;
+                    rotationSpeed = 600f;
+                    rotationRad = 360f;
             }};
 
             onDraw = (e) -> {
-                copter.unitrot = e.rotation();
+                copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
             };

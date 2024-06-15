@@ -10,12 +10,10 @@ import mindustry.graphics.*;
 import subvoyage.*;
 
 public class RotatorRegionPart extends DrawPart{
-    public TextureRegion rotator, outlineR, blurR, base;
+    public TextureRegion rotator, outlineR, blurR, top;
     public float layerOffset = -1, outlineLayerOffset = -0.001f;
-    public float x, y, xScl = 1f, yScl = 1f, rotation, unitrot;
-    public float moveRot;
-    public float unitX;
-    public float unitY;
+    public float x, y, xScl = 1f, yScl = 1f, rotationRad, rotationSpeed;
+    public float unitX, unitY, unitRot;
     public boolean mirror = false;
 
     public @Nullable Color color;
@@ -33,14 +31,14 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void draw(PartParams params){
         if(rotator.found()){
-            Vec2 vec = Tmp.v2.set(x,y).rotate(unitrot - 90);
+            Vec2 vec = Tmp.v2.set(x,y).rotate(unitRot - 90);
             float t = Time.time / 60f;
-            float rx = params.x, ry = params.y, rot = (t * moveRot) % rotation;
+            float rx = params.x, ry = params.y, rot = (t * rotationSpeed) % rotationRad;
 
             Draw.xscl *= xScl;
             Draw.yscl *= yScl;
             Draw.z(layerOffset);
-            Draw.rect(base, vec.x + rx, vec.y + ry, vec.angle());
+            Draw.rect(top, vec.x + rx, vec.y + ry, vec.angle());
             Drawf.spinSprite(rotator, vec.x + rx, vec.y + ry, rot);
             if(blur){
                 Draw.z(layerOffset - 1);
@@ -57,10 +55,10 @@ public class RotatorRegionPart extends DrawPart{
                 Draw.z(Draw.z());
             }
 
-            Vec2 mirrorVec = Tmp.v2.set(x,y).rotate(unitrot - 90).inv();
+            Vec2 mirrorVec = Tmp.v2.set(x,y).rotate(unitRot - 90).inv();
             if(mirror) {
                 Draw.z(layerOffset);
-                Draw.rect(base, mirrorVec.x + rx, mirrorVec.y + ry, mirrorVec.angle());
+                Draw.rect(top, mirrorVec.x + rx, mirrorVec.y + ry, mirrorVec.angle());
                 Drawf.spinSprite(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
                 if(blur){
                     Draw.z(layerOffset - 1);
@@ -85,7 +83,7 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void load(String name){
         rotator = Core.atlas.find(suffix);
-        base = Core.atlas.find(suffix + "-base");
+        top = Core.atlas.find(suffix + "-top");
         if(outline){
             outlineR = Core.atlas.find(suffix + "-outline");
         }
