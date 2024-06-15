@@ -46,6 +46,7 @@ public class RotatorRegionPart extends DrawPart{
                 Draw.alpha(0.75f);
                 Drawf.spinSprite(blurR, vec.x + rx, vec.y + ry, rot);
                 Draw.z(Draw.z());
+                Draw.alpha(1);
             }
 
             if(outline){
@@ -64,6 +65,7 @@ public class RotatorRegionPart extends DrawPart{
                     Draw.alpha(0.75f);
                     Drawf.spinSprite(blurR, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
                     Draw.z(Draw.z());
+                    Draw.alpha(1);
                 }
 
                 if(outline){

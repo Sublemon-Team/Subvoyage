@@ -88,7 +88,7 @@ public class SvUnits{
             constructor = HelicopterUnitEntity::create;
             drag = 0.05f;
             speed = 1.6f;
-            rotateSpeed = 12f;
+            rotateSpeed = 4f;
             accel = 0.1f;
             health = 800f;
             engineSize = 0;
@@ -148,7 +148,7 @@ public class SvUnits{
             constructor = HelicopterUnitEntity::create;
             drag = 0.15f;
             speed = 1.3f;
-            rotateSpeed = 6f;
+            rotateSpeed = 3f;
             accel = 0.25f;
             health = 1450f;
 
@@ -239,7 +239,7 @@ public class SvUnits{
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
             speed = 2f;
-            rotateSpeed = 5f;
+            rotateSpeed = 2f;
             accel = 0.45f;
             health = 1820f;
 
@@ -386,7 +386,7 @@ public class SvUnits{
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
             speed = 2f;
-            rotateSpeed = 5f;
+            rotateSpeed = 1f;
             accel = 0.45f;
             health = 1820f;
 
@@ -537,10 +537,10 @@ public class SvUnits{
 
     }
 
-
     public static void helicopter(String id) {
         mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
     }
+    
     public static void helicopter(String... ids) {
         for (String id : ids) helicopter(id);
     }
