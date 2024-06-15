@@ -13,6 +13,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
+import mindustry.type.weapons.*;
 import subvoyage.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
@@ -22,11 +23,11 @@ public class SvUnits{
     // core
     marine,
     //helicopters
-    helio, harke;
+    lapetus, skath, charon, callees;
 
     public static int mapHelicopter = 0;
     public static void load(){
-        helicopter("helio","harke");
+        helicopter("lapetus", "skath", "charon", "callees");
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -82,7 +83,7 @@ public class SvUnits{
             }});
         }};
 
-        helio = new HelicopterUnitType("helio"){{
+        lapetus = new HelicopterUnitType("lapetus"){{
             aiController = FlyingFollowAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.05f;
@@ -95,13 +96,17 @@ public class SvUnits{
 
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
-                    outline = false;
                     layerOffset = Layer.flyingUnitLow;
                     xScl = 1.5f;
                     yScl = 1.5f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> moveRot = 600f + (600f * e.localAcceleration);
+                    onUpdate = (e) -> {
+                        moveRot = 600f + (moveRot * e.localAcceleration);
+                        unitrot = e.rotation;
+                        unitX = e.x;
+                        unitY = e.y;
+                    };
                     rotation = 360f;
                 }
             };
@@ -139,7 +144,7 @@ public class SvUnits{
             }});
         }};
 
-        harke = new HelicopterUnitType("harke"){{
+        skath = new HelicopterUnitType("skath"){{
             aiController = FlyingFollowAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.15f;
@@ -153,13 +158,17 @@ public class SvUnits{
             hitSize = 14f;
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
-                    outline = false;
                     layerOffset = Layer.flyingUnitLow;
                     xScl = 1.5f;
                     yScl = 1.5f;
                     y = -0.15f;
                     moveRot = 600f;
-                    onUpdate = (e) -> moveRot = 600f + (moveRot * e.localAcceleration);
+                    onUpdate = (e) -> {
+                        moveRot = 600f + (moveRot * e.localAcceleration);
+                        unitrot = e.rotation;
+                        unitX = e.x;
+                        unitY = e.y;
+                    };
                     rotation = 360f;
                 }
             };
@@ -178,14 +187,138 @@ public class SvUnits{
             weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
-                reload = 80f;
+                reload = 60f;
                 recoil = 2f;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.mediumCannon;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
 
                 top = false;
                 alternate = false;
+                shoot.shots = 4;
+                shoot.shotDelay = 15f;
+                bullet = new BasicBulletType(){{
+                    sprite = "missile-large";
+                    width = height = 8f;
+                    layer = Layer.scorch;
+                    maxRange = 50f;
+                    ignoreRotation = true;
+
+                    hitColor = trailColor = Color.valueOf("feb380");
+                    frontColor = Color.white;
+                    trailWidth = 2f;
+                    trailLength = 8;
+                    hitEffect = despawnEffect = Fx.blastExplosion;
+                    smokeEffect = SvFx.shootLauncher;
+                    hitSound = Sounds.plasmaboom;
+
+                    backColor = Color.valueOf("feb380");
+                    frontColor = Color.white;
+                    mixColorTo = Color.white;
+
+                    ejectEffect = Fx.none;
+                    hitSize = 22f;
+
+                    collidesAir = true;
+                    lifetime = 87f;
+
+                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                    keepVelocity = false;
+
+                    shrinkX = shrinkY = 0f;
+                    weaveMag = 2f;
+                    weaveScale = 1f;
+                    speed = 0.8f;
+                    drag = -0.020f;
+                    homingPower = 0.05f;
+                    collideFloor = true;
+
+                    splashDamage = 40f;
+                    splashDamageRadius = 25f;
+                }};
+            }});
+        }};
+
+        charon = new HelicopterUnitType("charon"){{
+            aiController = FlyingFollowAI::new;
+            constructor = HelicopterUnitEntity::create;
+            drag = 0.16f;
+            speed = 2f;
+            rotateSpeed = 5f;
+            accel = 0.45f;
+            health = 1820f;
+
+            engineOffset = -7.5f;
+            engineSize = 0;
+            hitSize = 14f;
+            RotatorRegionPart copter = new RotatorRegionPart(){
+                {
+                    layerOffset = Layer.flyingUnitLow;
+                    xScl = 2f;
+                    yScl = 2f;
+                    y = -0.15f;
+                    moveRot = 600f;
+                    onUpdate = (e) -> {
+                        moveRot = 600f + (moveRot * e.localAcceleration);
+                        unitrot = e.rotation;
+                        unitX = e.x;
+                        unitY = e.y;
+                    };
+                    rotation = 360f;
+                }
+            };
+
+            parts.add(copter);
+            parts.add(new ShapePart(){{
+                layer = Layer.effect;
+                circle = true;
+                y = -0.25f;
+                radius = 1.5f;
+                color = Color.valueOf("feb380");
+                colorTo = Color.white;
+                progress = PartProgress.life.curve(Interp.pow5In);
+            }});
+
+            abilities.add(
+            new MoveEffectAbility(3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
+                teamColor = true;
+            }},
+
+            new MoveEffectAbility(-3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
+                teamColor = true;
+            }}
+            );
+
+            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
+                top = false;
+                mirror = true;
+                alternate = false;
+
+                x = 4f;
+                y = -9.25f;
+
+                reload = 50f;
+                targetInterval = 10f;
+                targetSwitchInterval = 15f;
+                bullet = new BulletType(){{
+                    shootEffect = Fx.sparkShoot;
+                    hitEffect = Fx.pointHit;
+                    maxRange = 100f;
+                    damage = 17f;
+                }};
+            }});
+
+            weapons.add(new Weapon(SubvoyageMod.ID + "-rocket-launcher"){{
+                top = false;
+                alternate = false;
+                x = 6f;
+                y = 2f;
+                reload = 120f;
+                recoil = 2f;
+                shootSound = Sounds.missileLaunch;
+                velocityRnd = 0f;
+                inaccuracy = 0f;
+
                 bullet = new BulletType(){{
                     shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
@@ -194,7 +327,7 @@ public class SvUnits{
                     speed = 0f;
                     keepVelocity = false;
                     collidesAir = true;
-                    spawnUnit = new MissileUnitType("harke-missile"){{
+                    spawnUnit = new MissileUnitType("charon-missile"){{
                         outlineColor = Pal.darkOutline;
                         trailRotation = true;
                         targetAir = true;
@@ -270,6 +403,80 @@ public class SvUnits{
                 }};
             }});
         }};
+
+        callees = new HelicopterUnitType("callees"){{
+            aiController = FlyingFollowAI::new;
+            constructor = HelicopterUnitEntity::create;
+            drag = 0.16f;
+            speed = 2f;
+            rotateSpeed = 5f;
+            accel = 0.45f;
+            health = 1820f;
+
+            engineOffset = -7.5f;
+            engineSize = 0;
+            hitSize = 14f;
+            RotatorRegionPart copter = new RotatorRegionPart(){
+                {
+                    layerOffset = Layer.flyingUnitLow;
+                    xScl = 1.65f;
+                    yScl = 1.65f;
+                    x = 17f;
+                    y = -0.15f;
+                    moveRot = 600f;
+                    onUpdate = (e) -> {
+                        moveRot = 600f + (moveRot * e.localAcceleration);
+                        unitrot = e.rotation;
+                        unitX = e.x;
+                        unitY = e.y;
+                    };
+                    rotation = 360f;
+                }
+            };
+
+            RotatorRegionPart copter2 = new RotatorRegionPart(){
+                {
+                    layerOffset = Layer.flyingUnitLow;
+                    xScl = 1.65f;
+                    yScl = 1.65f;
+                    x = -17f;
+                    y = -0.15f;
+                    moveRot = 600f;
+                    onUpdate = (e) -> {
+                        moveRot = 600f + (moveRot * e.localAcceleration);
+                        unitrot = e.rotation;
+                        unitX = e.x;
+                        unitY = e.y;
+                    };
+                    rotation = 360f;
+                }
+            };
+
+            parts.add(copter);
+            parts.add(copter2);
+            parts.add(new ShapePart(){{
+                layer = Layer.effect;
+                circle = true;
+                x = -0.25f;
+                y = -8;
+                radius = 2f;
+                color = Color.valueOf("feb380");
+                colorTo = Color.white;
+                progress = PartProgress.life.curve(Interp.pow5In);
+            }});
+
+            abilities.add(
+            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
+                teamColor = true;
+            }},
+
+            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
+                teamColor = true;
+            }}
+            );
+
+        }};
+
     }
 
 
