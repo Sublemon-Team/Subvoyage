@@ -10,7 +10,7 @@ import mindustry.graphics.*;
 import subvoyage.*;
 
 public class RotatorRegionPart extends DrawPart{
-    public TextureRegion rotator, outlineR;
+    public TextureRegion rotator, outlineR, blurR;
     public float layerOffset = -1, outlineLayerOffset = -0.001f;
     public float x, y, xScl = 1f, yScl = 1f, rotation, unitrot;
     public float moveRot;
@@ -21,6 +21,7 @@ public class RotatorRegionPart extends DrawPart{
     public @Nullable Color color;
     public String suffix = SubvoyageMod.ID + "-base-rotator";
     public boolean outline = false;
+    public boolean blur = true;
 
     public RotatorRegionPart(String suffix){
         this.suffix = suffix;
@@ -40,6 +41,13 @@ public class RotatorRegionPart extends DrawPart{
             Draw.yscl *= yScl;
             Draw.z(layerOffset);
             Drawf.spinSprite(rotator, vec.x + rx, vec.y + ry, rot);
+            if(blur){
+                Draw.z(layerOffset - 1);
+                Draw.alpha(0.75f);
+                Drawf.spinSprite(blurR, vec.x + rx, vec.y + ry, rot);
+                Draw.z(Draw.z());
+            }
+
             if(outline){
                 Draw.z(outlineLayerOffset);
                 Draw.color(Pal.darkOutline);
@@ -51,6 +59,13 @@ public class RotatorRegionPart extends DrawPart{
             if(mirror) {
                 Draw.z(layerOffset);
                 Drawf.spinSprite(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
+                if(blur){
+                    Draw.z(layerOffset - 1);
+                    Draw.alpha(0.75f);
+                    Drawf.spinSprite(blurR, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
+                    Draw.z(Draw.z());
+                }
+
                 if(outline){
                     Draw.z(outlineLayerOffset);
                     Draw.color(Pal.darkOutline);
@@ -67,7 +82,11 @@ public class RotatorRegionPart extends DrawPart{
     public void load(String name){
         rotator = Core.atlas.find(suffix);
         if(outline){
-            outlineR = Core.atlas.find(name + suffix + "-outline");
+            outlineR = Core.atlas.find(suffix + "-outline");
+        }
+
+        if(blur) {
+            blurR = Core.atlas.find(suffix + "-blur");
         }
     }
 }

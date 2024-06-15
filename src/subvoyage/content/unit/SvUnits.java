@@ -105,7 +105,6 @@ public class SvUnits{
             };
 
             onUpdate = (e) -> {
-                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
                 copter.unitrot = e.rotation;
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -156,35 +155,35 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 14f;
-            RotatorRegionPart copter = new RotatorRegionPart(){
-                {
-                    layerOffset = Layer.flyingUnitLow;
-                    xScl = 1.5f;
-                    yScl = 1.5f;
-                    y = -0.15f;
-                    moveRot = 600f;
-                    rotation = 360f;
-                }
-            };
+            RotatorRegionPart copter = new RotatorRegionPart(){{
+                layerOffset = Layer.flyingUnitLow;
+                xScl = 1.27f;
+                yScl = 1.27f;
+                y = 2.47f;
+                moveRot = 600f;
+                rotation = 360f;
+            }};
+
+            RotatorRegionPart tail = new RotatorRegionPart(){{
+                layerOffset = Layer.flyingUnitLow;
+                xScl = 0.75f;
+                yScl = 0.75f;
+                y = -10.5f;
+                moveRot = 600f;
+                rotation = 360f;
+            }};
 
             onUpdate = (e) -> {
-                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
                 copter.unitrot = e.prefRotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
+
+                tail.unitrot = e.prefRotation();
+                tail.unitX = e.x;
+                tail.unitY = e.y;
             };
 
-            parts.add(copter);
-            abilities.add(
-            new MoveEffectAbility(3, engineOffset - 1, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }},
-
-            new MoveEffectAbility(-3, engineOffset - 1, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }}
-            );
-
+            parts.addAll(copter, tail);
             weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
@@ -199,7 +198,6 @@ public class SvUnits{
                 bullet = new BasicBulletType(){{
                     sprite = "missile-large";
                     width = height = 8f;
-                    layer = Layer.scorch;
                     maxRange = 50f;
                     ignoreRotation = true;
 
@@ -223,14 +221,12 @@ public class SvUnits{
 
                     hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
                     keepVelocity = false;
-
-                    shrinkX = shrinkY = 0f;
                     weaveMag = 2f;
                     weaveScale = 1f;
                     speed = 0.8f;
                     drag = -0.020f;
                     homingPower = 0.05f;
-                    collideFloor = true;
+                    collideTerrain = true;
 
                     splashDamage = 40f;
                     splashDamageRadius = 25f;
@@ -260,23 +256,12 @@ public class SvUnits{
             }};
 
             onUpdate = (e) -> {
-                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
                 copter.unitrot = e.rotation;
                 copter.unitX = e.x;
                 copter.unitY = e.y;
             };
 
             parts.add(copter);
-            parts.add(new ShapePart(){{
-                layer = Layer.effect;
-                circle = true;
-                y = -0.25f;
-                radius = 1.5f;
-                color = Color.valueOf("feb380");
-                colorTo = Color.white;
-                progress = PartProgress.life.curve(Interp.pow5In);
-            }});
-
             abilities.add(
             new MoveEffectAbility(3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
                 teamColor = true;
@@ -420,7 +405,6 @@ public class SvUnits{
             }};
 
             onDraw = (e) -> {
-                copter.moveRot = 600f + (copter.moveRot * e.localAcceleration);
                 copter.unitrot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -438,11 +422,19 @@ public class SvUnits{
                 progress = PartProgress.life.curve(Interp.pow5In);
             }});
 
+            abilities.add(new SuppressionFieldAbility(){{
+                layer = Layer.flyingUnitLow - 1;
+                orbRadius = 0.65f;
+                y = 6f;
+
+                color = Color.valueOf("feb380");
+                particleColor = Color.valueOf("FE6C4C");
+            }});
+
             abilities.add(
             new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
                 teamColor = true;
             }},
-
             new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
                 teamColor = true;
             }}
