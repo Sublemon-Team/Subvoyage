@@ -226,8 +226,6 @@ public class SvUnits{
                     speed = 0.8f;
                     drag = -0.020f;
                     homingPower = 0.05f;
-                    collideTerrain = true;
-
                     splashDamage = 40f;
                     splashDamageRadius = 25f;
                 }};
@@ -431,14 +429,19 @@ public class SvUnits{
                 particleColor = Color.valueOf("FE6C4C");
             }});
 
-            abilities.add(
-            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }},
-            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }}
+            trailLength = 20;
+            trailScl = 1.9f;
+            setEnginesMirror(
+                new UnitEngine(7.2f, -15, 2.25f, -90)
             );
+//            abilities.add(
+//            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
+//                teamColor = true;
+//            }},
+//            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
+//                teamColor = true;
+//            }}
+//            );
 
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
@@ -540,7 +543,7 @@ public class SvUnits{
     public static void helicopter(String id) {
         mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
     }
-    
+
     public static void helicopter(String... ids) {
         for (String id : ids) helicopter(id);
     }

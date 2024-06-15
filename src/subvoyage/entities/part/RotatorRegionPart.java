@@ -10,7 +10,7 @@ import mindustry.graphics.*;
 import subvoyage.*;
 
 public class RotatorRegionPart extends DrawPart{
-    public TextureRegion rotator, outlineR, blurR;
+    public TextureRegion rotator, outlineR, blurR, base;
     public float layerOffset = -1, outlineLayerOffset = -0.001f;
     public float x, y, xScl = 1f, yScl = 1f, rotation, unitrot;
     public float moveRot;
@@ -40,6 +40,7 @@ public class RotatorRegionPart extends DrawPart{
             Draw.xscl *= xScl;
             Draw.yscl *= yScl;
             Draw.z(layerOffset);
+            Draw.rect(base, vec.x + rx, vec.y + ry, vec.angle());
             Drawf.spinSprite(rotator, vec.x + rx, vec.y + ry, rot);
             if(blur){
                 Draw.z(layerOffset - 1);
@@ -59,6 +60,7 @@ public class RotatorRegionPart extends DrawPart{
             Vec2 mirrorVec = Tmp.v2.set(x,y).rotate(unitrot - 90).inv();
             if(mirror) {
                 Draw.z(layerOffset);
+                Draw.rect(base, mirrorVec.x + rx, mirrorVec.y + ry, mirrorVec.angle());
                 Drawf.spinSprite(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
                 if(blur){
                     Draw.z(layerOffset - 1);
@@ -83,6 +85,7 @@ public class RotatorRegionPart extends DrawPart{
     @Override
     public void load(String name){
         rotator = Core.atlas.find(suffix);
+        base = Core.atlas.find(suffix + "-base");
         if(outline){
             outlineR = Core.atlas.find(suffix + "-outline");
         }
