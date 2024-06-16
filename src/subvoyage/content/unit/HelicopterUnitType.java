@@ -15,8 +15,6 @@ public class HelicopterUnitType extends AtlacianUnitType {
         super(name);
         flying = true;
         lowAltitude = true;
-
-        omniMovement = false;
         rotateMoveFirst = true;
     }
 

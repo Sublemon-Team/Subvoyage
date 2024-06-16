@@ -27,7 +27,7 @@ public class SvUnits{
 
     public static int mapHelicopter = 0;
     public static void load(){
-        helicopter("lapetus", "skath", "charon", "callees");
+        helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -379,7 +379,7 @@ public class SvUnits{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
-            speed = 1f;
+            speed = 1.6f;
             rotateSpeed = 4f;
             accel = 0.45f;
             health = 1820f;
@@ -429,6 +429,7 @@ public class SvUnits{
             setEnginesMirror(
                 new UnitEngine(7.2f, -15, 2.25f, -90)
             );
+
 //            abilities.add(
 //            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
 //                teamColor = true;
@@ -533,6 +534,243 @@ public class SvUnits{
             }});
         }};
 
+        ganymede = new HelicopterUnitType("ganymede"){{
+            aiController = FlyingAI::new;
+            constructor = HelicopterUnitEntity::create;
+            drag = 0.16f;
+            speed = 2.25f;
+            rotateSpeed = 3f;
+            accel = 0.45f;
+            health = 1820f;
+
+            engineOffset = -7.5f;
+            engineSize = 0;
+            hitSize = 14f;
+            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+                mirror = true;
+                layerOffset = Layer.flyingUnitLow;
+                xScl = 1.6f;
+                yScl = 1.6f;
+                x = 23.5f;
+                y = -2.75f;
+                rotationSpeed = 400f;
+            }};
+
+            RotatorRegionPart tail = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+                layerOffset = Layer.flyingUnitLow;
+                xScl = 0.8f;
+                yScl = 0.8f;
+                y = -33.25f;
+                rotationSpeed = 400f;
+            }};
+
+            onUpdate = (e) -> {
+                copter.unitRot = e.rotation();
+                copter.unitX = e.x;
+                copter.unitY = e.y;
+
+                tail.unitRot = e.rotation();
+                tail.unitX = e.x;
+                tail.unitY = e.y;
+            };
+
+            parts.add(copter, tail);
+            abilities.add(new SuppressionFieldAbility(){{
+                layer = Layer.flyingUnitLow - 1;
+                orbRadius = 0.65f;
+                y = 18f;
+
+                color = Color.valueOf("feb380");
+                particleColor = Color.valueOf("FE6C4C");
+            }});
+
+            trailLength = 20;
+            trailScl = 1.9f;
+            setEnginesMirror(
+            new UnitEngine(14f, -20, 2.75f, -90)
+            );
+//            abilities.add(
+//            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
+//                teamColor = true;
+//            }},
+//            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
+//                teamColor = true;
+//            }}
+//            );
+
+            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
+                top = false;
+                mirror = true;
+                alternate = false;
+
+                x = 12f;
+                y = -12.25f;
+
+                reload = 40f;
+                targetInterval = 10f;
+                targetSwitchInterval = 15f;
+                bullet = new BulletType(){{
+                    shootEffect = Fx.disperseTrail;
+                    hitEffect = Fx.pointHit;
+                    maxRange = 100f;
+                    damage = 18f;
+                }};
+            }});
+
+            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
+                top = false;
+                mirror = true;
+                alternate = false;
+                x = 12f;
+                y = 21f;
+
+                reload = 40f;
+                targetInterval = 10f;
+                targetSwitchInterval = 15f;
+                bullet = new BulletType(){{
+                    shootEffect = Fx.disperseTrail;
+                    hitEffect = Fx.pointHit;
+                    maxRange = 100f;
+                    damage = 18f;
+                }};
+            }});
+
+            weapons.add(new Weapon(SubvoyageMod.ID + "-beam-weapon"){{
+                shadow = 20f;
+                controllable = false;
+                autoTarget = true;
+                mirror = false;
+                shake = 3f;
+                shootY = 7f;
+                rotate = true;
+                x = 0;
+                y = 4f;
+
+                targetInterval = 20f;
+                targetSwitchInterval = 35f;
+
+                rotateSpeed = 3.5f;
+                reload = 170f;
+                recoil = 1f;
+                shootSound = Sounds.beam;
+                continuous = true;
+                cooldownTime = reload;
+                immunities.add(StatusEffects.burning);
+                bullet = new ContinuousLaserBulletType(){{
+                    maxRange = 90f;
+                    damage = 27f;
+                    length = 95f;
+                    hitEffect = Fx.smeltsmoke;
+                    drawSize = 200f;
+                    lifetime = 155f;
+                    shake = 1f;
+
+                    shootEffect = Fx.shootHeal;
+                    smokeEffect = Fx.none;
+                    width = 4f;
+                    largeHit = false;
+
+                    incendChance = 0.03f;
+                    incendSpread = 5f;
+                    incendAmount = 1;
+                    colors = new Color[]{Color.valueOf("feb380").a(.2f), Color.valueOf("feb380").a(.5f), Color.valueOf("feb380").mul(1.2f), Color.white};
+                }};
+            }});
+
+            weapons.add(new Weapon(name + "-weapon"){{
+                top = false;
+                x = 23f;
+                y = 12f;
+                shoot.shots = 5;
+                shoot.shotDelay = 12f;
+
+                reload = 360f;
+                recoil = 2f;
+
+                rotate = true;
+                rotateSpeed = 0.4f;
+                layerOffset = -2f;
+                rotationLimit = 22f;
+                minWarmup = 0.95f;
+                shootWarmupSpeed = 0.1f;
+                inaccuracy = 28f;
+                shootCone = 40f;
+
+                shootSound = Sounds.missileLaunch;
+                parts.add(new RegionPart("-blade"){{
+                    heatProgress = PartProgress.warmup;
+                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
+                    heatColor = Color.valueOf("feb380");
+                    x = 5 / 4f;
+                    y = 0f;
+                    moveRot = -33f;
+                    moveY = -1f;
+                    moveX = -1f;
+                    under = true;
+                    mirror = true;
+                }});
+
+                bullet = new BulletType(){{
+                    shootEffect = Fx.sparkShoot;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    hitColor = Pal.suppress;
+                    shake = 1f;
+                    speed = 0f;
+                    keepVelocity = false;
+                    collidesAir = true;
+                    spawnUnit = new MissileUnitType("ganymede-missile"){{
+                        outlineColor = Pal.darkOutline;
+                        trailRotation = true;
+                        targetAir = true;
+                        physics = true;
+                        lowAltitude = true;
+
+                        hitEffect = despawnEffect = Fx.blastExplosion;
+                        smokeEffect = SvFx.shootLauncher;
+                        trailEffect = SvFx.missileTrailSmoke;
+                        trailInterval = 3f;
+                        trailWidth = 1f;
+                        trailLength = 6;
+
+                        speed = 4.6f;
+                        maxRange = 3f;
+                        health = 40;
+                        homingDelay = 5f;
+
+                        engineSize = 3f;
+                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        engineLayer = Layer.effect;
+                        deathExplosionEffect = Fx.none;
+                        loopSoundVolume = 0.1f;
+                        weapons.add(new Weapon(){{
+                            shootCone = 360f;
+                            mirror = false;
+                            reload = 1f;
+                            shootOnDeath = true;
+                            bullet = new ExplosionBulletType(120, 22f){{
+                                collidesAir = true;
+                                suppressionRange = 80f;
+                                shootEffect = new ExplosionEffect(){{
+                                    lifetime = 50f;
+                                    waveStroke = 5f;
+                                    waveLife = 8f;
+                                    waveColor = Color.white;
+                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    waveRad = 40f;
+                                    smokeSize = 4f;
+                                    smokes = 7;
+                                    smokeSizeBase = 0f;
+                                    sparks = 10;
+                                    sparkRad = 40f;
+                                    sparkLen = 6f;
+                                    sparkStroke = 2f;
+                                }};
+                            }};
+                        }});
+                    }};
+                }};
+            }});
+        }};
     }
 
     public static void helicopter(String id) {
