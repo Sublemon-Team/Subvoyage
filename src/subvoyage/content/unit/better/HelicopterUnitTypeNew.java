@@ -3,7 +3,7 @@ package subvoyage.content.unit.better;
 import mindustry.gen.Unit;
 import subvoyage.content.unit.AtlacianUnitType;
 
-public class HelicopterUnitTypeNew extends AtlacianUnitTypeNew {
+public class HelicopterUnitTypeNew extends AtlacianUnitType {
 
     public float accelerationTime = 60f;
     public float accelerationInertia = 0.1f;

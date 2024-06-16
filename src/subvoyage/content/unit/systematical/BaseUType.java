@@ -27,7 +27,7 @@ public class BaseUType extends UnitType {
         //TODO how/where do I draw under?
         if(parts.size > 0){
             for(int i = 0; i < parts.size; i++){
-                DrawPart part = parts.get(i);
+                var part = parts.get(i);
 
                 WeaponMount first = unit.mounts.length > part.weaponIndex ? unit.mounts[part.weaponIndex] : null;
                 if(first != null){
@@ -40,9 +40,8 @@ public class BaseUType extends UnitType {
                     DrawPart.params.life = s.fin();
                 }
 
-                if(part instanceof UnitDrawPart drawPart && unit instanceof BaseUnit base) {
-                    drawPart.draw(base, DrawPart.params);
-                }
+                if(part instanceof UnitDrawPart drawPart && unit instanceof BaseUnit base)
+                    drawPart.draw(base,DrawPart.params);
             }
         }
     }
