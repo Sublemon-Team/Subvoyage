@@ -11,6 +11,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
@@ -36,7 +37,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture,
+            whirl, rupture, finesandWall, finesandWallLarge,
             //CRAFTERS
             waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
             //LIQUIDS
@@ -243,6 +244,21 @@ public class SvBlocks{
             coolantMultiplier = 1f;
             researchCostMultiplier = 0.05f;
             limitRange(6);
+        }};
+
+        int wallHealthMultiplier = 4;
+        int largeWallHealthMultiplier = 8;
+        finesandWall = new Wall("finesand-wall"){{
+            requirements(Category.defense, with(fineSand, 20));
+            health = 60 * wallHealthMultiplier;
+            envDisabled |= Env.scorching;
+        }};
+
+        finesandWallLarge = new Wall("finesand-wall-large"){{
+            requirements(Category.defense, ItemStack.mult(finesandWall.requirements, 18));
+            health = 60 * largeWallHealthMultiplier;
+            size = 2;
+            envDisabled |= Env.scorching;
         }};
 
         //exploration
