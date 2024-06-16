@@ -23,7 +23,7 @@ public class SvUnits{
     // core
     marine,
     //helicopters
-    lapetus, skath, charon, callees;
+    lapetus, skath, charon, callees,ganymede;
 
     public static int mapHelicopter = 0;
     public static void load(){
