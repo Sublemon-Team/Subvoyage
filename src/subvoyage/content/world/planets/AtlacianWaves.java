@@ -103,7 +103,7 @@ public class AtlacianWaves {
             step += (int)(rand.random(15, 30) * Mathf.lerp(1f, 0.5f, difficulty));
         }
 
-        int bossWave = (int)(rand.random(50, 70) * Mathf.lerp(1f, 0.5f, difficulty));
+        int bossWave = (int)(rand.random(30, 50) * Mathf.lerp(1f, 0.5f, difficulty));
         int bossSpacing = (int)(rand.random(25, 40) * Mathf.lerp(1f, 0.5f, difficulty));
 
         int bossTier = difficulty < 0.6 ? 3 : 4;

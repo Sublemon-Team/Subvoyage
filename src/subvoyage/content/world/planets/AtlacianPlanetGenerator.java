@@ -229,8 +229,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
         float difficulty = sector.threat*1.2f;
 
-        //TODO: make custom Waves.generate with new units
-        Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat*sector.threat*2f,new Rand(sector.id),state.rules.attackMode,rand.chance(0.3f));
+        Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat*sector.threat*5f+0.3f,new Rand(sector.id),state.rules.attackMode,rand.chance(0.3f));
         state.rules.spawns = spawns;
         state.rules.waves = true;
         state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
