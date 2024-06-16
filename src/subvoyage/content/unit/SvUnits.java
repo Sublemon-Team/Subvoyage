@@ -564,7 +564,7 @@ public class SvUnits{
                 rotationSpeed = 400f;
             }};
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -658,7 +658,7 @@ public class SvUnits{
                 immunities.add(StatusEffects.burning);
                 bullet = new ContinuousLaserBulletType(){{
                     maxRange = 90f;
-                    damage = 27f;
+                    damage = 42f;
                     length = 95f;
                     hitEffect = Fx.smeltsmoke;
                     drawSize = 200f;
@@ -747,7 +747,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(120, 22f){{
+                            bullet = new ExplosionBulletType(160, 22f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
