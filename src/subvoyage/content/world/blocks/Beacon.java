@@ -16,6 +16,7 @@ import mindustry.gen.UnitEntity;
 import mindustry.graphics.*;
 import mindustry.input.Placement;
 import mindustry.logic.*;
+import mindustry.type.unit.*;
 import mindustry.world.*;
 import mindustry.world.blocks.units.*;
 import mindustry.world.meta.*;
@@ -77,13 +78,12 @@ public class Beacon extends RepairTurret {
 
         @Override
         public void updateTile(){
-
             float multiplier = 1f;
             if(acceptCoolant){
                 multiplier = 1f + liquids.current().heatCapacity * coolantMultiplier * optionalEfficiency;
             }
 
-            if(target != null && (target.dead() || target.dst(this) - target.hitSize/2f > repairRadius)){
+            if(target != null && (target.dead() || target.type() instanceof MissileUnitType || target.dst(this) - target.hitSize/2f > repairRadius)){
                 target = null;
             }
 
@@ -92,7 +92,6 @@ public class Beacon extends RepairTurret {
             }
 
             boolean healed = false;
-
             if(target != null && efficiency > 0){
                 float angle = Angles.angle(x, y, target.x + offset.x, target.y + offset.y);
                 if(Angles.angleDist(angle, rotation) < 30f){
@@ -104,9 +103,8 @@ public class Beacon extends RepairTurret {
             }
 
             strength = Mathf.lerpDelta(strength, healed ? 1f : 0f, 0.08f * Time.delta);
-
             if(timer(timerTarget, 20)){
-                target = Units.closest(team, x, y, repairRadius, (e) -> true);
+                target = Units.closest(team, x, y, repairRadius, (e) -> !(e.type() instanceof MissileUnitType));
             }
         }
 

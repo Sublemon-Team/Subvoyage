@@ -92,10 +92,10 @@ public class SvUnits{
             accel = 0.1f;
             health = 800f;
             engineSize = 0;
-            hitSize = 12f;
+            hitSize = 20f;
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
-                    layerOffset = Layer.flyingUnitLow;
+                    layer = Layer.flyingUnitLow;
                     xScl = 1.5f;
                     yScl = 1.5f;
                     y = -0.15f;
@@ -153,9 +153,9 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
-            hitSize = 14f;
+            hitSize = 31f;
             RotatorRegionPart copter = new RotatorRegionPart(){{
-                layerOffset = Layer.flyingUnitLow;
+                layer = Layer.flyingUnitLow;
                 xScl = 1.27f;
                 yScl = 1.27f;
                 y = 2.47f;
@@ -163,7 +163,7 @@ public class SvUnits{
             }};
 
             RotatorRegionPart tail = new RotatorRegionPart(){{
-                layerOffset = Layer.flyingUnitLow;
+                layer = Layer.flyingUnitLow;
                 xScl = 0.75f;
                 yScl = 0.75f;
                 y = -10.5f;
@@ -240,9 +240,9 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
-            hitSize = 14f;
+            hitSize = 32f;
             RotatorRegionPart copter = new RotatorRegionPart(){{
-                    layerOffset = Layer.flyingUnitLow;
+                    layer = Layer.flyingUnitLow;
                     xScl = 2f;
                     yScl = 2f;
                     y = -0.15f;
@@ -386,10 +386,10 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
-            hitSize = 14f;
+            hitSize = 45f;
             RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
                     mirror = true;
-                    layerOffset = Layer.flyingUnitLow;
+                    layer = Layer.flyingUnitLow;
                     xScl = 1.2f;
                     yScl = 1.2f;
                     x = 16.5f;
@@ -545,10 +545,10 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
-            hitSize = 14f;
+            hitSize = 64f;
             RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
                 mirror = true;
-                layerOffset = Layer.flyingUnitLow;
+                layer = Layer.flyingUnitLow;
                 xScl = 1.6f;
                 yScl = 1.6f;
                 x = 23.5f;
@@ -557,7 +557,7 @@ public class SvUnits{
             }};
 
             RotatorRegionPart tail = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
-                layerOffset = Layer.flyingUnitLow;
+                layer = Layer.flyingUnitLow;
                 xScl = 0.8f;
                 yScl = 0.8f;
                 y = -33.25f;
