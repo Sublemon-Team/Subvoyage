@@ -3,6 +3,7 @@ package subvoyage.entities.part;
 import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.math.geom.Vec2;
 import arc.util.*;
 import mindustry.graphics.*;
 import subvoyage.*;
@@ -29,18 +30,20 @@ public class RotatorRegionPartNew extends UnitDrawPart{
     @Override
     public void draw(BaseUnit unit, PartParams params){
         if(rotator.found()){
+            Vec2 vec = Tmp.v2.set(x,y).rotate(unit.rotation() - 90);
             float t = Time.time / 60f;
-            float rx = params.x, ry = params.y, rot = (t * rotationSpeed) % rotationRad;
+            float rx = unit.x(), ry = unit.y(), rot = (t * rotationSpeed) % rotationRad;
 
             Draw.xscl *= xScl;
             Draw.yscl *= yScl;
+            Draw.z(layerOffset+1);
+            Draw.rect(top, rx+vec.x, ry+vec.y, unit.rotation()-90);
             Draw.z(layerOffset);
-            Draw.rect(top, unit.x + rx, unit.y + ry, unit.rotation());
-            Drawf.spinSprite(rotator, unit.x + rx, unit.y + ry, rot);
+            Drawf.spinSprite(rotator, rx+vec.x, ry+vec.y, rot);
             if(blur){
                 Draw.z(layerOffset - 1);
                 Draw.alpha(0.75f);
-                Drawf.spinSprite(blurR, unit.x + rx, unit.y + ry, rot);
+                Drawf.spinSprite(blurR, rx, ry, rot);
                 Draw.z(Draw.z());
                 Draw.alpha(1);
             }
@@ -48,18 +51,18 @@ public class RotatorRegionPartNew extends UnitDrawPart{
             if(outline){
                 Draw.z(outlineLayerOffset);
                 Draw.color(Pal.darkOutline);
-                Draw.rect(outlineR, unit.x + rx, unit.y + ry, rot);
+                Draw.rect(outlineR, rx, ry, rot);
                 Draw.z(Draw.z());
             }
 
             if(mirror) {
                 Draw.z(layerOffset);
-                Draw.rect(top, unit.x - rx, unit.y - ry, unit.rotation());
-                Drawf.spinSprite(rotator, unit.x - rx, unit.y - ry, -rot);
+                Draw.rect(top, rx-vec.x, ry-vec.y, unit.rotation());
+                Drawf.spinSprite(rotator, rx-vec.x, ry-vec.y, -rot);
                 if(blur){
                     Draw.z(layerOffset - 1);
                     Draw.alpha(0.75f);
-                    Drawf.spinSprite(blurR, unit.x - rx, unit.y - ry, -rot);
+                    Drawf.spinSprite(blurR, rx-vec.x, ry-vec.y, -rot);
                     Draw.z(Draw.z());
                     Draw.alpha(1);
                 }
@@ -67,7 +70,7 @@ public class RotatorRegionPartNew extends UnitDrawPart{
                 if(outline){
                     Draw.z(outlineLayerOffset);
                     Draw.color(Pal.darkOutline);
-                    Draw.rect(outlineR, unit.x - rx, unit.y - ry, -rot);
+                    Draw.rect(outlineR, rx-vec.x, ry-vec.y, -rot);
                     Draw.z(Draw.z());
                 }
             }

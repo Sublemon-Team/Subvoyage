@@ -15,6 +15,8 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import subvoyage.*;
+import subvoyage.content.unit.better.HelicopterUnitEntityNew;
+import subvoyage.content.unit.better.HelicopterUnitTypeNew;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 
@@ -27,7 +29,7 @@ public class SvUnits{
 
     public static int mapHelicopter = 0;
     public static void load(){
-        helicopter("lapetus", "skath", "charon", "callees");
+        helicopter(/*"lapetus", "skath", "charon",*/ "callees");
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -375,9 +377,9 @@ public class SvUnits{
             }});
         }};
 
-        callees = new HelicopterUnitType("callees"){{
+        callees = new HelicopterUnitTypeNew("callees"){{
             aiController = FlyingFollowAI::new;
-            constructor = HelicopterUnitEntity::create;
+            constructor = HelicopterUnitEntityNew::create;
             drag = 0.16f;
             speed = 2f;
             rotateSpeed = 1f;
@@ -387,23 +389,16 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 14f;
-            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
-                    mirror = true;
-                    layerOffset = Layer.flyingUnitLow;
-                    xScl = 1.2f;
-                    yScl = 1.2f;
-                    x = 16.5f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
-            }};
 
-            onUpdate = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
-
-            parts.add(copter);
+            parts.add(new RotatorRegionPartNew(SubvoyageMod.ID + "-medium-rotator"){{
+                mirror = true;
+                layerOffset = Layer.flyingUnitLow;
+                xScl = 1.2f;
+                yScl = 1.2f;
+                x = 16.5f;
+                y = -0.15f;
+                rotationSpeed = 400f;
+            }});
             parts.add(new ShapePart(){{
                 layer = Layer.effect;
                 circle = true;
@@ -536,7 +531,8 @@ public class SvUnits{
     }
 
     public static void helicopter(String id) {
-        mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
+        //mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
+        HelicopterUnitEntityNew.classId = EntityMapping.register(id,HelicopterUnitEntityNew::new);
     }
 
     public static void helicopter(String... ids) {
