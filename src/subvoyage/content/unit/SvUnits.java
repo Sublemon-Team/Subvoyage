@@ -350,7 +350,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(60, 15){{
+                            bullet = new ExplosionBulletType(100, 15){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
@@ -379,8 +379,8 @@ public class SvUnits{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
-            speed = 2f;
-            rotateSpeed = 1f;
+            speed = 1f;
+            rotateSpeed = 4f;
             accel = 0.45f;
             health = 1820f;
 
@@ -397,7 +397,7 @@ public class SvUnits{
                     rotationSpeed = 400f;
             }};
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -508,7 +508,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(120, 22f){{
+                            bullet = new ExplosionBulletType(320, 22f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
