@@ -103,7 +103,7 @@ public class SvUnits{
                 }
             };
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -170,7 +170,7 @@ public class SvUnits{
                 rotationSpeed = 400f;
             }};
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
@@ -249,7 +249,7 @@ public class SvUnits{
                     rotationSpeed = 400f;
             }};
 
-            onUpdate = (e) -> {
+            onDraw = (e) -> {
                 copter.unitRot = e.rotation();
                 copter.unitX = e.x;
                 copter.unitY = e.y;
