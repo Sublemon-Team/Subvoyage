@@ -17,7 +17,7 @@ public class AtlacianWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack, boolean airOnly) {
 
         UnitType[][] species = {
-                {lapetus, skath, charon, callees, ganymede},
+                {lapetus, skath, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
                 //{dagger, mace, fortress, scepter, reign},
                 //{nova, pulsar, quasar, vela, corvus},
                 //{crawler, atrax, spiroct, arkyid, toxopid},
