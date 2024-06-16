@@ -14,7 +14,7 @@ import static subvoyage.content.unit.SvUnits.*;
 
 public class AtlacianWaves {
 
-    public Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack, boolean airOnly) {
+    public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack, boolean airOnly) {
 
         UnitType[][] species = {
                 {lapetus, skath, charon, callees, ganymede},

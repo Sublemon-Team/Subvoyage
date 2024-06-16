@@ -84,7 +84,7 @@ public class SvUnits{
         }};
 
         lapetus = new HelicopterUnitType("lapetus"){{
-            aiController = FlyingFollowAI::new;
+            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.05f;
             speed = 1.6f;
@@ -143,7 +143,7 @@ public class SvUnits{
         }};
 
         skath = new HelicopterUnitType("skath"){{
-            aiController = FlyingFollowAI::new;
+            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.15f;
             speed = 1.3f;
@@ -230,7 +230,7 @@ public class SvUnits{
         }};
 
         charon = new HelicopterUnitType("charon"){{
-            aiController = FlyingFollowAI::new;
+            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
             speed = 2f;
@@ -376,7 +376,7 @@ public class SvUnits{
         }};
 
         callees = new HelicopterUnitType("callees"){{
-            aiController = FlyingFollowAI::new;
+            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.16f;
             speed = 2f;
