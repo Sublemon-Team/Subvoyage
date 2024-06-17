@@ -16,12 +16,15 @@ import static subvoyage.SubvoyageMod.navalCargoId;
 
 public class WaterCargoAI extends CargoAI {
 
+    private Building lastTarget;
     private Building target;
 
     public static class WaterCargoFlowfield extends Pathfinder.Flowfield {
         public Building target;
+
         @Override
         protected void getPositions(IntSeq out) {
+
             out.clear();
             if(target != null) {
                 out.add(target.tile.array());
@@ -33,6 +36,7 @@ public class WaterCargoAI extends CargoAI {
 
         Tile tile = unit.tileOn();
         if(tile == null) return;
+        pathfinder.updateTile(unit.tileOn());
         WaterCargoFlowfield flowfield = (WaterCargoFlowfield) pathfinder.getField(state.rules.waveTeam, costNaval, navalCargoId);
         flowfield.target = this.target;
         Tile targetTile = pathfinder.getTargetTile(tile, flowfield);
