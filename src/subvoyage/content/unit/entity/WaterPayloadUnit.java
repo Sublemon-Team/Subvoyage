@@ -1,10 +1,7 @@
-package subvoyage.content.unit;
+package subvoyage.content.unit.entity;
 
 import mindustry.Vars;
-import mindustry.entities.EntityCollisions;
-import mindustry.entities.Units;
 import mindustry.gen.BuildingTetherPayloadUnit;
-import mindustry.gen.UnitWaterMove;
 import mindustry.gen.WaterMovec;
 import mindustry.world.Tile;
 
@@ -15,8 +12,7 @@ public class WaterPayloadUnit extends BuildingTetherPayloadUnit implements Water
 
     @Override
     public boolean canPass(int tileX, int tileY) {
-        Tile tile = world.tile(tileX,tileY);
-        return tile != null && tile.floor().isLiquid;
+        return super.canPass(tileX,tileY);
     }
 
     @Override

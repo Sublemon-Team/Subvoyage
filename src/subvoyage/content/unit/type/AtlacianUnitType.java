@@ -1,4 +1,4 @@
-package subvoyage.content.unit;
+package subvoyage.content.unit.type;
 
 import mindustry.graphics.*;
 import mindustry.type.*;

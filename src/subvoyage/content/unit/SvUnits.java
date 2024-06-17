@@ -16,6 +16,11 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import subvoyage.*;
+import subvoyage.content.unit.ai.WaterCargoAI;
+import subvoyage.content.unit.entity.HelicopterUnitEntity;
+import subvoyage.content.unit.entity.WaterPayloadUnit;
+import subvoyage.content.unit.type.AtlacianUnitType;
+import subvoyage.content.unit.type.HelicopterUnitType;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 
@@ -776,7 +781,7 @@ public class SvUnits{
         }};
 
         bulker = new AtlacianUnitType("bulker"){{
-            controller = u -> new CargoAI();
+            controller = u -> new WaterCargoAI();
             constructor = WaterPayloadUnit::create;
             isEnemy = false;
             allowedInPayloads = false;

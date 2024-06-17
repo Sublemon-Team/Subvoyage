@@ -1,9 +1,10 @@
-package subvoyage.content.unit;
+package subvoyage.content.unit.type;
 
 import arc.math.geom.Position;
 import mindustry.game.Team;
 import mindustry.gen.TimedKillc;
 import mindustry.gen.Unit;
+import subvoyage.content.unit.entity.HelicopterUnitEntity;
 
 import java.util.function.Consumer;
 

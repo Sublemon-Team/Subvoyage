@@ -1,4 +1,4 @@
-package subvoyage.content.unit;
+package subvoyage.content.unit.entity;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -14,6 +14,8 @@ import mindustry.entities.units.StatusEntry;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
+import subvoyage.content.unit.type.HelicopterUnitType;
+import subvoyage.content.unit.SvUnits;
 
 import java.util.Iterator;
 
