@@ -26,6 +26,7 @@ import subvoyage.content.world.blocks.*;
 import subvoyage.content.world.blocks.cargo.ShipCargoStation;
 import subvoyage.content.world.blocks.energy.EnergyCross;
 import subvoyage.content.world.blocks.energy.EnergyDock;
+import subvoyage.content.world.blocks.offload_core.OffloadCore;
 import subvoyage.content.world.draw.*;
 import subvoyage.entities.shoot.*;
 import subvoyage.entities.part.*;
@@ -37,6 +38,10 @@ import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
     public static Block
+            //NON-USER
+            offloadCore,
+
+
             //DRILLS
             submersibleDrill, tectonicDrill,
             //DEFENSE
@@ -56,6 +61,14 @@ public class SvBlocks{
             corePuffer;
 
     public static void load() {
+        //non-user
+        offloadCore = new OffloadCore("offload-core") {{
+            requirements(Category.logic, BuildVisibility.editorOnly, with());
+            health = 400;
+            size = 3;
+        }};
+
+
         //drills
         submersibleDrill = new SubmersibleDrill("submersible-drill") {{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
