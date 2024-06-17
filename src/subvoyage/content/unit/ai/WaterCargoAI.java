@@ -33,7 +33,7 @@ public class WaterCargoAI extends CargoAI {
     }
 
     public void pathfind(){
-
+        //TODO: make this fucking thing work with two cargos
         Tile tile = unit.tileOn();
         if(tile == null) return;
         pathfinder.updateTile(unit.tileOn());
