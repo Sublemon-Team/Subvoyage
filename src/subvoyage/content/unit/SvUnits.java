@@ -2,6 +2,7 @@ package subvoyage.content.unit;
 
 import arc.graphics.*;
 import arc.math.*;
+import mindustry.ai.Pathfinder;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -23,7 +24,9 @@ public class SvUnits{
     // core
     marine,
     //helicopters
-    lapetus, skath, charon, callees,ganymede;
+    lapetus, skath, charon, callees,ganymede,
+    //cargo
+    bulker;
 
     public static int mapHelicopter = 0;
     public static void load(){
@@ -771,6 +774,35 @@ public class SvUnits{
                 }};
             }});
         }};
+
+        bulker = new AtlacianUnitType("bulker"){{
+            controller = u -> new CargoAI();
+            constructor = WaterPayloadUnit::create;
+            isEnemy = false;
+            allowedInPayloads = false;
+            logicControllable = false;
+            playerControllable = false;
+            envDisabled = 0;
+            payloadCapacity = 0f;
+
+            lowAltitude = false;
+            flying = false;
+            pathCost = Pathfinder.costTypes.get(Pathfinder.costNaval);
+            drag = 0.06f;
+            speed = 3.5f;
+            rotateSpeed = 9f;
+            accel = 0.1f;
+            itemCapacity = 100;
+            health = 200f;
+            hitSize = 11f;
+            engineSize = 2.3f;
+            engineOffset = 6.5f;
+            hidden = true;
+
+            setEnginesMirror(
+                    new UnitEngine(24 / 4f, -24 / 4f, 2.3f, 315f)
+            );
+        }};;
     }
 
     public static void helicopter(String id) {

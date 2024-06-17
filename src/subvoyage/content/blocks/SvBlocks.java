@@ -17,11 +17,13 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.UnitCargoLoader;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
+import subvoyage.content.world.blocks.cargo.ShipCargoStation;
 import subvoyage.content.world.blocks.energy.EnergyCross;
 import subvoyage.content.world.blocks.energy.EnergyDock;
 import subvoyage.content.world.draw.*;
@@ -30,6 +32,7 @@ import subvoyage.entities.part.*;
 import subvoyage.content.liquids.*;
 
 import static mindustry.type.ItemStack.with;
+import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
@@ -46,6 +49,7 @@ public class SvBlocks{
             energyDock, energyDistributor,sulfurator,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
+            shipCargoStation,
             //EXPLORATION
             buoy,beacon,
             //CORES
@@ -437,7 +441,7 @@ public class SvBlocks{
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
-            unitType = SvUnits.marine;
+            unitType = marine;
             health = 6000;
             itemCapacity = 5000;
             size = 5;
@@ -497,6 +501,50 @@ public class SvBlocks{
             buildCostMultiplier = 3f;
             invert = true;
         }};
+
+        /*
+        unitCargoLoader = new UnitCargoLoader("unit-cargo-loader"){{
+            requirements(Category.distribution, with(Items.silicon, 80, Items.surgeAlloy, 50, Items.oxide, 20));
+
+            size = 3;
+            buildTime = 60f * 8f;
+
+            consumePower(8f / 60f);
+
+            //intentionally set absurdly high to make this block not overpowered
+            consumeLiquid(Liquids.nitrogen, 10f / 60f);
+
+            itemCapacity = 200;
+            researchCost = with(Items.silicon, 2500, Items.surgeAlloy, 20, Items.oxide, 30);
+        }};
+
+        unitCargoUnloadPoint = new UnitCargoUnloadPoint("unit-cargo-unload-point"){{
+            requirements(Category.distribution, with(Items.silicon, 60, Items.tungsten, 60));
+
+            size = 2;
+
+            itemCapacity = 100;
+
+            researchCost = with(Items.silicon, 3000, Items.oxide, 20);
+        }};
+         */
+
+        shipCargoStation = new ShipCargoStation("ship-cargo-station") {{
+            requirements(Category.distribution,with(iridium,100,clay,200));
+
+            size = 3;
+            itemCapacity = 250;
+
+            buildTime = 6f*60f;
+
+            consumePower(12f/60f);
+            consumeLiquid(SvLiquids.argon,8f/60f);
+
+            unitType = bulker;
+
+            researchCost = with(iridium,1000,clay,2000);
+        }};
+
 
         //crafters
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
