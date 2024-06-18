@@ -6,7 +6,6 @@ import mindustry.content.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.game.MapObjectives;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -17,10 +16,8 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.units.UnitCargoLoader;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
 import subvoyage.content.world.blocks.cargo.ShipCargoStation;
@@ -40,8 +37,6 @@ public class SvBlocks{
     public static Block
             //NON-USER
             offloadCore,
-
-
             //DRILLS
             submersibleDrill, tectonicDrill,
             //DEFENSE
@@ -49,7 +44,7 @@ public class SvBlocks{
             //CRAFTERS
             waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
             //LIQUIDS
-            waterDiffuser,waterSifter, lowTierPump, clayConduit, conduitRouter, conduitBridge,
+            waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor,sulfurator,
             //TRANSPORTATION
@@ -67,7 +62,6 @@ public class SvBlocks{
             health = 400;
             size = 3;
         }};
-
 
         //drills
         submersibleDrill = new SubmersibleDrill("submersible-drill") {{
@@ -106,10 +100,6 @@ public class SvBlocks{
             }},
 
             new DrawBlurSpin("-rotator", 4),
-            new DrawPistons() {{
-                sideOffset = 1.25F;
-            }},
-
             new DrawDefault(),
             new DrawRegion("-top")
             );
@@ -281,21 +271,10 @@ public class SvBlocks{
         //exploration
         buoy = new Buoy("buoy") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,20));
-            alwaysUnlocked =true;
+            alwaysUnlocked = true;
             fogRadius = 32;
             envDisabled |= Env.scorching;
             destructible = true;
-            destroyBullet = new BasicBulletType(2f,10f) {{
-                width = 11f;
-                height = 20f;
-                lifetime = 25f;
-                shootEffect = Fx.shootBig;
-                lightning = 2;
-                lightningLength = 6;
-                lightningColor = Pal.surge;
-                //standard bullet damage is far too much for lightning
-                lightningDamage = 20;
-            }};
 
             priority = 0;
             health = 120;
@@ -335,6 +314,33 @@ public class SvBlocks{
             squareSprite = false;
             envDisabled |= Env.scorching;
             pumpAmount = 8f / 60f;
+        }};
+
+        centrifugalPump = new Pump("centrifugal-pump") {{
+            requirements(Category.liquid, with(spaclanium, 8));
+            size = 2;
+            researchCost = with(
+            spaclanium, 5
+            );
+
+            squareSprite = false;
+            envDisabled |= Env.scorching;
+            pumpAmount = 16f / 60f;
+            consumePower(0.35f);
+
+            drawer = new DrawMulti(
+            new DrawPistons() {{
+                lenOffset = -4.25f;
+                sideOffset = Mathf.PI / 2f;
+                angleOffset = 90.0F;
+                sides = 2;
+
+                sinMag = 2.75f;
+                sinScl = 5f;
+            }},
+            new DrawDefault(),
+            new DrawPumpLiquid()
+            );
         }};
 
         conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
@@ -589,7 +595,14 @@ public class SvBlocks{
 
             hasItems = true;
             hasLiquids = true;
-
+            squareSprite = false;
+            
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawBurner(),
+            new DrawRegion("-top"),
+            new DrawHeatGlow()
+            );
             outputItem = new ItemStack(clay,5);
             itemCapacity = 12;
 
