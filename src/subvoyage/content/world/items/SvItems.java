@@ -7,7 +7,11 @@ import mindustry.type.*;
 public class SvItems{
     public static final Seq<Item> atlacianItems = new Seq<>();
 
-    public static Item clay,fineSand, spaclanium, corallite, sulfur, iridium, stone;
+    public static Item spaclanium, corallite,fineSand, sulfur,
+            iridium,chromium,
+            stone, clay,
+            tugSheet,quartzFiber;
+
 
     public static void load() {
 
