@@ -1,29 +1,19 @@
 package subvoyage.content.world.blocks.offload_core;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.math.*;
 import arc.util.*;
 import mindustry.content.*;
+import mindustry.entities.effect.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.ui.*;
 import mindustry.world.*;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.util.Time;
-import mindustry.content.Fx;
-import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import subvoyage.content.world.SvFx;
-import subvoyage.content.world.blocks.offload_core.OffloadCore;
+import subvoyage.content.world.*;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class CoreDecoder extends Block {
     public int frequency = 120;
@@ -48,6 +38,14 @@ public class CoreDecoder extends Block {
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
         Drawf.dashCircle(x*tilesize,y*tilesize,radius*tilesize,Pal.accent);
+    }
+
+    @Override
+    public void setBars(){
+        super.setBars();
+
+        addBar("progress", (CoreDecoderBuild e) ->
+        new Bar(() -> Core.bundle.format("bar.loadprogress", Strings.fixed(e.timePassed / frequency, 2)), () -> Pal.ammo, () -> e.timePassed / frequency));
     }
 
     public class CoreDecoderBuild extends Building {
@@ -91,8 +89,7 @@ public class CoreDecoder extends Block {
         }
 
         private void pulse() {
-            SvFx.decoderWave.create(x,y,0, Pal.accent, radius*tilesize);
-
+            new MultiEffect(Fx.drillSteam, SvFx.decoderWave).create(x, y, 0, Pal.accent, radius * tilesize);
             if(attempts > minAttempts)
                 for(int xo = (int) -radius; xo < radius; xo++)
                     for(int yo = (int) -radius; yo < radius; yo++) {
