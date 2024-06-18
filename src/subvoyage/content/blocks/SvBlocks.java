@@ -3,6 +3,7 @@ package subvoyage.content.blocks;
 import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
+import mindustry.entities.TargetPriority;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
@@ -41,6 +42,7 @@ public class SvBlocks{
             submersibleDrill, tectonicDrill,
             //DEFENSE
             whirl, rupture, finesandWall, finesandWallLarge,
+            coreDecoder,
             //CRAFTERS
             waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
             //LIQUIDS
@@ -267,6 +269,22 @@ public class SvBlocks{
             size = 2;
             envDisabled |= Env.scorching;
         }};
+
+        coreDecoder = new CoreDecoder("core-decoder") {{
+            requirements(Category.effect, with(iridium,300,/*chromium,200,*/corallite,20));
+
+            health = 560;
+
+            priority = TargetPriority.core-0.2f;
+            fogRadius = 10;
+            size = 2;
+            consumePower(5f);
+
+            destructible = true;
+
+            envDisabled |= Env.scorching;
+        }};
+
 
         //exploration
         buoy = new Buoy("buoy") {{

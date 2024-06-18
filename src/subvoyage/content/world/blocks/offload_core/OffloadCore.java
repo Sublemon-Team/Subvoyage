@@ -9,6 +9,8 @@ import arc.math.Rand;
 import arc.math.geom.Vec2;
 import arc.util.Time;
 import arc.util.Tmp;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.content.Fx;
 import mindustry.game.MapObjectives;
 import mindustry.game.Team;
@@ -81,6 +83,24 @@ public class OffloadCore extends CoreBlock {
 
         public Rand rand = new Rand(0);
 
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+            write.f(damageDealt);
+            write.f(timePassed);
+            write.i(currentWave);
+            write.f(enemySpawnTime);
+        }
+
+        @Override
+        public void read(Reads read) {
+            super.read(read);
+            damageDealt = read.f();
+            timePassed = read.f();
+            currentWave = read.i();
+            enemySpawnTime = read.f();
+        }
 
         @Override
         public void created() {
