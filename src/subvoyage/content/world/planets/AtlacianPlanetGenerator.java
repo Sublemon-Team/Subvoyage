@@ -3,20 +3,18 @@ package subvoyage.content.world.planets;
 import arc.graphics.*;
 import arc.math.*;
 import arc.math.geom.*;
-import arc.struct.FloatSeq;
-import arc.struct.Seq;
+import arc.struct.*;
 import arc.util.*;
 import arc.util.noise.*;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
-import mindustry.maps.planet.SerpuloPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.blocks.SvBlocks;
+import mindustry.world.blocks.storage.*;
+import subvoyage.content.blocks.*;
 
 import static mindustry.Vars.*;
 import static subvoyage.content.blocks.SvWorldBlocks.*;
@@ -148,94 +146,37 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             float rr = Simplex.noise2d(sector.id, (float)2, 0.6f, 1f / 7f, x, y) * 0.1f;
             float value = Ridged.noise3d(2, v.x, v.y, v.z, 1, 1f / 55f) + rr - rawHeight(v) * 0f;
             if(value < 0.17f) return;
-
-            //do not place rivers on ice, they're frozen
-            //ignore pre-existing liquids
             floor = Blocks.water;
         });
 
-        median(5, 0.4);
-        terrain(Blocks.carbonWall,69.86f,0.35f,1.1f);
-        blend(legartyteStone, darkLegartyteStone, 6);
-
-        float length = width/2.6f;
-        float spawnDegree = rand.random(360f);
-        Vec2 trns = Tmp.v1.trns(spawnDegree, length);
-        int spawnX = (int)(trns.x + width/2f), spawnY = (int)(trns.y + height/2f), endX = (int)(-trns.x + width/2f), endY = (int)(-trns.y + height/2f);
-        float maxd = Mathf.dst(width/2f, height/2f);
-
-        erase(spawnX, spawnY, 15);
-        Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
-        brush(path, 13);
-        brushWithBlock(path,9, Blocks.water);
-        erase(endX, endY, 15);
-        blend(Blocks.water, Blocks.darksandWater, 4);
-        distort(10f, 16f);
-
-        Seq<Block> ores = getOres();
-        FloatSeq frequencies = new FloatSeq();
-        float poles = Math.abs(sector.tile.v.y);
-        for(int i = 0; i < ores.size; i++){
-            frequencies.add(rand.random(-0.1f, 0.01f) + i * 0.01f + poles * 0.04f);
-        }
-        pass((x,y) -> {
-            int offsetX = x - 4, offsetY = y + 23;
-            if(Mathf.within(x-spawnX,y-spawnY,6) && rand.chance(0.3)) {
-                ore = oreSpaclanium;
-                return;
-            }
-
-            if(block == agaryteWall && rand.chance(0.6) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
-                block = agaryteBlocks;
-            }
-
-            if(block == agaryteStone && rand.chance(0.052)){
-                block = agaryteBoulder;
-            }
-
-            if(block == legartyteStone || block == darkLegartyteStone || block == agaryteStone && rand.chance(0.075)){
-                block = hauntedTree;
-            }
-
-            boolean allowed = floor == Blocks.water || floor == Blocks.darksandWater;
-            if(allowed && rand.chance(0.0005)){
-                block = Blocks.redweed;
-            }
-
-            if(allowed && rand.chance(0.0015)){
-                block = Blocks.purbush;
-            }
-
-            if(allowed && rand.chance(0.0025)){
-                block = Blocks.yellowCoral;
-            }
-
-            for(int i = ores.size - 1; i >= 0; i--){
-                Block entry = ores.get(i);
-                float freq = frequencies.get(i);
-                if(Math.abs(0.5f - noise(offsetX, offsetY + i*888, 2, 0.7, (10 + i * 2))) > 0.24f + i*0.01 &&
-                        Math.abs(0.5f - noise(offsetX, offsetY - i*888, 1, 1, (15 + i * 4))) > 0.37f + freq){
-                    ore = entry;
-                    break;
-                }
-            }
-        });
-
-        //remove props near ores, they're too annoying
-        pass((x, y) -> {
-            if(ore.asFloor().wallOre || block.itemDrop != null || (block == Blocks.air && ore != Blocks.air)){
-                removeWall(x, y, 3, b -> b instanceof TallBlock);
-            }
-        });
-
-        Schematics.placeLaunchLoadout(spawnX, spawnY);
-
         float difficulty = sector.threat*1.2f;
         boolean isOffloaded = rand.chance(0.3);
+        float length = width / 2.6f;
+        float spawnDegree = rand.random(360f);
+        Vec2 trns = Tmp.v1.trns(spawnDegree, length);
 
+        int
+        spawnX = (int)(trns.x + width / 2f),
+        spawnY = (int)(trns.y + height / 2f),
+        endX = (int)(-trns.x + width / 2f),
+        endY = (int)(-trns.y + height / 2f);
+
+        float maxd = Mathf.dst(width / 2f, height / 2f);
+
+        median(5, 0.4);
+        terrain(Blocks.carbonWall, 69.86f, 0.35f, 1.1f);
+        erase(spawnX, spawnY, 15);
+
+        Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
+        brush(path, 24);
+        brushWithBlock(path, 22, Blocks.water);
+        erase(endX, endY, 15);
+        distort(12f, 16f);
+        blend(legartyteStone, darkLegartyteStone, 6);
+
+        // rules
         state.rules.env = sector.planet.defaultEnv;
         state.rules.fog = true;
-
         if(!isOffloaded) {
             Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat * sector.threat * 1.3f, new Rand(sector.id), state.rules.attackMode, rand.chance(0.3f));
             state.rules.spawns = spawns;
@@ -268,6 +209,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
                 brush(pathE,9);
                 brushWithBlock(pathE,7, Blocks.water);
+                distort(4, 7);
+
                 Tile tile = tiles.get(coreX,coreY);
                 tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
                 if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
@@ -279,6 +222,66 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             state.rules.waveTimer = false;
             sector.info.attack = true;
         }
+
+        blend(Blocks.water, Blocks.darksandWater, 4);
+        Seq<Block> ores = getOres();
+        FloatSeq frequencies = new FloatSeq();
+        float poles = Math.abs(sector.tile.v.y);
+        for(int i = 0; i < ores.size; i++){
+            frequencies.add(rand.random(-0.1f, 0.01f) + i * 0.01f + poles * 0.04f);
+        }
+
+        pass((x, y) -> {
+            int offsetX = x - 4, offsetY = y + 23;
+            if(Mathf.within(x - spawnX, y - spawnY, 6) && rand.chance(0.3)){
+                ore = oreSpaclanium;
+                return;
+            }
+
+            if(block == agaryteWall && rand.chance(0.6) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
+                block = agaryteBlocks;
+            }
+
+            if(block == agaryteStone && rand.chance(0.052)){
+                block = agaryteBoulder;
+            }
+
+            if(block == legartyteStone || block == darkLegartyteStone || block == agaryteStone && rand.chance(0.075)){
+                block = hauntedTree;
+            }
+
+            boolean allowed = floor == Blocks.water || floor == Blocks.darksandWater;
+            if(allowed && rand.chance(0.0005)){
+                block = Blocks.redweed;
+            }
+
+            if(allowed && rand.chance(0.0015)){
+                block = Blocks.purbush;
+            }
+
+            if(allowed && rand.chance(0.0025)){
+                block = Blocks.yellowCoral;
+            }
+
+            for(int i = ores.size - 1; i >= 0; i--){
+                Block entry = ores.get(i);
+                float freq = frequencies.get(i);
+                if(Math.abs(0.5f - noise(offsetX, offsetY + i * 888, 2, 0.7, (10 + i * 2))) > 0.24f + i * 0.01 &&
+                Math.abs(0.5f - noise(offsetX, offsetY - i * 888, 1, 1, (15 + i * 4))) > 0.37f + freq){
+                    ore = entry;
+                    break;
+                }
+            }
+        });
+
+        //remove props near ores, they're too annoying
+        pass((x, y) -> {
+            if(ore.asFloor().wallOre || block.itemDrop != null || (block == Blocks.air && ore != Blocks.air)){
+                removeWall(x, y, 3, b -> b instanceof TallBlock);
+            }
+        });
+
+        Schematics.placeLaunchLoadout(spawnX, spawnY);
     }
 
 

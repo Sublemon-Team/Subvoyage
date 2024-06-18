@@ -1,13 +1,12 @@
 package subvoyage.content.world.blocks;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.util.Time;
-import mindustry.content.Fx;
-import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
-import mindustry.world.Block;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.world.*;
 
 import static mindustry.Vars.tilesize;
 
@@ -36,7 +35,6 @@ public class CoreDecoder extends Block {
             }
             timePassed+=Time.delta*efficiency;
         }
-
 
         @Override
         public void draw() {

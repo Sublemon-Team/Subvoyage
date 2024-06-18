@@ -3,7 +3,7 @@ package subvoyage.content.blocks;
 import arc.graphics.*;
 import arc.math.*;
 import mindustry.content.*;
-import mindustry.entities.TargetPriority;
+import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
@@ -19,16 +19,15 @@ import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
-import subvoyage.content.world.blocks.cargo.ShipCargoStation;
-import subvoyage.content.world.blocks.energy.EnergyCross;
-import subvoyage.content.world.blocks.energy.EnergyDock;
-import subvoyage.content.world.blocks.offload_core.OffloadCore;
+import subvoyage.content.world.blocks.cargo.*;
+import subvoyage.content.world.blocks.energy.*;
+import subvoyage.content.world.blocks.offload_core.*;
 import subvoyage.content.world.draw.*;
-import subvoyage.entities.shoot.*;
 import subvoyage.entities.part.*;
-import subvoyage.content.liquids.*;
+import subvoyage.entities.shoot.*;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.unit.SvUnits.*;
@@ -272,7 +271,6 @@ public class SvBlocks{
 
         coreDecoder = new CoreDecoder("core-decoder") {{
             requirements(Category.effect, with(iridium,300,/*chromium,200,*/corallite,20));
-
             health = 560;
 
             priority = TargetPriority.core-0.2f;
@@ -284,7 +282,6 @@ public class SvBlocks{
 
             envDisabled |= Env.scorching;
         }};
-
 
         //exploration
         buoy = new Buoy("buoy") {{
