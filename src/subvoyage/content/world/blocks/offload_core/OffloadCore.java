@@ -95,9 +95,9 @@ public class OffloadCore extends CoreBlock {
             ));
             if(completeType == 0x79) {
                 completeType = (byte) ((byte) rand.nextInt(60)%4);
-                damageToDeal = 5000+rand.nextInt(3000);
-                waveToSurvive = 10+rand.nextInt(2*2+1)*5;
-                secondsToSurvive = 3*60+rand.nextInt(2*30)*2;
+                damageToDeal = 10000+rand.nextInt(10000);
+                waveToSurvive = 20+rand.nextInt(2*2+1)*5;
+                secondsToSurvive = 8*60+rand.nextInt(8*30)*2;
             }
         }
 
@@ -211,6 +211,7 @@ public class OffloadCore extends CoreBlock {
             float progress = 1f-Mathf.clamp(switch (completeType) {
                 case 0x0 -> damageDealt/damageToDeal;
                 case 0x1 -> (float) currentWave /waveToSurvive;
+                case 0x3 -> timePassed/(secondsToSurvive*60f);
                 default -> 0f;
             });
             Lines.poly(x,y,completeType+3,tilesize*progress,Time.time);
