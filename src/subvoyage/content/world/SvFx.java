@@ -1,19 +1,41 @@
 package subvoyage.content.world;
 
+import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
+import arc.util.Nullable;
+import arc.util.Time;
+import mindustry.content.Fx;
 import mindustry.entities.*;
+import mindustry.game.Team;
+import mindustry.gen.Entityc;
+import mindustry.gen.Rotc;
 import mindustry.graphics.*;
+import subvoyage.content.unit.entity.HelicopterUnitEntity;
 
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
+import static mindustry.Vars.tilesize;
 
 public class SvFx{
     public static final Rand rand = new Rand();
     public static final Vec2 v = new Vec2();
+
+    public static TextureRegion laser;
+    public static TextureRegion laserEnd;
+    public static TextureRegion laserTop;
+    public static TextureRegion laserTopEnd;
+
+    public static void loadLaser() {
+        laser = Core.atlas.find("laser-white");
+        laserEnd = Core.atlas.find("laser-white-end");
+        laserTop = Core.atlas.find("laser-top");
+        laserTopEnd = Core.atlas.find("laser-top-end");
+    }
+
 
     public static final Effect
 
@@ -27,6 +49,18 @@ public class SvFx{
 
         randLenVectors(e.id + 1, 4, 18 * e.finpow(), (x, y) ->
         lineAngle(e.x + x, e.y + y, Mathf.angle(x, y), 1f + e.fout() * 3f));
+    }),
+
+    point = new Effect(60, e -> {
+        color(e.color.a(e.fout()));
+        Lines.circle(e.x,e.y,e.finpow()*4);
+    }),
+
+    decoderWave = new Effect(20f, 80f, e -> {
+        color(Color.white, Color.lightGray, e.fin());
+        stroke(e.fout() * 4f);
+
+        Lines.circle(e.x, e.y, e.fin() * (float) e.data);
     }),
 
     smokePuff = new Effect(18, e -> {
@@ -75,5 +109,27 @@ public class SvFx{
                 Fill.circle(e.x + v.x, e.y + v.y, b.fout());
             });
         }
+    }),
+
+    beam = new Effect(60f, e -> {
+        float[] pos = e.data();
+        float x1 = pos[0];
+        float y1 = pos[1];
+        float x2 = pos[2];
+        float y2 = pos[3];
+        Draw.color(e.color);
+        drawLaser(x1,y1,x2,y2,2,2);
+        Draw.reset();
     });
+
+
+    public static void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2){
+        if(laser == null) loadLaser();
+
+        float angle1 = Angles.angle(x1, y1, x2, y2),
+                vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
+                len1 = size1 * tilesize / 2f - 1.5f, len2 = size2 * tilesize / 2f - 1.5f;
+
+        Drawf.laser(laser, laserEnd, x1 + vx*len1, y1 + vy*len1, x2 - vx*len2, y2 - vy*len2, 0.25f);
+    }
 }

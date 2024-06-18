@@ -1,5 +1,6 @@
-package subvoyage.content.world.blocks;
+package subvoyage.content.world.blocks.offload_core;
 
+import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.util.*;
@@ -18,6 +19,7 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
 import mindustry.world.Tile;
+import subvoyage.content.world.SvFx;
 import subvoyage.content.world.blocks.offload_core.OffloadCore;
 
 import static mindustry.Vars.tilesize;
@@ -28,9 +30,18 @@ public class CoreDecoder extends Block {
     public float radius = 10;
     public float hackChance = 0.01f;
     public int minAttempts = 40;
+
+    public TextureRegion heat;
+
     public CoreDecoder(String name) {
         super(name);
         update = true;
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        heat = Core.atlas.find(name+"-heat");
     }
 
     @Override
@@ -55,18 +66,32 @@ public class CoreDecoder extends Block {
 
         @Override
         public void draw() {
-            Draw.color(new Color(Color.white).lerp(Pal.accent,timePassed/ (float) frequency));
             Draw.rect(this.block.region, this.x, this.y, this.drawrot());
+            Draw.reset();
+
+            Draw.z(Layer.blockAdditive);
+            Draw.blend(Blending.additive);
+            Draw.color(Pal.redLight);
+            Draw.alpha(timePassed/frequency);
+            Draw.rect(heat,this.x,this.y,this.drawrot());
+            Draw.blend();
+
+            Draw.reset();
+
             drawTeamTop();
             Draw.reset();
 
+        }
+
+        @Override
+        public void drawSelect() {
+            super.drawSelect();
             Drawf.dashCircle(x,y,radius*tilesize,Pal.accent);
             Draw.reset();
         }
 
         private void pulse() {
-            Fx.shieldWave.create(x,y,0, Pal.accent, new Object());
-            Fx.bigShockwave.create(x,y,0, Pal.accent, new Object());
+            SvFx.decoderWave.create(x,y,0, Pal.accent, radius*tilesize);
 
             for(int xo = (int) -radius; xo < radius; xo++)
                 for(int yo = (int) -radius; yo < radius; yo++) {
@@ -76,17 +101,23 @@ public class CoreDecoder extends Block {
                     if(dst > radius) continue;
                     Tile tile = world.tile(x,y);
                     if(tile.build instanceof OffloadCore.OffloadCoreBuild c) {
-                        if(c.completeType != 0x2) return;
+                        if(c.completeType != 2) {
+                            continue;
+                        }
+                        SvFx.point.create(this.x,this.y,0,Pal.redLight,new Object());
+                        SvFx.point.create(c.x,c.y,0,Pal.redLight,new Object());
+                        SvFx.beam.create(c.x,c.y,0,Pal.redLight,new float[] {this.x,this.y,c.x,c.y});
                         boolean hack = rand.chance(hackChance*efficiency);
                         boolean protect = rand.chance(hackChance*2*efficiency);
                         //it can't be that fast, like imagine breaking every core from the first attempt,right?
                         if(attempts < minAttempts) {
-                            hack = false;
-                            protect = true;
+                            attempts++;
+                            continue;
                         }
                         if(hack && !protect) c.disableShield();
-                        else Fx.absorb.create(c.x,c.y,0,Pal.accent,new Object());
-                        attempts++;
+                        else{
+                            Fx.absorb.create(c.x,c.y,0,Pal.accent,new Object());
+                        }
                     }
                 }
         }
