@@ -74,6 +74,7 @@ public class OffloadCore extends CoreBlock {
         //1 - survive waves
         //2 - use special building
         //3 - timer
+        //4 - item payload
         public byte completeType = 0x79;
 
         public float damageDealt = 0f;
@@ -126,7 +127,7 @@ public class OffloadCore extends CoreBlock {
                     +y
             ));
             if(completeType == 0x79) {
-                completeType = (byte) ((byte) rand.nextInt(60)%4);
+                completeType = (byte) ((byte) rand.nextInt(60)%5);
                 damageToDeal = 10000+rand.nextInt(10000);
                 waveToSurvive = 20+rand.nextInt(2*2+1)*5;
                 secondsToSurvive = 8*60+rand.nextInt(8*30)*2;
@@ -139,6 +140,7 @@ public class OffloadCore extends CoreBlock {
             super.draw();
             if(!isShieldDisabled) drawShield();
         }
+
 
         @Override
         public void drawStatus() {
@@ -157,6 +159,7 @@ public class OffloadCore extends CoreBlock {
                     if(currentWave >= waveToSurvive) disableShield();
                     break;
                 case 0x2:
+                case 0x4:
                     break;
                 case 0x3:
                     if(timePassed >= secondsToSurvive*60f) disableShield();
@@ -246,7 +249,12 @@ public class OffloadCore extends CoreBlock {
                 case 0x3 -> timePassed/(secondsToSurvive*60f);
                 default -> 0f;
             });
-            Lines.poly(x,y,completeType+3,tilesize*progress,Time.time);
+            int sideCount = (completeType)+3;
+            int shapeCount = Math.max(completeType-2,0)+1;
+            for (int i = 0; i < shapeCount; i++) {
+                float xOffset = -4*(shapeCount-1) + 8*i;
+                Lines.poly(x+xOffset,y+tilesize*size,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
+            }
         }
 
         private float shieldAlpha() {

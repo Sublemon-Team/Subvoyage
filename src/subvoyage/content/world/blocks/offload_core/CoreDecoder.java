@@ -93,33 +93,31 @@ public class CoreDecoder extends Block {
         private void pulse() {
             SvFx.decoderWave.create(x,y,0, Pal.accent, radius*tilesize);
 
-            for(int xo = (int) -radius; xo < radius; xo++)
-                for(int yo = (int) -radius; yo < radius; yo++) {
-                    int x= tileX()+xo;
-                    int y= tileY()+yo;
-                    float dst = Mathf.dst(x,y,tileX(),tileY());
-                    if(dst > radius) continue;
-                    Tile tile = world.tile(x,y);
-                    if(tile.build instanceof OffloadCore.OffloadCoreBuild c) {
-                        if(c.completeType != 2) {
-                            continue;
-                        }
-                        SvFx.point.create(this.x,this.y,0,Pal.redLight,new Object());
-                        SvFx.point.create(c.x,c.y,0,Pal.redLight,new Object());
-                        SvFx.beam.create(c.x,c.y,0,Pal.redLight,new float[] {this.x,this.y,c.x,c.y});
-                        boolean hack = rand.chance(hackChance*efficiency);
-                        boolean protect = rand.chance(hackChance*2*efficiency);
-                        //it can't be that fast, like imagine breaking every core from the first attempt,right?
-                        if(attempts < minAttempts) {
-                            attempts++;
-                            continue;
-                        }
-                        if(hack && !protect) c.disableShield();
-                        else{
-                            Fx.absorb.create(c.x,c.y,0,Pal.accent,new Object());
+            if(attempts > minAttempts)
+                for(int xo = (int) -radius; xo < radius; xo++)
+                    for(int yo = (int) -radius; yo < radius; yo++) {
+                        int x= tileX()+xo;
+                        int y= tileY()+yo;
+                        float dst = Mathf.dst(x,y,tileX(),tileY());
+                        if(dst > radius) continue;
+                        Tile tile = world.tile(x,y);
+                        if(tile.build instanceof OffloadCore.OffloadCoreBuild c) {
+                            if(c.completeType != 2) {
+                                continue;
+                            }
+                            SvFx.point.create(this.x,this.y,0,Pal.redLight,new Object());
+                            SvFx.point.create(c.x,c.y,0,Pal.redLight,new Object());
+                            SvFx.beam.create(c.x,c.y,0,Pal.redLight,new float[] {this.x,this.y,c.x,c.y});
+                            boolean hack = rand.chance(hackChance*efficiency);
+                            boolean protect = rand.chance(hackChance*2*efficiency);
+                            //it can't be that fast, like imagine breaking every core from the first attempt,right?
+                            if(hack && !protect) c.disableShield();
+                            else{
+                                Fx.absorb.create(c.x,c.y,0,Pal.accent,new Object());
+                            }
                         }
                     }
-                }
+            attempts++;
         }
     }
 }
