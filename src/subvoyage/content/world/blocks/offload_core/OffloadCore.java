@@ -69,10 +69,15 @@ public class OffloadCore extends CoreBlock {
         //0 - just damage
         //1 - survive waves
         //2 - use special building
+        //3 - timer
         public byte completeType = 0x79;
+
         public float damageDealt = 0f;
+        public float timePassed = 0;
+
         public int damageToDeal = 0;
         public int waveToSurvive =10;
+        public int secondsToSurvive = 60;
 
         public Rand rand = new Rand(0);
 
@@ -89,9 +94,10 @@ public class OffloadCore extends CoreBlock {
                     +y
             ));
             if(completeType == 0x79) {
-                completeType = (byte) ((byte) rand.nextInt(60)%3);
+                completeType = (byte) ((byte) rand.nextInt(60)%4);
                 damageToDeal = 5000+rand.nextInt(3000);
                 waveToSurvive = 10+rand.nextInt(2*2+1)*5;
+                secondsToSurvive = 3*60+rand.nextInt(2*30)*2;
             }
         }
 
@@ -119,13 +125,16 @@ public class OffloadCore extends CoreBlock {
                     if(currentWave >= waveToSurvive) disableShield();
                     break;
                 case 0x2:
-                    //TODO;
+                    break;
+                case 0x3:
+                    if(timePassed >= secondsToSurvive*60f) disableShield();
                     break;
             }
 
             //we don't want to player spawn wave without a core, right?
             state.rules.waveSending = false;
 
+            timePassed += Time.delta;
             lastHitTime-=Time.delta/30f;
             enemySpawnProgress+=Time.delta/enemySpawnTime;
 
