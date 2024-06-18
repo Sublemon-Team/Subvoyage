@@ -23,6 +23,8 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.content.unit.SvUnits;
 
+import java.io.InputStream;
+
 import static arc.math.Mathf.pi;
 import static mindustry.Vars.*;
 
@@ -93,13 +95,23 @@ public class OffloadCore extends CoreBlock {
             write.f(enemySpawnTime);
         }
 
+
         @Override
-        public void read(Reads read) {
-            super.read(read);
-            damageDealt = read.f();
-            timePassed = read.f();
-            currentWave = read.i();
-            enemySpawnTime = read.f();
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+            try {
+                /*int a = 0;
+                if(read.input instanceof InputStream r){
+                    if(r.available() < 4+4+4+4) a = -1;
+                } else a = -1;
+                if(a == -1) return;*/
+                damageDealt = read.f();
+                timePassed = read.f();
+                currentWave = read.i();
+                enemySpawnTime = read.f();
+            } catch (Exception e) {
+
+            }
         }
 
         @Override

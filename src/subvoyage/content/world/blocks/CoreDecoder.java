@@ -16,6 +16,7 @@ public class CoreDecoder extends Block {
     public float radius = 10;
     public CoreDecoder(String name) {
         super(name);
+        update = true;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class CoreDecoder extends Block {
                 timePassed %= frequency;
                 pulse();
             }
-            timePassed+=Time.delta;
+            timePassed+=Time.delta*efficiency;
         }
 
 
@@ -49,7 +50,8 @@ public class CoreDecoder extends Block {
         }
 
         private void pulse() {
-            Fx.overdriveWave.create(x,y,0, Pal.accent, new Object());
+            Fx.shieldWave.create(x,y,0, Pal.accent, new Object());
+            Fx.bigShockwave.create(x,y,0, Pal.accent, new Object());
         }
     }
 }
