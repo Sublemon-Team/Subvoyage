@@ -90,7 +90,7 @@ public class OffloadCore extends CoreBlock {
             ));
             if(completeType == 0x79) {
                 completeType = (byte) ((byte) rand.nextInt(60)%3);
-                damageToDeal = 2000+rand.nextInt(2000);
+                damageToDeal = 5000+rand.nextInt(3000);
                 waveToSurvive = 10+rand.nextInt(2*2+1)*5;
             }
         }
