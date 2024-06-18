@@ -163,14 +163,55 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
         float maxd = Mathf.dst(width / 2f, height / 2f);
 
-        median(5, 0.4);
-        terrain(Blocks.carbonWall, 69.86f, 0.35f, 1.1f);
-        erase(spawnX, spawnY, 15);
-
         Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
         brush(path, 24);
         brushWithBlock(path, 22, Blocks.water);
         erase(endX, endY, 15);
+
+        Seq<Vec2> offloadCorePositions = Seq.with();
+        if(isOffloaded) {
+            int coresCount = (int) (2+Math.max(0,rand.nextFloat()*8));
+            Seq<Float> existingCores = Seq.with(spawnDegree,(spawnDegree+180)%360);
+            for (int i = 0; i < coresCount; i++) {
+                final float[] degree = {rand.random(360f)};
+                final boolean[] contains = {false};
+                existingCores.forEach(e -> {
+                    if(Math.abs(e-degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) contains[0] = true;
+                });
+                int attempts = 0;
+                while (contains[0]) {
+                    if(attempts > 36) break;
+                    degree[0] = rand.random(360f);
+                    existingCores.forEach(e -> {
+                        if(Math.abs(e-degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) contains[0] = true;
+                    });
+                    attempts++;
+                }
+                if(attempts >= 36) continue;
+
+                Vec2 trnsE = Tmp.v1.trns(degree[0], length);
+                int coreX = (int)(-trnsE.x + width/2f),coreY = (int)(-trnsE.y + height/2f);
+                Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
+                brush(pathE,9);
+                brushWithBlock(pathE,7, Blocks.water);
+                eraseWithBlock(coreX,coreY,12,Blocks.water);
+
+                offloadCorePositions.add(new Vec2(coreX,coreY));
+                existingCores.add(degree[0]);
+            }
+
+            state.rules.attackMode = true;
+            state.rules.waveSending = false;
+            state.rules.waves = false;
+            state.rules.waveTimer = false;
+            sector.info.attack = true;
+        }
+
+        median(5, 0.4);
+        terrain(Blocks.carbonWall, 69.86f, 0.35f, 1.1f);
+        erase(spawnX, spawnY, 15);
+
+
         distort(12f, 16f);
         blend(legartyteStone, darkLegartyteStone, 6);
 
@@ -184,43 +225,6 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
 
             tiles.get(endX,endY).setOverlay(Blocks.spawn);
-        } else {
-            int coresCount = (int) Math.max(1,rand.nextFloat()*rand.nextFloat()*8);
-            Seq<Float> existingCores = Seq.with(spawnDegree,(spawnDegree+180)%360);
-            for (int i = 0; i < coresCount; i++) {
-                final float[] degree = {rand.random(360f)};
-                final boolean[] contains = {false};
-                existingCores.forEach(e -> {
-                    if(Math.abs(e-degree[0]) < 10) contains[0] = true;
-                });
-                int attempts = 0;
-                while (contains[0]) {
-                    if(attempts > 36) break;
-                    degree[0] = rand.random(360f);
-                    existingCores.forEach(e -> {
-                        if(Math.abs(e-degree[0]) < 10) contains[0] = true;
-                    });
-                    attempts++;
-                }
-                if(attempts > 36) continue;
-
-                Vec2 trnsE = Tmp.v1.trns(degree[0], length);
-                int coreX = (int)(-trnsE.x + width/2f),coreY = (int)(-trnsE.y + height/2f);
-                Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
-                brush(pathE,9);
-                brushWithBlock(pathE,7, Blocks.water);
-                distort(4, 7);
-
-                Tile tile = tiles.get(coreX,coreY);
-                tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
-                if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
-            }
-
-            state.rules.attackMode = true;
-            state.rules.waveSending = false;
-            state.rules.waves = false;
-            state.rules.waveTimer = false;
-            sector.info.attack = true;
         }
 
         blend(Blocks.water, Blocks.darksandWater, 4);
@@ -279,6 +283,14 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             if(ore.asFloor().wallOre || block.itemDrop != null || (block == Blocks.air && ore != Blocks.air)){
                 removeWall(x, y, 3, b -> b instanceof TallBlock);
             }
+        });
+
+        offloadCorePositions.forEach(e -> {
+            int coreX = (int) e.x;
+            int coreY = (int) e.y;
+            Tile tile = tiles.get(coreX,coreY);
+            tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
+            if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
         });
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);

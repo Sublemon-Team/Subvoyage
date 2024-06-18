@@ -2,6 +2,7 @@ package subvoyage.content.blocks;
 
 import arc.graphics.*;
 import arc.math.*;
+import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.entities.bullet.*;
@@ -17,9 +18,12 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.units.UnitAssembler;
+import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.liquids.*;
+import subvoyage.content.unit.SvUnits;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
 import subvoyage.content.world.blocks.cargo.*;
@@ -40,7 +44,9 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, finesandWall, finesandWallLarge,
+            whirl, rupture,
+            finesandWall, finesandWallLarge,
+            clayWall,clayWallLarge,
             coreDecoder,
             //CRAFTERS
             waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
@@ -51,6 +57,8 @@ public class SvBlocks{
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation,
+            //PAYLOAD
+            helicopterFactory,
             //EXPLORATION
             buoy,beacon,
             //CORES
@@ -62,6 +70,16 @@ public class SvBlocks{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 400;
             size = 3;
+        }};
+        //payload
+        helicopterFactory = new UnitFactory("helicopter-factory") {{
+            requirements(Category.units, with(iridium, 60, clay, 70));
+            consumeLiquid(SvLiquids.argon,1f);
+            plans = Seq.with(
+                    new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
+            );
+            size = 3;
+            consumePower(1.2f);
         }};
 
         //drills
@@ -255,7 +273,7 @@ public class SvBlocks{
         }};
 
         int wallHealthMultiplier = 4;
-        int largeWallHealthMultiplier = 8;
+        int largeWallHealthMultiplier = 20;
         finesandWall = new Wall("finesand-wall"){{
             requirements(Category.defense, with(fineSand, 20));
             health = 60 * wallHealthMultiplier;
@@ -263,7 +281,20 @@ public class SvBlocks{
         }};
 
         finesandWallLarge = new Wall("finesand-wall-large"){{
-            requirements(Category.defense, ItemStack.mult(finesandWall.requirements, 18));
+            requirements(Category.defense, ItemStack.mult(finesandWall.requirements, 5));
+            health = 60 * largeWallHealthMultiplier;
+            size = 2;
+            envDisabled |= Env.scorching;
+        }};
+
+        clayWall = new Wall("clay-wall"){{
+            requirements(Category.defense, with(clay, 20));
+            health = 60 * wallHealthMultiplier;
+            envDisabled |= Env.scorching;
+        }};
+
+        clayWallLarge = new Wall("clay-wall-large"){{
+            requirements(Category.defense, ItemStack.mult(clayWall.requirements, 18));
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;

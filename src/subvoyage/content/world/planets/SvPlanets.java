@@ -13,6 +13,7 @@ import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.c.AtlacianPlanet;
 
+import static mindustry.Vars.tilesize;
 import static mindustry.content.Planets.*;
 
 public class SvPlanets{
@@ -47,7 +48,7 @@ public class SvPlanets{
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
                 r.loadout = Seq.with();
-                r.enemyCoreBuildRadius = 100f;
+                r.enemyCoreBuildRadius = 2*3*tilesize;
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;

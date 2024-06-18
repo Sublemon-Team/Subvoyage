@@ -193,7 +193,7 @@ public class OffloadCore extends CoreBlock {
             }
         }
 
-        private void disableShield() {
+        public void disableShield() {
             isShieldDisabled = false;
             Fx.instBomb.create(x,y,0, Pal.accent,new Object());
             Call.buildDestroyed(this);
