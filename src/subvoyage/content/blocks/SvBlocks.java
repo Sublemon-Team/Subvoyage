@@ -100,10 +100,6 @@ public class SvBlocks{
             }},
 
             new DrawBlurSpin("-rotator", 4),
-            new DrawPistons() {{
-                sideOffset = 1.25F;
-            }},
-
             new DrawDefault(),
             new DrawRegion("-top")
             );
