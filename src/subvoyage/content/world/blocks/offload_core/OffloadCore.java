@@ -142,7 +142,7 @@ public class OffloadCore extends CoreBlock {
                 if(bullet.within(x,y,shieldRadius) && bullet.team != team) {
                     Fx.absorb.create(bullet.x,bullet.y,0,team.color,new Object());
                     lastHitTime = 1f;
-                    enemySpawnProgress *= 0.99f;
+                    enemySpawnProgress *= 0.999f;
                     damageDealt += bullet.damage;
                     bullet.remove();
                 }
