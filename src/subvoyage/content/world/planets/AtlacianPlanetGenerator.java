@@ -15,6 +15,8 @@ import mindustry.maps.planet.SerpuloPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
+import mindustry.world.blocks.storage.CoreBlock;
+import subvoyage.content.blocks.SvBlocks;
 
 import static mindustry.Vars.*;
 import static subvoyage.content.blocks.SvWorldBlocks.*;
@@ -53,7 +55,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
     @Override
     public void generateSector(Sector sector){
-
+        sector.threat = rand.nextFloat()*rand.nextFloat()*10;
     }
 
     @Override
@@ -157,7 +159,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         blend(legartyteStone, darkLegartyteStone, 6);
 
         float length = width/2.6f;
-        Vec2 trns = Tmp.v1.trns(rand.random(360f), length);
+        float spawnDegree = rand.random(360f);
+        Vec2 trns = Tmp.v1.trns(spawnDegree, length);
         int spawnX = (int)(trns.x + width/2f), spawnY = (int)(trns.y + height/2f), endX = (int)(-trns.x + width/2f), endY = (int)(-trns.y + height/2f);
         float maxd = Mathf.dst(width/2f, height/2f);
 
@@ -228,15 +231,54 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         Schematics.placeLaunchLoadout(spawnX, spawnY);
 
         float difficulty = sector.threat*1.2f;
+        boolean isOffloaded = rand.chance(0.3);
 
-        Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat*sector.threat*1.3f,new Rand(sector.id),state.rules.attackMode,rand.chance(0.3f));
-        state.rules.spawns = spawns;
-        state.rules.waves = true;
-        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
         state.rules.env = sector.planet.defaultEnv;
         state.rules.fog = true;
 
-        tiles.get(endX,endY).setOverlay(Blocks.spawn);
+        if(!isOffloaded) {
+            Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat * sector.threat * 1.3f, new Rand(sector.id), state.rules.attackMode, rand.chance(0.3f));
+            state.rules.spawns = spawns;
+            state.rules.waves = true;
+            state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
+
+            tiles.get(endX,endY).setOverlay(Blocks.spawn);
+        } else {
+            int coresCount = (int) Math.max(1,rand.nextFloat()*rand.nextFloat()*8);
+            Seq<Float> existingCores = Seq.with(spawnDegree,(spawnDegree+180)%360);
+            for (int i = 0; i < coresCount; i++) {
+                final float[] degree = {rand.random(360f)};
+                final boolean[] contains = {false};
+                existingCores.forEach(e -> {
+                    if(Math.abs(e-degree[0]) < 10) contains[0] = true;
+                });
+                int attempts = 0;
+                while (contains[0]) {
+                    if(attempts > 36) break;
+                    degree[0] = rand.random(360f);
+                    existingCores.forEach(e -> {
+                        if(Math.abs(e-degree[0]) < 10) contains[0] = true;
+                    });
+                    attempts++;
+                }
+                if(attempts > 36) continue;
+
+                Vec2 trnsE = Tmp.v1.trns(degree[0], length);
+                int coreX = (int)(-trnsE.x + width/2f),coreY = (int)(-trnsE.y + height/2f);
+                Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
+                brush(pathE,9);
+                brushWithBlock(pathE,7, Blocks.water);
+                Tile tile = tiles.get(coreX,coreY);
+                tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
+                if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
+            }
+
+            state.rules.attackMode = true;
+            state.rules.waveSending = false;
+            state.rules.waves = false;
+            state.rules.waveTimer = false;
+            sector.info.attack = true;
+        }
     }
 
 

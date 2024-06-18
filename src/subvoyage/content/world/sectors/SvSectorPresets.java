@@ -18,12 +18,16 @@ public class SvSectorPresets {
             captureWave = 1;
 
             addStartingItems = false;
+            allowLaunchLoadout = false;
+
+
             difficulty = 0;
 
             rules = (r) -> {
                 r.attackMode = false;
                 r.canGameOver = false;
-                r.loadout = new Seq<>();
+                r.loadout = Seq.with();
+                r.infiniteResources = true;
             };
         }};/*
         crystalShores = new SectorPreset("crystalShores",atlacian,15) {{

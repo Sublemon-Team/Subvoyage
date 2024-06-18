@@ -1,6 +1,7 @@
 package subvoyage.content.world.blocks.offload_core;
 
 import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
@@ -9,11 +10,11 @@ import arc.math.geom.Vec2;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.Fx;
+import mindustry.game.MapObjectives;
 import mindustry.game.Team;
-import mindustry.gen.Bullet;
-import mindustry.gen.Groups;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
+import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.world.Block;
 import mindustry.world.Tile;
@@ -21,8 +22,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.content.unit.SvUnits;
 
 import static arc.math.Mathf.pi;
-import static mindustry.Vars.state;
-import static mindustry.Vars.tilesize;
+import static mindustry.Vars.*;
 
 public class OffloadCore extends CoreBlock {
     public OffloadCore(String name) {
@@ -61,11 +61,40 @@ public class OffloadCore extends CoreBlock {
 
         public float lastHitTime = 0f;
         public float enemySpawnProgress = 0f;
-        public final float enemySpawnTimeF = 60*60f;
-        public float enemySpawnTime = 60*60f;
+        public final float enemySpawnTimeF = 1.1f*60*60f;
+        public float enemySpawnTime = 2.3f*60*60f;
         public int currentWave = 0;
 
-        public Rand rand = new Rand();
+
+        //0 - just damage
+        //1 - survive waves
+        //2 - use special building
+        public byte completeType = 0x79;
+        public float damageDealt = 0f;
+        public int damageToDeal = 0;
+        public int waveToSurvive =10;
+
+        public Rand rand = new Rand(0);
+
+
+        @Override
+        public void created() {
+            super.created();
+            rand = new Rand((long) ((long)
+                    state.rules.planet.id*(state.rules.sector == null ? 1 : state.rules.sector.id)
+                    +state.rules.planet.id
+                    +(state.rules.sector == null ? 1 : state.rules.sector.id)
+                    +x*y
+                    +x
+                    +y
+            ));
+            if(completeType == 0x79) {
+                completeType = (byte) ((byte) rand.nextInt(60)%3);
+                damageToDeal = 2000+rand.nextInt(2000);
+                waveToSurvive = 10+rand.nextInt(2*2+1)*5;
+            }
+        }
+
 
         @Override
         public void draw() {
@@ -73,14 +102,29 @@ public class OffloadCore extends CoreBlock {
             if(!isShieldDisabled) drawShield();
         }
 
+        @Override
+        public void drawStatus() {
+            super.drawStatus();
+        }
 
         @Override
         public void update() {
             super.update();
 
+            switch (completeType) {
+                case 0x0:
+                    if(damageDealt >= damageToDeal) disableShield();
+                    break;
+                case 0x1:
+                    if(currentWave >= waveToSurvive) disableShield();
+                    break;
+                case 0x2:
+                    //TODO;
+                    break;
+            }
+
             //we don't want to player spawn wave without a core, right?
             state.rules.waveSending = false;
-            state.wavetime = enemySpawnTime;
 
             lastHitTime-=Time.delta/30f;
             enemySpawnProgress+=Time.delta/enemySpawnTime;
@@ -90,6 +134,7 @@ public class OffloadCore extends CoreBlock {
                     Fx.absorb.create(bullet.x,bullet.y,0,team.color,new Object());
                     lastHitTime = 1f;
                     enemySpawnProgress *= 0.99f;
+                    damageDealt += bullet.damage;
                     bullet.remove();
                 }
             }
@@ -105,6 +150,12 @@ public class OffloadCore extends CoreBlock {
                 Fx.blastExplosion.create(x,y,0,team.color,new Object());
                 beginWave();
             }
+        }
+
+        private void disableShield() {
+            isShieldDisabled = false;
+            Fx.instBomb.create(x,y,0, Pal.accent,new Object());
+            Call.buildDestroyed(this);
         }
 
         private void beginWave() {
@@ -144,8 +195,16 @@ public class OffloadCore extends CoreBlock {
                     Color.clear.lerp(team.color,0.5f),
                     Tmp.c2.set(team.color).a(0.7f * alpha)
             );
+
             Drawf.circles(x,y,radius,team.color);
             Drawf.dashCircle(x, y, waveRadius, new Color(team.color).lerp(Color.red,enemySpawnProgress));
+
+            float progress = 1f-Mathf.clamp(switch (completeType) {
+                case 0x0 -> damageDealt/damageToDeal;
+                case 0x1 -> (float) currentWave /waveToSurvive;
+                default -> 0f;
+            });
+            Lines.poly(x,y,completeType+3,tilesize*progress,Time.time);
         }
 
         private float shieldAlpha() {
@@ -155,6 +214,7 @@ public class OffloadCore extends CoreBlock {
         @Override
         public void damage(Team source, float damage) {
             if(isShieldDisabled) super.damage(source, damage);
+            else damageDealt += damage;
         }
 
     }

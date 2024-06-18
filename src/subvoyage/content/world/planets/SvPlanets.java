@@ -1,6 +1,7 @@
 package subvoyage.content.world.planets;
 
 import arc.graphics.*;
+import arc.struct.Seq;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -10,6 +11,7 @@ import mindustry.world.meta.*;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
+import subvoyage.content.world.planets.c.AtlacianPlanet;
 
 import static mindustry.content.Planets.*;
 
@@ -19,7 +21,7 @@ public class SvPlanets{
     public static void load() {
 
         serpulo.orbitSpacing = 3f;
-        atlacian = new Planet("atlacian", serpulo, 0.6f, 2) {{
+        atlacian = new AtlacianPlanet("atlacian", serpulo, 0.6f, 2) {{
             generator = new AtlacianPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 6);
             cloudMeshLoader = () -> new MultiMesh(
@@ -38,11 +40,14 @@ public class SvPlanets{
             //allowLaunchSchematics = true;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = true;
+
             //doesn't play well with configs
             prebuildBase = false;
             ruleSetter = r -> {
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
+                r.loadout = Seq.with();
+                r.enemyCoreBuildRadius = 100f;
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
