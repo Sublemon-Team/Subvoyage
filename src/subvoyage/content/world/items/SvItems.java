@@ -12,7 +12,6 @@ public class SvItems{
             stone, clay,
             tugSheet,quartzFiber;
 
-
     public static void load() {
 
         spaclanium = new Item("spaclanium", Color.valueOf("D8C4FF")) {{
@@ -53,6 +52,5 @@ public class SvItems{
         }};
 
         atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, stone);
-
     }
 }

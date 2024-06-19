@@ -1,29 +1,19 @@
 package subvoyage.content.world.blocks.offload_core;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.math.geom.Vec2;
-import arc.util.Time;
-import arc.util.Tmp;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
-import mindustry.content.Fx;
-import mindustry.game.MapObjectives;
-import mindustry.game.Team;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.util.*;
+import arc.util.io.*;
+import mindustry.content.*;
+import mindustry.game.*;
 import mindustry.gen.*;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
-import mindustry.type.UnitType;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.unit.SvUnits;
-
-import java.io.InputStream;
+import mindustry.graphics.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.world.blocks.storage.*;
+import subvoyage.content.unit.*;
 
 import static arc.math.Mathf.pi;
 import static mindustry.Vars.*;
@@ -85,7 +75,6 @@ public class OffloadCore extends CoreBlock {
         public int secondsToSurvive = 60;
 
         public Rand rand = new Rand(0);
-
 
         @Override
         public void write(Writes write) {
