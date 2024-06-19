@@ -251,9 +251,13 @@ public class OffloadCore extends CoreBlock {
             });
             int sideCount = (completeType)+3;
             int shapeCount = Math.max(completeType-2,0)+1;
+            float step = (float) 360 /shapeCount;
+            float dst = tilesize*size*progress;
+            float t = (Time.time/4f) % 360;
             for (int i = 0; i < shapeCount; i++) {
-                float xOffset = -4*(shapeCount-1) + 8*i;
-                Lines.poly(x+xOffset,y+tilesize*size,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
+                float xi = Mathf.sinDeg(step*i+t)*dst;
+                float yi = Mathf.cosDeg(step*i+t)*dst;
+                Lines.poly(x+xi,y+yi,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
             }
         }
 
