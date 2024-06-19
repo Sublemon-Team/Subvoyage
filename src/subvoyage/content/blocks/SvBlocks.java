@@ -18,6 +18,8 @@ import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
+import mindustry.world.blocks.storage.StorageBlock;
+import mindustry.world.blocks.storage.Unloader;
 import mindustry.world.blocks.units.UnitFactory;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
@@ -28,6 +30,7 @@ import subvoyage.content.world.blocks.cargo.*;
 import subvoyage.content.world.blocks.energy.*;
 import subvoyage.content.world.blocks.offload_core.*;
 import subvoyage.content.world.draw.*;
+import subvoyage.content.world.items.SvItems;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
 
@@ -59,8 +62,8 @@ public class SvBlocks{
             helicopterFactory,
             //EXPLORATION
             buoy,beacon,
-            //CORES
-            corePuffer;
+            //STORAGE
+            corePuffer, vault, largeVault, unloader;
 
     public static void load() {
         //non-user
@@ -69,6 +72,7 @@ public class SvBlocks{
             health = 400;
             size = 3;
         }};
+
 
         offloadCoreGuardian = new OffloadCoreGuardian("offload-core-guardian") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
@@ -306,7 +310,7 @@ public class SvBlocks{
         }};
 
         coreDecoder = new CoreDecoder("core-decoder") {{
-            requirements(Category.effect, with(iridium,300,/*chromium,200,*/corallite,20));
+            requirements(Category.effect, with(iridium,300,chromium,200,corallite,20));
             health = 560;
 
             priority = TargetPriority.core-0.2f;
@@ -505,7 +509,7 @@ public class SvBlocks{
             consumeItem(sulfur);
         }};
 
-        //core
+        //storage
         corePuffer = new SubvoyageCoreBlock("core-puffer"){{
             requirements(Category.effect, with(spaclanium,600,corallite,600,clay,300,sulfur,300));
             alwaysUnlocked = true;
@@ -523,6 +527,23 @@ public class SvBlocks{
             unitCapModifier = 12;
 
             bannedItems.addAll(stone);
+        }};
+        vault = new StorageBlock("vault"){{
+            requirements(Category.effect, with(chromium, 250, iridium, 125));
+            size = 2;
+            itemCapacity = 300;
+            scaledHealth = 55;
+        }};
+        largeVault = new StorageBlock("large-vault"){{
+            requirements(Category.effect, with(chromium, 500, iridium, 345));
+            size = 3;
+            itemCapacity = 1000;
+            scaledHealth = 155;
+        }};
+        unloader = new Unloader("unloader"){{
+            requirements(Category.effect, with(chromium, 25, clay, 30));
+            speed = 60f / 11f;
+            group = BlockGroup.transportation;
         }};
 
 

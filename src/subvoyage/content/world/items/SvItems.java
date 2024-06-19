@@ -39,6 +39,18 @@ public class SvItems{
             lowPriority = true;
             buildable = false;
         }};
+        chromium = new Item("chromium",Color.valueOf("FFFFFF")) {{
+            cost = 0.9f;
+            charge = 0.3f;
+        }};
+        tugSheet = new Item("tug-sheet",Color.valueOf("FFFFFF")) {{
+            cost = 1.2f;
+            charge = 0.1f;
+        }};
+        quartzFiber = new Item("quartz-fiber",Color.valueOf("FFFFFF")) {{
+            cost = 1.2f;
+            charge = 0.5f;
+        }};
 
         atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, stone);
 
