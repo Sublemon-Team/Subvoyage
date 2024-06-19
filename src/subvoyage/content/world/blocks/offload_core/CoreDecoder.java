@@ -19,7 +19,7 @@ public class CoreDecoder extends Block {
     public int frequency = 120;
     public float radius = 10;
     public float hackChance = 0.01f;
-    public int minAttempts = 40;
+    public int minAttempts = 70;
 
     public TextureRegion heat;
 
