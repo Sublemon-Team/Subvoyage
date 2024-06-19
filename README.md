@@ -4,4 +4,4 @@
 ![DOWNLOADS](https://img.shields.io/github/downloads/VuzZis/Subvoyage/latest/total?sort=date&style=for-the-badge&logo=github&label=Latest%20Version)
 
 
-> Oceanic-world inspired [Mindustry](https://github.com/Anuken/Mindustry) mod with vanilla-different mechanics, but not too-much different.
+> Oceanic-world inspired [Mindustry](https://github.com/Anuken/Mindustry) mod with vanilla-different mechanics, but not too-much.
