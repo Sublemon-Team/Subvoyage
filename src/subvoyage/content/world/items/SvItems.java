@@ -39,15 +39,15 @@ public class SvItems{
             lowPriority = true;
             buildable = false;
         }};
-        chromium = new Item("chromium",Color.valueOf("FFFFFF")) {{
+        chromium = new Item("chromium", Color.valueOf("8e898b")){{
             cost = 0.9f;
             charge = 0.3f;
         }};
-        tugSheet = new Item("tug-sheet",Color.valueOf("FFFFFF")) {{
+        tugSheet = new Item("tug-sheet", Color.valueOf("72817d")){{
             cost = 1.2f;
             charge = 0.1f;
         }};
-        quartzFiber = new Item("quartz-fiber",Color.valueOf("FFFFFF")) {{
+        quartzFiber = new Item("quartz-fiber", Color.valueOf("f4cec2")){{
             cost = 1.2f;
             charge = 0.5f;
         }};
