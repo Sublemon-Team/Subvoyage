@@ -231,7 +231,7 @@ public class OffloadCore extends CoreBlock {
             return unitTypes[unitType][tier];
         }
 
-        private void drawShield() {
+        protected void drawShield() {
             float alpha = shieldAlpha();
             float radius = shieldRadius-Mathf.clamp(lastHitTime);
             float waveRadius = radius*enemySpawnProgress;
@@ -257,7 +257,7 @@ public class OffloadCore extends CoreBlock {
             }
         }
 
-        private float shieldAlpha() {
+        protected float shieldAlpha() {
             return 0.5f;
         }
 

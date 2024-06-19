@@ -38,7 +38,7 @@ import static subvoyage.content.world.items.SvItems.*;
 public class SvBlocks{
     public static Block
             //NON-USER
-            offloadCore,
+            offloadCore, offloadCoreGuardian,
             //DRILLS
             submersibleDrill, tectonicDrill,
             //DEFENSE
@@ -69,6 +69,13 @@ public class SvBlocks{
             health = 400;
             size = 3;
         }};
+
+        offloadCoreGuardian = new OffloadCoreGuardian("offload-core-guardian") {{
+            requirements(Category.logic, BuildVisibility.editorOnly, with());
+            health = 4000;
+            size = 5;
+        }};;
+
         //payload
         helicopterFactory = new UnitFactory("helicopter-factory") {{
             requirements(Category.units, with(iridium, 60, clay, 70));
