@@ -493,6 +493,7 @@ public class SvBlocks{
             consumePowerBuffered(1000f);
         }};
 
+        //TODO: remake this thing, i hate it.
         sulfurator = new ConsumeGenerator("sulfurator") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
             powerProduction = 1f;

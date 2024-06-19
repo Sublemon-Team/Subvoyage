@@ -4,6 +4,8 @@ import arc.*;
 import arc.func.Prov;
 import arc.util.*;
 import mindustry.ai.Pathfinder;
+import mindustry.content.TechTree;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.EventType.*;
 import mindustry.mod.*;
 import subvoyage.content.blocks.*;
@@ -13,6 +15,7 @@ import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 import subvoyage.content.liquids.*;
 import subvoyage.content.world.planets.*;
+import subvoyage.content.world.planets.atlacian.AtlacianTechTree;
 import subvoyage.content.world.sectors.*;
 
 import static mindustry.Vars.pathfinder;
@@ -28,7 +31,13 @@ public class SubvoyageMod extends Mod {
 
         //listen for game load event
         Events.on(ClientLoadEvent.class, e -> {
-
+            for (TechTree.TechNode node : TechTree.all) {
+                UnlockableContent content = node.content;
+                if (content.locked()) {
+                    //Log.info("[UnlockTechTreeMod] Unlocking content " + (content.name).replace("content", ""));
+                    content.unlock();
+                }
+            }
         });
         Events.on(WorldLoadEvent.class, e -> {
             Prov<Pathfinder.Flowfield> navalCargo = WaterCargoAI.WaterCargoFlowfield::new;
@@ -56,7 +65,7 @@ public class SubvoyageMod extends Mod {
 
         EnvRenderer.init();
 
-        AtlacianTechTree.load();
+        AtlacianTechTree.loadBalanced();
     }
 
 }

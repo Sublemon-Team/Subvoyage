@@ -1,4 +1,4 @@
-package subvoyage.content.world.planets.c;
+package subvoyage.content.world.planets.atlacian;
 
 import arc.math.Mathf;
 import mindustry.type.Planet;

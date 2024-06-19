@@ -1,4 +1,4 @@
-package subvoyage.content.world.planets;
+package subvoyage.content.world.planets.atlacian;
 
 import arc.func.Intc;
 import arc.math.Mathf;

@@ -11,7 +11,8 @@ import mindustry.world.meta.*;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
-import subvoyage.content.world.planets.c.AtlacianPlanet;
+import subvoyage.content.world.planets.atlacian.AtlacianPlanet;
+import subvoyage.content.world.planets.atlacian.AtlacianPlanetGenerator;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Planets.*;

@@ -1,4 +1,4 @@
-package subvoyage.content.world.planets;
+package subvoyage.content.world.planets.atlacian;
 
 import arc.graphics.*;
 import arc.math.*;
@@ -15,6 +15,7 @@ import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.blocks.*;
+import subvoyage.content.world.planets.SvLoadouts;
 
 import static mindustry.Vars.*;
 import static subvoyage.content.blocks.SvWorldBlocks.*;
