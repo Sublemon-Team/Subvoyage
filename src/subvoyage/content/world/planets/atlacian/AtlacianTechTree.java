@@ -35,7 +35,7 @@ public class AtlacianTechTree {
             if(item == chromium) cost = 0.7f;
             if(item == tugSheet) cost = 0.85f;
             if(item == quartzFiber) cost = 1f;
-            cost*=0.5f;
+            cost*=0.8f;
             costMultipliers.put(item,cost);
         }
 
