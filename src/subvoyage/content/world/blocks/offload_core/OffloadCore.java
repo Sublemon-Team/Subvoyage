@@ -241,7 +241,10 @@ public class OffloadCore extends CoreBlock {
             );
 
             Drawf.circles(x,y,radius,team.color);
-            Drawf.dashCircle(x, y, waveRadius, new Color(team.color).lerp(Color.red,enemySpawnProgress));
+            Lines.stroke(Math.abs(Mathf.sinDeg((Time.time*2)%360))*3,Color.white);
+            Lines.circle(x,y,waveRadius);
+            Lines.stroke(1f,new Color(team.color).add(0.15f,0.15f,0.15f));
+            Lines.circle(x,y,waveRadius);
 
             float progress = 1f-Mathf.clamp(switch (completeType) {
                 case 0x0 -> damageDealt/damageToDeal;
@@ -258,10 +261,23 @@ public class OffloadCore extends CoreBlock {
             for (int i = 0; i < shapeCount; i++) {
                 float xi = Mathf.sinDeg(step*i+t)*dst;
                 float yi = Mathf.cosDeg(step*i+t)*dst;
+                Lines.stroke(4f);
+                Draw.color(team.color);
+                Lines.poly(x+xi,y+yi,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
+
+                Lines.stroke(1f);
+                Draw.color();
                 Lines.poly(x+xi,y+yi,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
 
                 float xi2 = Mathf.sinDeg(step*i+t2)*tilesize*size;
                 float yi2 = Mathf.cosDeg(step*i+t2)*tilesize*size;
+                Lines.stroke(4f);
+                Draw.color(team.color);
+                Draw.alpha(0.3f);
+                Lines.poly(x+xi2,y+yi2,sideCount,tilesize,i % 2 == 0 ? Time.time : Time.time+180);
+
+                Lines.stroke(1f);
+                Draw.color();
                 Draw.alpha(0.3f);
                 Lines.poly(x+xi2,y+yi2,sideCount,tilesize,i % 2 == 0 ? Time.time : Time.time+180);
                 Draw.reset();
