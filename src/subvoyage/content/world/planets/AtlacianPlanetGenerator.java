@@ -292,7 +292,11 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
             if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
         });
-
+        if(isOffloaded) {
+            Tile coreTile = tiles.get(endX, endY);
+            coreTile.setBlock(SvBlocks.offloadCoreGuardian, Team.malis, 0);
+            if (coreTile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
+        }
         Schematics.placeLaunchLoadout(spawnX, spawnY);
     }
 

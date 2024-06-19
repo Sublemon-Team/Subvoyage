@@ -205,7 +205,7 @@ public class OffloadCore extends CoreBlock {
         private void beginWave() {
             state.wave = currentWave+1;
 
-            int enemyCount = currentWave == 0 ? 1 : rand.nextInt(Math.max(currentWave/10,1))+1;
+            int enemyCount = currentWave == 0 ? 1 : rand.nextInt(Math.max(currentWave/5,1))+1;
             boolean[] hasBoss = new boolean[] {false};
             for (int i = 0; i < enemyCount; i++) {
                 UnitType currentEnemy = getEnemy(currentWave,hasBoss);
