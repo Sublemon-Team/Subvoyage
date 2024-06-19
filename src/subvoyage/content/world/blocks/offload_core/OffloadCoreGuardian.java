@@ -7,6 +7,8 @@ import arc.math.geom.Vec2;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.Fx;
+import mindustry.content.StatusEffects;
+import mindustry.game.Waves;
 import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.type.UnitType;
@@ -78,7 +80,7 @@ public class OffloadCoreGuardian extends OffloadCore {
             world.tiles.forEach(e -> {
                 if(e.build instanceof OffloadCoreBuild && e.build != this) coreCount.getAndIncrement();
             });
-            if(coreCount.get() <= 0) initiateBoss();
+            if(coreCount.get() <= 0 && !isBossStarted) initiateBoss();
         }
 
         private void initiateBoss() {
@@ -92,6 +94,7 @@ public class OffloadCoreGuardian extends OffloadCore {
             if(rand.chance(0.1)) tier++;
             UnitType boss = specie[tier];
             this.boss = boss.spawn(team,x,y);
+            this.boss.apply(StatusEffects.boss);
         }
     }
 }

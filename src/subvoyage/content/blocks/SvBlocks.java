@@ -73,7 +73,7 @@ public class SvBlocks{
         offloadCoreGuardian = new OffloadCoreGuardian("offload-core-guardian") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 4000;
-            size = 5;
+            size = 4;
         }};;
 
         //payload
