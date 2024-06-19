@@ -8,7 +8,7 @@ import subvoyage.content.world.items.*;
 public class SvWorldBlocks{
     public static Block
     //ores
-    oreSpaclanium,oreCorallite,oreSulfur,oreIridium,
+    oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     // floors
     legartyteStone, darkLegartyteStone, agaryteStone,
     // walls
@@ -34,8 +34,13 @@ public class SvWorldBlocks{
         }};
         oreIridium = new OreBlock(SvItems.iridium){{
             oreDefault = false;
-            oreThreshold = 0.41f;
+            oreThreshold = 0.85f;
             oreScale = 12.42614f;
+        }};
+        oreChromium = new OreBlock(SvItems.chromium) {{
+            oreDefault = false;
+            oreThreshold = 0.9f;
+            oreScale = 10.42614f;
         }};
         legartyteStone = new Floor("legartyte-stone"){{
             attributes.set(Attribute.water, -1f);

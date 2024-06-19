@@ -6,10 +6,10 @@ import mindustry.content.TechTree;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
-import subvoyage.content.liquids.*;
 import subvoyage.content.world.items.SvItems;
 
-import static mindustry.content.Liquids.water;
+import static mindustry.content.Liquids.*;
+import static subvoyage.content.liquids.SvLiquids.*;
 import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.planets.SvPlanets.*;
 
@@ -179,6 +179,9 @@ public class AtlacianTechTree {
                 });
                 node(water,() -> {
                 });
+                node(argon,() -> {
+
+                });
             });
 
         });
@@ -209,7 +212,7 @@ public class AtlacianTechTree {
 
             node(submersibleDrill,Seq.with(/*new Objectives.SectorComplete(crystalShores),*/
                     new Objectives.Research(waterMetallizer),
-                    new Objectives.Produce(SvLiquids.polygen)),() -> {
+                    new Objectives.Produce(polygen)),() -> {
             });
 
             node(lowTierPump,() -> {
