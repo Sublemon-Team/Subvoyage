@@ -26,6 +26,7 @@ public class CoreDecoder extends Block {
     public CoreDecoder(String name) {
         super(name);
         update = true;
+        ambientSound = Sounds.electricHum;
     }
 
     @Override
@@ -89,6 +90,7 @@ public class CoreDecoder extends Block {
         }
 
         private void pulse() {
+            Sounds.pulseBlast.at(x,y);
             new MultiEffect(Fx.drillSteam, SvFx.decoderWave).create(x, y, 0, Pal.accent, radius * tilesize);
             for(int xo = (int) -radius; xo < radius; xo++)
                 for(int yo = (int) -radius; yo < radius; yo++) {

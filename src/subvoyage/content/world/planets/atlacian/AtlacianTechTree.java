@@ -1,12 +1,9 @@
 package subvoyage.content.world.planets.atlacian;
 
 import arc.struct.*;
-import mindustry.Vars;
-import mindustry.content.TechTree;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
-import subvoyage.content.world.items.SvItems;
 
 import static mindustry.content.Liquids.*;
 import static subvoyage.content.liquids.SvLiquids.*;
@@ -69,6 +66,9 @@ public class AtlacianTechTree {
                node(tectonicDrill, () -> {
 
                });
+               node(featherDrill,() -> {
+
+               });
             });
 
             node(lowTierPump, () -> {
@@ -95,32 +95,43 @@ public class AtlacianTechTree {
 
                 });
                 node(argonCentrifuge, () -> {
+                    node(argonCondenser,() -> {
 
+                    });
                 });
                 node(waterMetallizer, () -> {
+                    node(poweredEnhancer,() -> {
 
+                    });
                 });
             });
 
-            node(sulfurator,() -> {
+            node(spaclaniumHydrolyzer,() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
                     });
                 });
+                node(windTurbine, () -> {
+
+                });
+                node(chromiumReactor,() -> {
+
+                });
             });
 
             node(whirl, () -> {
                 node(rupture, () -> {
-
+                    node(awe);
                 });
                 node(finesandWall,() -> {
                     node(finesandWallLarge,() -> {
-
-                    });
-                    node(clayWall,() -> {
-                        node(clayWallLarge,() -> {
-
+                        node(clayWall,() -> {
+                            node(clayWallLarge,() -> {
+                                node(tugSheetWall,() -> {
+                                    node(tugSheetWallLarge);
+                                });
+                            });
                         });
                     });
                 });
@@ -178,6 +189,9 @@ public class AtlacianTechTree {
                     });
                 });
                 node(water,() -> {
+                    node(polygen,() -> {
+
+                    });
                 });
                 node(argon,() -> {
 
@@ -205,7 +219,7 @@ public class AtlacianTechTree {
                 node(beacon);
             });
 
-            node(sulfurator,Seq.with(/*new Objectives.SectorComplete(crystalShores)*/),() -> {
+            node(spaclaniumHydrolyzer,Seq.with(/*new Objectives.SectorComplete(crystalShores)*/),() -> {
                 node(energyDock);
                 node(energyDistributor);
             });

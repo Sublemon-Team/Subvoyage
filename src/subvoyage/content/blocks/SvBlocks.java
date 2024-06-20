@@ -34,27 +34,35 @@ import subvoyage.content.world.draw.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
 
+import static mindustry.content.Liquids.water;
+import static mindustry.type.ItemStack.mult;
 import static mindustry.type.ItemStack.with;
+import static subvoyage.content.liquids.SvLiquids.argon;
+import static subvoyage.content.liquids.SvLiquids.polygen;
 import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
+    /*featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
+        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор)
+      */
     public static Block
             //NON-USER
             offloadCore, offloadCoreGuardian,
             //DRILLS
-            submersibleDrill, tectonicDrill,
+            submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture,
+            whirl, rupture, awe,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
+            tugSheetWall, tugSheetWallLarge,
             coreDecoder,
             //CRAFTERS
-            waterMetallizer, ceramicBurner, terracottaBlaster, argonCentrifuge,
+            waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
-            energyDock, energyDistributor,sulfurator,
+            energyDock, energyDistributor, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation,
@@ -71,6 +79,8 @@ public class SvBlocks{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 400;
             size = 3;
+
+            unitType = marine;
         }};
 
 
@@ -78,12 +88,14 @@ public class SvBlocks{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 4000;
             size = 4;
+
+            unitType = marine;
         }};;
 
         //payload
         helicopterFactory = new UnitFactory("helicopter-factory") {{
             requirements(Category.units, with(iridium, 60, clay, 70));
-            consumeLiquid(SvLiquids.argon,1f);
+            consumeLiquid(argon,1f);
             plans = Seq.with(
                     new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
             );
@@ -95,6 +107,7 @@ public class SvBlocks{
         submersibleDrill = new SubmersibleDrill("submersible-drill") {{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
             tier = 2;
+            hardnessDrillMultiplier = 0.9f;
             drillTime = 400;
             size = 2;
             itemCapacity = 20;
@@ -104,6 +117,22 @@ public class SvBlocks{
             squareSprite = false;
 
             consumeLiquid(SvLiquids.polygen, 5/60f);
+        }};
+
+        featherDrill = new SubmersibleDrill("feather-drill") {{
+            requirements(Category.production, with(corallite, 100, iridium, 100, clay, 200));
+            tier = 3;
+            hardnessDrillMultiplier = 1.1f;
+            drillTime = 100;
+            size = 3;
+            itemCapacity = 30;
+            blockedItem = Items.sand;
+            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
+            fogRadius = 3;
+            squareSprite = false;
+
+            consumeLiquid(argon, 1.8f);
+            consumeCoolant(1.2f);
         }};
 
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
@@ -281,6 +310,39 @@ public class SvBlocks{
             limitRange(6);
         }};
 
+
+        awe = new PowerTurret("awe") {{
+            requirements(Category.turret, with(corallite, 85, iridium, 40, spaclanium, 20));
+            size = 2;
+            outlineColor = Pal.darkOutline;
+            shootCone = 360f;
+            targetGround = true;
+            targetAir = false;
+            fogRadius = 6;
+            health = 260;
+            shootSound = Sounds.spark;
+            range = 8*10f;
+            velocityRnd = 0;
+            reload = 60f;
+            shake = 10f;
+            shootEffect = new MultiEffect(Fx.massiveExplosion, Fx.scatheExplosion, Fx.scatheLight, new WaveEffect(){{
+                lifetime = 10f;
+                strokeFrom = 4f;
+                sizeTo = range;
+            }});
+            shootType = new ExplosionBulletType(20f,range) {{
+                collidesAir = false;
+                buildingDamageMultiplier = 1.1f;
+                ammoMultiplier = 1f;
+                speed = 0;
+                lifetime = 1f;
+                killShooter = false;
+            }};
+            consumePower(3.3f);
+            coolant = consumeCoolant(0.1f);
+        }};
+
+
         int wallHealthMultiplier = 4;
         int largeWallHealthMultiplier = 20;
         finesandWall = new Wall("finesand-wall"){{
@@ -290,7 +352,7 @@ public class SvBlocks{
         }};
 
         finesandWallLarge = new Wall("finesand-wall-large"){{
-            requirements(Category.defense, ItemStack.mult(finesandWall.requirements, 5));
+            requirements(Category.defense, mult(finesandWall.requirements, 5));
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
@@ -303,10 +365,37 @@ public class SvBlocks{
         }};
 
         clayWallLarge = new Wall("clay-wall-large"){{
-            requirements(Category.defense, ItemStack.mult(clayWall.requirements, 18));
+            requirements(Category.defense, mult(clayWall.requirements, 18));
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
+        }};
+
+        tugSheetWall = new ShieldWall("tug-sheet-wall") {{
+            requirements(Category.defense, with(tugSheet, 30));
+            consumePower(3f / 60f);
+            hasPower = true;
+            outputsPower = false;
+            consumesPower = true;
+            conductivePower = true;
+            chanceDeflect = 10f;
+            armor = 15f;
+            health = 200 * wallHealthMultiplier;
+            envDisabled |= Env.scorching;
+        }};
+
+        tugSheetWallLarge = new ShieldWall("tug-sheet-wall-large") {{
+            requirements(Category.defense, mult(tugSheetWall.requirements, 18));
+            consumePower(3*4f / 60f);
+            hasPower = true;
+            outputsPower = false;
+            consumesPower = true;
+            conductivePower = true;
+            chanceDeflect = 20f;
+            armor = 15f;
+            health = 200 * largeWallHealthMultiplier;
+            envDisabled |= Env.scorching;
+            size = 2;
         }};
 
         coreDecoder = new CoreDecoder("core-decoder") {{
@@ -435,9 +524,9 @@ public class SvBlocks{
 
             drawer = new DrawMulti(
             new DrawDefault(),
-            new DrawLiquidRegion(Liquids.water)
+            new DrawLiquidRegion(water)
             );
-            consumeLiquid(Liquids.water, 1/60f);
+            consumeLiquid(water, 1/60f);
             envDisabled |= Env.scorching;
             results = with(
                     spaclanium,3,
@@ -451,12 +540,12 @@ public class SvBlocks{
             craftTime = 20f;
             itemCapacity = 50;
             size = 2;
-            consumeLiquid(Liquids.water, 12/60f);
+            consumeLiquid(water, 12/60f);
             envDisabled |= Env.scorching;
             squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),
-                new DrawLiquidRegion(Liquids.water),
+                new DrawLiquidRegion(water),
                 new WarmupDrawRegion("-top", true)
             );
 
@@ -493,21 +582,36 @@ public class SvBlocks{
             consumePowerBuffered(1000f);
         }};
 
-        //TODO: remake this thing, i hate it.
-        sulfurator = new ConsumeGenerator("sulfurator") {{
+        spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
-            powerProduction = 1f;
+            powerProduction = 1.2f;
             itemDuration = 120f;
             envDisabled |= Env.scorching;
 
-            ambientSound = Sounds.smelter;
+            ambientSound = Sounds.extractLoop;
             ambientSoundVolume = 0.03f;
 
-            consumeEffect = Fx.redgeneratespark;
+            consumeEffect = Fx.generatespark;
             generateEffect = Fx.pulverizeSmall;
 
             drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
-            consumeItem(sulfur);
+            consumeItem(spaclanium);
+            consumeLiquid(water,0.5f);
+        }};
+
+        windTurbine = spaclaniumHydrolyzer; //TODO
+        chromiumReactor = new ImpactReactor("chromium-reactor") {{
+            requirements(Category.power,with(chromium, 300, tugSheet, 50, corallite, 80, iridium, 100));
+            size = 3;
+            health = 900;
+            powerProduction = 120f/30;
+            itemDuration = 60f*3;
+            ambientSound = Sounds.pulse;
+            ambientSoundVolume = 0.07f;
+
+            consumePower(20f/30);
+            consumeItem(chromium,2);
+            consumeLiquid(polygen, 0.5f);
         }};
 
         //storage
@@ -642,7 +746,7 @@ public class SvBlocks{
             buildTime = 6f*60f;
 
             consumePower(12f/60f);
-            consumeLiquid(SvLiquids.argon,8f/60f);
+            consumeLiquid(argon,8f/60f);
 
             unitType = bulker;
 
@@ -669,7 +773,7 @@ public class SvBlocks{
             itemCapacity = 3;
             size = 2;
             envDisabled |= Env.scorching;
-            consumeLiquid(Liquids.water,1);
+            consumeLiquid(water,1);
             consumeItem(fineSand, 1);
         }};
 
@@ -693,28 +797,9 @@ public class SvBlocks{
 
             size = 3;
             envDisabled |= Env.scorching;
-            consumeLiquid(Liquids.water, 2);
+            consumeLiquid(water, 2);
             consumeItem(fineSand,2);
             consumePower(2.3f);
-        }};
-
-        argonCentrifuge = new GenericCrafter("argon-centrifuge") {{
-           requirements(Category.crafting, with(spaclanium,60,corallite,200,sulfur,30));
-           itemCapacity = 10;
-           size = 2;
-           craftEffect = Fx.smokePuff;
-           craftTime = 60f;
-           envDisabled |= Env.scorching;
-
-           consumeItem(sulfur,1);
-           consumeItem(corallite, 2);
-           consumePower(0.8f);
-           outputLiquid = new LiquidStack(SvLiquids.argon, 8/60f);
-           hasLiquids = true;
-           drawer = new DrawMulti(
-                   new DrawDefault(),
-                   new DrawLiquidRegion(SvLiquids.argon)
-           );
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
@@ -736,8 +821,70 @@ public class SvBlocks{
             new DrawRegion("-top")
             );
 
-            consumeLiquid(Liquids.water,1);
+            consumeLiquid(water,1);
             consumeItem(corallite,1);
+        }};
+
+        poweredEnhancer = new GenericCrafter("powered-enhancer") {{
+            requirements(Category.crafting, with(chromium, 200, iridium, 100));
+            outputLiquid = new LiquidStack(SvLiquids.polygen, 2);
+            craftTime = 1f;
+
+            itemCapacity = 30;
+            size = 3;
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+            envDisabled |= Env.scorching;
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawMixer(),
+                    new DrawDefault(),
+                    new DrawRegion("-top")
+            );
+
+            consumeLiquid(water,0.5f);
+            consumeItem(corallite, 1);
+            consumePower(0.8f);
+        }};
+
+        argonCentrifuge = new GenericCrafter("argon-centrifuge") {{
+            requirements(Category.crafting, with(spaclanium,60,corallite,200,sulfur,30));
+            itemCapacity = 10;
+            size = 2;
+            craftEffect = Fx.smokePuff;
+            craftTime = 60f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(sulfur,1);
+            consumeItem(corallite, 2);
+            consumePower(0.8f);
+            outputLiquid = new LiquidStack(argon, 8/60f);
+            hasLiquids = true;
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawLiquidRegion(argon)
+            );
+        }};
+
+        argonCondenser = new GenericCrafter("argon-condenser") {{
+            requirements(Category.crafting, with(chromium,120,iridium,60,tugSheet,10));
+            itemCapacity = 10;
+            size = 2;
+            craftEffect = Fx.smokePuff;
+            craftTime = 20f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(sulfur,2);
+            consumeItem(corallite, 3);
+            consumePower(1.3f);
+            outputLiquid = new LiquidStack(argon, 30/60f);
+            hasLiquids = true;
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawLiquidRegion(argon)
+            );
         }};
     }
 }

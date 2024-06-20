@@ -1,5 +1,6 @@
 package subvoyage.content.blocks;
 
+import mindustry.content.Blocks;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
@@ -41,6 +42,7 @@ public class SvWorldBlocks{
             oreDefault = false;
             oreThreshold = 0.9f;
             oreScale = 10.42614f;
+            playerUnmineable = true;
         }};
         legartyteStone = new Floor("legartyte-stone"){{
             attributes.set(Attribute.water, -1f);

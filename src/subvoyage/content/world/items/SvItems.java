@@ -28,10 +28,12 @@ public class SvItems{
         }};
         sulfur = new Item("sulfur",Color.valueOf("C4A981")) {{
             cost = 0.6f;
+            hardness = 1;
         }};
         iridium = new Item("iridium", Color.valueOf("8b9098")) {{
             cost = 0.8f;
             charge = 0.4f;
+            hardness = 2;
         }};
         stone = new Item("stone", Color.valueOf("393f42")) {{
             cost = 0.2f;
@@ -41,6 +43,7 @@ public class SvItems{
         chromium = new Item("chromium", Color.valueOf("8e898b")){{
             cost = 0.9f;
             charge = 0.3f;
+            hardness = 3;
         }};
         tugSheet = new Item("tug-sheet", Color.valueOf("72817d")){{
             cost = 1.2f;
