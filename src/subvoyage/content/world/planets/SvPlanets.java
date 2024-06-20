@@ -1,7 +1,7 @@
 package subvoyage.content.world.planets;
 
 import arc.graphics.*;
-import arc.struct.Seq;
+import arc.struct.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -11,8 +11,7 @@ import mindustry.world.meta.*;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
-import subvoyage.content.world.planets.atlacian.AtlacianPlanet;
-import subvoyage.content.world.planets.atlacian.AtlacianPlanetGenerator;
+import subvoyage.content.world.planets.atlacian.*;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Planets.*;
@@ -57,12 +56,15 @@ public class SvPlanets{
             };
 
             iconColor = Color.valueOf("7286AD");
-            atmosphereColor = Color.valueOf("EAC7DE");
+            lightColor = Color.white.cpy().a(0.025f);
+            atmosphereColor = Color.valueOf("EAC7DE").a(0.25f);
             atmosphereRadIn = 0.03f;
             atmosphereRadOut = 0.1f;
+
+            minZoom = 0.35f;
+            camRadius = 1f;
             startSector = 7;
             defaultEnv = Environment.legarytic | Env.terrestrial;
-
 
             alwaysUnlocked = true;
             landCloudColor = Color.valueOf("4F4CB5");
