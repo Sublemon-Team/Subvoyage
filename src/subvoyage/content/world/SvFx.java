@@ -5,16 +5,12 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
-import arc.util.Nullable;
-import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.entities.*;
-import mindustry.game.Team;
-import mindustry.gen.Entityc;
-import mindustry.gen.Rotc;
 import mindustry.graphics.*;
-import subvoyage.content.unit.entity.HelicopterUnitEntity;
 
+import static arc.graphics.g2d.Draw.alpha;
 import static arc.graphics.g2d.Draw.color;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
@@ -40,6 +36,43 @@ public class SvFx{
     public static final Effect
 
     none = new Effect(0, 0f, e -> {
+    }),
+
+    aweExplosion = new Effect(60f, 160f, e -> {
+        color(Pal.stoneGray);
+        stroke(e.fout() * 2f);
+        float circleRad = 6f + e.finpow() * 60f;
+        Lines.circle(e.x, e.y, circleRad);
+
+        rand.setSeed(e.id);
+        for(int i = 0; i < 16; i++){
+            float angle = rand.random(360f);
+            float lenRand = rand.random(0.5f, 1f);
+            Tmp.v1.trns(angle, circleRad);
+
+            for(int s : Mathf.signs){
+                Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 6f, e.fout() * 10f * lenRand + 6f, angle + 90f + s * 90f);
+            }
+        }
+    }),
+    aweExplosionDust = new Effect(60f, 160f, e -> {
+        color(Pal.stoneGray);
+        alpha(0.3f);
+        stroke(e.fout() * 2f);
+        float circleRad = 6f + e.finpow() * 60f;
+        Lines.circle(e.x, e.y, circleRad);
+
+        rand.setSeed(e.id);
+        for(int i = 0; i < 16; i++){
+            float angle = rand.random(360f);
+            float lenRand = rand.random(0.5f, 1f);
+            Tmp.v1.trns(angle, circleRad);
+
+            for(int s : Mathf.signs){
+                alpha(0.3f-rand.random(0.25f));
+                Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 24f * lenRand);
+            }
+        }
     }),
 
     pulverize = new Effect(20, e -> {

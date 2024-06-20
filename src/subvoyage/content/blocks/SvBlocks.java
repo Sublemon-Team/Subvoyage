@@ -320,14 +320,16 @@ public class SvBlocks{
             targetAir = false;
             fogRadius = 6;
             health = 260;
-            shootSound = Sounds.spark;
+            shootSound = Sounds.dullExplosion;
             range = 8*10f;
             velocityRnd = 0;
             reload = 60f;
-            shake = 10f;
-            shootEffect = new MultiEffect(Fx.massiveExplosion, Fx.scatheExplosion, Fx.scatheLight, new WaveEffect(){{
+            shake = 5f;
+
+            shootEffect = new MultiEffect(Fx.massiveExplosion,SvFx.aweExplosion,SvFx.aweExplosionDust, new WaveEffect(){{
                 lifetime = 10f;
-                strokeFrom = 4f;
+                strokeFrom = 3f;
+                strokeTo = 0f;
                 sizeTo = range;
             }});
             shootType = new ExplosionBulletType(20f,range) {{

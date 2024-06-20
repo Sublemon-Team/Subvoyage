@@ -95,6 +95,7 @@ public class OffloadCoreGuardian extends OffloadCore {
             UnitType boss = specie[tier];
             this.boss = boss.spawn(team,x,y);
             this.boss.apply(StatusEffects.boss);
+            this.boss.shield(100f*(tier+1));
         }
     }
 }
