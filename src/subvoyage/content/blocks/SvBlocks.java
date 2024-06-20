@@ -593,6 +593,8 @@ public class SvBlocks{
             ambientSound = Sounds.extractLoop;
             ambientSoundVolume = 0.03f;
 
+            size = 2;
+
             consumeEffect = Fx.generatespark;
             generateEffect = Fx.pulverizeSmall;
 
