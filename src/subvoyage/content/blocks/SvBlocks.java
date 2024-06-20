@@ -905,7 +905,7 @@ public class SvBlocks{
         argonCondenser = new GenericCrafter("argon-condenser") {{
             requirements(Category.crafting, with(chromium,120,iridium,60,tugSheet,10));
             itemCapacity = 10;
-            size = 2;
+            size = 3;
             craftEffect = Fx.smokePuff;
             craftTime = 20f;
             envDisabled |= Env.scorching;
