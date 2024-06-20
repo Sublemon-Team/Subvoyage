@@ -651,7 +651,9 @@ public class SvBlocks{
                 size = 2;
                 itemCapacity = 300;
                 scaledHealth = 55;
+                squareSprite = false;
             }
+            
             @Override
             protected TextureRegion[] icons() {
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
@@ -663,6 +665,7 @@ public class SvBlocks{
                 size = 3;
                 itemCapacity = 1000;
                 scaledHealth = 155;
+                squareSprite = false;
             }
 
             @Override
@@ -675,6 +678,7 @@ public class SvBlocks{
             requirements(Category.effect, with(chromium, 25, clay, 30));
             speed = 60f / 11f;
             group = BlockGroup.transportation;
+            squareSprite = false;
         }};
 
         liquidContainer = new LiquidRouter("liquid-container"){{
