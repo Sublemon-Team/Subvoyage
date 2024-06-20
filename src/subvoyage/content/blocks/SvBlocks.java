@@ -1,7 +1,7 @@
 package subvoyage.content.blocks;
 
 import arc.graphics.*;
-import arc.graphics.g2d.TextureRegion;
+import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
 import mindustry.content.*;
@@ -9,7 +9,7 @@ import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.game.Team;
+import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -35,10 +35,8 @@ import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
 
 import static mindustry.content.Liquids.water;
-import static mindustry.type.ItemStack.mult;
-import static mindustry.type.ItemStack.with;
-import static subvoyage.content.liquids.SvLiquids.argon;
-import static subvoyage.content.liquids.SvLiquids.polygen;
+import static mindustry.type.ItemStack.*;
+import static subvoyage.content.liquids.SvLiquids.*;
 import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.items.SvItems.*;
 
@@ -71,7 +69,7 @@ public class SvBlocks{
             //EXPLORATION
             buoy,beacon,
             //STORAGE
-            corePuffer, vault, largeVault, unloader;
+            corePuffer, vault, largeVault, unloader, liquidContainer, liquidTank;
 
     public static void load() {
         //non-user
@@ -376,6 +374,11 @@ public class SvBlocks{
         tugSheetWall = new ShieldWall("tug-sheet-wall") {{
             requirements(Category.defense, with(tugSheet, 30));
             consumePower(3f / 60f);
+
+            glowColor = Color.valueOf("bee8d7").a(0.5f);
+            glowMag = 0.8f;
+            glowScl = 12f;
+
             hasPower = true;
             outputsPower = false;
             consumesPower = true;
@@ -389,6 +392,11 @@ public class SvBlocks{
         tugSheetWallLarge = new ShieldWall("tug-sheet-wall-large") {{
             requirements(Category.defense, mult(tugSheetWall.requirements, 18));
             consumePower(3*4f / 60f);
+
+            glowColor = Color.valueOf("bee8d7").a(0.5f);
+            glowMag = 0.8f;
+            glowScl = 12f;
+
             hasPower = true;
             outputsPower = false;
             consumesPower = true;
@@ -662,10 +670,32 @@ public class SvBlocks{
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
         };
+
         unloader = new Unloader("unloader"){{
             requirements(Category.effect, with(chromium, 25, clay, 30));
             speed = 60f / 11f;
             group = BlockGroup.transportation;
+        }};
+
+        liquidContainer = new LiquidRouter("liquid-container"){{
+            requirements(Category.liquid, with(corallite, 10, clay, 15));
+            liquidCapacity = 700f;
+            size = 2;
+            liquidPadding = 3f / 4f;
+
+            solid = true;
+            squareSprite = false;
+        }};
+
+        liquidTank = new LiquidRouter("liquid-tank"){{
+            requirements(Category.liquid, with(corallite, 30, clay, 40));
+            liquidCapacity = 1800f;
+            health = 500;
+            size = 3;
+            liquidPadding = 6f / 4f;
+
+            solid = true;
+            squareSprite = false;
         }};
 
         //transport
