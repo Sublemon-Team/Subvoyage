@@ -1,6 +1,7 @@
 package subvoyage.content.blocks;
 
 import arc.graphics.*;
+import arc.graphics.g2d.TextureRegion;
 import arc.math.*;
 import arc.struct.*;
 import mindustry.content.*;
@@ -8,6 +9,7 @@ import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -527,18 +529,31 @@ public class SvBlocks{
 
             bannedItems.addAll(stone);
         }};
-        vault = new StorageBlock("vault"){{
-            requirements(Category.effect, with(chromium, 250, iridium, 125));
-            size = 2;
-            itemCapacity = 300;
-            scaledHealth = 55;
-        }};
-        largeVault = new StorageBlock("large-vault"){{
-            requirements(Category.effect, with(chromium, 500, iridium, 345));
-            size = 3;
-            itemCapacity = 1000;
-            scaledHealth = 155;
-        }};
+        vault = new StorageBlock("vault"){
+            {
+                requirements(Category.effect, with(chromium, 250, iridium, 125));
+                size = 2;
+                itemCapacity = 300;
+                scaledHealth = 55;
+            }
+            @Override
+            protected TextureRegion[] icons() {
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
+        largeVault = new StorageBlock("large-vault"){
+            {
+                requirements(Category.effect, with(chromium, 500, iridium, 345));
+                size = 3;
+                itemCapacity = 1000;
+                scaledHealth = 155;
+            }
+
+            @Override
+            protected TextureRegion[] icons() {
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
         unloader = new Unloader("unloader"){{
             requirements(Category.effect, with(chromium, 25, clay, 30));
             speed = 60f / 11f;
