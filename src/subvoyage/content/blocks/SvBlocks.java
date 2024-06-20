@@ -14,6 +14,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.*;
+import mindustry.world.blocks.Attributes;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -57,6 +58,7 @@ public class SvBlocks{
             coreDecoder,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
+            quartzScutcher, tugRoller,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
@@ -923,6 +925,25 @@ public class SvBlocks{
                     new DrawDefault(),
                     new DrawLiquidRegion(argon)
             );
+        }};
+        quartzScutcher = new AttributeCrafter("quartz-scutcher") {{
+            requirements(Category.crafting,with(chromium,220,spaclanium,120,fineSand,80,iridium,30));
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smeltsmoke;
+            craftTime = 50f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(spaclanium,6);
+            consumeItem(fineSand,8);
+            consumeLiquid(argon,1.2f);
+            consumePower(6f);
+
+            outputItem = new ItemStack(quartzFiber,2);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
         }};
     }
 }
