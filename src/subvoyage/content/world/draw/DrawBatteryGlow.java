@@ -10,8 +10,8 @@ import mindustry.world.*;
 import mindustry.world.draw.*;
 
 public class DrawBatteryGlow extends DrawBlock{
-    public Color color = new Color(0.45f, 0.22f, 0.65f, 0.25f);
-    public float pulse = 0.45f, scl = 2.5f;
+    public Color color = new Color(0.45f, 0.22f, 0.65f, 1.00f);
+    public float pulse = 0.15f, scl = 2.5f;
     public float layer = Layer.blockAdditive;
 
     public TextureRegion glow;

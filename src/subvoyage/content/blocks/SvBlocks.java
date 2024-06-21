@@ -648,8 +648,8 @@ public class SvBlocks{
             consumePowerBuffered(4000f);
             baseExplosiveness = 1f;
             drawer = new DrawMulti(new DrawDefault(), new DrawBatteryGlow());
-
         }};
+
         largeAccumulator = new Battery("large-accumulator"){{
             requirements(Category.power, mult(accumulator.requirements,4));
             consumePowerBuffered(4000f*5);
