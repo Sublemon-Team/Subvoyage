@@ -38,7 +38,7 @@ public class SvPlanets{
             allowWaves = true;
             allowWaveSimulation = true;
             allowSectorInvasion = true;
-            //allowLaunchSchematics = true;
+            allowLaunchSchematics = true;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = true;
 

@@ -41,9 +41,13 @@ import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
-    /*featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
-        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор)
-      */
+    /*
+    featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
+        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор),
+        regenerator (Регенератор), repairProjector (Чинящий проектор), shieldProjector (Защитный проектор),
+        accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор)
+     */
+    
     public static Block
             //NON-USER
             offloadCore, offloadCoreGuardian,
@@ -54,13 +58,15 @@ public class SvBlocks{
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
-            coreDecoder,
+            coreDecoder, coreDecrypter,
+            regenerator, repairProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
+            quartzScutcher, tugRoller,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
             //ENERGY
-            energyDock, energyDistributor, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
+            energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
             //TRANSPORTATION
             duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation,
@@ -118,7 +124,7 @@ public class SvBlocks{
         }};
 
         featherDrill = new SubmersibleDrill("feather-drill") {{
-            requirements(Category.production, with(corallite, 100, iridium, 100, clay, 200));
+            requirements(Category.production, with(corallite, 100, chromium, 50, iridium, 100, clay, 200));
             tier = 3;
             hardnessDrillMultiplier = 1.1f;
             drillTime = 250;
@@ -427,6 +433,46 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
+        coreDecrypter = new CoreDecoder("core-decrypter") {{
+            requirements(Category.effect,with(iridium,400,chromium,300,quartzFiber,250));
+            health = 2560;
+            priority = TargetPriority.core;
+            fogRadius = 16;
+            size = 3;
+            consumePower(18f);
+            destructible = true;
+            envDisabled |= Env.scorching;
+            minAttempts = 50;
+            frequency = 80;
+            hackChance = 0.02f;
+        }};
+
+        regenerator = new MendProjector("regenerator"){{
+            requirements(Category.effect, with(spaclanium, 60));
+            consumePower(0.3f);
+            size = 1;
+            reload = 200f;
+            range = 40f;
+            healPercent = 4f;
+            phaseBoost = 4f;
+            phaseRangeBoost = 20f;
+            health = 80;
+            consumeLiquid(polygen,0.3f).boost();
+        }};
+
+        repairProjector = new MendProjector("repair-projector"){{
+            requirements(Category.effect, with(spaclanium, 60, clay, 80, iridium, 10));
+            consumePower(0.3f);
+            size = 2;
+            reload = 100f;
+            range = 40f*2;
+            healPercent = 16f;
+            phaseBoost = 4f;
+            phaseRangeBoost = 20f;
+            health = 400;
+            consumeLiquid(polygen,1f).boost();
+        }};
+
         //exploration
         buoy = new Buoy("buoy") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,20));
@@ -597,6 +643,18 @@ public class SvBlocks{
             consumePowerBuffered(1000f);
         }};
 
+        accumulator = new Battery("accumulator"){{
+            requirements(Category.power, with(iridium, 5, spaclanium, 20));
+            consumePowerBuffered(4000f);
+            baseExplosiveness = 1f;
+        }};
+        largeAccumulator = new Battery("large-accumulator"){{
+            requirements(Category.power, mult(accumulator.requirements,4));
+            consumePowerBuffered(4000f*5);
+            baseExplosiveness = 3f;
+            size = 2;
+        }};
+
         spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
             powerProduction = 1.2f;
@@ -616,7 +674,15 @@ public class SvBlocks{
             consumeLiquid(water,0.5f);
         }};
 
-        windTurbine = spaclaniumHydrolyzer; //TODO
+        windTurbine = new WindTurbine("wind-turbine") {{
+            requirements(Category.power,with(corallite,60,clay,15,iridium,30));
+
+            ambientSound = Sounds.wind;
+            ambientSoundVolume = 0.05f;
+
+            powerProduction = 0.2f;
+            size = 2;
+        }};
         chromiumReactor = new ImpactReactor("chromium-reactor") {{
             requirements(Category.power,with(chromium, 300, tugSheet, 50, corallite, 80, iridium, 100));
             size = 3;
@@ -687,7 +753,7 @@ public class SvBlocks{
         }};
 
         liquidContainer = new LiquidRouter("liquid-container"){{
-            requirements(Category.liquid, with(corallite, 10, clay, 15));
+            requirements(Category.liquid, with(corallite, 30, clay, 35));
             liquidCapacity = 700f;
             size = 2;
             liquidPadding = 3f / 4f;
@@ -697,7 +763,7 @@ public class SvBlocks{
         }};
 
         liquidTank = new LiquidRouter("liquid-tank"){{
-            requirements(Category.liquid, with(corallite, 30, clay, 40));
+            requirements(Category.liquid, with(corallite,80, clay, 140, iridium, 30));
             liquidCapacity = 1800f;
             health = 500;
             size = 3;
@@ -928,6 +994,45 @@ public class SvBlocks{
                     new DrawDefault(),
                     new DrawLiquidRegion(argon)
             );
+        }};
+        quartzScutcher = new AttributeCrafter("quartz-scutcher") {{
+            requirements(Category.crafting,with(chromium,220,spaclanium,120,fineSand,80,iridium,30));
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smeltsmoke;
+            craftTime = 100f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(spaclanium,6);
+            consumeItem(fineSand,8);
+            consumeLiquid(argon,1.2f);
+            consumePower(6f);
+
+            outputItem = new ItemStack(quartzFiber,2);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
+
+        tugRoller = new AttributeCrafter("tug-roller") {{
+            requirements(Category.crafting,with(chromium,220,iridium,140,quartzFiber,60,sulfur,120));
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smeltsmoke;
+            craftTime = 100f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(chromium,6);
+            consumeItem(sulfur,8);
+            consumeLiquid(polygen,1.3f);
+            consumePower(9f);
+
+            outputItem = new ItemStack(tugSheet,1);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
         }};
     }
 }

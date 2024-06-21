@@ -85,7 +85,11 @@ public class AtlacianTechTree {
 
                     });
                     node(conduitRouter, () -> {
+                        node(liquidContainer,() -> {
+                           node(liquidTank,() -> {
 
+                           }) ;
+                        });
                     });
                 });
             });
@@ -96,7 +100,11 @@ public class AtlacianTechTree {
                 });
                 node(argonCentrifuge, () -> {
                     node(argonCondenser,() -> {
+                        node(quartzScutcher,() -> {
+                            node(tugRoller,() -> {
 
+                            }) ;
+                        });
                     });
                 });
                 node(waterMetallizer, () -> {
@@ -111,12 +119,22 @@ public class AtlacianTechTree {
                     node(energyDistributor,() -> {
 
                     });
+                    node(accumulator,() -> {
+                        node(largeAccumulator,() -> {
+
+                        });
+                    });
                 });
                 node(windTurbine, () -> {
 
                 });
                 node(chromiumReactor,() -> {
 
+                });
+                node(regenerator,() -> {
+                    node(repairProjector,() -> {
+
+                    });
                 });
             });
 
@@ -159,7 +177,9 @@ public class AtlacianTechTree {
 
                 });
                 node(coreDecoder,() -> {
+                    node(coreDecrypter,() -> {
 
+                    });
                 });
             });
 
