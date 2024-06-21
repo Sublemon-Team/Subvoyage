@@ -20,6 +20,8 @@ public class SubmersibleDrill extends Drill{
     public Color glowColor = new Color(0.65f, 0.35f, 0.25f);
     public Sound drillSound = Sounds.drillImpact;
     public float drillSoundVolume = 0.6f, drillSoundPitchRand = 0.1f;
+    public boolean scaleTop = true;
+    public float scaleMin = 0.25f, scaleMax = 0.28f;
 
     public SubmersibleDrill(String name){
         super(name);
@@ -102,14 +104,29 @@ public class SubmersibleDrill extends Drill{
             return items.total() <= itemCapacity - dominantItems && enabled;
         }
 
+        public void spinSprite(TextureRegion region, float x, float y, float r, float progress){
+            if(scaleTop){
+                float a = Draw.getColor().a;
+                r = Mathf.mod(r, 90f);
+
+                float scale = Mathf.clamp(progress, scaleMin, scaleMax);
+                Draw.rect(region, x, y, region.width * scale, region.height * scale, r);
+                Draw.alpha(r / 90f * a);
+                Draw.rect(region, x, y, region.width * scale, region.height * scale, r - 90);
+                Draw.alpha(a);
+            }else{
+                Drawf.spinSprite(region, x, y, r);
+            }
+        }
+
         @Override
         public void draw(){
             Draw.rect(region, x, y);
             drawDefaultCracks();
-            Drawf.spinSprite(topRegion, x, y, timeDrilled * rotateSpeed);
+            spinSprite(topRegion, x, y, timeDrilled * rotateSpeed, smoothProgress);
             if(dominantItem != null && drawMineItem){
                 Draw.color(dominantItem.color);
-                Drawf.spinSprite(itemRegion, x, y, timeDrilled * rotateSpeed);
+                spinSprite(itemRegion, x, y, timeDrilled * rotateSpeed, smoothProgress);
                 Draw.color();
             }
 

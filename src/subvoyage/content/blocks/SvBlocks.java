@@ -106,7 +106,7 @@ public class SvBlocks{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
             tier = 2;
             hardnessDrillMultiplier = 0.9f;
-            drillTime = 400;
+            drillTime = 470;
             size = 2;
             itemCapacity = 20;
             blockedItem = Items.sand;
@@ -121,13 +121,14 @@ public class SvBlocks{
             requirements(Category.production, with(corallite, 100, iridium, 100, clay, 200));
             tier = 3;
             hardnessDrillMultiplier = 1.1f;
-            drillTime = 100;
+            drillTime = 250;
             size = 3;
             itemCapacity = 30;
             blockedItem = Items.sand;
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             fogRadius = 3;
             squareSprite = false;
+            scaleTop = false;
 
             consumeLiquid(argon, 1.8f);
             consumeCoolant(1.2f);
@@ -323,6 +324,9 @@ public class SvBlocks{
             velocityRnd = 0;
             reload = 60f;
             shake = 5f;
+            shootY = 0f;
+            rotateSpeed = 0;
+            drawer = new DrawTurret("atlacian-");
 
             shootEffect = new MultiEffect(Fx.massiveExplosion,SvFx.aweExplosion,SvFx.aweExplosionDust, new WaveEffect(){{
                 lifetime = 10f;
@@ -330,6 +334,7 @@ public class SvBlocks{
                 strokeTo = 0f;
                 sizeTo = range;
             }});
+
             shootType = new ExplosionBulletType(20f,range) {{
                 collidesAir = false;
                 buildingDamageMultiplier = 1.1f;
