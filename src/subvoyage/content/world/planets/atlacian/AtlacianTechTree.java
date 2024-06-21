@@ -119,12 +119,22 @@ public class AtlacianTechTree {
                     node(energyDistributor,() -> {
 
                     });
+                    node(accumulator,() -> {
+                        node(largeAccumulator,() -> {
+
+                        });
+                    });
                 });
                 node(windTurbine, () -> {
 
                 });
                 node(chromiumReactor,() -> {
 
+                });
+                node(regenerator,() -> {
+                    node(repairProjector,() -> {
+
+                    });
                 });
             });
 
