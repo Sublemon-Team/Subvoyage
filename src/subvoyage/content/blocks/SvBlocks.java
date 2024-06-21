@@ -647,11 +647,14 @@ public class SvBlocks{
             requirements(Category.power, with(iridium, 5, spaclanium, 20));
             consumePowerBuffered(4000f);
             baseExplosiveness = 1f;
+            drawer = new DrawMulti(new DrawDefault(), new DrawBatteryGlow());
+
         }};
         largeAccumulator = new Battery("large-accumulator"){{
             requirements(Category.power, mult(accumulator.requirements,4));
             consumePowerBuffered(4000f*5);
             baseExplosiveness = 3f;
+            drawer = new DrawMulti(new DrawDefault(), new DrawBatteryGlow());
             size = 2;
         }};
 
