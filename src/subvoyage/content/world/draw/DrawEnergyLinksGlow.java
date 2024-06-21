@@ -9,30 +9,30 @@ import mindustry.graphics.*;
 import mindustry.world.*;
 import mindustry.world.draw.*;
 
-public class DrawBatteryGlow extends DrawBlock{
-    public Color color = new Color(0.45f, 0.22f, 0.65f, 1.00f);
-    public float pulse = 0.15f, scl = 2.5f;
+public class DrawEnergyLinksGlow extends DrawBlock{
+    public Color color = new Color(0.45f, 0.22f, 0.65f, 0.25f);
+    public float pulse = 0.25f, scl = 2.5f;
     public float layer = Layer.blockAdditive;
 
     public TextureRegion glow;
     public String suffix = "-glow";
 
-    public DrawBatteryGlow(float layer){
+    public DrawEnergyLinksGlow(float layer){
         this.layer = layer;
     }
 
-    public DrawBatteryGlow(String suffix){
+    public DrawEnergyLinksGlow(String suffix){
         this.suffix = suffix;
     }
 
-    public DrawBatteryGlow(String suffix, Color color, float pulse, float scl){
+    public DrawEnergyLinksGlow(String suffix, Color color, float pulse, float scl){
         this.suffix = suffix;
         this.color = color;
         this.pulse = pulse;
         this.scl = scl;
     }
 
-    public DrawBatteryGlow(){
+    public DrawEnergyLinksGlow(){
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DrawBatteryGlow extends DrawBlock{
         float z = Draw.z();
         if(layer > 0) Draw.z(layer);
         Draw.blend(Blending.additive);
-        Draw.color(color, Mathf.clamp(build.power().status) * (color.a * (build.power().status - pulse + Mathf.absin(scl, pulse))));
+        Draw.color(color, Mathf.clamp(build.power().links.size) * (color.a * (build.power().links.size - pulse + Mathf.absin(scl, pulse))));
         Draw.rect(glow, build.x, build.y);
         Draw.blend();
         Draw.color();
