@@ -683,6 +683,7 @@ public class SvBlocks{
             powerProduction = 0.2f;
             size = 2;
         }};
+
         chromiumReactor = new ImpactReactor("chromium-reactor") {{
             requirements(Category.power,with(chromium, 300, tugSheet, 50, corallite, 80, iridium, 100));
             size = 3;
