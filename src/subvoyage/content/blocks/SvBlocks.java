@@ -645,6 +645,7 @@ public class SvBlocks{
             requirements(Category.power, mult(accumulator.requirements,4));
             consumePowerBuffered(4000f*5);
             baseExplosiveness = 3f;
+            size = 2;
         }};
 
         spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
