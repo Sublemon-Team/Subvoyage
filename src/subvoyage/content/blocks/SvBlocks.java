@@ -334,14 +334,14 @@ public class SvBlocks{
             rotateSpeed = 0;
             drawer = new DrawTurret("atlacian-");
 
-            shootEffect = new MultiEffect(Fx.massiveExplosion,SvFx.aweExplosion,SvFx.aweExplosionDust, new WaveEffect(){{
+            shootEffect = new MultiEffect(SvFx.aweExplosion,SvFx.aweExplosionDust, new WaveEffect(){{
                 lifetime = 10f;
                 strokeFrom = 3f;
                 strokeTo = 0f;
                 sizeTo = range;
             }});
 
-            shootType = new ExplosionBulletType(20f,range) {{
+            shootType = new ExplosionBulletType(26f,range) {{
                 collidesAir = false;
                 buildingDamageMultiplier = 1.1f;
                 ammoMultiplier = 1f;
