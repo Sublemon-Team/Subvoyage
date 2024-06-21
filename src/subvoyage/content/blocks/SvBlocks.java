@@ -14,7 +14,6 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.*;
-import mindustry.world.blocks.Attributes;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
@@ -43,7 +42,7 @@ import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
     /*featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
-        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор)
+        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор)
       */
     public static Block
             //NON-USER
@@ -55,7 +54,7 @@ public class SvBlocks{
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
-            coreDecoder,
+            coreDecoder, coreDecrypter,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
             quartzScutcher, tugRoller,
@@ -108,7 +107,7 @@ public class SvBlocks{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
             tier = 2;
             hardnessDrillMultiplier = 0.9f;
-            drillTime = 400;
+            drillTime = 300;
             size = 2;
             itemCapacity = 20;
             blockedItem = Items.sand;
@@ -123,7 +122,7 @@ public class SvBlocks{
             requirements(Category.production, with(corallite, 100, iridium, 100, clay, 200));
             tier = 3;
             hardnessDrillMultiplier = 1.1f;
-            drillTime = 100;
+            drillTime = 150;
             size = 3;
             itemCapacity = 30;
             blockedItem = Items.sand;
@@ -424,6 +423,20 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
+        coreDecrypter = new CoreDecoder("core-decrypter") {{
+            requirements(Category.effect,with(iridium,400,chromium,300,quartzFiber,250));
+            health = 2560;
+            priority = TargetPriority.core;
+            fogRadius = 16;
+            size = 3;
+            consumePower(18f);
+            destructible = true;
+            envDisabled |= Env.scorching;
+            minAttempts = 50;
+            frequency = 80;
+            hackChance = 0.02f;
+        }};
+
         //exploration
         buoy = new Buoy("buoy") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,20));
@@ -684,7 +697,7 @@ public class SvBlocks{
         }};
 
         liquidContainer = new LiquidRouter("liquid-container"){{
-            requirements(Category.liquid, with(corallite, 10, clay, 15));
+            requirements(Category.liquid, with(corallite, 30, clay, 35));
             liquidCapacity = 700f;
             size = 2;
             liquidPadding = 3f / 4f;
@@ -694,7 +707,7 @@ public class SvBlocks{
         }};
 
         liquidTank = new LiquidRouter("liquid-tank"){{
-            requirements(Category.liquid, with(corallite, 30, clay, 40));
+            requirements(Category.liquid, with(corallite,80, clay, 140, iridium, 30));
             liquidCapacity = 1800f;
             health = 500;
             size = 3;
@@ -931,7 +944,7 @@ public class SvBlocks{
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smeltsmoke;
-            craftTime = 50f;
+            craftTime = 100f;
             envDisabled |= Env.scorching;
 
             consumeItem(spaclanium,6);
@@ -940,6 +953,26 @@ public class SvBlocks{
             consumePower(6f);
 
             outputItem = new ItemStack(quartzFiber,2);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
+
+        tugRoller = new AttributeCrafter("tug-roller") {{
+            requirements(Category.crafting,with(chromium,220,iridium,140,quartzFiber,60,sulfur,120));
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smeltsmoke;
+            craftTime = 100f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(chromium,6);
+            consumeItem(sulfur,8);
+            consumeLiquid(polygen,1.3f);
+            consumePower(9f);
+
+            outputItem = new ItemStack(tugSheet,1);
 
             hasItems = true;
             hasLiquids = true;
