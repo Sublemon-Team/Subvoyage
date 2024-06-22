@@ -1,6 +1,7 @@
 package subvoyage.content.world.blocks.energy;
 
 import arc.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
@@ -51,12 +52,16 @@ public class WindTurbine extends SolarGenerator {
                 new Bar(() -> Core.bundle.format("bar.efficiency", Strings.fixed(e.productionEfficiency*100, 1)), () -> Pal.powerBar, () -> e.productionEfficiency));
     }
 
+    public static void select(float x, float y, float radius, float size, Color color){
+        Lines.stroke(size, color);
+        Lines.square(x, y, radius - 14);
+        Draw.reset();
+    }
+
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid){
         super.drawPlace(x, y, rotation, valid);
-        Draw.color(Pal.placing);
-        Lines.stroke(size);
-        Lines.poly(x * tilesize + offset, y * tilesize + offset, 4, tilesize * (size + spacing), 45);
+        select(x * tilesize + offset, y * tilesize + offset, tilesize * (size + spacing), size, Pal.placing);
     }
 
     // Redo this
@@ -65,10 +70,11 @@ public class WindTurbine extends SolarGenerator {
         int off = 1 - size % 2;
         for(int x = tile.x - spacing + off; x <= tile.x + spacing; x++){
             for(int y = tile.y - spacing + off; y <= tile.y + spacing; y++){
-                Tile t = world.tile(x, y);
-                if(t != null && t.block() instanceof WindTurbine s && (s == this || s.intersectsSpacing(t.build.tile, tile))) return false;
+                Tile other = world.tile(x, y);
+                if(other != null && other.block() instanceof WindTurbine turbine && (turbine == this || turbine.intersectsSpacing(other.build.tile, tile))) return false;
             }
         }
+
         return true;
     }
 

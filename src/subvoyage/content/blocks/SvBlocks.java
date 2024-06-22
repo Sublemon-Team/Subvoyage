@@ -687,18 +687,18 @@ public class SvBlocks{
             size = 2;
         }};
 
-        chromiumReactor = new ImpactReactor("chromium-reactor") {{
+        chromiumReactor = new ChromiumReactor("chromium-reactor"){{
             requirements(Category.power,with(chromium, 300, tugSheet, 50, corallite, 80, iridium, 100));
             size = 3;
+            squareSprite = false;
             health = 900;
-            powerProduction = 120f/30;
-            itemDuration = 60f*3;
-            ambientSound = Sounds.pulse;
-            ambientSoundVolume = 0.07f;
+            ambientSound = Sounds.hum;
+            ambientSoundVolume = 0.24f;
+            powerProduction = 6;
 
             consumePower(20f/30);
             consumeItem(chromium,2);
-            consumeLiquid(polygen, 0.5f);
+            consumeLiquid(polygen, heating / coolantPower).update(false);
         }};
 
         //storage
