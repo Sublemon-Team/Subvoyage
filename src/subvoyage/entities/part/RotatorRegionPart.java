@@ -12,7 +12,7 @@ import subvoyage.*;
 public class RotatorRegionPart extends DrawPart{
     public TextureRegion rotator, outlineR, blurR, top;
     public float layer = -1, outlineLayerOffset = -0.001f;
-    public float x, y, xScl = 1f, yScl = 1f, rotationRad = 360f, rotationSpeed;
+    public float x, y, xScl = 1f, yScl = 1f, rotationRad = 720f, rotationSpeed;
     public float unitX, unitY, unitRot;
     public boolean mirror = false;
 
@@ -33,7 +33,7 @@ public class RotatorRegionPart extends DrawPart{
         if(rotator.found()){
             Vec2 vec = Tmp.v2.set(x,y).rotate(unitRot - 90);
             float t = Time.time / 60f;
-            float rx = params.x, ry = params.y, rot = (t * rotationSpeed) % rotationRad;
+            float rx = params.x, ry = params.y, rot = (t * rotationSpeed);
 
             Draw.xscl *= xScl;
             Draw.yscl *= yScl;
@@ -43,7 +43,7 @@ public class RotatorRegionPart extends DrawPart{
             Drawf.spinSprite(rotator, vec.x + rx, vec.y + ry, rot);
             if(blur){
                 Draw.z(layer - 1);
-                Draw.alpha(0.75f);
+                Draw.alpha(1f);
                 Drawf.spinSprite(blurR, vec.x + rx, vec.y + ry, rot);
                 Draw.z(Draw.z());
                 Draw.alpha(1);
@@ -64,7 +64,7 @@ public class RotatorRegionPart extends DrawPart{
                 Drawf.spinSprite(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
                 if(blur){
                     Draw.z(layer - 1);
-                    Draw.alpha(0.75f);
+                    Draw.alpha(1f);
                     Drawf.spinSprite(blurR, mirrorVec.x + rx, mirrorVec.y + ry, -rot);
                     Draw.z(Draw.z());
                     Draw.alpha(1);

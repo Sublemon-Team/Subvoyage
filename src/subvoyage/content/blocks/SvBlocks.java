@@ -357,7 +357,7 @@ public class SvBlocks{
         int wallHealthMultiplier = 4;
         int largeWallHealthMultiplier = 20;
         finesandWall = new Wall("finesand-wall"){{
-            requirements(Category.defense, with(fineSand, 20));
+            requirements(Category.defense, with(fineSand, 8));
             health = 60 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
@@ -370,20 +370,20 @@ public class SvBlocks{
         }};
 
         clayWall = new Wall("clay-wall"){{
-            requirements(Category.defense, with(clay, 20));
+            requirements(Category.defense, with(clay, 8));
             health = 60 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
         clayWallLarge = new Wall("clay-wall-large"){{
-            requirements(Category.defense, mult(clayWall.requirements, 18));
+            requirements(Category.defense, mult(clayWall.requirements, 4));
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
         }};
 
         tugSheetWall = new ShieldWall("tug-sheet-wall") {{
-            requirements(Category.defense, with(tugSheet, 30));
+            requirements(Category.defense, with(tugSheet, 8));
             consumePower(3f / 60f);
 
             glowColor = Color.valueOf("bee8d7").a(0.5f);
@@ -401,7 +401,7 @@ public class SvBlocks{
         }};
 
         tugSheetWallLarge = new ShieldWall("tug-sheet-wall-large") {{
-            requirements(Category.defense, mult(tugSheetWall.requirements, 18));
+            requirements(Category.defense, mult(tugSheetWall.requirements, 4));
             consumePower(3*4f / 60f);
 
             glowColor = Color.valueOf("bee8d7").a(0.5f);

@@ -46,7 +46,7 @@ public class SvUnits{
 
             mineSpeed = 8f;
             mineTier = 1;
-            buildSpeed = 0.4f;
+            buildSpeed = 1f;
             drag = 0.05f;
             speed = 2.6f;
             rotateSpeed = 15f;

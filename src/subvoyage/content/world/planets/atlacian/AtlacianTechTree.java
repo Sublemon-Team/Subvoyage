@@ -100,11 +100,12 @@ public class AtlacianTechTree {
                 });
                 node(argonCentrifuge, () -> {
                     node(argonCondenser,() -> {
-                        node(quartzScutcher,() -> {
-                            node(tugRoller,() -> {
 
-                            }) ;
-                        });
+                    });
+                    node(quartzScutcher,() -> {
+                        node(tugRoller,() -> {
+
+                        }) ;
                     });
                 });
                 node(waterMetallizer, () -> {
