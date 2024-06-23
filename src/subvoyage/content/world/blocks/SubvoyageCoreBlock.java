@@ -2,6 +2,7 @@ package subvoyage.content.world.blocks;
 
 import arc.struct.Seq;
 import mindustry.content.Fx;
+import mindustry.content.Items;
 import mindustry.gen.Building;
 import mindustry.gen.Teamc;
 import mindustry.type.Item;
@@ -17,13 +18,19 @@ public class SubvoyageCoreBlock extends CoreBlock {
     public class  SubvoyageCoreBuild extends CoreBuild {
         @Override
         public void handleStack(Item item, int amount, Teamc source) {
-            if(!bannedItems.contains(item)) super.handleStack(item, amount, source);
+            if(!bannedItems.contains(item) && item != Items.copper) super.handleStack(item, amount, source);
             else Fx.coreBurn.at(x, y);
         }
 
         @Override
+        public void update() {
+            super.update();
+            items.remove(Items.copper,1000);
+        }
+
+        @Override
         public void handleItem(Building source, Item item) {
-            if(!bannedItems.contains(item)) super.handleItem(source, item);
+            if(!bannedItems.contains(item) && item != Items.copper) super.handleItem(source, item);
             else incinerateEffect(this, source);
         }
     }
