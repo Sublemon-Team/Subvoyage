@@ -449,6 +449,7 @@ public class SvBlocks{
             ammo(
                     chromium, new BasicBulletType(6f, 40){{
                         inaccuracy = 0.5f;
+                        ammoMultiplier = 1f;
                         width = 6f;
                         height = 12f;
                         lifetime = 120f;
