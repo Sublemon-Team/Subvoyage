@@ -27,7 +27,7 @@ public class SvSectorPresets {
                 r.attackMode = false;
                 r.canGameOver = false;
                 r.loadout = Seq.with();
-                r.infiniteResources = true;
+                //r.infiniteResources = true;
             };
         }};/*
         crystalShores = new SectorPreset("crystalShores",atlacian,15) {{

@@ -54,7 +54,7 @@ public class AtlacianTechTree {
                 node(ductBridge,() -> {
 
                 });
-                node(shipCargoStation,() -> {
+                node(shipCargoStation,with(research(vault)),() -> {
                     node(shipUnloadPoint,() -> {
 
                     });
@@ -62,7 +62,7 @@ public class AtlacianTechTree {
             });
 
             node(buoy, () -> {
-                node(tower,() -> {
+                node(tower,with(research(crudeSmelter)),() -> {
 
                 });
                 node(beacon,() -> {
@@ -74,22 +74,22 @@ public class AtlacianTechTree {
                node(tectonicDrill, () -> {
 
                });
-               node(featherDrill,() -> {
+               node(featherDrill,with(research(argonCentrifuge)), () -> {
 
                });
             });
 
-            node(lowTierPump, () -> {
-                node(waterDiffuser, () -> {
-                    node(waterSifter, () -> {
+            node(waterDiffuser, () -> {
+                node(lowTierPump, () -> {
+                    node(centrifugalPump,with(research(energyDistributor)), () -> {
 
                     });
                 });
-                node(centrifugalPump, () -> {
+                node(waterSifter, () -> {
 
                 });
                 node(clayConduit, () -> {
-                    node(highPressureConduit,() -> {
+                    node(highPressureConduit,with(research(liquidContainer)),() -> {
 
                     });
                     node(conduitBridge, () -> {
@@ -109,20 +109,20 @@ public class AtlacianTechTree {
                 node(terracottaBlaster, () -> {
 
                 });
-                node(crudeSmelter,() -> {
+                node(crudeSmelter,with(research(tectonicDrill)),() -> {
 
                 });
                 node(argonCentrifuge, () -> {
                     node(argonCondenser,() -> {
 
                     });
-                    node(quartzScutcher,() -> {
-                        node(tugRoller,() -> {
+                    node(quartzScutcher,with(research(poweredEnhancer)), () -> {
+                        node(tugRoller,with(research(argonCondenser)),() -> {
 
                         }) ;
                     });
                 });
-                node(waterMetallizer, () -> {
+                node(waterMetallizer,with(research(energyDistributor)), () -> {
                     node(poweredEnhancer,() -> {
 
                     });
@@ -140,14 +140,14 @@ public class AtlacianTechTree {
                         });
                     });
                 });
-                node(windTurbine, () -> {
+                node(windTurbine,with(research(accumulator)), () -> {
 
                 });
-                node(chromiumReactor,() -> {
+                node(chromiumReactor,with(research(crudeSmelter)),() -> {
 
                 });
                 node(regenerator,() -> {
-                    node(regenProjector,() -> {
+                    node(regenProjector,with(research(polygen)),() -> {
 
                     });
                 });
@@ -156,7 +156,7 @@ public class AtlacianTechTree {
             node(whirl, () -> {
                 node(rupture, () -> {
                     node(awe,() -> {
-                        node(resonance,() -> {
+                        node(resonance,with(research(burden)), () -> {
                             node(cascade,() -> {
 
                             });
@@ -168,9 +168,9 @@ public class AtlacianTechTree {
                 });
                 node(finesandWall,() -> {
                     node(finesandWallLarge,() -> {
-                        node(clayWall,() -> {
+                        node(clayWall,with(research(ceramicBurner)),() -> {
                             node(clayWallLarge,() -> {
-                                node(tugSheetWall,() -> {
+                                node(tugSheetWall,with(research(tugRoller)),() -> {
                                     node(tugSheetWallLarge);
                                 });
                             });
@@ -197,16 +197,16 @@ public class AtlacianTechTree {
                 node(unloader,() -> {
 
                 });
-                node(largeVault,() -> {
+                node(largeVault,with(research(coreShore)),() -> {
 
                 });
                 node(coreDecoder,() -> {
-                    node(coreDecrypter,() -> {
+                    node(coreDecrypter,with(research(coreShore)), () -> {
 
                     });
                 });
                 node(coreShore,() -> {
-                    node(coreReef,() -> {
+                    node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {
 
                     });
                 });
@@ -215,34 +215,34 @@ public class AtlacianTechTree {
             node(divingPoint, () -> {
 
             });
-            node(spaclanium, () -> {
-                node(corallite,() -> {
-                    node(iridium,() -> {
+            node(spaclanium,with(produce(spaclanium)), () -> {
+                node(corallite,with(produce(corallite)),() -> {
+                    node(iridium,with(produce(iridium)),() -> {
 
                     });
-                    node(chromium,() -> {
-                        node(quartzFiber,() -> {
+                    node(chromium,with(produce(chromium)),() -> {
+                        node(quartzFiber,with(produce(quartzFiber)),() -> {
 
                         });
-                        node(tugSheet,() -> {
+                        node(tugSheet,with(produce(tugSheet)),() -> {
 
                         });
                     });
                 });
-                node(sulfur,() -> {
+                node(sulfur,with(produce(sulfur)),() -> {
 
                 });
-                node(fineSand,() -> {
-                    node(clay,with(research(water)),() -> {
-
-                    });
-                });
-                node(water,() -> {
-                    node(polygen,() -> {
+                node(fineSand,with(produce(fineSand)),() -> {
+                    node(clay,with(research(water),produce(clay)),() -> {
 
                     });
                 });
-                node(argon,() -> {
+                node(water,with(produce(water)),() -> {
+                    node(polygen,with(produce(polygen)),() -> {
+
+                    });
+                });
+                node(argon,with(produce(argon)),() -> {
 
                 });
             });

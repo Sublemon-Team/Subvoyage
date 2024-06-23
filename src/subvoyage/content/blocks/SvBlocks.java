@@ -42,14 +42,6 @@ import static subvoyage.content.unit.SvUnits.*;
 import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
-    /*
-        featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
-        windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор),
-        regenerator (Регенератор), repairProjector (Регенерирующий проектор), shieldProjector (Защитный проектор),
-        accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор), crudeSmelter (Сырьевая плавильня),
-        tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления),
-        resonance (Резонанс), burden (Бремя), cascade (Каскад), shipUnloadPoint (Корабельная точка разгрузки)
-     */
     
     public static Block
             //NON-USER
@@ -103,6 +95,9 @@ public class SvBlocks{
         //payload
         helicopterFactory = new UnitFactory("helicopter-factory") {{
             requirements(Category.units, with(iridium, 60, clay, 70));
+
+            researchCost = with(iridium,400,clay,500);
+
             consumeLiquid(argon,1f);
             plans = Seq.with(
                     new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
@@ -124,11 +119,16 @@ public class SvBlocks{
             fogRadius = 2;
             squareSprite = false;
 
+            researchCost = with(corallite,200,spaclanium,100,iridium,30);
+
             consumeLiquid(SvLiquids.polygen, 5/60f);
         }};
 
         featherDrill = new SubmersibleDrill("feather-drill") {{
             requirements(Category.production, with(corallite, 100, chromium, 50, iridium, 100, clay, 200));
+
+            researchCost = with(corallite,500,chromium,200,iridium,300,clay,400);
+
             tier = 3;
             hardnessDrillMultiplier = 1.1f;
             drillTime = 250;
@@ -146,6 +146,9 @@ public class SvBlocks{
 
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
             requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
+
+            researchCost = with(corallite,500,spaclanium,400,iridium,100);
+
             craftTime = 400;
             size = 3;
             itemCapacity = 20;
@@ -181,6 +184,9 @@ public class SvBlocks{
             requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
             outlineColor = Pal.darkOutline;
             squareSprite = false;
+
+            researchCost = with(corallite,10,clay,10,sulfur,5);
+
             ammo(
             spaclanium, new BasicBulletType(3f, 36){{
                 width = 7f;
@@ -248,6 +254,9 @@ public class SvBlocks{
 
         rupture = new ItemTurret("rupture"){{
             requirements(Category.turret, with(corallite, 45, clay, 25));
+
+            researchCost = with(corallite,100,clay,60);
+
             outlineColor = Pal.darkOutline;
 
             size = 2;
@@ -358,6 +367,9 @@ public class SvBlocks{
 
         resonance = new PowerTurret("resonance") {{
             requirements(Category.turret, with(corallite, 185, iridium, 140,chromium,80));
+
+            researchCost = with(corallite,800,iridium,500,chromium,300);
+
             size = 3;
             outlineColor = Pal.darkOutline;
             shootCone = 360f;
@@ -396,6 +408,7 @@ public class SvBlocks{
 
         burden = new LiquidTurret("burden") {{
             requirements(Category.turret, with(clay,200,iridium,140,chromium,120));
+            researchCost = with(clay,1000,iridium,600,chromium,400);
             ammo(
                     Liquids.water, new LiquidBulletType(Liquids.water){{
                         lifetime = 49f;
@@ -438,6 +451,9 @@ public class SvBlocks{
 
         cascade = new ItemTurret("cascade") {{
             requirements(Category.turret, with(clay,300,iridium,150,chromium,50,spaclanium,80));
+
+            researchCost = with(clay,1000,iridium,800,chromium,700,spaclanium,600);
+
             outlineColor = Pal.darkOutline;
 
             size = 3;
@@ -519,12 +535,18 @@ public class SvBlocks{
         int largeWallHealthMultiplier = 20;
         finesandWall = new Wall("finesand-wall"){{
             requirements(Category.defense, with(fineSand, 8));
+
+            researchCost = with(fineSand,10);
+
             health = 60 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
         finesandWallLarge = new Wall("finesand-wall-large"){{
             requirements(Category.defense, mult(finesandWall.requirements, 5));
+
+            researchCost = with(fineSand,80);
+
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
@@ -532,12 +554,18 @@ public class SvBlocks{
 
         clayWall = new Wall("clay-wall"){{
             requirements(Category.defense, with(clay, 8));
+
+            researchCost = with(clay,15);
+
             health = 60 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
         clayWallLarge = new Wall("clay-wall-large"){{
             requirements(Category.defense, mult(clayWall.requirements, 4));
+
+            researchCost = with(clay,100);
+
             health = 60 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
@@ -546,6 +574,8 @@ public class SvBlocks{
         tugSheetWall = new ShieldWall("tug-sheet-wall") {{
             requirements(Category.defense, with(tugSheet, 8));
             consumePower(3f / 60f);
+
+            researchCost = with(tugSheet,150);
 
             glowColor = Color.valueOf("bee8d7").a(0.5f);
             glowMag = 0.8f;
@@ -563,6 +593,8 @@ public class SvBlocks{
 
         tugSheetWallLarge = new ShieldWall("tug-sheet-wall-large") {{
             requirements(Category.defense, mult(tugSheetWall.requirements, 4));
+            researchCost = with(tugSheet,600);
+
             consumePower(3*4f / 60f);
 
             glowColor = Color.valueOf("bee8d7").a(0.5f);
@@ -582,6 +614,9 @@ public class SvBlocks{
 
         coreDecoder = new CoreDecoder("core-decoder") {{
             requirements(Category.effect, with(iridium,300,chromium,200,corallite,20));
+
+            researchCost = with(iridium,800,chromium,500,corallite,400);
+
             health = 560;
 
             priority = TargetPriority.core-0.2f;
@@ -596,6 +631,9 @@ public class SvBlocks{
 
         coreDecrypter = new CoreDecoder("core-decrypter") {{
             requirements(Category.effect,with(iridium,400,chromium,300,quartzFiber,250));
+
+            researchCost = with(iridium,1600,chromium,1000,quartzFiber,820);
+
             health = 2560;
             priority = TargetPriority.core;
             fogRadius = 16;
@@ -610,6 +648,8 @@ public class SvBlocks{
 
         regenerator = new MendProjector("regenerator"){{
             requirements(Category.effect, with(spaclanium, 60));
+            researchCost = with(spaclanium,300);
+
             consumePower(0.3f);
             size = 1;
             reload = 200f;
@@ -623,6 +663,8 @@ public class SvBlocks{
 
         regenProjector = new MendProjector("regen-projector"){{
             requirements(Category.effect, with(spaclanium, 60, clay, 80, iridium, 10));
+            researchCost = with(spaclanium,500,clay,280,iridium,100);
+
             consumePower(0.3f);
             size = 2;
             reload = 100f;
@@ -644,6 +686,8 @@ public class SvBlocks{
 
             priority = 0;
             health = 120;
+
+            researchCost = with(spaclanium,8);
         }};
 
         tower = new Buoy("tower") {{
@@ -656,6 +700,8 @@ public class SvBlocks{
 
             priority = 0;
             health = 360;
+
+            researchCost = with(chromium,50,clay,50);
         }};
 
         beacon = new Beacon("beacon") {{
@@ -676,6 +722,8 @@ public class SvBlocks{
             super.coolantMultiplier = 2f;
             super.acceptCoolant = true;
 
+            researchCost = with(spaclanium,500,clay,100,sulfur,300);
+
             placeEffect = Fx.healWaveDynamic;
             health = 450;
 
@@ -689,10 +737,15 @@ public class SvBlocks{
             squareSprite = false;
             envDisabled |= Env.scorching;
             pumpAmount = 8f / 60f;
+
+            researchCost = with(spaclanium,5);
         }};
 
         centrifugalPump = new Pump("centrifugal-pump") {{
-            requirements(Category.liquid, with(spaclanium, 8));
+            requirements(Category.liquid, with(spaclanium, 32, clay, 30, iridium, 10));
+
+            researchCost = with(spaclanium,300,clay,320,iridium,400);
+
             size = 2;
 
             squareSprite = false;
@@ -717,6 +770,9 @@ public class SvBlocks{
 
         clayConduit = new Conduit("clay-conduit") {{
             requirements(Category.liquid, with(clay, 1));
+
+            researchCost = with(clay,3);
+
             bridgeReplacement = conduitBridge;
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
@@ -726,6 +782,9 @@ public class SvBlocks{
 
         highPressureConduit = new Conduit("high-pressure-conduit") {{
             requirements(Category.liquid, with(chromium, 1, clay, 1));
+
+            researchCost = with(clay,400,chromium,100);
+
             bridgeReplacement = conduitBridge;
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
@@ -737,6 +796,9 @@ public class SvBlocks{
 
         conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
             requirements(Category.liquid, with(corallite, 4, clay, 8));
+
+            researchCost = with(corallite,80,clay,40);
+
             range = 4;
             hasPower = false;
 
@@ -745,6 +807,9 @@ public class SvBlocks{
 
         conduitRouter = new LiquidRouter("liquid-router") {{
             requirements(Category.liquid, with(corallite, 4, clay, 2));
+
+            researchCost = with(corallite,40,clay,10);
+
             liquidCapacity = 20f;
             underBullets = true;
             solid = false;
@@ -756,6 +821,8 @@ public class SvBlocks{
             requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
             craftTime = 60f*2.5f;
             itemCapacity = 50;
+
+            researchCost = with(spaclanium,3,corallite,1);
 
             drawer = new DrawMulti(
             new DrawDefault(),
@@ -774,6 +841,8 @@ public class SvBlocks{
             requirements(Category.liquid, with(spaclanium,50, corallite, 60,clay,30));
             craftTime = 20f;
             itemCapacity = 50;
+            researchCost = with(spaclanium,100,corallite,60,clay,50);
+
             size = 2;
             consumeLiquid(water, 12/60f);
             envDisabled |= Env.scorching;
@@ -795,6 +864,8 @@ public class SvBlocks{
         //energy
         energyDock = new EnergyDock("energy-dock") {{
             requirements(Category.power,with(iridium,3,corallite, 2));
+            researchCost = with(iridium,5,corallite,10);
+
             size = 2;
             maxNodes = 10;
             range = 10;
@@ -808,6 +879,7 @@ public class SvBlocks{
 
         energyDistributor = new EnergyCross("energy-distributor") {{
             requirements(Category.power, with(iridium, 18));
+            researchCost = with(iridium,30);
             consumesPower = outputsPower = true;
             health = 90;
             range = 5;
@@ -819,6 +891,9 @@ public class SvBlocks{
         accumulator = new Battery("accumulator"){{
             requirements(Category.power, with(iridium, 5, spaclanium, 20));
             consumePowerBuffered(4000f);
+
+            researchCost = with(iridium,80,spaclanium,100);
+
             baseExplosiveness = 1f;
             drawer = new DrawMulti(new DrawDefault(), new DrawEnergyGlow());
         }};
@@ -826,6 +901,9 @@ public class SvBlocks{
         largeAccumulator = new Battery("large-accumulator"){{
             requirements(Category.power, mult(accumulator.requirements,4));
             consumePowerBuffered(4000f*5);
+
+            researchCost = with(iridium,800,spaclanium,700);
+
             baseExplosiveness = 3f;
             drawer = new DrawMulti(new DrawDefault(), new DrawEnergyGlow());
             size = 2;
@@ -833,6 +911,9 @@ public class SvBlocks{
 
         spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
             requirements(Category.power, with(corallite, 20, clay, 30, iridium, 25));
+
+            researchCost = with(corallite,200,clay,150,iridium,100);
+
             powerProduction = 1.2f;
             itemDuration = 120f;
             envDisabled |= Env.scorching;
@@ -853,6 +934,8 @@ public class SvBlocks{
         windTurbine = new WindTurbine("wind-turbine") {{
             requirements(Category.power,with(corallite,60,clay,15,iridium,30));
 
+            researchCost = with(corallite,600,clay,300,iridium,300);
+
             ambientSound = Sounds.wind;
             ambientSoundVolume = 0.05f;
 
@@ -862,6 +945,9 @@ public class SvBlocks{
 
         chromiumReactor = new ChromiumReactor("chromium-reactor"){{
             requirements(Category.power,with(chromium, 300, tugSheet, 50, corallite, 80, iridium, 100));
+
+            researchCost = with(chromium,1800,tugSheet,500,corallite,3000,iridium,1950);
+
             size = 3;
             squareSprite = false;
             health = 900;
@@ -896,6 +982,9 @@ public class SvBlocks{
 
         coreShore = new SubvoyageCoreBlock("core-shore"){{
             requirements(Category.effect, with(spaclanium,1500,corallite,1200,chromium,1300,iridium,800));
+
+            researchCost = with(spaclanium,3000,corallite,3000,chromium,1500,iridium,1500);
+
             unitType = marine;
             health = 12000;
             itemCapacity = 8000;
@@ -912,6 +1001,8 @@ public class SvBlocks{
 
         coreReef = new SubvoyageCoreBlock("core-reef"){{
             requirements(Category.effect, with(spaclanium,3500,corallite,2200,chromium,1300,iridium,1000,quartzFiber,1000,tugSheet,800));
+
+            researchCost = with(spaclanium,8000,corallite,8000,chromium,5000,iridium,3000,quartzFiber,1000,tugSheet,1000);
             unitType = marine;
             health = 24000;
             itemCapacity = 12000;
@@ -929,6 +1020,9 @@ public class SvBlocks{
         vault = new StorageBlock("vault"){
             {
                 requirements(Category.effect, with(chromium, 250, iridium, 125));
+
+                researchCost = with(chromium,1000,iridium,2000);
+
                 size = 2;
                 itemCapacity = 300;
                 scaledHealth = 55;
@@ -943,6 +1037,7 @@ public class SvBlocks{
         largeVault = new StorageBlock("large-vault"){
             {
                 requirements(Category.effect, with(chromium, 500, iridium, 345));
+                researchCost = with(chromium,2000,iridium,3500);
                 size = 3;
                 itemCapacity = 1000;
                 scaledHealth = 155;
@@ -957,6 +1052,9 @@ public class SvBlocks{
 
         unloader = new Unloader("unloader"){{
             requirements(Category.effect, with(chromium, 25, clay, 30));
+
+            researchCost = with(chromium,100,clay,300);
+
             speed = 60f / 11f;
             group = BlockGroup.transportation;
             squareSprite = false;
@@ -964,6 +1062,9 @@ public class SvBlocks{
 
         liquidContainer = new LiquidRouter("liquid-container"){{
             requirements(Category.liquid, with(corallite, 30, clay, 35));
+
+            researchCost = with(corallite,540,clay,350);
+
             liquidCapacity = 700f;
             size = 2;
             liquidPadding = 3f / 4f;
@@ -974,6 +1075,7 @@ public class SvBlocks{
 
         liquidTank = new LiquidRouter("liquid-tank"){{
             requirements(Category.liquid, with(corallite,80, clay, 140, iridium, 30));
+            researchCost = with(corallite,1040,clay,870,iridium,500);
             liquidCapacity = 1800f;
             health = 500;
             size = 3;
@@ -986,6 +1088,8 @@ public class SvBlocks{
         //transport
         ductBridge = new DuctBridge("duct-bridge") {{
             requirements(Category.distribution, with(corallite, 4,spaclanium,2));
+            researchCost = with(corallite, 16, spaclanium, 4);
+
             envDisabled |= Env.scorching;
             health = 90;
             speed = 4f;
@@ -997,10 +1101,13 @@ public class SvBlocks{
             health = 90;
             speed = 4f;
             envDisabled |= Env.scorching;
+
+            researchCost = with(corallite,2);
         }};
 
         highPressureDuct = new Duct("high-pressure-duct") {{
             requirements(Category.distribution,with(chromium,1,corallite,1));
+            researchCost = with(chromium,500,corallite,900);
             bridgeReplacement = SvBlocks.ductBridge;
             health = 180;
             speed = 2f;
@@ -1009,17 +1116,20 @@ public class SvBlocks{
 
         ductRouter = new Router("duct-router") {{
             requirements(Category.distribution, with(corallite, 3));
+            researchCost = with(corallite,16);
             envDisabled |= Env.scorching;
         }};
         
         ductSorter = new Sorter("duct-sorter"){{
             requirements(Category.distribution, with(corallite, 2, spaclanium, 2));
+            researchCost = with(corallite,100,spaclanium,350);
             buildCostMultiplier = 3f;
             envDisabled |= Env.scorching;
         }};
 
         ductDistributor = new Router("duct-distributor"){{
             requirements(Category.distribution, with(corallite, 4, spaclanium, 4));
+            researchCost = with(corallite,320,spaclanium,70);
             buildCostMultiplier = 3f;
             size = 2;
             squareSprite = false;
@@ -1027,11 +1137,13 @@ public class SvBlocks{
 
         ductOverflow = new OverflowGate("duct-overflow-gate"){{
             requirements(Category.distribution, with(corallite, 2, spaclanium, 4));
+            researchCost = with(corallite,300,spaclanium,300);
             buildCostMultiplier = 3f;
         }};
 
         ductUnderflow = new OverflowGate("duct-underflow-gate"){{
             requirements(Category.distribution, with(corallite, 2, spaclanium, 4));
+            researchCost = with(corallite,300,spaclanium,300);
             buildCostMultiplier = 3f;
             invert = true;
         }};
@@ -1066,6 +1178,8 @@ public class SvBlocks{
         shipCargoStation = new UnitCargoLoader("ship-cargo-station"){{
             requirements(Category.distribution,with(iridium,100,clay,200));
 
+            researchCost = with(iridium,1000,clay,700);
+
             size = 3;
             itemCapacity = 250;
 
@@ -1080,6 +1194,8 @@ public class SvBlocks{
         shipUnloadPoint = new UnitCargoUnloadPoint("ship-unload-point") {{
             requirements(Category.distribution,with(iridium,50,clay,80));
 
+            researchCost = with(iridium,700,clay,500);
+
             size = 2;
             itemCapacity = 50;
         }};
@@ -1090,6 +1206,8 @@ public class SvBlocks{
             requirements(Category.crafting,with(spaclanium,30,corallite,70,fineSand,30));
             craftEffect = SvFx.smokePuff;
             craftTime = 60f*2;
+
+            researchCost = with(spaclanium,100,corallite,60,fineSand,10);
 
             hasItems = true;
             hasLiquids = true;
@@ -1110,6 +1228,9 @@ public class SvBlocks{
 
         terracottaBlaster = new GenericCrafter("terracotta-blaster") {{
             requirements(Category.crafting,with(spaclanium,100,corallite,200,fineSand,120,iridium,40));
+
+            researchCost = with(spaclanium,1000,corallite,1600,fineSand,700,iridium,780);
+
             craftEffect = SvFx.smokePuff;
             craftTime = 60f*1.3f;
 
@@ -1138,6 +1259,8 @@ public class SvBlocks{
             outputLiquid = new LiquidStack(SvLiquids.polygen, 1);
             craftTime = 20f;
 
+            researchCost = with(spaclanium,700,corallite,800);
+
             itemCapacity = 30;
             size = 2;
 
@@ -1161,6 +1284,8 @@ public class SvBlocks{
             outputLiquid = new LiquidStack(SvLiquids.polygen, 2);
             craftTime = 1f;
 
+            researchCost = with(chromium,1600,iridium,3200);
+
             itemCapacity = 30;
             size = 3;
 
@@ -1182,6 +1307,9 @@ public class SvBlocks{
 
         argonCentrifuge = new GenericCrafter("argon-centrifuge") {{
             requirements(Category.crafting, with(spaclanium,60,corallite,200,sulfur,30));
+
+            researchCost = with(spaclanium,800,corallite,700,sulfur,900);
+
             itemCapacity = 10;
             size = 2;
             craftEffect = Fx.smokePuff;
@@ -1201,6 +1329,9 @@ public class SvBlocks{
 
         argonCondenser = new GenericCrafter("argon-condenser") {{
             requirements(Category.crafting, with(chromium,120,iridium,60,tugSheet,10));
+
+            researchCost = with(chromium,3500,iridium,5310,tugSheet,3210);
+
             itemCapacity = 10;
             size = 3;
             craftEffect = Fx.smokePuff;
@@ -1220,6 +1351,9 @@ public class SvBlocks{
 
         crudeSmelter = new CrudeSmelter("crude-smelter") {{
             requirements(Category.crafting,with(spaclanium,100,iridium,50,clay,30));
+
+            researchCost = with(spaclanium,1000,iridium,1600,clay,600);
+
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smokePuff;
@@ -1236,6 +1370,9 @@ public class SvBlocks{
 
         quartzScutcher = new AttributeCrafter("quartz-scutcher") {{
             requirements(Category.crafting,with(chromium,220,spaclanium,120,fineSand,80,iridium,30));
+
+            researchCost = with(chromium,3000,spaclanium,5000,fineSand,3500,iridium,6000);
+
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smeltsmoke;
@@ -1256,6 +1393,9 @@ public class SvBlocks{
 
         tugRoller = new AttributeCrafter("tug-roller") {{
             requirements(Category.crafting,with(chromium,220,iridium,140,quartzFiber,60,sulfur,120));
+
+            researchCost = with(chromium,5000,iridium,7000,quartzFiber,5000,sulfur,3200);
+
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smeltsmoke;
