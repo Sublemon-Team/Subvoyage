@@ -19,6 +19,8 @@ import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.power.*;
 
+import java.util.ArrayList;
+
 import static mindustry.Vars.*;
 
 // TODO: rework rotations
@@ -143,10 +145,18 @@ public class WindTurbine extends SolarGenerator {
         }
 
         public float getRot(){
-            WeatherState w = Groups.weather.find(ws -> ws.weather() != null && ws.weather().sound == Sounds.wind);
+            ArrayList<Float> weatherAngles = new ArrayList<>();
+            weatherAngles.add(90f);
+            float[] angleSum = new float[1];
+            Groups.weather.forEach(e -> {
+                angleSum[0] +=e.windVector.angle();
+                weatherAngles.add(e.windVector.angle());
+            });
+            float angle = angleSum[0]/weatherAngles.size();
+            //WeatherState w = Groups.weather.find(ws -> ws.weather() != null && ws.weather().sound == Sounds.wind);
             totalTime += efficiency / (powerProduction - 20f) * delta();
 
-            float rotation = Mathf.clamp(efficiency, w != null ? totalTime * w.windVector.angle() : totalTime * 90, totalTime * 90);
+            float rotation = Mathf.clamp(efficiency, angle != 90f ? totalTime * Mathf.sign(angle)*90 : totalTime * 90, totalTime * 90);
             return rot = rotation;
         }
 
