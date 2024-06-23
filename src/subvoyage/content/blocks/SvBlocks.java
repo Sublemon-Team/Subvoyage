@@ -43,9 +43,9 @@ import static subvoyage.content.world.items.SvItems.*;
 
 public class SvBlocks{
     /*
-    featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
+        featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
         windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор),
-        regenerator (Регенератор), repairProjector (Чинящий проектор), shieldProjector (Защитный проектор),
+        regenerator (Регенератор), repairProjector (Регенерирующий проектор), shieldProjector (Защитный проектор),
         accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор), crudeSmelter (Сырьевая плавильня),
         tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления)
      */
@@ -61,7 +61,7 @@ public class SvBlocks{
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
             coreDecoder, coreDecrypter,
-            regenerator, repairProjector,
+            regenerator, regenProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
             crudeSmelter,
@@ -463,7 +463,7 @@ public class SvBlocks{
             consumeLiquid(polygen,0.3f).boost();
         }};
 
-        repairProjector = new MendProjector("repair-projector"){{
+        regenProjector = new MendProjector("repair-projector"){{
             requirements(Category.effect, with(spaclanium, 60, clay, 80, iridium, 10));
             consumePower(0.3f);
             size = 2;

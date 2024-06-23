@@ -136,7 +136,7 @@ public class AtlacianTechTree {
 
                 });
                 node(regenerator,() -> {
-                    node(repairProjector,() -> {
+                    node(regenProjector,() -> {
 
                     });
                 });
