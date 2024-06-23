@@ -26,7 +26,6 @@ public class WaterCargoAI extends CargoAI {
 
 
     public void pathfind(){
-        //TODO: make this fucking thing work with two cargos
         Tile tileOn = unit.tileOn();
         if(tileOn == null) return;
         float width = state.map.width;
