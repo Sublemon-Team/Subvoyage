@@ -143,7 +143,7 @@ public class WindTurbine extends SolarGenerator {
         }
 
         public float getRot(){
-            WeatherState w = Groups.weather.find(ws -> ws.weather() != null);
+            WeatherState w = Groups.weather.find(ws -> ws.weather() != null && ws.weather().sound == Sounds.wind);
             totalTime += efficiency / (powerProduction - 20f) * delta();
 
             float rotation = Mathf.clamp(efficiency, w != null ? totalTime * w.windVector.angle() : totalTime * 90, totalTime * 90);
