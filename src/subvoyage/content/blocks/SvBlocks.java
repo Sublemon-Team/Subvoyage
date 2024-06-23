@@ -27,8 +27,7 @@ import mindustry.world.meta.*;
 import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
-import subvoyage.content.world.blocks.cargo.*;
-import subvoyage.content.world.blocks.crude_smelter.CrudeSmelter;
+import subvoyage.content.world.blocks.crude_smelter.*;
 import subvoyage.content.world.blocks.energy.*;
 import subvoyage.content.world.blocks.offload_core.*;
 import subvoyage.content.world.draw.*;
@@ -904,7 +903,7 @@ public class SvBlocks{
         }};
          */
 
-        shipCargoStation = new ShipCargoStation("ship-cargo-station") {{
+        shipCargoStation = new UnitCargoLoader("ship-cargo-station"){{
             requirements(Category.distribution,with(iridium,100,clay,200));
 
             size = 3;
