@@ -11,6 +11,7 @@ import mindustry.gen.Building;
 import mindustry.gen.BuildingTetherc;
 import mindustry.gen.Call;
 import mindustry.world.Tile;
+import mindustry.world.blocks.units.UnitCargoUnloadPoint;
 import mindustry.world.meta.BlockFlag;
 
 import static mindustry.Vars.*;
@@ -39,7 +40,7 @@ public class WaterCargoAI extends CargoAI {
         Tile targetTile = path.first();
         if(!targetTile.floor().isLiquid || targetTile.solid()) {
             if(stuckAttempts >= 240) unit.destroy();
-            stuckAttempts++;
+            if(target instanceof UnitCargoUnloadPoint.UnitCargoUnloadPointBuild) stuckAttempts++;
             return;
         }
 

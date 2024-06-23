@@ -72,7 +72,7 @@ public class SvBlocks{
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
             //TRANSPORTATION
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
-            shipCargoStation,
+            shipCargoStation, shipUnloadPoint,
             //PAYLOAD
             helicopterFactory,
             //EXPLORATION
@@ -241,7 +241,6 @@ public class SvBlocks{
             range = 170f;
             scaledHealth = 200;
             coolant = consumeCoolant(0.2f);
-            researchCostMultiplier = 0.05f;
 
             limitRange(2);
         }};
@@ -314,7 +313,7 @@ public class SvBlocks{
             scaledHealth = 200;
             coolant = consumeCoolant(0.5f);
             coolantMultiplier = 1f;
-            researchCostMultiplier = 0.05f;
+
             limitRange(6);
         }};
 
@@ -490,7 +489,6 @@ public class SvBlocks{
 
         tower = new Buoy("tower") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(chromium,10,clay,10));
-            alwaysUnlocked = true;
             fogRadius = 28;
 
             envDisabled |= Env.scorching;
@@ -528,9 +526,6 @@ public class SvBlocks{
         //liquids
         lowTierPump = new Pump("lead-pump") {{
             requirements(Category.liquid, with(spaclanium, 8));
-            researchCost = with(
-                    spaclanium, 5
-            );
 
             squareSprite = false;
             envDisabled |= Env.scorching;
@@ -540,9 +535,6 @@ public class SvBlocks{
         centrifugalPump = new Pump("centrifugal-pump") {{
             requirements(Category.liquid, with(spaclanium, 8));
             size = 2;
-            researchCost = with(
-            spaclanium, 5
-            );
 
             squareSprite = false;
             envDisabled |= Env.scorching;
@@ -605,10 +597,6 @@ public class SvBlocks{
             requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
             craftTime = 60f*2.5f;
             itemCapacity = 50;
-            researchCost = with(
-                    spaclanium, 20,
-                    corallite , 10
-            );
 
             drawer = new DrawMulti(
             new DrawDefault(),
@@ -664,7 +652,6 @@ public class SvBlocks{
             consumesPower = outputsPower = true;
             health = 90;
             range = 5;
-            researchCost = with(iridium,5);
             squareSprite = false;
 
             consumePowerBuffered(1000f);
@@ -850,7 +837,6 @@ public class SvBlocks{
             bridgeReplacement = SvBlocks.ductBridge;
             health = 90;
             speed = 4f;
-            researchCost = with(corallite, 5);
             envDisabled |= Env.scorching;
         }};
 
@@ -930,8 +916,13 @@ public class SvBlocks{
             consumeLiquid(argon,8f/60f);
 
             unitType = bulker;
+        }};
 
-            researchCost = with(iridium,1000,clay,2000);
+        shipUnloadPoint = new UnitCargoUnloadPoint("ship-unload-point") {{
+            requirements(Category.distribution,with(iridium,50,clay,80));
+
+            size = 2;
+            itemCapacity = 50;
         }};
 
 

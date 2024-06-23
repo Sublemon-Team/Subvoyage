@@ -798,7 +798,7 @@ public class SvUnits{
             speed = 3.5f;
             rotateSpeed = 9f;
             accel = 0.1f;
-            itemCapacity = 100;
+            itemCapacity = 50;
             health = 200f;
             hitSize = 11f;
             engineSize = 2.3f;
