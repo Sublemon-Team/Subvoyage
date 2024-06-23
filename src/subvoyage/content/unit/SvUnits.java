@@ -778,7 +778,7 @@ public class SvUnits{
 
         bulker = new AtlacianUnitType("bulker"){{
             controller = u -> new CargoAI();
-            constructor = UnitEntity::create;
+            constructor = BuildingTetherPayloadUnit::create;
             isEnemy = false;
             allowedInPayloads = false;
             logicControllable = false;
