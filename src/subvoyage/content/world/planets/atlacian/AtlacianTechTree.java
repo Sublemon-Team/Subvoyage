@@ -98,6 +98,9 @@ public class AtlacianTechTree {
                 node(terracottaBlaster, () -> {
 
                 });
+                node(crudeSmelter,() -> {
+
+                });
                 node(argonCentrifuge, () -> {
                     node(argonCondenser,() -> {
 
@@ -179,6 +182,11 @@ public class AtlacianTechTree {
                 });
                 node(coreDecoder,() -> {
                     node(coreDecrypter,() -> {
+
+                    });
+                });
+                node(coreShore,() -> {
+                    node(coreReef,() -> {
 
                     });
                 });

@@ -20,6 +20,7 @@ import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 
 public class Buoy extends Radar {
+    public boolean isWater = true;
     public Buoy(String name) {
         super(name);
         swapDiagonalPlacement = true;
@@ -39,6 +40,7 @@ public class Buoy extends Radar {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
+        if(!isWater) return super.canPlaceOn(tile,team,rotation);
         return tile.floor() == Blocks.water || tile.block() == Blocks.water || tile.block() == Blocks.darksandWater ||
                 tile.floor() == Blocks.darksandWater;
     }

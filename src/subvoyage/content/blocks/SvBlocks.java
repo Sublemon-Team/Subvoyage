@@ -46,7 +46,8 @@ public class SvBlocks{
     featherDrill (перовой бур),awe (трепет), swiftHydralizer (Электро-обогащатель), argonCondenser (Сгущатель аргона),
         windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор),
         regenerator (Регенератор), repairProjector (Чинящий проектор), shieldProjector (Защитный проектор),
-        accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор)
+        accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор), crudeSmelter (Сырьевая плавильня),
+        tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления)
      */
     
     public static Block
@@ -66,18 +67,18 @@ public class SvBlocks{
             crudeSmelter,
             quartzScutcher, tugRoller,
             //LIQUIDS
-            waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
+            waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
             //TRANSPORTATION
-            duct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
+            duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation,
             //PAYLOAD
             helicopterFactory,
             //EXPLORATION
-            buoy,beacon,
+            buoy,tower,beacon,
             //STORAGE
-            corePuffer, vault, largeVault, unloader, liquidContainer, liquidTank;
+            corePuffer,coreShore,coreReef, vault, largeVault, unloader, liquidContainer, liquidTank;
 
     public static void load() {
         //non-user
@@ -487,6 +488,19 @@ public class SvBlocks{
             health = 120;
         }};
 
+        tower = new Buoy("tower") {{
+            requirements(Category.effect, BuildVisibility.fogOnly, with(chromium,10,clay,10));
+            alwaysUnlocked = true;
+            fogRadius = 28;
+
+            envDisabled |= Env.scorching;
+            destructible = true;
+            isWater = false;
+
+            priority = 0;
+            health = 360;
+        }};
+
         beacon = new Beacon("beacon") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,300,clay, 50,sulfur,200));
             fogRadius = 75;
@@ -550,14 +564,6 @@ public class SvBlocks{
             );
         }};
 
-        conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
-            requirements(Category.liquid, with(corallite, 4, clay, 8));
-            range = 4;
-            hasPower = false;
-
-            envDisabled |= Env.scorching;
-        }};
-
         clayConduit = new Conduit("clay-conduit") {{
             requirements(Category.liquid, with(clay, 1));
             bridgeReplacement = conduitBridge;
@@ -565,6 +571,25 @@ public class SvBlocks{
             botColor = Color.valueOf("54333c");
 
             health = 45;
+        }};
+
+        highPressureConduit = new Conduit("high-pressure-conduit") {{
+            requirements(Category.liquid, with(chromium, 1, clay, 1));
+            bridgeReplacement = conduitBridge;
+            envDisabled |= Env.scorching;
+            botColor = Color.valueOf("54333c");
+            liquidCapacity = 16f;
+            liquidPressure = 1.225f;
+
+            health = 80;
+        }};
+
+        conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
+            requirements(Category.liquid, with(corallite, 4, clay, 8));
+            range = 4;
+            hasPower = false;
+
+            envDisabled |= Env.scorching;
         }};
 
         conduitRouter = new LiquidRouter("liquid-router") {{
@@ -712,7 +737,7 @@ public class SvBlocks{
             unitType = marine;
             health = 6000;
             itemCapacity = 5000;
-            size = 5;
+            size = 4;
 
             incinerateNonBuildable = true;
             squareSprite = false;
@@ -722,6 +747,39 @@ public class SvBlocks{
 
             bannedItems.addAll(crude);
         }};
+
+        coreShore = new SubvoyageCoreBlock("core-shore"){{
+            requirements(Category.effect, with(spaclanium,1500,corallite,1200,chromium,1300,iridium,800));
+            unitType = marine;
+            health = 12000;
+            itemCapacity = 8000;
+            size = 5;
+
+            incinerateNonBuildable = true;
+            squareSprite = false;
+            requiresCoreZone = false;
+            envDisabled |= Env.scorching;
+            unitCapModifier = 18;
+
+            bannedItems.addAll(crude);
+        }};
+
+        coreReef = new SubvoyageCoreBlock("core-reef"){{
+            requirements(Category.effect, with(spaclanium,3500,corallite,2200,chromium,1300,iridium,1000,quartzFiber,1000,tugSheet,800));
+            unitType = marine;
+            health = 24000;
+            itemCapacity = 12000;
+            size = 6;
+
+            incinerateNonBuildable = true;
+            squareSprite = false;
+            requiresCoreZone = false;
+            envDisabled |= Env.scorching;
+            unitCapModifier = 24;
+
+            bannedItems.addAll(crude);
+        }};
+
         vault = new StorageBlock("vault"){
             {
                 requirements(Category.effect, with(chromium, 250, iridium, 125));
@@ -793,6 +851,14 @@ public class SvBlocks{
             health = 90;
             speed = 4f;
             researchCost = with(corallite, 5);
+            envDisabled |= Env.scorching;
+        }};
+
+        highPressureDuct = new Duct("high-pressure-duct") {{
+            requirements(Category.distribution,with(chromium,1,corallite,1));
+            bridgeReplacement = SvBlocks.ductBridge;
+            health = 180;
+            speed = 2f;
             envDisabled |= Env.scorching;
         }};
 

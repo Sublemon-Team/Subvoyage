@@ -119,7 +119,7 @@ public class CrudeSmelter extends GenericCrafter {
         @Override
         public void updateTile() {
             CrudeSmelterRecipe recipe = recipes.getOrDefault(produceItem,recipes.values().iterator().next());
-            if(efficiency > 0){
+            if(efficiency > 0 && produceItem != null){
 
                 progress += getProgressIncrease(recipe.craftTime);
                 warmup = Mathf.approachDelta(warmup, warmupTarget(), warmupSpeed);
@@ -134,7 +134,7 @@ public class CrudeSmelter extends GenericCrafter {
             //TODO may look bad, revert to edelta() if so
             totalProgress += warmup * Time.delta;
 
-            if(progress >= 1f){
+            if(progress >= 1f && produceItem != null){
                 craft();
             }
 
