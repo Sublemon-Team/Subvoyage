@@ -15,7 +15,7 @@ public class SvLiquids{
     public static void load() {
         polygen = new Liquid("meta-water", Color.valueOf("8997FF")) {{
             heatCapacity = 1.5f;
-            effect = StatusEffects.overdrive;
+            effect = StatusEffects.corroded;
             boilPoint = 0.5f;
             gasColor = Color.grays(0.9f);
             flammability = 0f;

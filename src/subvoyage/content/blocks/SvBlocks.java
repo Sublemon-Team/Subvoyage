@@ -9,6 +9,7 @@ import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.entities.pattern.ShootBarrel;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -46,7 +47,8 @@ public class SvBlocks{
         windTurbine (ветрогенератор), chromiumReactor (Хромовый реактор), coreDecrypter (Ядровый Декриптор),
         regenerator (Регенератор), repairProjector (Регенерирующий проектор), shieldProjector (Защитный проектор),
         accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор), crudeSmelter (Сырьевая плавильня),
-        tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления)
+        tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления),
+        resonance (Резонанс), burden (Бремя), cascade (Каскад)
      */
     
     public static Block
@@ -55,7 +57,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe,
+            whirl, rupture, awe, resonance, burden, cascade,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -352,6 +354,163 @@ public class SvBlocks{
             }};
             consumePower(3.3f);
             coolant = consumeCoolant(0.1f);
+        }};
+
+        resonance = new PowerTurret("resonance") {{
+            requirements(Category.turret, with(corallite, 185, iridium, 140,chromium,80));
+            size = 3;
+            outlineColor = Pal.darkOutline;
+            shootCone = 360f;
+            targetGround = true;
+            targetAir = true;
+            fogRadius = 9;
+            health = 540;
+            shootSound = Sounds.cannon;
+            range = 10*10f;
+            velocityRnd = 0;
+            reload = 120f;
+            shake = 5f;
+            chargeSound = Sounds.lasercharge;
+            shootY = 0f;
+            rotateSpeed = 0;
+            drawer = new DrawTurret("atlacian-");
+
+            shootEffect = new MultiEffect(SvFx.resonanceExplosion,SvFx.resonanceExplosionDust, new WaveEffect(){{
+                lifetime = 10f;
+                strokeFrom = 3f;
+                strokeTo = 0f;
+                sizeTo = range;
+            }});
+
+            shootType = new ExplosionBulletType(54f,range) {{
+                collidesAir = false;
+                buildingDamageMultiplier = 1.1f;
+                ammoMultiplier = 1f;
+                speed = 0;
+                lifetime = 1f;
+                killShooter = false;
+            }};
+            consumePower(3.3f);
+            coolant = consumeCoolant(0.1f);
+        }};
+
+        burden = new LiquidTurret("burden") {{
+            requirements(Category.turret, with(clay,200,iridium,140,chromium,120));
+            ammo(
+                    Liquids.water, new LiquidBulletType(Liquids.water){{
+                        lifetime = 49f;
+                        speed = 4f;
+                        knockback = 1.7f;
+                        puddleSize = 8f;
+                        orbSize = 4f;
+                        drag = 0.001f;
+                        ammoMultiplier = 0.4f;
+                        statusDuration = 60f * 4f;
+                        damage = 0.2f;
+                        layer = Layer.bullet - 2f;
+                    }},
+                    polygen, new LiquidBulletType(polygen){{
+                        lifetime = 68f;
+                        speed = 6f;
+                        knockback = 3f;
+                        puddleSize = 12f;
+                        orbSize = 5f;
+                        drag = 0.001f;
+                        ammoMultiplier = 0.3f;
+                        statusDuration = 60f * 4f;
+                        damage = 0.3f;
+                        layer = Layer.bullet - 2f;
+                    }}
+            );
+            size = 3;
+            reload = 3f;
+            shoot.shots = 2;
+            velocityRnd = 0.1f;
+            inaccuracy = 4f;
+            recoil = 1f;
+            shootCone = 45f;
+            liquidCapacity = 40f;
+            shootEffect = Fx.shootLiquid;
+            range = 190f;
+            scaledHealth = 250;
+            flags = EnumSet.of(BlockFlag.turret, BlockFlag.extinguisher);
+        }};
+
+        cascade = new ItemTurret("cascade") {{
+            requirements(Category.turret, with(clay,300,iridium,150,chromium,50,spaclanium,80));
+            outlineColor = Pal.darkOutline;
+
+            size = 3;
+            shootCone = 360f;
+            fogRadius = 6;
+            targetGround = true;
+            targetAir = true;
+            squareSprite = false;
+            ammo(
+                    chromium, new BasicBulletType(6f, 40){{
+                        inaccuracy = 0.5f;
+                        width = 6f;
+                        height = 12f;
+                        lifetime = 120f;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = Pal.plastaniumFront;
+                        frontColor = Color.white;
+                        trailWidth = 6f;
+                        trailLength = 4;
+                        shoot = new ShootBarrel();
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                    }},
+
+                    tugSheet, new BasicBulletType(12f, 300){{
+                        reloadMultiplier = 1.1f;
+                        ammoMultiplier = 1f;
+                        width = 6f;
+                        ammoPerShot = 4;
+                        height = 12f;
+                        lifetime = 85f;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = Pal.missileYellow;
+                        frontColor = Color.white;
+                        trailWidth = 8f;
+                        trailLength = 6;
+                        homingPower = 0.08f;
+                        homingRange = 8f;
+                        shoot = new ShootBarrel();
+                        trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                    }}
+            );
+
+            drawer = new DrawTurret("atlacian-"){{
+                parts.add(new RegionPart("-blade"){{
+                    mirror = true;
+                    under = true;
+                    moveX = 1.5f;
+                    moveRot = -4;
+                    progress = PartProgress.recoil;
+                }});
+
+                parts.add(new RegionPart("-blade-mid"){{
+                    progress = PartProgress.recoil;
+                    moveY = -1.25f;
+                }});
+            }};
+
+            shootSound = Sounds.railgun;
+            reload = 15f;
+            shootY = 5f;
+
+            recoil = 0.5f;
+            priority = 0;
+            range = 180f;
+            scaledHealth = 200;
+            coolant = consumeCoolant(0.5f);
+            coolantMultiplier = 1.2f;
+
+            limitRange(6);
+
         }};
 
 
