@@ -8,8 +8,9 @@ import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
+import mindustry.entities.part.DrawPart.*;
 import mindustry.entities.part.*;
-import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -395,6 +396,7 @@ public class SvBlocks{
         }};
 
         burden = new LiquidTurret("burden") {{
+            outlineColor = Pal.darkOutline;
             requirements(Category.turret, with(clay,200,iridium,140,chromium,120));
             ammo(
                     Liquids.water, new LiquidBulletType(Liquids.water){{
@@ -422,6 +424,8 @@ public class SvBlocks{
                         layer = Layer.bullet - 2f;
                     }}
             );
+
+            drawer = new DrawTurret("atlacian-");
             size = 3;
             reload = 3f;
             shoot.shots = 2;
@@ -447,61 +451,167 @@ public class SvBlocks{
             targetAir = true;
             squareSprite = false;
             ammo(
-                    chromium, new BasicBulletType(6f, 40){{
-                        inaccuracy = 0.5f;
-                        ammoMultiplier = 1f;
-                        width = 6f;
-                        height = 12f;
-                        lifetime = 120f;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
-                        hitColor = backColor = trailColor = Pal.plastaniumFront;
-                        frontColor = Color.white;
-                        trailWidth = 6f;
-                        trailLength = 4;
-                        shoot = new ShootBarrel();
-                        hitEffect = despawnEffect = Fx.hitBulletColor;
-                    }},
+            chromium, new BasicBulletType(6f, 40){{
+                sprite = "large-orb";
+                inaccuracy = 1f;
+                ammoMultiplier = 1f;
 
-                    tugSheet, new BasicBulletType(12f, 300){{
-                        reloadMultiplier = 1.1f;
-                        ammoMultiplier = 1f;
-                        width = 6f;
-                        ammoPerShot = 4;
-                        height = 12f;
-                        lifetime = 85f;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
-                        hitColor = backColor = trailColor = Pal.missileYellow;
-                        frontColor = Color.white;
-                        trailWidth = 8f;
-                        trailLength = 6;
-                        homingPower = 0.08f;
-                        homingRange = 8f;
-                        shoot = new ShootBarrel();
-                        trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
-                        hitEffect = despawnEffect = Fx.hitBulletColor;
-                    }}
+                width = 8f;
+                height = 12f;
+                lifetime = 120f;
+                shootEffect = SvFx.pulverize;
+                smokeEffect = Fx.none;
+
+                hitColor = backColor = trailColor = Color.valueOf("d5cba3");
+                frontColor = Color.white;
+
+                trailRotation = true;
+                trailEffect = Fx.disperseTrail;
+                trailInterval = 3f;
+                trailWidth = 6f;
+                trailLength = 6;
+                trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+
+                shoot = new ShootBarrel();
+                hitEffect = despawnEffect = Fx.hitBulletColor;
+            }},
+
+            tugSheet, new BasicBulletType(12f, 300){{
+                sprite = "large-orb";
+                inaccuracy = 3f;
+                reloadMultiplier = 1.1f;
+                ammoMultiplier = 1f;
+
+                width = 8f;
+                ammoPerShot = 4;
+                height = 12f;
+                lifetime = 85f;
+                shootEffect = SvFx.pulverize;
+                smokeEffect = Fx.none;
+
+                hitColor = backColor = trailColor = Color.valueOf("95b3b1");
+                frontColor = Color.white;
+
+                trailRotation = true;
+                trailEffect = Fx.disperseTrail;
+                trailInterval = 3f;
+                trailWidth = 6f;
+                trailLength = 6;
+                trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+
+                homingPower = 0.08f;
+                homingRange = 8f;
+                shoot = new ShootBarrel();
+
+                hitEffect = Fx.hitBulletColor;
+                despawnEffect = new MultiEffect(Fx.hitBulletColor, new WaveEffect(){{
+                    sizeTo = 16f;
+                    colorFrom = colorTo = Color.valueOf("95b3b1");
+                    lifetime = 12;
+                }});
+            }}
             );
 
+            smokeEffect = Fx.shootSmokeSmite;
             drawer = new DrawTurret("atlacian-"){{
-                parts.add(new RegionPart("-blade"){{
+                var heatp = PartProgress.warmup.blend(p -> Mathf.absin(2f, 1f) * p.warmup, 0.2f);
+                var haloProgress = PartProgress.warmup.delay(0.5f);
+                float haloY = -10;
+                parts.addAll(new RegionPart("-blade"){{
+                                 progress = PartProgress.warmup;
+                                 heatProgress = PartProgress.warmup;
+                                 heatColor = Color.valueOf("ffffc4");
                     mirror = true;
                     under = true;
-                    moveX = 1.5f;
-                    moveRot = -4;
-                    progress = PartProgress.recoil;
-                }});
+                                 moveX = 2f;
+                                 moveRot = -7f;
+                                 moves.add(new PartMove(PartProgress.warmup, 0f, -2f, 3f));
+                             }},
 
-                parts.add(new RegionPart("-blade-mid"){{
-                    progress = PartProgress.recoil;
-                    moveY = -1.25f;
+                new RegionPart("-barrel"){{
+                    progress = PartProgress.warmup;
+                    heatProgress = PartProgress.recoil;
+                    under = true;
+                    moveY = -4f;
+                    heatColor = Color.valueOf("ffffc4");
+                }},
+
+                new RegionPart("-mid"){{
+                    heatProgress = heatp;
+                    progress = PartProgress.warmup;
+                    heatColor = Color.valueOf("ffffc4");
+                    moveY = -8f;
+                    mirror = false;
+                    under = true;
+                }},
+
+                new ShapePart(){{
+                    progress = PartProgress.warmup.delay(0.2f);
+                    color = Pal.accent;
+                    circle = true;
+                    hollow = true;
+                    stroke = 0f;
+                    strokeTo = 2f;
+                    radius = 6f;
+                    layer = Layer.effect;
+                    y = haloY;
+                    rotateSpeed = 1f;
+                }},
+
+                new HaloPart(){{
+                    progress = haloProgress;
+                    color = Pal.accent;
+                    layer = Layer.effect;
+                    y = haloY;
+                    haloRotateSpeed = -1f;
+
+                    shapes = 4;
+                    shapeRotation = 180f;
+                    triLength = 0f;
+                    triLengthTo = 2f;
+                    haloRotation = 45f;
+                    haloRadius = 2f;
+                    tri = true;
+                    radius = 4f;
+                }},
+
+                new HaloPart(){{
+                    progress = haloProgress;
+                    color = Pal.accent;
+                    layer = Layer.effect;
+                    y = haloY;
+                    haloRotateSpeed = -1f;
+
+                    shapes = 4;
+                    shapeRotation = 180f;
+                    triLength = 0f;
+                    triLengthTo = 2f;
+                    haloRotation = 45f;
+                    haloRadius = 10f;
+                    tri = true;
+                    radius = 4f;
+                }},
+
+                new HaloPart(){{
+                    progress = haloProgress;
+                    color = Pal.accent;
+                    layer = Layer.effect;
+                    y = haloY;
+
+                    shapes = 4;
+                    triLength = 0f;
+                    triLengthTo = 4f;
+                    haloRadius = 10f;
+                    haloRotation = 0;
+                    shapeRotation = 90f;
+                    tri = true;
+                    radius = 4f;
                 }});
             }};
 
             shootSound = Sounds.railgun;
             reload = 15f;
-            shootY = 5f;
+            shootY = 8f;
 
             recoil = 0.5f;
             priority = 0;
@@ -511,7 +621,6 @@ public class SvBlocks{
             coolantMultiplier = 1.2f;
 
             limitRange(6);
-
         }};
 
 
