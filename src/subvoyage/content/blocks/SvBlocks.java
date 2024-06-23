@@ -621,7 +621,7 @@ public class SvBlocks{
             consumeLiquid(polygen,0.3f).boost();
         }};
 
-        regenProjector = new MendProjector("repair-projector"){{
+        regenProjector = new MendProjector("regen-projector"){{
             requirements(Category.effect, with(spaclanium, 60, clay, 80, iridium, 10));
             consumePower(0.3f);
             size = 2;
