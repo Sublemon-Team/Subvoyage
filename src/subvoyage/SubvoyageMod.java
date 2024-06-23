@@ -1,9 +1,7 @@
 package subvoyage;
 
 import arc.*;
-import arc.func.*;
 import arc.util.*;
-import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.ctype.*;
 import mindustry.game.EventType.*;
@@ -11,15 +9,11 @@ import mindustry.mod.*;
 import subvoyage.content.blocks.*;
 import subvoyage.content.liquids.*;
 import subvoyage.content.unit.*;
-import subvoyage.content.unit.ai.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.*;
 import subvoyage.content.world.planets.atlacian.*;
 import subvoyage.content.world.sectors.*;
-
-import static mindustry.Vars.*;
-import static mindustry.ai.Pathfinder.costNaval;
 
 public class SubvoyageMod extends Mod {
     public static String ID = "subvoyage";
