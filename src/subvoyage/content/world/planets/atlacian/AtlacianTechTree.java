@@ -155,7 +155,16 @@ public class AtlacianTechTree {
 
             node(whirl, () -> {
                 node(rupture, () -> {
-                    node(awe);
+                    node(awe,() -> {
+                        node(resonance,() -> {
+                            node(cascade,() -> {
+
+                            });
+                        });
+                    });
+                    node(burden,() -> {
+
+                    });
                 });
                 node(finesandWall,() -> {
                     node(finesandWallLarge,() -> {

@@ -48,7 +48,7 @@ public class SvBlocks{
         regenerator (Регенератор), repairProjector (Регенерирующий проектор), shieldProjector (Защитный проектор),
         accumulator (Аккумулятор), largeAccumulator (Большой аккумулятор), crudeSmelter (Сырьевая плавильня),
         tower(Вышка), coreShore (Ядро Берег), coreReef (Ядро Риф), highPressureConduit,Duct (Канал/трубопровод высокого давления),
-        resonance (Резонанс), burden (Бремя), cascade (Каскад)
+        resonance (Резонанс), burden (Бремя), cascade (Каскад), shipUnloadPoint (Корабельная точка разгрузки)
      */
     
     public static Block
