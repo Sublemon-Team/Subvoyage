@@ -23,13 +23,13 @@ public class SubvoyageMod extends Mod {
     public SubvoyageMod(){
         //listen for game load event
         Events.on(ClientLoadEvent.class, e -> {
-            for (TechTree.TechNode node : TechTree.all) {
+            /*for (TechTree.TechNode node : TechTree.all) {
                 UnlockableContent content = node.content;
                 if (content.locked()) {
                     //Log.info("[UnlockTechTreeMod] Unlocking content " + (content.name).replace("content", ""));
                     content.unlock();
                 }
-            }
+            }*/
         });
         Events.on(WorldLoadEvent.class, e -> {
 
