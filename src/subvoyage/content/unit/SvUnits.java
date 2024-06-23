@@ -791,9 +791,8 @@ public class SvUnits{
             payloadCapacity = 0f;
 
             lowAltitude = false;
-            flying = false;
+            flying = true;
 
-            pathCost = Pathfinder.costTypes.get(Pathfinder.costNaval);
             drag = 0.06f;
             speed = 3.5f;
             rotateSpeed = 9f;
