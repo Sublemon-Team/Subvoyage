@@ -9,7 +9,7 @@ public class SvItems{
 
     public static Item spaclanium, corallite,fineSand, sulfur,
             iridium,chromium,
-            stone, clay,
+            crude, clay,
             tugSheet,quartzFiber;
 
     public static void load() {
@@ -35,7 +35,7 @@ public class SvItems{
             charge = 0.4f;
             hardness = 2;
         }};
-        stone = new Item("stone", Color.valueOf("393f42")) {{
+        crude = new Item("stone", Color.valueOf("393f42")) {{
             cost = 0.2f;
             lowPriority = true;
             buildable = false;
@@ -54,6 +54,6 @@ public class SvItems{
             charge = 0.5f;
         }};
 
-        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, stone);
+        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, crude);
     }
 }

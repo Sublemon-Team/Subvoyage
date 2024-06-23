@@ -28,6 +28,7 @@ import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.blocks.*;
 import subvoyage.content.world.blocks.cargo.*;
+import subvoyage.content.world.blocks.crude_smelter.CrudeSmelter;
 import subvoyage.content.world.blocks.energy.*;
 import subvoyage.content.world.blocks.offload_core.*;
 import subvoyage.content.world.draw.*;
@@ -62,6 +63,7 @@ public class SvBlocks{
             regenerator, repairProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
+            crudeSmelter,
             quartzScutcher, tugRoller,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, conduitRouter, conduitBridge,
@@ -145,7 +147,7 @@ public class SvBlocks{
             craftTime = 400;
             size = 3;
             itemCapacity = 20;
-            outputItem = new ItemStack(stone, 8);
+            outputItem = new ItemStack(crude, 8);
             hasPower = true;
             hasLiquids = false;
             displayEfficiency = false;
@@ -718,7 +720,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
 
-            bannedItems.addAll(stone);
+            bannedItems.addAll(crude);
         }};
         vault = new StorageBlock("vault"){
             {
@@ -999,6 +1001,23 @@ public class SvBlocks{
                     new DrawLiquidRegion(argon)
             );
         }};
+
+        crudeSmelter = new CrudeSmelter("crude-smelter") {{
+            requirements(Category.crafting,with(spaclanium,100,iridium,50,clay,30));
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smokePuff;
+            recipes = recipes(spaclanium,2,60,corallite,2,60,iridium,1,90,chromium,1,120);
+
+            consumeItem(crude,2);
+            consumeLiquid(water,0.5f);
+            consumePower(0.8f);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
+
         quartzScutcher = new AttributeCrafter("quartz-scutcher") {{
             requirements(Category.crafting,with(chromium,220,spaclanium,120,fineSand,80,iridium,30));
             itemCapacity = 30;
