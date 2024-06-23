@@ -41,6 +41,9 @@ public class AtlacianTechTree {
             context().researchCostMultipliers = costMultipliers;
 
             node(duct, () -> {
+                node(highPressureDuct,() -> {
+
+                });
                 node(ductRouter,() -> {
                     node(ductDistributor);
                     node(ductSorter,() -> {
@@ -57,6 +60,9 @@ public class AtlacianTechTree {
             });
 
             node(buoy, () -> {
+                node(tower,() -> {
+
+                });
                 node(beacon,() -> {
 
                 });
@@ -81,6 +87,9 @@ public class AtlacianTechTree {
 
                 });
                 node(clayConduit, () -> {
+                    node(highPressureConduit,() -> {
+
+                    });
                     node(conduitBridge, () -> {
 
                     });

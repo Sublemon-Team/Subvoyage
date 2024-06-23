@@ -1,7 +1,10 @@
 package subvoyage.content.unit.ai;
 
+import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.struct.IntSeq;
+import arc.struct.Seq;
+import mindustry.ai.Astar;
 import mindustry.ai.Pathfinder;
 import mindustry.ai.types.CargoAI;
 import mindustry.gen.Building;
@@ -19,32 +22,29 @@ public class WaterCargoAI extends CargoAI {
     private Building lastTarget;
     private Building target;
 
-    public static class WaterCargoFlowfield extends Pathfinder.Flowfield {
-        public Building target;
+    private int stuckAttempts = 0;
 
-        @Override
-        protected void getPositions(IntSeq out) {
-
-            out.clear();
-            if(target != null) {
-                out.add(target.tile.array());
-            }
-        }
-    }
 
     public void pathfind(){
         //TODO: make this fucking thing work with two cargos
-        Tile tile = unit.tileOn();
-        if(tile == null) return;
-        pathfinder.updateTile(unit.tileOn());
-        WaterCargoFlowfield flowfield = (WaterCargoFlowfield) pathfinder.getField(state.rules.waveTeam, costNaval, navalCargoId);
-        flowfield.target = this.target;
-        Tile targetTile = pathfinder.getTargetTile(tile, flowfield);
-        if(tile == targetTile || !targetTile.floor().isLiquid || !targetTile.block().isAir()) return;
+        Tile tileOn = unit.tileOn();
+        if(tileOn == null) return;
+        float width = state.map.width;
+        float height = state.map.height;
+        float maxd = Mathf.dst(width / 2f, height / 2f);
 
-        if(!unit.within(targetTile,8f)) {
-            unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()));
+        Vec2 angle = new Vec2(target.tileX(),target.tileY()).sub(unit.tileX(),unit.tileY()).nor();
+
+        Seq<Tile> path = Astar.pathfind(unit.tileX(), unit.tileY(), target.tileX()-(int)  Math.ceil(angle.getX()), target.tileY()-(int) Math.ceil(angle.getY()), tile -> (!tile.floor().isLiquid || tile.solid() ? 300f : 0f) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan, tile -> world.getDarkness(tile.x, tile.y) <= 1f);
+        if(path.isEmpty()) return;
+        Tile targetTile = path.first();
+        if(!targetTile.floor().isLiquid || targetTile.solid()) {
+            if(stuckAttempts >= 240) unit.destroy();
+            stuckAttempts++;
+            return;
         }
+
+        unit.movePref(vec.trns(unit.angleTo(targetTile.worldx(), targetTile.worldy()), unit.speed()/2));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class WaterCargoAI extends CargoAI {
 
         target = unit.hasItem() ? unloadTarget : build;
         transferRange = 40f;
-        pathfind();
+        if(target != null) pathfind();
 
         if(build.items == null) return;
 

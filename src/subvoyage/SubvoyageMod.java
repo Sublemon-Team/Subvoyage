@@ -38,10 +38,7 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.on(WorldLoadEvent.class, e -> {
-            Prov<Pathfinder.Flowfield> navalCargo = WaterCargoAI.WaterCargoFlowfield::new;
-            Pathfinder.fieldTypes.add(navalCargo);
-            navalCargoId = Pathfinder.fieldTypes.indexOf(navalCargo);
-            pathfinder.getField(state.rules.waveTeam, costNaval, navalCargoId);
+
         });
     }
 
