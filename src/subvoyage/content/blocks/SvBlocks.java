@@ -1250,7 +1250,7 @@ public class SvBlocks{
             researchCost = with(chromium,500,corallite,900);
             bridgeReplacement = SvBlocks.ductBridge;
             health = 180;
-            speed = 2f;
+            speed = 3.2f;
             envDisabled |= Env.scorching;
         }};
 
