@@ -1441,20 +1441,36 @@ public class SvBlocks{
 
             researchCost = with(chromium,3500,iridium,5310,tugSheet,3210);
 
+            squareSprite = false;
             itemCapacity = 10;
             size = 3;
-            craftEffect = Fx.smokePuff;
+            craftEffect = Fx.none;
             craftTime = 20f;
             envDisabled |= Env.scorching;
 
             consumeItem(sulfur,2);
-            consumeItem(corallite, 3);
+            consumeItem(corallite, 4);
             consumePower(1.3f);
             outputLiquid = new LiquidStack(argon, 30/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),
-                    new DrawLiquidRegion(argon)
+            new DrawLiquidRegion(argon),
+            new DrawArcSmelt(){{
+                flameColor = Color.valueOf("bd4453");
+                midColor = Color.valueOf("ff8c99");
+                flameRad = 1.0F;
+                circleSpace = 1.0F;
+                flameRadiusScl = 3.0F;
+                flameRadiusMag = 0.3F;
+                circleStroke = 1.25F;
+                particles = 16;
+                particleLife = 30.0F;
+                particleRad = 5.2F;
+                particleStroke = 0.8F;
+                particleLen = 2.25F;
+            }},
+            new DrawGlowRegion()
             );
         }};
 
