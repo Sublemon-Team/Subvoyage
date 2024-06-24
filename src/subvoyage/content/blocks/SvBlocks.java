@@ -82,7 +82,13 @@ public class SvBlocks{
             size = 3;
 
             unitType = marine;
-        }};
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
 
 
         offloadCoreGuardian = new OffloadCoreGuardian("offload-core-guardian") {{
@@ -91,7 +97,13 @@ public class SvBlocks{
             size = 4;
 
             unitType = marine;
-        }};;
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
 
         //payload
         helicopterFactory = new UnitFactory("helicopter-factory") {{
@@ -806,6 +818,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             destructible = true;
             isWater = false;
+            outlineIcon = true;
 
             priority = 0;
             health = 360;
@@ -1087,7 +1100,13 @@ public class SvBlocks{
             unitCapModifier = 12;
 
             bannedItems.addAll(crude);
-        }};
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
 
         coreShore = new SubvoyageCoreBlock("core-shore"){{
             requirements(Category.effect, with(spaclanium,1500,corallite,1200,chromium,1300,iridium,800));
@@ -1106,7 +1125,13 @@ public class SvBlocks{
             unitCapModifier = 18;
 
             bannedItems.addAll(crude);
-        }};
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
 
         coreReef = new SubvoyageCoreBlock("core-reef"){{
             requirements(Category.effect, with(spaclanium,3500,corallite,2200,chromium,1300,iridium,1000,quartzFiber,1000,tugSheet,800));
@@ -1124,7 +1149,13 @@ public class SvBlocks{
             unitCapModifier = 24;
 
             bannedItems.addAll(crude);
-        }};
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
 
         vault = new StorageBlock("vault"){
             {
