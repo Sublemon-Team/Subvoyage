@@ -1,23 +1,19 @@
 package subvoyage.content.world.blocks;
 
-import arc.graphics.g2d.*;
-import arc.math.Mathf;
-import arc.math.geom.Intersector;
-import arc.math.geom.Point2;
-import arc.struct.Seq;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
-import mindustry.Vars;
+import mindustry.*;
 import mindustry.content.*;
 import mindustry.game.*;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
-import mindustry.input.Placement;
+import mindustry.graphics.*;
+import mindustry.input.*;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 
 public class Buoy extends Radar {
     public boolean isWater = true;
