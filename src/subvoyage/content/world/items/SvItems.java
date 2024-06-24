@@ -35,7 +35,7 @@ public class SvItems{
             charge = 0.4f;
             hardness = 2;
         }};
-        crude = new Item("stone", Color.valueOf("393f42")) {{
+        crude = new Item("crude", Color.valueOf("393f42")) {{
             cost = 0.2f;
             lowPriority = true;
             buildable = false;

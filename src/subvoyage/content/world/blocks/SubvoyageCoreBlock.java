@@ -7,6 +7,9 @@ import mindustry.gen.Building;
 import mindustry.gen.Teamc;
 import mindustry.type.Item;
 import mindustry.world.blocks.storage.CoreBlock;
+import subvoyage.content.SvMusic;
+
+import static arc.Core.settings;
 
 public class SubvoyageCoreBlock extends CoreBlock {
     public Seq<Item> bannedItems = new Seq<>();
@@ -26,6 +29,7 @@ public class SubvoyageCoreBlock extends CoreBlock {
         public void update() {
             super.update();
             items.remove(Items.copper,1000);
+            SvMusic.theAtlacian.setVolume(settings.getInt("musicvol") / 150f);
         }
 
         @Override
