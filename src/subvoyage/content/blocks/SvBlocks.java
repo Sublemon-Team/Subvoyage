@@ -1579,14 +1579,14 @@ public class SvBlocks{
             hasPower = true;
         }};
 
-        tugRoller = new AttributeCrafter("tug-roller") {{
+        tugRoller = new TugRoller("tug-roller"){{
             requirements(Category.crafting,with(chromium,220,iridium,140,quartzFiber,60,sulfur,120));
 
             researchCost = with(chromium,5000,iridium,7000,quartzFiber,5000,sulfur,3200);
 
             itemCapacity = 30;
             size = 3;
-            craftEffect = Fx.smeltsmoke;
+            craftEffect = Fx.generatespark;
             craftTime = 100f;
             envDisabled |= Env.scorching;
 
@@ -1596,7 +1596,6 @@ public class SvBlocks{
             consumePower(9f);
 
             outputItem = new ItemStack(tugSheet,1);
-
             hasItems = true;
             hasLiquids = true;
             hasPower = true;
