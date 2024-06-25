@@ -1571,7 +1571,7 @@ public class SvBlocks{
             consumeItem(fineSand,8);
             consumeLiquid(argon,1.2f);
             consumePower(6f);
-            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(Color.valueOf("f4cec2")), new DrawDefault());
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(Color.valueOf("FDE8E2")), new DrawDefault());
             outputItem = new ItemStack(quartzFiber,2);
 
             hasItems = true;

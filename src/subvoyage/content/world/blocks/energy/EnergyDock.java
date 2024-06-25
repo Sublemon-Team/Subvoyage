@@ -152,7 +152,7 @@ public class EnergyDock extends PowerBlock {
     public void setBars() {
         super.setBars();
         addBar("power",entity -> {
-            if(!(entity.power.graph instanceof EnergyDockPowerGraph)) {
+            if(!(entity.power.graph instanceof EnergyDockPowerGraph g)) {
                 return new Bar(() ->
                         Core.bundle.format("bar.powerbalance",
                                 ((entity.power.graph.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long) (entity.power.graph.getPowerBalance() * 60)))),
@@ -162,7 +162,7 @@ public class EnergyDock extends PowerBlock {
             }
             else return new Bar(() ->
                 Core.bundle.format("bar.powerbalance",
-                        ((((EnergyDockPowerGraph) entity.power.graph).getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(((EnergyDockPowerGraph) entity.power.graph).getPowerBalanceVisual() * 60)))),
+                        ((g.getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalanceVisual() * 60)))),
                 () -> Pal.powerBar,
                 () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
             );
