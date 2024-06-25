@@ -58,7 +58,7 @@ public class SvBlocks{
             regenerator, regenProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
-            crudeSmelter,
+            crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
@@ -1048,7 +1048,14 @@ public class SvBlocks{
             consumeEffect = Fx.generatespark;
             generateEffect = Fx.pulverizeSmall;
 
-            drawer = new DrawMulti(new DrawDefault(), new DrawWarmupRegion());
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawGlowRegion(){{
+                alpha = 0.75f;
+                color = Color.violet;
+            }}
+            );
+
             consumeItem(spaclanium);
             consumeLiquid(water,0.5f);
         }};
@@ -1505,16 +1512,41 @@ public class SvBlocks{
             );
         }};
 
-        crudeSmelter = new CrudeSmelter("crude-smelter") {{
-            requirements(Category.crafting,with(spaclanium,100,iridium,50,clay,30));
-
-            researchCost = with(spaclanium,1000,iridium,1600,clay,600);
+        crudeCrucible = new CrudeSmelter("crude-crucible"){{
+            requirements(Category.crafting, with(spaclanium, 100, iridium, 50, clay, 30));
+            researchCost = with(spaclanium, 1000, iridium, 1600, clay, 600);
 
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smokePuff;
-            recipes = recipes(spaclanium,2,60,corallite,2,60,iridium,1,90,chromium,1,120);
+            recipes = recipes(spaclanium, 2, 60, corallite, 2, 60, iridium, 1, 90, chromium, 1, 120);
 
+            drawer = new DrawMulti(
+            new DrawDefault(),
+            new DrawFlame(){{
+                lightRadius = 70f;
+                flameRadius = 6f;
+            }}
+            );
+            consumeItem(crude, 6);
+            consumeLiquid(water, 0.5f);
+            consumePower(1.2f);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
+
+        crudeSmelter = new CrudeSmelter("crude-smelter") {{
+            requirements(Category.crafting,with(spaclanium,100,iridium,50,clay,30));
+            researchCost = with(spaclanium,1000,iridium,1600,clay,600);
+
+            itemCapacity = 30;
+            size = 2;
+            craftEffect = Fx.smokePuff;
+            recipes = recipes(spaclanium, 2, 120, corallite, 2, 120, iridium, 1, 160, chromium, 1, 190);
+
+            drawer = new DrawMulti(new DrawDefault(), new DrawFlame());
             consumeItem(crude,2);
             consumeLiquid(water,0.5f);
             consumePower(0.8f);
@@ -1539,7 +1571,7 @@ public class SvBlocks{
             consumeItem(fineSand,8);
             consumeLiquid(argon,1.2f);
             consumePower(6f);
-
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(Color.valueOf("f4cec2")), new DrawDefault());
             outputItem = new ItemStack(quartzFiber,2);
 
             hasItems = true;

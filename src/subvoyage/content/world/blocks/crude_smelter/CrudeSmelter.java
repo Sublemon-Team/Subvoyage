@@ -1,34 +1,22 @@
 package subvoyage.content.world.blocks.crude_smelter;
 
-import arc.Core;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.math.Mathf;
-import arc.scene.ui.layout.Table;
-import arc.struct.Seq;
-import arc.util.Eachable;
-import arc.util.Nullable;
-import arc.util.Time;
-import arc.util.io.Reads;
-import arc.util.io.Writes;
-import mindustry.entities.units.BuildPlan;
-import mindustry.type.Item;
-import mindustry.type.ItemStack;
-import mindustry.world.DirectionalItemBuffer;
-import mindustry.world.blocks.ItemSelection;
-import mindustry.world.blocks.distribution.Sorter;
-import mindustry.world.blocks.production.GenericCrafter;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatUnit;
-import mindustry.world.meta.StatValues;
+import arc.math.*;
+import arc.scene.ui.layout.*;
+import arc.struct.*;
+import arc.util.*;
+import arc.util.io.*;
+import mindustry.entities.units.*;
+import mindustry.type.*;
+import mindustry.world.*;
+import mindustry.world.blocks.*;
+import mindustry.world.blocks.production.*;
+import mindustry.world.meta.*;
 
-import java.util.HashMap;
+import java.util.*;
 
 import static mindustry.Vars.content;
 
 public class CrudeSmelter extends GenericCrafter {
-
-    public TextureRegion filter;
     public HashMap<Item,CrudeSmelterRecipe> recipes = new HashMap<>();
 
     public CrudeSmelter(String name) {
@@ -38,12 +26,6 @@ public class CrudeSmelter extends GenericCrafter {
         clearOnDoubleTap = true;
         config(Item.class, (CrudeSmelterBuild tile, Item item) -> tile.produceItem = item);
         configClear((CrudeSmelterBuild tile) -> tile.produceItem = null);
-    }
-
-    @Override
-    public void load() {
-        super.load();
-        filter = Core.atlas.find(name+"-filter");
     }
 
     @Override
@@ -97,15 +79,6 @@ public class CrudeSmelter extends GenericCrafter {
         }
 
         @Override
-        public void draw() {
-            super.draw();
-            if(produceItem != null) {
-                Draw.color(produceItem.color);
-                Draw.rect(filter,x,y);
-            }
-        }
-
-        @Override
         public void buildConfiguration(Table table) {
             ItemSelection.buildTable(CrudeSmelter.this,table,Seq.with(recipes.keySet()),() -> produceItem,this::configure,selectionRows,selectionColumns);
         }
@@ -115,12 +88,10 @@ public class CrudeSmelter extends GenericCrafter {
             return produceItem;
         }
 
-
         @Override
         public void updateTile() {
             CrudeSmelterRecipe recipe = recipes.getOrDefault(produceItem,recipes.values().iterator().next());
             if(efficiency > 0 && produceItem != null){
-
                 progress += getProgressIncrease(recipe.craftTime);
                 warmup = Mathf.approachDelta(warmup, warmupTarget(), warmupSpeed);
 
@@ -144,7 +115,6 @@ public class CrudeSmelter extends GenericCrafter {
         @Override
         public void craft() {
             consume();
-
             CrudeSmelterRecipe recipe = recipes.getOrDefault(produceItem,recipes.values().iterator().next());
             if(recipe.outputItem != null){
                 for(int i = 0; i < recipe.outputItem.amount; i++){
