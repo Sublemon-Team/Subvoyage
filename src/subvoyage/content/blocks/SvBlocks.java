@@ -1512,30 +1512,6 @@ public class SvBlocks{
             );
         }};
 
-        crudeCrucible = new CrudeSmelter("crude-crucible"){{
-            requirements(Category.crafting, with(spaclanium, 100, iridium, 50, clay, 30));
-            researchCost = with(spaclanium, 1000, iridium, 1600, clay, 600);
-
-            itemCapacity = 30;
-            size = 3;
-            craftEffect = Fx.smokePuff;
-            recipes = recipes(spaclanium, 2, 60, corallite, 2, 60, iridium, 1, 90, chromium, 1, 120);
-
-            drawer = new DrawMulti(
-            new DrawDefault(),
-            new DrawFlame(){{
-                lightRadius = 70f;
-                flameRadius = 6f;
-            }}
-            );
-            consumeItem(crude, 6);
-            consumeLiquid(water, 0.5f);
-            consumePower(1.2f);
-
-            hasItems = true;
-            hasLiquids = true;
-            hasPower = true;
-        }};
 
         crudeSmelter = new CrudeSmelter("crude-smelter") {{
             requirements(Category.crafting,with(spaclanium,100,iridium,50,clay,30));
@@ -1550,6 +1526,31 @@ public class SvBlocks{
             consumeItem(crude,2);
             consumeLiquid(water,0.5f);
             consumePower(0.8f);
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
+
+        crudeCrucible = new CrudeSmelter("crude-crucible"){{
+            requirements(Category.crafting, with(spaclanium, 500, iridium, 510, clay, 530,chromium,350));
+            researchCost = with(spaclanium, 5000, iridium, 5600, clay, 3600,chromium,2750);
+
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.smokePuff;
+            recipes = recipes(spaclanium, 2, 60, corallite, 2, 60, iridium, 1, 90, chromium, 1, 120);
+
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawFlame(){{
+                        lightRadius = 70f;
+                        flameRadius = 6f;
+                    }}
+            );
+            consumeItem(crude, 3);
+            consumeLiquid(water, 1f);
+            consumePower(1.2f);
 
             hasItems = true;
             hasLiquids = true;
