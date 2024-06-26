@@ -8,6 +8,7 @@ import arc.util.*;
 import mindustry.*;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
+import subvoyage.content.world.items.SvItems;
 
 public class TugRoller extends AttributeCrafter{
     public float sinMag = 4f, sinScl = 10f, sideOffset = 0f, lenOffset = -1f, horiOffset = 0f, angleOffset = 0f;
@@ -46,18 +47,16 @@ public class TugRoller extends AttributeCrafter{
         public class ItemParticle{
             float r = Mathf.random(Mathf.PI2);
             float d = Mathf.lerp(0, 4, Mathf.sqrt(Mathf.random()));
+            float aD = 0f;
             Item item;
 
             void draw(){
                 if(item != null){
-                    Draw.rect(item.fullIcon, x + Mathf.cos(r) * d, y + Mathf.sin(r) * d, Vars.itemSize, Vars.itemSize);
+                    Draw.rect(item.fullIcon, x + Mathf.cos(r) * (aD*d), y + Mathf.sin(r) * d, Vars.itemSize, Vars.itemSize);
                 }
             }
         }
 
-        // TODO: Render only two items (Chromium, Sulfur) and after a spark the output
-        // TODO: Sync the movements of pistons to a craft progress
-        // я усталь не дают сделать ниче гады свет крадут фу (делалось на примере проджект юнити)
         @Override
         public void updateTile(){
             super.updateTile();
@@ -88,8 +87,16 @@ public class TugRoller extends AttributeCrafter{
                         }
                     });
                 }
+                for(int i = 0; i < particles.size; i++){
+                    if(particles.get(i).item != SvItems.sulfur && particles.get(i).item != SvItems.chromium)
+                        particles.get(i).item = null;
+                    particles.get(i).aD = curLen1/sinMag-lenOffset/sinMag;
+                }
             }
         }
+
+        float curLen1 = 0f;
+        float curLen2 = 0f;
 
         @Override
         public void draw(){
@@ -99,7 +106,16 @@ public class TugRoller extends AttributeCrafter{
             }
 
             for(int i = 0; i < 2; i++){
-                float len = Mathf.absin(this.totalProgress() + sideOffset * i, sinScl, sinMag) + lenOffset;
+                float len = Mathf.absin(progress*90 + sideOffset * i, sinScl, sinMag) + lenOffset;
+                float thisLen = 0f;
+                if(i == 0) {
+                    curLen1 = Mathf.lerp(curLen1,len,Time.delta/5);
+                    thisLen = curLen1;
+                }
+                else {
+                    curLen2 = Mathf.lerp(curLen2,len,Time.delta/5);
+                    thisLen = curLen2;
+                }
                 float angle = angleOffset + i * 360f / 2;
                 TextureRegion reg =
                 angle >= 135 && angle < 315 ? region2 : region1;
@@ -108,7 +124,7 @@ public class TugRoller extends AttributeCrafter{
                     Draw.yscl = -1f;
                 }
 
-                Tmp.v1.trns(angle, len, -horiOffset);
+                Tmp.v1.trns(angle, thisLen, -horiOffset);
                 Draw.rect(reg, x + Tmp.v1.x, y + Tmp.v1.y, angle);
 
                 Draw.yscl = 1f;
