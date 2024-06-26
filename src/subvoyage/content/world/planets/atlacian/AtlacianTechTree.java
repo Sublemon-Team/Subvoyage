@@ -110,7 +110,9 @@ public class AtlacianTechTree {
 
                 });
                 node(crudeSmelter,with(research(tectonicDrill)),() -> {
+                    node(crudeCrucible,with(research(poweredEnhancer)),() -> {
 
+                    });
                 });
                 node(argonCentrifuge, () -> {
                     node(argonCondenser,() -> {
