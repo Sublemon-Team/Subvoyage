@@ -11,7 +11,7 @@ import mindustry.world.blocks.production.*;
 
 public class TugRoller extends AttributeCrafter{
     public float sinMag = 4f, sinScl = 10f, sideOffset = 0f, lenOffset = -1f, horiOffset = 0f, angleOffset = 0f;
-    public TextureRegion region1, region2, bottom;
+    public TextureRegion region1, region2, bottom, pistons;
 
     public TugRoller(String name){
         super(name);
@@ -23,6 +23,12 @@ public class TugRoller extends AttributeCrafter{
         bottom = Core.atlas.find(this.name + "-bottom");
         region1 = Core.atlas.find(this.name + "-piston" + "0", this.name + "-piston");
         region2 = Core.atlas.find(this.name + "-piston" + "1", this.name + "-piston");
+        pistons = Core.atlas.find(this.name+"-pistons");
+    }
+
+    @Override
+    public TextureRegion[] icons() {
+        return new TextureRegion[] {bottom,pistons,region};
     }
 
     public class TugRollerBuild extends AttributeCrafterBuild{
