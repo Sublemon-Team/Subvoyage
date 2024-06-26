@@ -1,6 +1,5 @@
 package subvoyage.content.blocks;
 
-import mindustry.content.Blocks;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
@@ -40,6 +39,7 @@ public class SvWorldBlocks{
         }};
         oreChromium = new OreBlock(SvItems.chromium) {{
             oreDefault = false;
+            variants = 5;
             oreThreshold = 0.9f;
             oreScale = 10.42614f;
             playerUnmineable = true;
