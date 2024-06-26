@@ -12,6 +12,7 @@ public class AtlacianPlanet extends Planet {
     @Override
     public void updateBaseCoverage() {
         for(Sector sector : sectors){
+            //TODO: make this accurate
             float sum = 1f;
             for(Sector other : sector.near()){
                 if(other.generateEnemyBase || other.info.attack){

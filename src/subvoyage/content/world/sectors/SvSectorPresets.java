@@ -11,7 +11,7 @@ public class SvSectorPresets {
     public static void load() {
 
         //TODO UNCOMMENT WHEN SECTORS ARE RESTORED
-        divingPoint = new SectorPreset("divingPoint",atlacian,7) {{
+        divingPoint = new SectorPreset("divingPoint",atlacian,13) {{
             alwaysUnlocked = true;
 
             overrideLaunchDefaults = true;

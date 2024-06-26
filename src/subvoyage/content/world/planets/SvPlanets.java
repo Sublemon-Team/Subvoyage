@@ -14,6 +14,7 @@ import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.atlacian.*;
+import subvoyage.content.world.sectors.SvSectorPresets;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Planets.*;
@@ -28,9 +29,9 @@ public class SvPlanets{
             generator = new AtlacianPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 6);
             cloudMeshLoader = () -> new MultiMesh(
-                    new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.25f), 2, 0.45f, 0.9f, 0.38f),
-                    new HexSkyMesh(this, 1, 0.9f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.2f), 2, 0.45f, 1f, 0.41f),
-                    new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.25f), 4, 0.6f, 2f, 0.41f)
+                    new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.15f), 2, 0.45f, 0.9f, 0.38f),
+                    new HexSkyMesh(this, 1, 0.9f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.1f), 2, 0.45f, 1f, 0.41f),
+                    new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.15f), 4, 0.6f, 2f, 0.41f)
             );
 
 
@@ -60,14 +61,14 @@ public class SvPlanets{
             };
 
             iconColor = Color.valueOf("7286AD");
-            lightColor = Color.white.cpy().a(0.025f);
-            atmosphereColor = Color.valueOf("EAC7DE").a(0.25f);
+            lightColor = Color.white.cpy().a(0.01f);
+            atmosphereColor = Color.valueOf("EAC7DE").a(0.05f);
             atmosphereRadIn = 0.03f;
             atmosphereRadOut = 0.1f;
 
-            minZoom = 0.35f;
+            minZoom = 0.1f;
             camRadius = 1f;
-            startSector = 7;
+            startSector = 13;
             defaultEnv = Environment.legarytic | Env.terrestrial;
 
             alwaysUnlocked = true;

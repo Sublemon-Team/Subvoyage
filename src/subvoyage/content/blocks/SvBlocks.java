@@ -895,7 +895,10 @@ public class SvBlocks{
 
             researchCost = with(clay,3);
 
-            bridgeReplacement = conduitBridge;
+            bridgeReplacement = SvBlocks.conduitBridge;
+            rotBridgeReplacement = bridgeReplacement;
+            junctionReplacement = SvBlocks.conduitRouter;
+
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
 
@@ -907,7 +910,10 @@ public class SvBlocks{
 
             researchCost = with(clay,400,chromium,100);
 
-            bridgeReplacement = conduitBridge;
+            bridgeReplacement = SvBlocks.conduitBridge;
+            rotBridgeReplacement = bridgeReplacement;
+            junctionReplacement = SvBlocks.conduitRouter;
+
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
             liquidCapacity = 16f;

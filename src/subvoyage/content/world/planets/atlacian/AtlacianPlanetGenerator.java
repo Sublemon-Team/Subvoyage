@@ -9,6 +9,7 @@ import arc.util.noise.*;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
+import mindustry.graphics.g3d.PlanetGrid;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -16,6 +17,9 @@ import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.planets.SvLoadouts;
+import subvoyage.content.world.sectors.SvSectorPresets;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static mindustry.Vars.*;
 import static subvoyage.content.blocks.SvWorldBlocks.*;
@@ -58,7 +62,32 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
     @Override
     public void generateSector(Sector sector){
-        sector.threat = rand.nextFloat()*rand.nextFloat()*10;
+        PlanetGrid.Ptile tile = sector.tile;
+
+        boolean any = false;
+        float noise = Noise.snoise3(tile.v.x, tile.v.y, tile.v.z, 0.001f, 0.5f);
+
+        if(noise > 0.027){
+            any = true;
+        }
+
+        if(noise < 0.15){
+            for(PlanetGrid.Ptile other : tile.tiles){
+                //no sectors near start sector!
+                if(sector.planet.getSector(other).id == sector.planet.startSector){
+                    return;
+                }
+
+                if(sector.planet.getSector(other).generateEnemyBase){
+                    any = false;
+                    break;
+                }
+            }
+        }
+
+        if(any){
+            sector.generateEnemyBase = true;
+        }
     }
 
     @Override
@@ -155,7 +184,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         });
 
         float difficulty = sector.threat*1.2f;
-        boolean isOffloaded = rand.chance(0.3);
+        boolean isOffloaded = sector.generateEnemyBase;
         float length = width / 2.6f;
         float spawnDegree = rand.random(360f);
         Vec2 trns = Tmp.v1.trns(spawnDegree, length);
@@ -206,6 +235,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             }
 
             state.rules.attackMode = true;
+            sector.generateEnemyBase = true;
             state.rules.waveSending = false;
             state.rules.waves = false;
             state.rules.waveTimer = false;
@@ -228,6 +258,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             state.rules.spawns = spawns;
             state.rules.waves = true;
             state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(difficulty, 0f));
+            sector.generateEnemyBase = false;
 
             tiles.get(endX,endY).setOverlay(Blocks.spawn);
         }
@@ -322,6 +353,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             }
         }
     }
+
 
     float rawHeight(Vec3 position){
         return Simplex.noise3d(seed, 8, 0.7f, 1f, position.x, position.y, position.z);
