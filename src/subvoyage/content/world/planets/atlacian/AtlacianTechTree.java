@@ -70,7 +70,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(submersibleDrill, () -> {
+            node(submersibleDrill,with(onsector(hillFacility)), () -> {
                node(tectonicDrill, () -> {
 
                });
@@ -131,7 +131,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(spaclaniumHydrolyzer,() -> {
+            node(spaclaniumHydrolyzer,with(onsector(hillFacility)),() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
@@ -156,7 +156,7 @@ public class AtlacianTechTree {
             });
 
             node(whirl, () -> {
-                node(rupture, () -> {
+                node(rupture,with(onsector(hillFacility)), () -> {
                     node(awe,() -> {
                         node(resonance,with(research(burden)), () -> {
                             node(cascade,() -> {
@@ -215,11 +215,13 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
+                node(hillFacility,with(sector(divingPoint)),() -> {
 
+                });
             });
             node(spaclanium,with(produce(spaclanium)), () -> {
                 node(corallite,with(produce(corallite)),() -> {
-                    node(iridium,with(produce(iridium)),() -> {
+                    node(iridium,with(produce(iridium),onsector(hillFacility)),() -> {
 
                     });
                     node(chromium,with(produce(chromium)),() -> {
@@ -331,6 +333,9 @@ public class AtlacianTechTree {
     }
     public static Objectives.SectorComplete sector(SectorPreset preset) {
         return new Objectives.SectorComplete(preset);
+    }
+    public static Objectives.OnSector onsector(SectorPreset preset) {
+        return new Objectives.OnSector(preset);
     }
     public static Objectives.Produce produce(UnlockableContent content) {
         return new Objectives.Produce(content);

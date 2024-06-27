@@ -121,7 +121,7 @@ public class SvBlocks{
 
         //drills
         submersibleDrill = new SubmersibleDrill("submersible-drill") {{
-            requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
+            requirements(Category.production, with(corallite, 50, spaclanium, 10));
             tier = 2;
             hardnessDrillMultiplier = 0.9f;
             drillTime = 470;
@@ -132,9 +132,9 @@ public class SvBlocks{
             fogRadius = 2;
             squareSprite = false;
 
-            researchCost = with(corallite,200,spaclanium,100,iridium,30);
+            researchCost = with(corallite,200,spaclanium,100);
 
-            consumeLiquid(SvLiquids.polygen, 5/60f);
+            consumeLiquid(water, 30/60f);
         }};
 
         featherDrill = new SubmersibleDrill("feather-drill") {{
@@ -158,9 +158,9 @@ public class SvBlocks{
         }};
 
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
-            requirements(Category.production, with(corallite, 50, spaclanium, 10, iridium, 10));
+            requirements(Category.production, with(corallite, 200, spaclanium, 100, iridium, 100));
 
-            researchCost = with(corallite,500,spaclanium,400,iridium,100);
+            researchCost = with(corallite,1000,spaclanium,600,iridium,400);
 
             craftTime = 400;
             size = 3;

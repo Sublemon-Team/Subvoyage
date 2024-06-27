@@ -40,15 +40,14 @@ public class SvPlanets{
             unlockedOnLand.add(SvBlocks.corePuffer);
 
             sectorSeed = 6;
-            allowWaves = true;
-            allowWaveSimulation = true;
+
             allowSectorInvasion = true;
-            allowLaunchSchematics = true;
+            allowLaunchSchematics = false;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = true;
 
             //doesn't play well with configs
-            prebuildBase = false;
+            prebuildBase = true;
             ruleSetter = r -> {
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;

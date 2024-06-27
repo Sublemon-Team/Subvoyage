@@ -6,7 +6,7 @@ import mindustry.type.*;
 import static subvoyage.content.world.planets.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset divingPoint, crystalShores, furtherInstallation;
+    public static SectorPreset divingPoint, hillFacility;
 
     public static void load() {
 
@@ -25,27 +25,21 @@ public class SvSectorPresets {
 
             rules = (r) -> {
                 r.attackMode = false;
-                r.canGameOver = false;
+                r.winWave = 1;
                 r.loadout = Seq.with();
                 //r.infiniteResources = true;
             };
-        }};/*
-        crystalShores = new SectorPreset("crystalShores",atlacian,15) {{
-            overrideLaunchDefaults = false;
-            rules = (r) -> {
-                r.attackMode = false;
-            };
-            captureWave = 15;
-            difficulty = 2;
         }};
 
-        furtherInstallation = new SectorPreset("furtherInstallation",atlacian,3) {{
-            overrideLaunchDefaults = false;
+        hillFacility = new SectorPreset("hillFacility",atlacian,25) {{
+            difficulty = 2;
+            captureWave = 1;
             rules = (r) -> {
                 r.attackMode = false;
+                r.canGameOver = false;
+                r.loadout = Seq.with();
+                r.winWave = 20;
             };
-            captureWave = 25;
-            difficulty = 3;
-        }};*/
+        }};
     }
 }
