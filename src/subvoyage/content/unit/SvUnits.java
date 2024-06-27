@@ -128,7 +128,7 @@ public class SvUnits{
                     sprite = "missile-large";
                     width = 6f;
                     height = 13f;
-                    lifetime = 120f;
+                    lifetime = 70f;
                     hitSize = 6f;
                     hitColor = backColor = trailColor = Color.valueOf("feb380");
                     frontColor = Color.white;
