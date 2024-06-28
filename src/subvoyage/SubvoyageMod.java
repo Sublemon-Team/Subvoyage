@@ -1,16 +1,10 @@
 package subvoyage;
 
 import arc.*;
-import arc.math.geom.Geometry;
-import arc.math.geom.Vec2;
 import arc.util.*;
-import mindustry.ai.Pathfinder;
 import mindustry.game.EventType.*;
-import mindustry.gen.Groups;
 import mindustry.gen.Musics;
 import mindustry.mod.*;
-import mindustry.net.Administration;
-import mindustry.world.Tile;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
 import subvoyage.content.blocks.editor.vapor.VaporControl;
@@ -21,6 +15,7 @@ import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.*;
 import subvoyage.content.world.planets.atlacian.*;
 import subvoyage.content.world.sectors.*;
+import subvoyage.dialog.BetaCompleteDialog;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -29,10 +24,13 @@ import static mindustry.Vars.state;
 public class SubvoyageMod extends Mod {
     public static String ID = "subvoyage";
 
+    public BetaCompleteDialog betaCompleteDialog;
+
 
     public SubvoyageMod(){
         //listen for game load event
         Events.on(ClientLoadEvent.class, e -> {
+            betaCompleteDialog = new BetaCompleteDialog();
             /*for (TechTree.TechNode node : TechTree.all) {
                 UnlockableContent content = node.content;
                 if (content.locked()) {
@@ -40,6 +38,9 @@ public class SubvoyageMod extends Mod {
                     content.unlock();
                 }
             }*/
+        });
+        Events.on(UnlockEvent.class,e -> {
+            if(e.content == SvSectorPresets.noxiousTarn) e.content.clearUnlock();
         });
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();
@@ -54,6 +55,11 @@ public class SubvoyageMod extends Mod {
                     SvMusic.theAtlacian.play();
                 }
             }
+        });
+        Events.on(SectorCaptureEvent.class,e -> {
+            if(e.sector.preset == SvSectorPresets.facility) {
+                betaCompleteDialog.show(SvPlanets.atlacian);
+            };
         });
         Events.on(WorldLoadEvent.class, e -> {
 
