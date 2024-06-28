@@ -4,6 +4,7 @@ import arc.*;
 import arc.math.geom.Geometry;
 import arc.math.geom.Vec2;
 import arc.util.*;
+import mindustry.ai.Pathfinder;
 import mindustry.game.EventType.*;
 import mindustry.gen.Groups;
 import mindustry.gen.Musics;
@@ -83,6 +84,8 @@ public class SubvoyageMod extends Mod {
         EnvRenderer.init();
 
         AtlacianTechTree.loadBalanced();
+
+        VaporControl.load();
     }
 
 }
