@@ -1,14 +1,12 @@
-package subvoyage.content.world.blocks.offload_core;
+package subvoyage.content.blocks.editor.offload_core;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
-import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
-import mindustry.game.Waves;
 import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.type.UnitType;

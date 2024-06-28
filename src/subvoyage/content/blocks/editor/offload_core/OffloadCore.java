@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks.offload_core;
+package subvoyage.content.blocks.editor.offload_core;
 
 import arc.graphics.*;
 import arc.graphics.g2d.*;

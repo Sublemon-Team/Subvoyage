@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks.energy;
+package subvoyage.content.blocks.energy;
 
 import arc.math.Mathf;
 import arc.math.WindowedMean;
