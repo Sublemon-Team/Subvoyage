@@ -1,6 +1,7 @@
 package subvoyage.content.world.sectors;
 
 import arc.struct.Seq;
+import mindustry.Vars;
 import mindustry.type.*;
 
 import static subvoyage.content.world.planets.SvPlanets.atlacian;
@@ -31,12 +32,13 @@ public class SvSectorPresets {
             };
         }};
 
+
         hillFacility = new SectorPreset("hillFacility",atlacian,25) {{
             difficulty = 2;
-            captureWave = 1;
+            captureWave = 20;
+
             rules = (r) -> {
                 r.attackMode = false;
-                r.canGameOver = false;
                 r.loadout = Seq.with();
                 r.winWave = 20;
             };

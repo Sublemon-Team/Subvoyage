@@ -215,7 +215,7 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
-                node(hillFacility,with(sector(divingPoint)),() -> {
+                node(hillFacility,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
 
                 });
             });

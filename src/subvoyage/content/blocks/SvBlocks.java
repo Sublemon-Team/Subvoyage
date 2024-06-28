@@ -479,12 +479,13 @@ public class SvBlocks{
             targetAir = true;
             squareSprite = false;
             ammo(
-            chromium, new BasicBulletType(6f, 40){{
+            chromium, new BasicBulletType(6f, 60){{
                 sprite = "large-orb";
                 inaccuracy = 1f;
-                ammoMultiplier = 1f;
+                ammoMultiplier = 10f;
+                ammoPerShot = 3;
 
-                width = 8f;
+                width = 12f;
                 height = 12f;
                 lifetime = 120f;
                 shootEffect = SvFx.pulverize;
@@ -492,6 +493,9 @@ public class SvBlocks{
 
                 hitColor = backColor = trailColor = Color.valueOf("d5cba3");
                 frontColor = Color.white;
+
+                homingPower = 0.18f;
+                homingRange = 16f;
 
                 trailRotation = true;
                 trailEffect = Fx.disperseTrail;
