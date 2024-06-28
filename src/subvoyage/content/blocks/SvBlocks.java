@@ -1112,15 +1112,15 @@ public class SvBlocks{
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
             unitType = marine;
-            health = 6000;
-            itemCapacity = 5000;
+            health = 4000;
+            itemCapacity = 3000;
             size = 4;
 
             incinerateNonBuildable = true;
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 12;
+            unitCapModifier = 7;
 
             bannedItems.addAll(crude);
         }
@@ -1145,7 +1145,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 18;
+            unitCapModifier = 12;
 
             bannedItems.addAll(crude);
         }
@@ -1169,7 +1169,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 24;
+            unitCapModifier = 20;
 
             bannedItems.addAll(crude);
         }
