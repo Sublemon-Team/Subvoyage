@@ -4,6 +4,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.entities.bullet.*;
@@ -823,6 +824,8 @@ public class SvBlocks{
             destructible = true;
             isWater = false;
             outlineIcon = true;
+
+            consumePower(4f/60f);
 
             priority = 0;
             health = 360;
