@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks;
+package subvoyage.content.blocks.editor.decoration;
 
 import arc.*;
 import arc.graphics.g2d.*;

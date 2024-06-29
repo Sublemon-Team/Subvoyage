@@ -1,6 +1,8 @@
 package subvoyage.content.world.planets.atlacian;
 
+import arc.Core;
 import arc.struct.*;
+import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
@@ -70,7 +72,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(submersibleDrill,with(onsector(hillFacility)), () -> {
+            node(submersibleDrill,with(onsector(facility)), () -> {
                node(tectonicDrill, () -> {
 
                });
@@ -131,7 +133,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(spaclaniumHydrolyzer,with(onsector(hillFacility)),() -> {
+            node(spaclaniumHydrolyzer,with(onsector(facility)),() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
@@ -156,7 +158,7 @@ public class AtlacianTechTree {
             });
 
             node(whirl, () -> {
-                node(rupture,with(onsector(hillFacility)), () -> {
+                node(rupture,with(onsector(facility)), () -> {
                     node(awe,() -> {
                         node(resonance,with(research(burden)), () -> {
                             node(cascade,() -> {
@@ -215,13 +217,15 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
-                node(hillFacility,with(sector(divingPoint)),() -> {
+                node(facility,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
+                    node(noxiousTarn,with(sector(facility),never()),() -> {
 
+                    });
                 });
             });
             node(spaclanium,with(produce(spaclanium)), () -> {
                 node(corallite,with(produce(corallite)),() -> {
-                    node(iridium,with(produce(iridium),onsector(hillFacility)),() -> {
+                    node(iridium,with(produce(iridium),onsector(facility)),() -> {
 
                     });
                     node(chromium,with(produce(chromium)),() -> {
@@ -276,7 +280,6 @@ public class AtlacianTechTree {
                 node(energyDock);
                 node(energyDistributor);
             });
-
             node(submersibleDrill,Seq.with(/*new Objectives.SectorComplete(crystalShores),*/
                     new Objectives.Research(waterMetallizer),
                     new Objectives.Produce(polygen)),() -> {
@@ -334,6 +337,9 @@ public class AtlacianTechTree {
     public static Objectives.SectorComplete sector(SectorPreset preset) {
         return new Objectives.SectorComplete(preset);
     }
+    public static Objectives.Objective never() {
+        return new Inaccesible();
+    }
     public static Objectives.OnSector onsector(SectorPreset preset) {
         return new Objectives.OnSector(preset);
     }
@@ -344,4 +350,18 @@ public class AtlacianTechTree {
         return new Objectives.Research(content);
     }
 
+
+
+    public static class Inaccesible implements Objectives.Objective {
+
+        @Override
+        public boolean complete() {
+            return false;
+        }
+
+        @Override
+        public String display() {
+            return Core.bundle.format("requirement.never");
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks;
+package subvoyage.content.blocks.production;
 
 import arc.*;
 import arc.audio.*;

@@ -7,6 +7,7 @@ import mindustry.gen.Musics;
 import mindustry.mod.*;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
+import subvoyage.content.blocks.editor.vapor.VaporControl;
 import subvoyage.content.liquids.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
@@ -14,6 +15,7 @@ import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.*;
 import subvoyage.content.world.planets.atlacian.*;
 import subvoyage.content.world.sectors.*;
+import subvoyage.dialog.BetaCompleteDialog;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -22,10 +24,13 @@ import static mindustry.Vars.state;
 public class SubvoyageMod extends Mod {
     public static String ID = "subvoyage";
 
+    public BetaCompleteDialog betaCompleteDialog;
+
 
     public SubvoyageMod(){
         //listen for game load event
         Events.on(ClientLoadEvent.class, e -> {
+            betaCompleteDialog = new BetaCompleteDialog();
             /*for (TechTree.TechNode node : TechTree.all) {
                 UnlockableContent content = node.content;
                 if (content.locked()) {
@@ -33,7 +38,9 @@ public class SubvoyageMod extends Mod {
                     content.unlock();
                 }
             }*/
-
+        });
+        Events.on(UnlockEvent.class,e -> {
+            if(e.content == SvSectorPresets.noxiousTarn) e.content.clearUnlock();
         });
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();
@@ -49,11 +56,16 @@ public class SubvoyageMod extends Mod {
                 }
             }
         });
+        Events.on(SectorCaptureEvent.class,e -> {
+            if(e.sector.preset == SvSectorPresets.facility) {
+                betaCompleteDialog.show(SvPlanets.atlacian);
+            };
+        });
         Events.on(WorldLoadEvent.class, e -> {
 
         });
         Events.on(MusicRegisterEvent.class, e -> {
-            control.sound.ambientMusic.add(SvMusic.theAtlacian);
+            //control.sound.ambientMusic.add(SvMusic.theAtlacian);
         });
     }
 
@@ -78,6 +90,8 @@ public class SubvoyageMod extends Mod {
         EnvRenderer.init();
 
         AtlacianTechTree.loadBalanced();
+
+        VaporControl.load();
     }
 
 }

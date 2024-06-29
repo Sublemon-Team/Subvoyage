@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks.crude_smelter;
+package subvoyage.content.blocks.crude_smelter;
 
 import arc.math.*;
 import arc.scene.ui.layout.*;

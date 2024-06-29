@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks.energy;
+package subvoyage.content.blocks.energy;
 
 import mindustry.world.blocks.power.PowerGraph;
 import mindustry.world.modules.PowerModule;

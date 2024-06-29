@@ -15,6 +15,7 @@ import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.ui.dialogs.PlanetDialog;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
@@ -26,12 +27,16 @@ import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.units.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.content.blocks.editor.SubvoyageCoreBlock;
+import subvoyage.content.blocks.fog.Beacon;
+import subvoyage.content.blocks.fog.Buoy;
+import subvoyage.content.blocks.production.SubmersibleDrill;
+import subvoyage.content.blocks.production.TugRoller;
 import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
-import subvoyage.content.world.blocks.*;
-import subvoyage.content.world.blocks.crude_smelter.*;
-import subvoyage.content.world.blocks.energy.*;
-import subvoyage.content.world.blocks.offload_core.*;
+import subvoyage.content.blocks.crude_smelter.*;
+import subvoyage.content.blocks.energy.*;
+import subvoyage.content.blocks.editor.offload_core.*;
 import subvoyage.content.world.draw.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
@@ -479,12 +484,13 @@ public class SvBlocks{
             targetAir = true;
             squareSprite = false;
             ammo(
-            chromium, new BasicBulletType(6f, 40){{
+            chromium, new BasicBulletType(6f, 60){{
                 sprite = "large-orb";
                 inaccuracy = 1f;
-                ammoMultiplier = 1f;
+                ammoMultiplier = 10f;
+                ammoPerShot = 3;
 
-                width = 8f;
+                width = 12f;
                 height = 12f;
                 lifetime = 120f;
                 shootEffect = SvFx.pulverize;
@@ -492,6 +498,9 @@ public class SvBlocks{
 
                 hitColor = backColor = trailColor = Color.valueOf("d5cba3");
                 frontColor = Color.white;
+
+                homingPower = 0.18f;
+                homingRange = 16f;
 
                 trailRotation = true;
                 trailEffect = Fx.disperseTrail;
@@ -820,6 +829,8 @@ public class SvBlocks{
             isWater = false;
             outlineIcon = true;
 
+            consumePower(4f/60f);
+
             priority = 0;
             health = 360;
 
@@ -895,10 +906,6 @@ public class SvBlocks{
 
             researchCost = with(clay,3);
 
-            bridgeReplacement = SvBlocks.conduitBridge;
-            rotBridgeReplacement = bridgeReplacement;
-            junctionReplacement = SvBlocks.conduitRouter;
-
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
 
@@ -909,10 +916,6 @@ public class SvBlocks{
             requirements(Category.liquid, with(chromium, 1, clay, 1));
 
             researchCost = with(clay,400,chromium,100);
-
-            bridgeReplacement = SvBlocks.conduitBridge;
-            rotBridgeReplacement = bridgeReplacement;
-            junctionReplacement = SvBlocks.conduitRouter;
 
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
@@ -926,7 +929,8 @@ public class SvBlocks{
             requirements(Category.liquid, with(corallite, 4, clay, 8));
 
             researchCost = with(corallite,80,clay,40);
-
+            ((Conduit) clayConduit).rotBridgeReplacement = this;
+            ((Conduit) highPressureConduit).rotBridgeReplacement = this;
             range = 4;
             hasPower = false;
 
@@ -941,6 +945,8 @@ public class SvBlocks{
             liquidCapacity = 20f;
             underBullets = true;
             solid = false;
+
+
 
             envDisabled |= Env.scorching;
         }};
@@ -1102,15 +1108,15 @@ public class SvBlocks{
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
             unitType = marine;
-            health = 6000;
-            itemCapacity = 5000;
+            health = 4000;
+            itemCapacity = 3000;
             size = 4;
 
             incinerateNonBuildable = true;
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 12;
+            unitCapModifier = 7;
 
             bannedItems.addAll(crude);
         }
@@ -1135,7 +1141,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 18;
+            unitCapModifier = 12;
 
             bannedItems.addAll(crude);
         }
@@ -1159,7 +1165,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 24;
+            unitCapModifier = 20;
 
             bannedItems.addAll(crude);
         }
@@ -1239,18 +1245,9 @@ public class SvBlocks{
         }};
 
         //transport
-        ductBridge = new DuctBridge("duct-bridge") {{
-            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
-            researchCost = with(corallite, 16, spaclanium, 4);
-
-            envDisabled |= Env.scorching;
-            health = 90;
-            speed = 4f;
-        }};
 
         duct = new Duct("duct"){{
             requirements(Category.distribution, with(corallite, 1));
-            bridgeReplacement = SvBlocks.ductBridge;
             health = 90;
             speed = 4f;
             envDisabled |= Env.scorching;
@@ -1261,10 +1258,21 @@ public class SvBlocks{
         highPressureDuct = new Duct("high-pressure-duct") {{
             requirements(Category.distribution,with(chromium,1,corallite,1));
             researchCost = with(chromium,500,corallite,900);
-            bridgeReplacement = SvBlocks.ductBridge;
             health = 180;
             speed = 3.2f;
             envDisabled |= Env.scorching;
+        }};
+
+        ductBridge = new DuctBridge("duct-bridge") {{
+            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
+            researchCost = with(corallite, 16, spaclanium, 4);
+
+            ((Duct) duct).bridgeReplacement = this;
+            ((Duct) highPressureDuct).bridgeReplacement = this;
+
+            envDisabled |= Env.scorching;
+            health = 90;
+            speed = 4f;
         }};
 
         ductRouter = new Router("duct-router") {{

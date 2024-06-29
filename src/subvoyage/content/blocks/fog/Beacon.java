@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks;
+package subvoyage.content.blocks.fog;
 
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -11,7 +11,6 @@ import mindustry.*;
 import mindustry.content.*;
 import mindustry.entities.Units;
 import mindustry.game.*;
-import mindustry.gen.Unit;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.*;
 import mindustry.input.Placement;

@@ -1,4 +1,4 @@
-package subvoyage.content.world.blocks;
+package subvoyage.content.blocks.fog;
 
 import arc.math.*;
 import arc.math.geom.*;

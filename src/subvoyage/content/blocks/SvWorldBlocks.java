@@ -1,9 +1,13 @@
 package subvoyage.content.blocks;
 
+import mindustry.type.Category;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
+import subvoyage.content.blocks.editor.decoration.TreeBlock;
 import subvoyage.content.world.items.*;
+
+import static mindustry.type.ItemStack.with;
 
 public class SvWorldBlocks{
     public static Block
@@ -17,6 +21,7 @@ public class SvWorldBlocks{
     agaryteBoulder, agaryteBlocks, hauntedTree;
 
     public static void load() {
+
         oreSpaclanium = new OreBlock(SvItems.spaclanium){{
             oreDefault = false;
             oreThreshold = 0.81f;

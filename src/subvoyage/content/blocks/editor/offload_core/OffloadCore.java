@@ -1,9 +1,10 @@
-package subvoyage.content.world.blocks.offload_core;
+package subvoyage.content.blocks.editor.offload_core;
 
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
+import arc.scene.ui.layout.Table;
 import arc.util.*;
 import arc.util.io.*;
 import mindustry.content.*;
@@ -116,7 +117,7 @@ public class OffloadCore extends CoreBlock {
                     +y
             ));
             if(completeType == 0x79) {
-                completeType = (byte) ((byte) rand.nextInt(60)%5);
+                completeType = (byte) ((byte) rand.nextInt(60)%4);
                 damageToDeal = 10000+rand.nextInt(10000);
                 waveToSurvive = 20+rand.nextInt(2*2+1)*5;
                 secondsToSurvive = 8*60+rand.nextInt(8*30)*2;
@@ -134,6 +135,11 @@ public class OffloadCore extends CoreBlock {
         @Override
         public void drawStatus() {
             super.drawStatus();
+        }
+
+        @Override
+        public void buildConfiguration(Table table) {
+            super.buildConfiguration(table);
         }
 
         @Override
