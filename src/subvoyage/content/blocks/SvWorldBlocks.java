@@ -1,10 +1,12 @@
 package subvoyage.content.blocks;
 
+import mindustry.editor.EditorTool;
 import mindustry.type.Category;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
 import subvoyage.content.blocks.editor.decoration.TreeBlock;
+import subvoyage.content.blocks.editor.vapor.VaporFloor;
 import subvoyage.content.world.items.*;
 
 import static mindustry.type.ItemStack.with;
@@ -18,9 +20,15 @@ public class SvWorldBlocks{
     // walls
     legartyteWall, agaryteWall,
     // boulders
-    agaryteBoulder, agaryteBlocks, hauntedTree;
+    agaryteBoulder, agaryteBlocks, hauntedTree,
+    //editor
+    vapor;
 
     public static void load() {
+
+        vapor = new VaporFloor("vapor") {{
+            requirements(Category.logic, BuildVisibility.editorOnly, with());
+        }};
 
         oreSpaclanium = new OreBlock(SvItems.spaclanium){{
             oreDefault = false;
