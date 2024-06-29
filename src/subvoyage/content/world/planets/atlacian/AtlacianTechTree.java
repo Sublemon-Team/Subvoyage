@@ -197,22 +197,22 @@ public class AtlacianTechTree {
                 );
             });
 
-            node(vault,() -> {
+            node(coreShore,() -> {
                 node(unloader,() -> {
 
                 });
-                node(largeVault,with(research(coreShore)),() -> {
+                node(vault,() -> {
+                    node(largeVault,with(research(coreReef)),() -> {
 
+                    });
                 });
                 node(coreDecoder,() -> {
                     node(coreDecrypter,with(research(coreShore)), () -> {
 
                     });
                 });
-                node(coreShore,() -> {
-                    node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {
+                node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {
 
-                    });
                 });
             });
 
