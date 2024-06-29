@@ -1,9 +1,16 @@
 package subvoyage;
 
 import arc.*;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.math.Mathf;
+import arc.struct.Bits;
 import arc.util.*;
 import mindustry.game.EventType.*;
+import mindustry.gen.Groups;
 import mindustry.gen.Musics;
+import mindustry.graphics.Pal;
+import mindustry.graphics.Shaders;
 import mindustry.mod.*;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
@@ -26,6 +33,7 @@ public class SubvoyageMod extends Mod {
 
     public BetaCompleteDialog betaCompleteDialog;
 
+    public static VaporControl vaporControl;
 
     public SubvoyageMod(){
         //listen for game load event
@@ -67,6 +75,39 @@ public class SubvoyageMod extends Mod {
         Events.on(MusicRegisterEvent.class, e -> {
             //control.sound.ambientMusic.add(SvMusic.theAtlacian);
         });
+        Events.run(Trigger.update,() -> {
+            if(state.isGame()) {
+                if (!state.isPaused()) {
+                    vaporControl.update();
+                }
+            }
+        });
+        Events.run(Trigger.draw, () -> {
+            if(state.isGame()) {
+                Bits bits = vaporControl.getVapor();
+                if(bits != null) {
+                    Draw.z(VaporControl.layer);
+                    Draw.color(Pal.neoplasm1);
+                    for (int i = 0; i < bits.length(); i++) {
+                        boolean isVapor = bits.get(i);
+                        int x = i % world.width();
+                        int y = Math.floorDiv(i,world.height());
+                        if(isVapor) {
+                            Draw.alpha(0.95f);
+                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,10f,1f),
+                                    y*tilesize+Mathf.absin(Time.time+i+90f,10f,1f),tilesize);
+                            Draw.alpha(0.5f);
+                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,9f,1f),
+                                    y*tilesize+Mathf.absin(Time.time+i+90f,8f,1f),tilesize*1.5f);
+                            Draw.alpha(0.1f);
+                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,7f,1f),
+                                    y*tilesize+Mathf.absin(Time.time+i+90f,6f,1f),tilesize*2.5f);
+                        }
+                    }
+                    Draw.reset();
+                }
+            }
+        });
     }
 
     @Override
@@ -91,6 +132,7 @@ public class SubvoyageMod extends Mod {
 
         AtlacianTechTree.loadBalanced();
 
+        vaporControl = new VaporControl();
         VaporControl.load();
     }
 

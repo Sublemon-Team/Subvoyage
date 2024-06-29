@@ -1102,6 +1102,80 @@ public class SvBlocks{
         }};
 
         //storage
+
+        vault = new StorageBlock("vault"){
+            {
+                requirements(Category.effect, with(chromium, 250, iridium, 125));
+
+                researchCost = with(chromium,1000,iridium,2000);
+
+                size = 2;
+                itemCapacity = 300;
+                scaledHealth = 55;
+                squareSprite = false;
+            }
+            
+            @Override
+            protected TextureRegion[] icons() {
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
+        largeVault = new StorageBlock("large-vault"){
+            {
+                requirements(Category.effect, with(chromium, 500, iridium, 345));
+                researchCost = with(chromium,2000,iridium,3500);
+                size = 3;
+                itemCapacity = 1000;
+                scaledHealth = 155;
+                squareSprite = false;
+            }
+
+            @Override
+            protected TextureRegion[] icons() {
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };
+
+        unloader = new Unloader("unloader"){{
+            requirements(Category.effect, with(chromium, 25, clay, 30));
+
+            researchCost = with(chromium,100,clay,300);
+
+            speed = 60f / 11f;
+            group = BlockGroup.transportation;
+            squareSprite = false;
+        }
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+            }
+        };;
+
+        liquidContainer = new LiquidRouter("liquid-container"){{
+            requirements(Category.liquid, with(corallite, 30, clay, 35));
+
+            researchCost = with(corallite,540,clay,350);
+
+            liquidCapacity = 700f;
+            size = 2;
+            liquidPadding = 3f / 4f;
+
+            solid = true;
+            squareSprite = false;
+        }};
+
+        liquidTank = new LiquidRouter("liquid-tank"){{
+            requirements(Category.liquid, with(corallite,80, clay, 140, iridium, 30));
+            researchCost = with(corallite,1040,clay,870,iridium,500);
+            liquidCapacity = 1800f;
+            health = 500;
+            size = 3;
+            liquidPadding = 6f / 4f;
+
+            solid = true;
+            squareSprite = false;
+        }};
+
         corePuffer = new SubvoyageCoreBlock("core-puffer"){{
             requirements(Category.effect, with(spaclanium,600,corallite,600,clay,300,sulfur,300));
             alwaysUnlocked = true;
@@ -1175,74 +1249,6 @@ public class SvBlocks{
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
         };
-
-        vault = new StorageBlock("vault"){
-            {
-                requirements(Category.effect, with(chromium, 250, iridium, 125));
-
-                researchCost = with(chromium,1000,iridium,2000);
-
-                size = 2;
-                itemCapacity = 300;
-                scaledHealth = 55;
-                squareSprite = false;
-            }
-            
-            @Override
-            protected TextureRegion[] icons() {
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
-            }
-        };
-        largeVault = new StorageBlock("large-vault"){
-            {
-                requirements(Category.effect, with(chromium, 500, iridium, 345));
-                researchCost = with(chromium,2000,iridium,3500);
-                size = 3;
-                itemCapacity = 1000;
-                scaledHealth = 155;
-                squareSprite = false;
-            }
-
-            @Override
-            protected TextureRegion[] icons() {
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
-            }
-        };
-
-        unloader = new Unloader("unloader"){{
-            requirements(Category.effect, with(chromium, 25, clay, 30));
-
-            researchCost = with(chromium,100,clay,300);
-
-            speed = 60f / 11f;
-            group = BlockGroup.transportation;
-            squareSprite = false;
-        }};
-
-        liquidContainer = new LiquidRouter("liquid-container"){{
-            requirements(Category.liquid, with(corallite, 30, clay, 35));
-
-            researchCost = with(corallite,540,clay,350);
-
-            liquidCapacity = 700f;
-            size = 2;
-            liquidPadding = 3f / 4f;
-
-            solid = true;
-            squareSprite = false;
-        }};
-
-        liquidTank = new LiquidRouter("liquid-tank"){{
-            requirements(Category.liquid, with(corallite,80, clay, 140, iridium, 30));
-            researchCost = with(corallite,1040,clay,870,iridium,500);
-            liquidCapacity = 1800f;
-            health = 500;
-            size = 3;
-            liquidPadding = 6f / 4f;
-
-            solid = true;
-            squareSprite = false;
-        }};
 
         //transport
 
