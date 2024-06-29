@@ -906,10 +906,6 @@ public class SvBlocks{
 
             researchCost = with(clay,3);
 
-            bridgeReplacement = SvBlocks.conduitBridge;
-            rotBridgeReplacement = bridgeReplacement;
-            junctionReplacement = SvBlocks.conduitRouter;
-
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
 
@@ -920,10 +916,6 @@ public class SvBlocks{
             requirements(Category.liquid, with(chromium, 1, clay, 1));
 
             researchCost = with(clay,400,chromium,100);
-
-            bridgeReplacement = SvBlocks.conduitBridge;
-            rotBridgeReplacement = bridgeReplacement;
-            junctionReplacement = SvBlocks.conduitRouter;
 
             envDisabled |= Env.scorching;
             botColor = Color.valueOf("54333c");
@@ -937,7 +929,8 @@ public class SvBlocks{
             requirements(Category.liquid, with(corallite, 4, clay, 8));
 
             researchCost = with(corallite,80,clay,40);
-
+            ((Conduit) clayConduit).rotBridgeReplacement = this;
+            ((Conduit) highPressureConduit).rotBridgeReplacement = this;
             range = 4;
             hasPower = false;
 
@@ -952,6 +945,8 @@ public class SvBlocks{
             liquidCapacity = 20f;
             underBullets = true;
             solid = false;
+
+
 
             envDisabled |= Env.scorching;
         }};
@@ -1250,18 +1245,9 @@ public class SvBlocks{
         }};
 
         //transport
-        ductBridge = new DuctBridge("duct-bridge") {{
-            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
-            researchCost = with(corallite, 16, spaclanium, 4);
-
-            envDisabled |= Env.scorching;
-            health = 90;
-            speed = 4f;
-        }};
 
         duct = new Duct("duct"){{
             requirements(Category.distribution, with(corallite, 1));
-            bridgeReplacement = SvBlocks.ductBridge;
             health = 90;
             speed = 4f;
             envDisabled |= Env.scorching;
@@ -1272,10 +1258,21 @@ public class SvBlocks{
         highPressureDuct = new Duct("high-pressure-duct") {{
             requirements(Category.distribution,with(chromium,1,corallite,1));
             researchCost = with(chromium,500,corallite,900);
-            bridgeReplacement = SvBlocks.ductBridge;
             health = 180;
             speed = 3.2f;
             envDisabled |= Env.scorching;
+        }};
+
+        ductBridge = new DuctBridge("duct-bridge") {{
+            requirements(Category.distribution, with(corallite, 4,spaclanium,2));
+            researchCost = with(corallite, 16, spaclanium, 4);
+
+            ((Duct) duct).bridgeReplacement = this;
+            ((Duct) highPressureDuct).bridgeReplacement = this;
+
+            envDisabled |= Env.scorching;
+            health = 90;
+            speed = 4f;
         }};
 
         ductRouter = new Router("duct-router") {{
