@@ -5,7 +5,7 @@
 [![Discord](https://img.shields.io/discord/1252898892882903082?style=for-the-badge&logo=discord&label=SUBVOYAGE-GENERAL)](https://discord.gg/8k3XKSPsqD)
 
 
-> [Mindustry](https://github.com/Anuken/Mindustry) Modification adding new oceanic-themed Atlacian planet, that aims to provide unique experience for players.
+> [Mindustry](https://github.com/Anuken/Mindustry) Mod adding new oceanic-themed Atlacian planet, that aims to provide unique experience for players.
 
 ***
 ## Developers
