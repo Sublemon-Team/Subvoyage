@@ -14,7 +14,7 @@ main: "subvoyage.SubvoyageMod"
 description: "Aquatic-stylized mod with new planet and unique mechanics"
 
 #the mod version
-version: 1.0
+version: 0.1-beta
 
 #the minimum game build required to run this mod
 minGameVersion: 145
