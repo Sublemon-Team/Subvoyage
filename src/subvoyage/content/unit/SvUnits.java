@@ -240,7 +240,7 @@ public class SvUnits{
             speed = 1.5f;
             rotateSpeed = 2f;
             accel = 0.45f;
-            health = 2220f;
+            health = 4220f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -386,7 +386,7 @@ public class SvUnits{
             speed = 1.6f;
             rotateSpeed = 4f;
             accel = 0.45f;
-            health = 2820f;
+            health = 8820f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -513,7 +513,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(90, 25f){{
+                            bullet = new ExplosionBulletType(150, 25f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
@@ -545,7 +545,7 @@ public class SvUnits{
             speed = 1.8f;
             rotateSpeed = 3f;
             accel = 0.45f;
-            health = 6820f;
+            health = 24820f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -751,7 +751,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(60, 30f){{
+                            bullet = new ExplosionBulletType(250, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
