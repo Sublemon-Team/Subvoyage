@@ -16,6 +16,9 @@ public class SvItems{
 
         spaclanium = new Item("spaclanium", Color.valueOf("D8C4FF")) {{
             cost = 0.3f;
+            radioactivity = 0.3f;
+            charge = 0.1f;
+            flammability = 0.2f;
         }};
         clay = new Item("clay", Color.valueOf("B28768")) {{
             cost = 0.5f;
@@ -29,6 +32,7 @@ public class SvItems{
         sulfur = new Item("sulfur",Color.valueOf("C4A981")) {{
             cost = 0.6f;
             hardness = 1;
+            explosiveness = 0.8f;
         }};
         iridium = new Item("iridium", Color.valueOf("8b9098")) {{
             cost = 0.8f;
@@ -48,10 +52,13 @@ public class SvItems{
         tugSheet = new Item("tug-sheet", Color.valueOf("72817d")){{
             cost = 1.2f;
             charge = 0.1f;
+            hardness = 4;
         }};
         quartzFiber = new Item("quartz-fiber", Color.valueOf("f4cec2")){{
             cost = 1.2f;
             charge = 0.5f;
+            radioactivity = 0.3f;
+            hardness = 3;
         }};
 
         atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, crude);
