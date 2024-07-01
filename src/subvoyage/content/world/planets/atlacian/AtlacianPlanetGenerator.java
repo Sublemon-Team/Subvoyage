@@ -209,16 +209,22 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             for (int i = 0; i < coresCount; i++) {
                 final float[] degree = {rand.random(360f)};
                 final boolean[] contains = {false};
-                existingCores.forEach(e -> {
-                    if(Math.abs(e-degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) contains[0] = true;
-                });
+                for (Float e : existingCores) {
+                    if (Math.abs(e - degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) {
+                        contains[0] = true;
+                        break;
+                    }
+                }
                 int attempts = 0;
                 while (contains[0]) {
                     if(attempts > 36) break;
                     degree[0] = rand.random(360f);
-                    existingCores.forEach(e -> {
-                        if(Math.abs(e-degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) contains[0] = true;
-                    });
+                    for (Float e : existingCores) {
+                        if (Math.abs(e - degree[0]) < (e.equals(spawnDegree) ? 80 : 10)) {
+                            contains[0] = true;
+                            break;
+                        }
+                    }
                     attempts++;
                 }
                 if(attempts >= 36) continue;
@@ -322,13 +328,13 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
             }
         });
 
-        offloadCorePositions.forEach(e -> {
+        for (Vec2 e : offloadCorePositions) {
             int coreX = (int) e.x;
             int coreY = (int) e.y;
             Tile tile = tiles.get(coreX,coreY);
             tile.setBlock(SvBlocks.offloadCore,Team.malis,0);
             if(tile.build instanceof CoreBlock.CoreBuild cb) state.teams.registerCore(cb);
-        });
+        }
         if(isOffloaded) {
             Tile coreTile = tiles.get(endX, endY);
             coreTile.setBlock(SvBlocks.offloadCoreGuardian, Team.malis, 0);

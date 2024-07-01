@@ -11,6 +11,7 @@ import mindustry.game.EventType;
 import mindustry.game.FogControl;
 import mindustry.game.Team;
 import mindustry.gen.Groups;
+import mindustry.gen.Unit;
 import mindustry.graphics.FogRenderer;
 import mindustry.io.SaveFileReader;
 import mindustry.io.SaveVersion;
@@ -100,10 +101,9 @@ public class VaporControl implements SaveFileReader.CustomChunk {
                 tile.clearOverlay();
             }
         }
-
-        Groups.unit.forEach(u -> {
+        for (Unit u : Groups.unit) {
             if(u.team == Team.sharded && isVaporised(u.tileX(),u.tileY())) u.damage(1f);
-        });
+        }
     }
 
 

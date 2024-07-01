@@ -148,10 +148,10 @@ public class WindTurbine extends SolarGenerator {
             ArrayList<Float> weatherAngles = new ArrayList<>();
             weatherAngles.add(90f);
             float[] angleSum = new float[1];
-            Groups.weather.forEach(e -> {
+            for (WeatherState e : Groups.weather) {
                 angleSum[0] +=e.windVector.angle();
                 weatherAngles.add(e.windVector.angle());
-            });
+            }
             float angle = angleSum[0]/weatherAngles.size();
             //WeatherState w = Groups.weather.find(ws -> ws.weather() != null && ws.weather().sound == Sounds.wind);
             totalTime += efficiency / (powerProduction - 20f) * delta();

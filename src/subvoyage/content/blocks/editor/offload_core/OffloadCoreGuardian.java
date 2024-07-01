@@ -10,6 +10,7 @@ import mindustry.content.StatusEffects;
 import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.type.UnitType;
+import mindustry.world.Tile;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -75,9 +76,9 @@ public class OffloadCoreGuardian extends OffloadCore {
 
         private void checkCores() {
             AtomicInteger coreCount = new AtomicInteger();
-            world.tiles.forEach(e -> {
+            for (Tile e : world.tiles) {
                 if(e.build instanceof OffloadCoreBuild && e.build != this) coreCount.getAndIncrement();
-            });
+            }
             if(coreCount.get() <= 0 && !isBossStarted) initiateBoss();
         }
 
