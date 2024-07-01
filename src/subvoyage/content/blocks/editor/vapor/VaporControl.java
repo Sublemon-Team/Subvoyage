@@ -5,6 +5,7 @@ import arc.struct.Bits;
 import arc.struct.Seq;
 import arc.util.Nullable;
 import arc.util.noise.Simplex;
+import mindustry.Vars;
 import mindustry.ai.Pathfinder;
 import mindustry.game.EventType;
 import mindustry.game.FogControl;
@@ -55,11 +56,11 @@ public class VaporControl implements SaveFileReader.CustomChunk {
 
     public static void load() {
         Seq<Pathfinder.PathCost> newCosts = Seq.with();
-        Pathfinder.costTypes.forEach(e -> {
-            //TODO: replace when vapor check is done
+        for (int i = 0; i < Pathfinder.costTypes.size; i++) {
+            Pathfinder.PathCost e = Pathfinder.costTypes.get(0);
             newCosts.add((team, tile) ->
-                    vaporControl.isVaporised(world.tile(tile).x,world.tile(tile).y) ? -1 : e.getCost(team,tile));
-        });
+                vaporControl.isVaporised(world.tile(tile).x,world.tile(tile).y) ? -1 : e.getCost(team,tile));
+        }
     }
 
     public boolean isVaporised(int x,int y) {
