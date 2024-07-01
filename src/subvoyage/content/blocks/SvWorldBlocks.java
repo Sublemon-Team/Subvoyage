@@ -55,7 +55,6 @@ public class SvWorldBlocks{
             variants = 5;
             oreThreshold = 0.9f;
             oreScale = 10.42614f;
-            playerUnmineable = true;
         }};
         legartyteStone = new Floor("legartyte-stone"){{
             attributes.set(Attribute.water, -1f);

@@ -958,6 +958,8 @@ public class SvBlocks{
 
             researchCost = with(spaclanium,3,corallite,1);
 
+            squareSprite = false;
+
             drawer = new DrawMulti(
             new DrawDefault(),
             new DrawLiquidRegion(water)
