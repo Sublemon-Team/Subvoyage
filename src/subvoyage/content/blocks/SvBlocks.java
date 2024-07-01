@@ -1544,6 +1544,8 @@ public class SvBlocks{
             craftEffect = Fx.smokePuff;
             recipes = recipes(spaclanium, 2, 120, corallite, 2, 120, iridium, 1, 160, chromium, 1, 190);
 
+            squareSprite = false;
+
             drawer = new DrawMulti(new DrawDefault(), new DrawFlame());
             consumeItem(crude,2);
             consumeLiquid(water,0.5f);
@@ -1557,6 +1559,8 @@ public class SvBlocks{
         crudeCrucible = new CrudeSmelter("crude-crucible"){{
             requirements(Category.crafting, with(spaclanium, 500, iridium, 510, clay, 530,chromium,350));
             researchCost = with(spaclanium, 5000, iridium, 5600, clay, 3600,chromium,2750);
+
+            squareSprite = false;
 
             itemCapacity = 30;
             size = 3;
