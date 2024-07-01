@@ -10,12 +10,14 @@ import arc.math.geom.Point2;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.core.Renderer;
+import mindustry.core.UI;
 import mindustry.entities.TargetPriority;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
+import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.BeamNode;
 import mindustry.world.blocks.power.PowerBlock;
@@ -30,6 +32,7 @@ import java.util.Arrays;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
 
 public class EnergyCross extends PowerBlock {
     public int range = 5;
@@ -63,8 +66,23 @@ public class EnergyCross extends PowerBlock {
     @Override
     public void setBars(){
         super.setBars();
-        addBar("power", PowerNode.makePowerBalance());
-        addBar("batteries", PowerNode.makeBatteryBalance());
+        addBar("power",entity -> {
+            if(!(entity.power.graph instanceof EnergyDockPowerGraph g)) {
+                return new Bar(() ->
+                        Core.bundle.format("bar.powerbalance",
+                                ((entity.power.graph.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long) (entity.power.graph.getPowerBalance() * 60)))),
+                        () -> Pal.powerBar,
+                        () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
+                );
+            }
+            else return new Bar(() ->
+                    Core.bundle.format("bar.powerbalance",
+                            ((g.getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalanceVisual() * 60)))),
+                    () -> Pal.powerBar,
+                    () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
+            );
+        });
+        addBar("batteries", makeBatteryBalance());
     }
 
     @Override
