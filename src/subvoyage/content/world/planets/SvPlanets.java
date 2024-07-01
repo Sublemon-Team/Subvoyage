@@ -1,6 +1,7 @@
 package subvoyage.content.world.planets;
 
 import arc.graphics.*;
+import arc.scene.ui.Dialog;
 import arc.struct.*;
 import mindustry.content.*;
 import mindustry.game.*;
@@ -25,6 +26,7 @@ public class SvPlanets{
     public static void load() {
 
         serpulo.orbitSpacing = 3f;
+
         atlacian = new AtlacianPlanet("atlacian", serpulo, 0.6f, 2) {{
             generator = new AtlacianPlanetGenerator();
             meshLoader = () -> new HexMesh(this, 6);
@@ -42,6 +44,7 @@ public class SvPlanets{
             sectorSeed = 6;
 
             allowSectorInvasion = false;
+            allowWaveSimulation = true;
             allowLaunchSchematics = false;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = true;
