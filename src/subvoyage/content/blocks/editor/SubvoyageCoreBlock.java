@@ -1,13 +1,11 @@
 package subvoyage.content.blocks.editor;
 
-import arc.struct.Seq;
-import mindustry.content.Fx;
-import mindustry.content.Items;
-import mindustry.gen.Building;
-import mindustry.gen.Teamc;
-import mindustry.type.Item;
-import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.SvMusic;
+import arc.struct.*;
+import mindustry.content.*;
+import mindustry.gen.*;
+import mindustry.type.*;
+import mindustry.world.blocks.storage.*;
+import subvoyage.content.*;
 
 import static arc.Core.settings;
 
@@ -38,8 +36,6 @@ public class SubvoyageCoreBlock extends CoreBlock {
             items.remove(Items.copper,1000);
             SvMusic.theAtlacian.setVolume(settings.getInt("musicvol") / 150f);
         }
-
-
 
         @Override
         public void handleItem(Building source, Item item) {
