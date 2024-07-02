@@ -153,7 +153,7 @@ public class SvUnits{
             speed = 1.3f;
             rotateSpeed = 3f;
             accel = 0.25f;
-            health = 1250f;
+            health = 2250f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -188,13 +188,13 @@ public class SvUnits{
             weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
-                reload = 60f;
+                reload = 180f;
                 recoil = 2f;
                 shootSound = Sounds.mediumCannon;
 
                 top = false;
                 alternate = false;
-                shoot.shots = 4;
+                shoot.shots = 8;
                 shoot.shotDelay = 15f;
                 bullet = new BasicBulletType(){{
                     sprite = "missile-large";
@@ -227,7 +227,8 @@ public class SvUnits{
                     speed = 0.8f;
                     drag = -0.020f;
                     homingPower = 0.05f;
-                    splashDamage = 25f;
+
+                    splashDamage = 2f;
                     splashDamageRadius = 20f;
                 }};
             }});
@@ -357,6 +358,43 @@ public class SvUnits{
                             bullet = new ExplosionBulletType(40, 15){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
+                                fragBullets = 5;
+                                fragBullet = new BasicBulletType(4f,10f) {{
+                                    sprite = "missile-large";
+                                    width = height = 8f;
+                                    maxRange = 50f;
+                                    ignoreRotation = true;
+
+                                    hitColor = trailColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    trailWidth = 2f;
+                                    trailLength = 8;
+                                    hitEffect = despawnEffect = Fx.blastExplosion;
+                                    smokeEffect = SvFx.shootLauncher;
+                                    hitSound = Sounds.plasmaboom;
+
+                                    backColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    mixColorTo = Color.white;
+
+                                    ejectEffect = Fx.none;
+                                    hitSize = 22f;
+
+                                    collidesAir = true;
+                                    lifetime = 87f;
+
+                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                                    keepVelocity = false;
+                                    weaveMag = 2f;
+                                    weaveScale = 1f;
+                                    speed = 0.8f;
+                                    drag = -0.020f;
+                                    homingPower = 0.01f;
+
+                                    splashDamage = 10f;
+                                    splashDamageRadius = 10f;
+                                }};
+
                                 shootEffect = new ExplosionEffect(){{
                                     lifetime = 50f;
                                     waveStroke = 5f;
@@ -754,6 +792,82 @@ public class SvUnits{
                             bullet = new ExplosionBulletType(250, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
+
+
+                                fragBullets = 2;
+                                fragBullet = new BasicBulletType(10f,60f) {{
+                                    sprite = "missile-large";
+                                    width = height = 8f;
+                                    maxRange = 50f;
+                                    ignoreRotation = true;
+
+                                    hitColor = trailColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    trailWidth = 2f;
+                                    trailLength = 8;
+                                    hitEffect = despawnEffect = Fx.blastExplosion;
+                                    smokeEffect = SvFx.shootLauncher;
+                                    hitSound = Sounds.plasmaboom;
+
+                                    backColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    mixColorTo = Color.white;
+
+                                    ejectEffect = Fx.none;
+                                    hitSize = 22f;
+
+                                    collidesAir = true;
+                                    lifetime = 30f;
+
+                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                                    keepVelocity = false;
+                                    weaveMag = 2f;
+                                    weaveScale = 1f;
+                                    speed = 0.8f;
+                                    drag = -0.020f;
+                                    homingPower = 0.01f;
+
+                                    fragBullets = 10;
+                                    fragBullet = new BasicBulletType(20f,30f) {{
+                                        sprite = "missile-large";
+                                        width = height = 8f;
+                                        maxRange = 50f;
+                                        ignoreRotation = true;
+
+                                        hitColor = trailColor = Color.valueOf("feb380");
+                                        frontColor = Color.white;
+                                        trailWidth = 2f;
+                                        trailLength = 8;
+                                        hitEffect = despawnEffect = Fx.blastExplosion;
+                                        smokeEffect = SvFx.shootLauncher;
+                                        hitSound = Sounds.plasmaboom;
+
+                                        backColor = Color.valueOf("feb380");
+                                        frontColor = Color.white;
+                                        mixColorTo = Color.white;
+
+                                        ejectEffect = Fx.none;
+                                        hitSize = 22f;
+
+                                        collidesAir = true;
+                                        lifetime = 30f;
+
+                                        hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                                        keepVelocity = false;
+                                        weaveMag = 2f;
+                                        weaveScale = 1f;
+                                        speed = 0.8f;
+                                        drag = -0.020f;
+                                        homingPower = 0.01f;
+
+                                        splashDamage = 20f;
+                                        splashDamageRadius = 10f;
+                                    }};
+
+                                    splashDamage = 20f;
+                                    splashDamageRadius = 10f;
+                                }};
+
                                 shootEffect = new ExplosionEffect(){{
                                     lifetime = 50f;
                                     waveStroke = 5f;
