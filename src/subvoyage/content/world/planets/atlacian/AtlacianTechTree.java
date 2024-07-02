@@ -228,7 +228,7 @@ public class AtlacianTechTree {
                     node(iridium,with(produce(iridium),onsector(facility)),() -> {
 
                     });
-                    node(chromium,with(produce(chromium)),() -> {
+                    node(chromium,with(research(crudeSmelter)),() -> {
                         node(quartzFiber,with(produce(quartzFiber)),() -> {
 
                         });

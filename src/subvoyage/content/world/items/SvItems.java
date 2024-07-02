@@ -37,7 +37,7 @@ public class SvItems{
         iridium = new Item("iridium", Color.valueOf("8b9098")) {{
             cost = 0.8f;
             charge = 0.4f;
-            hardness = 1;
+            hardness = 2;
         }};
         crude = new Item("crude", Color.valueOf("393f42")) {{
             cost = 0.2f;
@@ -47,7 +47,7 @@ public class SvItems{
         chromium = new Item("chromium", Color.valueOf("8e898b")){{
             cost = 0.9f;
             charge = 0.3f;
-            hardness = 1;
+            hardness = 3;
         }};
         tugSheet = new Item("tug-sheet", Color.valueOf("72817d")){{
             cost = 1.2f;
