@@ -283,38 +283,113 @@ public class SvBlocks{
             targetGround = false;
             targetAir = true;
             squareSprite = false;
-            ammo(
-            corallite, new BasicBulletType(6f, 16){{
-                inaccuracy = 2.5f;
-                width = 6f;
-                height = 12f;
-                lifetime = 120f;
-                shootEffect = SvFx.pulverize;
-                smokeEffect = Fx.none;
-                hitColor = backColor = trailColor = Pal.plastaniumFront;
-                frontColor = Color.white;
-                trailWidth = 2f;
-                trailLength = 4;
-                hitEffect = despawnEffect = Fx.hitBulletColor;
-            }},
 
-            sulfur, new BasicBulletType(3f, 50){{
-                reloadMultiplier = 0.3f;
+            shoot = new ShootHelix() {{
+                mag = 3;
+            }};
+
+
+            ammo(
+            sulfur, new BasicBulletType(6f, 40){{
                 width = 6f;
                 height = 12f;
-                lifetime = 85f;
+                lifetime = 30f;
                 shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
                 hitColor = backColor = trailColor = Pal.missileYellow;
                 frontColor = Color.white;
-                trailWidth = 2f;
-                trailLength = 6;
+                trailWidth = 6f;
+                trailLength = 12;
                 trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
                 hitEffect = despawnEffect = Fx.hitBulletColor;
+                shoot = new ShootHelix();
+                ammoPerShot = 3;
+                fragBullet = intervalBullet = new BasicBulletType(6f, 2) {{
+                    width = 9f;
+                    hitSize = 5f;
+                    height = 15f;
+                    pierce = true;
+                    lifetime = 15f;
+                    pierceBuilding = true;
+                    hitColor = backColor = trailColor = Pal.bulletYellow;
+                    frontColor = Color.white;
+                    trailWidth = 2.1f;
+                    trailLength = 5;
+                    shoot = new ShootHelix();
 
-                status = StatusEffects.slow;
-                statusDuration = 60f;
-            }}
+                    status = StatusEffects.slow;
+                    statusDuration = 60f;
+                    hitEffect = despawnEffect = new WaveEffect(){{
+                        colorFrom = colorTo = Pal.boostFrom;
+                        sizeTo = 4f;
+                        strokeFrom = 4f;
+                        lifetime = 10f;
+                    }};
+                    buildingDamageMultiplier = 0.3f;
+                    homingPower = 0.2f;
+                    homingRange = 30f;
+                }};
+                intervalRandomSpread = 0f;
+                intervalSpread = 80f;
+                intervalBullets = 3;
+                intervalDelay = -1f;
+                bulletInterval = 10f;
+
+                fragRandomSpread = 0f;
+                fragSpread = 90f;
+                fragBullets = 3;
+                fragVelocityMin = 1f;
+            }},
+            quartzFiber, new BasicBulletType(5f, 40){{
+                        width = 12f;
+                        height = 12f;
+                        lifetime = 30f;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = Pal.thoriumPink;
+                        frontColor = Color.white;
+                        trailWidth = 6f;
+                        trailLength = 12;
+                        trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+                        hitEffect = despawnEffect = Fx.hitBulletColor;
+                        shoot = new ShootHelix();
+
+                        fragBullet = intervalBullet = new BasicBulletType(9f, 12) {{
+                            width = 9f;
+                            hitSize = 5f;
+                            height = 15f;
+                            pierce = true;
+                            lifetime = 35f;
+                            pierceBuilding = true;
+                            hitColor = backColor = trailColor = Pal.thoriumPink;
+                            frontColor = Color.white;
+                            trailWidth = 2.1f;
+                            trailLength = 5;
+                            shoot = new ShootHelix();
+
+                            status = StatusEffects.slow;
+                            statusDuration = 60f;
+                            hitEffect = despawnEffect = new WaveEffect(){{
+                                colorFrom = colorTo = Pal.thoriumPink;
+                                sizeTo = 4f;
+                                strokeFrom = 4f;
+                                lifetime = 10f;
+                            }};
+                            buildingDamageMultiplier = 0.3f;
+                            homingPower = 0.2f;
+                            homingRange = 30f;
+                        }};
+                        intervalRandomSpread = 0f;
+                        intervalSpread = 80f;
+                        intervalBullets = 3;
+                        intervalDelay = -1f;
+                        bulletInterval = 10f;
+
+                        fragRandomSpread = 0f;
+                        fragSpread = 90f;
+                        fragBullets = 3;
+                        fragVelocityMin = 1f;
+                    }}
             );
 
             drawer = new DrawTurret("atlacian-"){{
@@ -327,20 +402,19 @@ public class SvBlocks{
                 }});
 
                 parts.add(new RegionPart("-blade-mid"){{
-                    progress = PartProgress.recoil;
+                    //progress = PartProgress.recoil;
+                    progress = PartProgress.heat;
                     moveY = -1.25f;
                 }});
             }};
 
             shootSound = Sounds.railgun;
-            reload = 15f;
+            reload = 80f;
             shootY = 5f;
             recoil = 0.5f;
             priority = 0;
             range = 260f;
             scaledHealth = 200;
-            coolant = consumeCoolant(0.5f);
-            coolantMultiplier = 1f;
 
             limitRange(6);
         }};
@@ -377,6 +451,7 @@ public class SvBlocks{
                 ammoMultiplier = 1f;
                 speed = 0;
                 lifetime = 1f;
+
                 killShooter = false;
             }};
             consumePower(3.3f);
