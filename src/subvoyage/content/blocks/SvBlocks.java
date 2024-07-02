@@ -488,12 +488,39 @@ public class SvBlocks{
             }});
 
             shootType = new ExplosionBulletType(54f,range) {{
-                collidesAir = false;
+                collidesAir = true;
                 buildingDamageMultiplier = 1.1f;
                 ammoMultiplier = 1f;
                 speed = 0;
                 lifetime = 1f;
                 killShooter = false;
+
+                fragBullets = 8;
+                fragSpread = 45f;
+                fragRandomSpread = 5f;
+                fragVelocityMin = 1f;
+
+                fragBullet = new BasicBulletType(6f, 6) {{
+                    width = 9f;
+                    hitSize = 5f;
+                    height = 15f;
+                    pierce = true;
+                    lifetime = 40f;
+                    pierceBuilding = true;
+                    hitColor = backColor = trailColor = Pal.lightishGray;
+                    frontColor = Color.white;
+                    trailWidth = 2.1f;
+                    trailLength = 5;
+                    hitEffect = despawnEffect = new WaveEffect(){{
+                        colorFrom = colorTo = Pal.lightishGray;
+                        sizeTo = 4f;
+                        strokeFrom = 4f;
+                        lifetime = 10f;
+                    }};
+                    buildingDamageMultiplier = 0.8f;
+                    homingPower = 0.08f;
+                    homingRange = 80f;
+                }};
             }};
             consumePower(3.3f);
             coolant = consumeCoolant(0.1f);
