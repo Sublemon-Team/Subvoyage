@@ -15,7 +15,6 @@ import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.ui.dialogs.PlanetDialog;
 import mindustry.world.*;
 import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
@@ -1078,7 +1077,7 @@ public class SvBlocks{
 
         waterSifter = new WaterSifter("water-sifter") {{
             requirements(Category.liquid, with(spaclanium,50, corallite, 60,clay,30));
-            craftTime = 80f;
+            harvestTime = 80f;
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);
 

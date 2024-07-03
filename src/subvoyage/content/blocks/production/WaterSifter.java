@@ -1,25 +1,29 @@
 package subvoyage.content.blocks.production;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.geom.Geometry;
 import arc.math.geom.Point2;
-import arc.struct.Seq;
 import arc.util.Eachable;
+import arc.util.Strings;
+import mindustry.content.Liquids;
 import mindustry.entities.units.BuildPlan;
-import mindustry.game.MapObjectives;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.WorldLabel;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.input.Placement;
 import mindustry.type.Item;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
+import mindustry.world.blocks.production.Drill;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.draw.DrawDefault;
+import mindustry.world.meta.*;
+import subvoyage.content.blocks.crude_smelter.CrudeSmelterRecipe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,11 +34,14 @@ import static mindustry.Vars.*;
 
 public class WaterSifter extends Block {
 
-    public int oreSearchRadius = 9;
     //optimization reasons
     HashMap<Integer,Item> populatedOres = new HashMap<>();
     public DrawBlock drawer = new DrawDefault();
-    public float craftTime;
+
+
+    public float harvestTime = 60f;
+    public float liquidOutput = 10/60f;
+    public int oreSearchRadius = 9;
 
     public WaterSifter(String name) {
         super(name);
@@ -55,6 +62,21 @@ public class WaterSifter extends Block {
         super.load();
         drawer.load(this);
     }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        stats.add(Stat.mineSpeed,60f/harvestTime, StatUnit.itemsSecond);
+        stats.add(Stat.output, StatValues.liquid(Liquids.water,liquidOutput*60f,true));
+    }
+
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("harvestspeed", (WaterSifterBuild e) ->
+                new Bar(() -> Core.bundle.format("bar.harvestspeed", Strings.fixed(60f/e.getHarvestTime() * e.efficiency, 2)), () -> Pal.ammo, () -> e.efficiency));
+    }
+
     @Override
     public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list){
         drawer.drawPlan(this, plan, list);
@@ -66,7 +88,7 @@ public class WaterSifter extends Block {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        return tile.floor().isLiquid && !hasNearbySelf(tile) && populatedOres.getOrDefault(Point2.pack(tile.x,tile.y),null) != null;
+        return tile.floor().isLiquid && !hasNearbySelf(tile) && getPopulatedOreItemCached(tile.x,tile.y) != null;
     }
     public boolean hasNearbySelf(Tile tile) {
         return isSelf(tile,0) || isSelf(tile,1) || isSelf(tile,2) || isSelf(tile,3);
@@ -84,6 +106,7 @@ public class WaterSifter extends Block {
 
     public Item getPopulatedOreItem(Tile tile) {
         List<Item> candidates = new ArrayList<>();
+        if(tile == null) return null;
         Geometry.circle(tile.x,tile.y,oreSearchRadius,(x,y) -> {
             Tile cTile = world.tile(x,y);
             if(cTile == null) return;
@@ -109,13 +132,18 @@ public class WaterSifter extends Block {
         return frequentItem;
     };
 
+    public Item getPopulatedOreItemCached(int x, int y) {
+        int pos = Point2.pack(x,y);
+        Item item;
+        if(!populatedOres.containsKey(pos)) populatedOres.put(pos,getPopulatedOreItem(world.tile(x,y)));
+        item = populatedOres.get(pos);
+        return item;
+    };
+
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
-        int pos = Point2.pack(x,y);
-        Item toDraw;
-        if(!populatedOres.containsKey(pos)) populatedOres.put(pos,getPopulatedOreItem(world.tile(x,y)));
-        toDraw = populatedOres.get(pos);
+        Item toDraw = getPopulatedOreItemCached(x,y);
         if(toDraw == null || toDraw.fullIcon.texture == null) {
             Draw.z(Layer.block+2);
             Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
@@ -134,6 +162,9 @@ public class WaterSifter extends Block {
     }
 
     public class WaterSifterBuild extends Building {
+
+        public float progress = 0f;
+
         @Override
         public void draw(){
             drawer.draw(this);
@@ -149,6 +180,40 @@ public class WaterSifter extends Block {
         @Override
         public void updateTile() {
             super.updateTile();
+            Item item = getPopulatedOreItemCached(tile.x,tile.y);
+            progress += getProgressIncrease(getHarvestTime());
+            float liq = liquidOutput * edelta() - item.hardness*0.8f/60f;
+            liquids.add(Liquids.water,liq);
+            consume();
+            if(progress >= 1f) {
+                progress %= 1f;
+                harvest();
+            }
+            dumpOutputs();
+        }
+
+        public float getHarvestTime() {
+            Item item = getPopulatedOreItemCached(tile.x,tile.y);
+            return harvestTime+item.hardness*35f;
+        }
+
+
+        public void dumpOutputs() {
+            Item item = getPopulatedOreItemCached(tile.x,tile.y);
+            if(item != null && timer(timerDump, dumpTime / timeScale)){
+                dump(item);
+            }
+            dumpLiquid(Liquids.water);
+        }
+
+        private void harvest() {
+            Item item = getPopulatedOreItemCached(tile.x,tile.y);
+            offload(item);
+        }
+
+        @Override
+        public float warmup() {
+            return efficiency;
         }
     }
 
