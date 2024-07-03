@@ -32,6 +32,7 @@ import subvoyage.content.blocks.fog.Beacon;
 import subvoyage.content.blocks.fog.Buoy;
 import subvoyage.content.blocks.production.SubmersibleDrill;
 import subvoyage.content.blocks.production.TugRoller;
+import subvoyage.content.blocks.production.WaterSifter;
 import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
 import subvoyage.content.blocks.crude_smelter.*;
@@ -199,11 +200,11 @@ public class SvBlocks{
 
         //defense
         whirl = new ItemTurret("whirl"){{
-            requirements(Category.turret, with(corallite, 85, clay, 45, sulfur, 10));
+            requirements(Category.turret, with(corallite, 85, clay, 45));
             outlineColor = Pal.darkOutline;
             squareSprite = false;
 
-            researchCost = with(corallite,10,clay,10,sulfur,5);
+            researchCost = with(corallite,10,clay,10);
 
             ammo(
             spaclanium, new BasicBulletType(3f, 36){{
@@ -271,9 +272,9 @@ public class SvBlocks{
         }};
 
         rupture = new ItemTurret("rupture"){{
-            requirements(Category.turret, with(corallite, 45, clay, 25));
+            requirements(Category.turret, with(corallite, 145, clay, 125, iridium, 30));
 
-            researchCost = with(corallite,100,clay,60);
+            researchCost = with(corallite,100,clay,60,iridium,30);
 
             outlineColor = Pal.darkOutline;
 
@@ -1054,8 +1055,8 @@ public class SvBlocks{
         }};
 
         waterDiffuser = new Separator("water-diffuser") {{
-            requirements(Category.liquid, with(spaclanium, 20, corallite, 5));
-            craftTime = 60f*2.5f;
+            requirements(Category.liquid, with(spaclanium, 30, corallite, 10));
+            craftTime = 60f;
             itemCapacity = 50;
 
             researchCost = with(spaclanium,3,corallite,1);
@@ -1066,7 +1067,7 @@ public class SvBlocks{
             new DrawDefault(),
             new DrawLiquidRegion(water)
             );
-            consumeLiquid(water, 1/60f);
+            consumeLiquid(water, 6/60f);
             envDisabled |= Env.scorching;
             results = with(
                     spaclanium,3,
@@ -1075,27 +1076,21 @@ public class SvBlocks{
             );
         }};
 
-        waterSifter = new Separator("water-sifter") {{
+        waterSifter = new WaterSifter("water-sifter") {{
             requirements(Category.liquid, with(spaclanium,50, corallite, 60,clay,30));
-            craftTime = 20f;
+            craftTime = 80f;
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);
 
+            consumePower(0.3f);
+
             size = 2;
-            consumeLiquid(water, 12/60f);
             envDisabled |= Env.scorching;
             squareSprite = false;
             drawer = new DrawMulti(
                 new DrawDefault(),
                 new DrawLiquidRegion(water),
                 new WarmupDrawRegion("-top", true)
-            );
-
-            results = with(
-                    spaclanium,3,
-                    corallite, 2,
-                    fineSand, 4,
-                    sulfur, 2
             );
         }};
 

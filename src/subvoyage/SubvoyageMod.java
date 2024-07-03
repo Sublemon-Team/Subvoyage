@@ -15,6 +15,7 @@ import mindustry.mod.*;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
 import subvoyage.content.blocks.editor.vapor.VaporControl;
+import subvoyage.content.blocks.production.WaterSifter;
 import subvoyage.content.liquids.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
@@ -70,7 +71,7 @@ public class SubvoyageMod extends Mod {
             };
         });
         Events.on(WorldLoadEvent.class, e -> {
-
+            if(SvBlocks.waterSifter instanceof WaterSifter) ((WaterSifter) SvBlocks.waterSifter).worldReset();
         });
         Events.on(MusicRegisterEvent.class, e -> {
             //control.sound.ambientMusic.add(SvMusic.theAtlacian);
