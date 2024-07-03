@@ -194,7 +194,7 @@ public class WaterSifter extends Block {
 
         public float getHarvestTime() {
             Item item = getPopulatedOreItemCached(tile.x,tile.y);
-            return harvestTime+item.hardness*35f;
+            return harvestTime+item.hardness*15f;
         }
 
 
