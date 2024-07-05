@@ -32,6 +32,7 @@ public class SvUnits{
     public static int mapHelicopter = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
+
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -51,38 +52,67 @@ public class SvUnits{
             itemCapacity = 30;
             health = 400f;
             engineOffset = 6.5f;
+            engineSize = 0;
             hitSize = 8f;
+
+            setEnginesMirror(
+                    new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f)
+            );
 
             ammoType = new PowerAmmoType(900);
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
                 y = -1.25f;
                 x = 6.5f;
-                reload = 10f;
+                reload = 15f;
                 ejectEffect = Fx.casing1;
                 recoil = 2f;
-                shootSound = Sounds.lasershoot;
+                shootSound = Sounds.bolt;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
                 alternate = true;
                 fogRadius = 0;
                 lightRadius = 8;
-                bullet = new ArtilleryBulletType(3f, 11){{
-                    collidesTiles = true;
-                    collides = true;
-                    collidesAir = true;
+                bullet = new LaserBulletType(10){{
+                    colors = new Color[]{Pal.accent.cpy().a(0.4f), Pal.accent, Color.white};
+                    //TODO merge
+                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
 
-                    trailSize = 1;
-                    homingPower = 0.08f;
-                    weaveMag = 4;
-                    weaveScale = 1;
-                    lifetime = 42f;
-                    keepVelocity = false;
-                    smokeEffect = SvFx.hitLaserOrange;
-                    hitEffect = despawnEffect = SvFx.hitLaserOrange;
-                    frontColor = Color.white;
-                    hitSound = Sounds.none;
-                    backColor = Pal.lightOrange;
+                    buildingDamageMultiplier = 0f;
+                    hitEffect = Fx.hitLancer;
+                    hitSize = 4;
+                    lifetime = 16f;
+                    drawSize = 400f;
+                    collidesAir = false;
+                    length = 40f;
+                    ammoMultiplier = 1f;
+                    pierceCap = 4;
+                }};
+            }});
+
+            weapons.add(new RepairBeamWeapon(){{
+                widthSinMag = 0.11f;
+                reload = 20f;
+                x = 0f;
+                y = 6.5f;
+                rotate = false;
+                shootY = 0f;
+                beamWidth = 0.7f;
+                repairSpeed = 3.1f;
+                fractionRepairSpeed = 0.06f;
+                aimDst = 0f;
+                shootCone = 15f;
+                mirror = false;
+
+                targetUnits = false;
+                targetBuildings = true;
+                autoTarget = true;
+                controllable =false;
+                laserColor = Pal.accent;
+                healColor = Pal.accent;
+
+                bullet = new BulletType(){{
+                    maxRange = 60f;
                 }};
             }});
         }};
