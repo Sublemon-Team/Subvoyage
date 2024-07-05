@@ -1630,9 +1630,9 @@ public class SvBlocks{
         }};
 
         argonCondenser = new GenericCrafter("argon-condenser") {{
-            requirements(Category.crafting, with(chromium,120,iridium,60,tugSheet,10));
+            requirements(Category.crafting, with(chromium,120,iridium,60,quartzFiber,10));
 
-            researchCost = with(chromium,3500,iridium,5310,tugSheet,3210);
+            researchCost = with(chromium,3500,iridium,5310,quartzFiber,3210);
 
             squareSprite = false;
             itemCapacity = 10;
