@@ -164,6 +164,9 @@ public class AtlacianTechTree {
                             node(cascade,() -> {
 
                             });
+                            node(inspiration,() -> {
+
+                            });
                         });
                     });
                     node(burden,() -> {
@@ -255,6 +258,9 @@ public class AtlacianTechTree {
 
                     });
                     node(helium,with(produce(helium)),() -> {
+
+                    });
+                    node(SvLiquids.nitrogen,with(produce(SvLiquids.nitrogen)),() -> {
 
                     });
                 });

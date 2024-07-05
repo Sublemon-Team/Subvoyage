@@ -531,6 +531,8 @@ public class SvBlocks{
         inspiration = new TractorBeamTurret("inspiration"){{
             requirements(Category.turret, with(corallite,200,iridium,150,chromium,35));
 
+            researchCost = with(corallite,1400,iridium,1200,chromium,300);
+
             targetAir = true;
             targetGround = false;
 

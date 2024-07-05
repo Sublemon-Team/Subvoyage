@@ -88,7 +88,7 @@ public class HelicopterUnitEntity extends UnitEntity {
         this.vel.add(tmp2.times(new Vec2(localAcceleration,localAcceleration)));
     }
 
-    @Override
+    /*@Override
     public void move(float cx, float cy) {
         EntityCollisions.SolidPred check = this.solidity();
 
@@ -105,7 +105,7 @@ public class HelicopterUnitEntity extends UnitEntity {
             this.x += cx;
             this.y += cy;
         }
-    }
+    }*/
 
     @Override
     public void movePref(Vec2 movement) {
