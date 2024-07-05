@@ -1770,6 +1770,6 @@ public class SvBlocks{
         return new BuildVisibility(() -> v.visible() &&  Vars.state.getPlanet() == SvPlanets.atlacian);
     }
     static BuildVisibility atl() {
-        return new BuildVisibility(() -> BuildVisibility.shown.visible() && Vars.state.rules.planet == SvPlanets.atlacian);
+        return atl(BuildVisibility.shown);
     }
 }
