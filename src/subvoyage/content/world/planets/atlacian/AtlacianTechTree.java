@@ -254,7 +254,7 @@ public class AtlacianTechTree {
                     node(propane,with(produce(propane)),() -> {
 
                     });
-                    node(SvLiquids.nitrogen,with(produce(SvLiquids.nitrogen)),() -> {
+                    node(helium,with(produce(helium)),() -> {
 
                     });
                 });

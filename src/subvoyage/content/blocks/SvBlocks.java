@@ -24,6 +24,7 @@ import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.units.*;
+import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.blocks.editor.SubvoyageCoreBlock;
@@ -55,7 +56,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe, resonance, burden, cascade,
+            whirl, rupture, awe, resonance, burden, cascade, inspiration,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -265,7 +266,7 @@ public class SvBlocks{
             priority = 0;
             range = 170f;
             scaledHealth = 200;
-            coolant = consumeCoolant(0.2f);
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(2);
         }};
@@ -416,6 +417,8 @@ public class SvBlocks{
             range = 260f;
             scaledHealth = 200;
 
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
+
             limitRange(6);
         }};
 
@@ -455,7 +458,7 @@ public class SvBlocks{
                 killShooter = false;
             }};
             consumePower(3.3f);
-            coolant = consumeCoolant(0.1f);
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
         }};
 
         resonance = new PowerTurret("resonance") {{
@@ -523,7 +526,31 @@ public class SvBlocks{
                 }};
             }};
             consumePower(3.3f);
-            coolant = consumeCoolant(0.1f);
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
+        }};
+        inspiration = new TractorBeamTurret("inspiration"){{
+            requirements(Category.turret, with(corallite,200,iridium,150,chromium,35));
+
+            targetAir = true;
+            targetGround = false;
+
+            hasPower = true;
+            hasLiquids = true;
+            size = 2;
+            force = 20f;
+            scaledForce = 6f;
+            range = 240f;
+            damage = 2f;
+            scaledHealth = 160;
+            rotateSpeed = 10;
+
+            laserColor = Color.valueOf("FF4023");
+
+            consumePower(3f);
+            consumeLiquid(argon,0.3f);
+            consumeLiquid(helium,0.4f);
+
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
         }};
 
         burden = new LiquidTurret("burden") {{
@@ -756,8 +783,9 @@ public class SvBlocks{
             priority = 0;
             range = 180f;
             scaledHealth = 200;
-            coolant = consumeCoolant(0.5f);
+
             coolantMultiplier = 1.2f;
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(6);
         }};
