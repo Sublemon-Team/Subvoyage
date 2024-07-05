@@ -687,7 +687,7 @@ public class SvBlocks{
 
             researchCost = with(clay,15);
 
-            health = 60 * wallHealthMultiplier;
+            health = 160 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
@@ -696,7 +696,7 @@ public class SvBlocks{
 
             researchCost = with(clay,100);
 
-            health = 60 * largeWallHealthMultiplier;
+            health = 160 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
         }};
