@@ -956,14 +956,16 @@ public class SvBlocks{
 
         tower = new Buoy("tower") {{
             requirements(Category.effect, BuildVisibility.fogOnly, with(chromium,10,clay,10));
-            fogRadius = 28;
+            fogRadius = 40;
 
             envDisabled |= Env.scorching;
             destructible = true;
             isWater = false;
             outlineIcon = true;
 
-            consumePower(4f/60f);
+            discoveryTime *= 1.5f;
+
+            consumeLiquid(polygen,0.3f);
 
             priority = 0;
             health = 360;
@@ -972,7 +974,7 @@ public class SvBlocks{
         }};
 
         beacon = new Beacon("beacon") {{
-            requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,300,clay, 50,sulfur,200));
+            requirements(Category.effect, BuildVisibility.fogOnly, with(spaclanium,300,clay, 50,sulfur,200,iridium,300));
             fogRadius = 75;
             size = 3;
             envDisabled |= Env.scorching;
@@ -987,14 +989,16 @@ public class SvBlocks{
             super.pulseRadius = 10f;
             super.coolantUse = 0.16f;
             super.coolantMultiplier = 2f;
-            super.acceptCoolant = true;
 
             researchCost = with(spaclanium,500,clay,100,sulfur,300);
 
             placeEffect = Fx.healWaveDynamic;
             health = 450;
 
-            consumePower(0.15f);
+
+            acceptCoolant = false;
+            heal = consumePower(0.15f);
+            discover = consumeLiquid(argon,2f);
         }};
 
         //liquids
@@ -1546,8 +1550,9 @@ public class SvBlocks{
 
             size = 3;
             envDisabled |= Env.scorching;
-            consumeLiquid(water, 2);
+            consumeLiquid(water, 0.8f);
             consumeItem(fineSand,2);
+            consumeLiquid(propane, 0.5f);
             consumePower(2.3f);
         }};
 
@@ -1693,7 +1698,7 @@ public class SvBlocks{
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smokePuff;
-            recipes = recipes(spaclanium, 2, 60, corallite, 2, 60, iridium, 1, 90, chromium, 1, 120);
+            recipes = recipes(spaclanium, 4, 60, corallite, 3, 80, iridium, 2, 90, chromium, 1, 120);
 
             drawer = new DrawMulti(
                     new DrawDefault(),
@@ -1703,7 +1708,8 @@ public class SvBlocks{
                     }}
             );
             consumeItem(crude, 3);
-            consumeLiquid(water, 1f);
+            consumeLiquid(water, 0.5f);
+            consumeLiquid(propane, 0.7f);
             consumePower(1.2f);
 
             hasItems = true;
@@ -1747,7 +1753,8 @@ public class SvBlocks{
 
             consumeItem(chromium,6);
             consumeItem(sulfur,8);
-            consumeLiquid(polygen,1.3f);
+            consumeLiquid(polygen,0.8f);
+            consumeLiquid(helium,1.3f);
             consumePower(9f);
 
             outputItem = new ItemStack(tugSheet,1);

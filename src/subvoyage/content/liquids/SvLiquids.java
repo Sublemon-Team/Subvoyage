@@ -48,6 +48,7 @@ public class SvLiquids{
         nitrogen = new Liquid("nitrogen",Color.valueOf("AEAFF1")) {{
             gas = true;
             coolant = true;
+
             explosiveness = 0.6f;
             temperature = 0.2f;
             gasColor = color;

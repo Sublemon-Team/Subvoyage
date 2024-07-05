@@ -1,5 +1,6 @@
 package subvoyage.content.blocks.fog;
 
+import arc.Core;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.Intersector;
@@ -18,6 +19,7 @@ import mindustry.logic.*;
 import mindustry.type.unit.*;
 import mindustry.world.*;
 import mindustry.world.blocks.units.*;
+import mindustry.world.consumers.Consume;
 import mindustry.world.meta.*;
 
 import static mindustry.Vars.tilesize;
@@ -25,6 +27,9 @@ import static mindustry.Vars.world;
 
 public class Beacon extends RepairTurret {
     public float discoveryTime = 60f * 10f;
+    public TextureRegion glow;
+    public Consume heal;
+    public Consume discover;
 
     public Beacon(String name) {
         super(name);
@@ -34,6 +39,12 @@ public class Beacon extends RepairTurret {
         destructible = true;
         swapDiagonalPlacement = true;
         allowDiagonal = true;
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        glow = Core.atlas.find(name+"-glow");
     }
 
     @Override
@@ -53,34 +64,36 @@ public class Beacon extends RepairTurret {
     }
 
     public class BeaconBuild extends RepairPointBuild implements Ranged {
-        public float progress;
+        public float fogProgress;
         public float lastRadius = 0f;
-        public float smoothEfficiency = 1f;
-        public float totalProgress;
+        public float fogEfficiency = 0f;
+        public float scl = 1f;
 
         @Override
         public void update() {
-            laserColor = Pal.lightishOrange;
-            smoothEfficiency = Mathf.lerpDelta(smoothEfficiency, efficiency, 0.05f);
+            super.update();
+        }
+
+        @Override
+        public void updateConsumption() {
+            discover.update(this);;
+        }
+
+        @Override
+        public void updateTile(){
+
+            laserColor = Pal.heal;
+            fogEfficiency = Mathf.lerp(fogEfficiency,discover.efficiency(this),delta()/40f);
 
             if(Math.abs(fogRadius() - lastRadius) >= 0.5f){
                 Vars.fogControl.forceUpdate(team, this);
                 lastRadius = fogRadius();
             }
 
-            progress += edelta() / discoveryTime;
-            progress = Mathf.clamp(progress);
+            fogProgress += (fogEfficiency * delta()) / discoveryTime;
+            fogProgress = Mathf.clamp(fogProgress);
 
-            totalProgress += efficiency * edelta();
-            super.update();
-        }
-
-        @Override
-        public void updateTile(){
             float multiplier = 1f;
-            if(acceptCoolant){
-                multiplier = 1f + liquids.current().heatCapacity * coolantMultiplier * optionalEfficiency;
-            }
 
             if(target != null && (target.dead() || target.type() instanceof MissileUnitType || target.dst(this) - target.hitSize/2f > repairRadius)){
                 target = null;
@@ -91,25 +104,36 @@ public class Beacon extends RepairTurret {
             }
 
             boolean healed = false;
-            if(target != null && efficiency > 0){
+            float efficiency = heal.efficiency(this);
+            if(target != null && efficiency > 0 && target.damaged()){
                 float angle = Angles.angle(x, y, target.x + offset.x, target.y + offset.y);
                 if(Angles.angleDist(angle, rotation) < 30f){
                     healed = true;
-                    target.heal(repairSpeed * strength * edelta() * multiplier);
-                    if(target instanceof UnitEntity e) e.apply(StatusEffects.fast,1f);
+                    target.heal(repairSpeed * strength * delta() * efficiency * multiplier);
+                    heal.update(this);
                 }
                 rotation = Mathf.slerpDelta(rotation, angle, 0.5f * efficiency * timeScale);
             }
 
             strength = Mathf.lerpDelta(strength, healed ? 1f : 0f, 0.08f * Time.delta);
             if(timer(timerTarget, 20)){
-                target = Units.closest(team, x, y, repairRadius, (e) -> !(e.type() instanceof MissileUnitType));
+                target = Units.closest(team, x, y, repairRadius, (e) -> !(e.type() instanceof MissileUnitType) && e.damaged());
             }
         }
 
         @Override
+        public float efficiency() {
+            return 1f;
+        }
+
+        @Override
+        public float edelta() {
+            return delta();
+        }
+
+        @Override
         public float fogRadius(){
-            return fogRadius * progress * smoothEfficiency;
+            return fogRadius * fogProgress * fogEfficiency;
         }
 
         @Override
@@ -133,33 +157,38 @@ public class Beacon extends RepairTurret {
             Draw.z(Layer.turret);
             Drawf.shadow(region, x - (size / 2f), y - (size / 2f), rotation - 90);
 
-            if(shouldConsume()) Draw.scl(1.2f);
-            Drawf.spinSprite(region, x, y, (t * 90) % 360);
+            scl = Mathf.lerp(scl,enabled() && target != null ? 1f : 0f,delta()/40f);
+            Draw.scl(scl*0.2f+1f);
+            Drawf.spinSprite(region, x, y, ((t * 90) % 360));
+            Draw.alpha(scl*0.5f);
+            Drawf.spinSprite(glow, x, y, ((t * 90) % 360));
 
-            if(shouldConsume()) Draw.scl();
+            Draw.scl();
+            Draw.reset();
 
-            drawBeam(x, y, rotation, length, id, target, team, strength,
-                    pulseStroke, pulseRadius, beamWidth, lastEnd, offset, laserColor, laserTopColor,
-                    laser, laserEnd, laserTop, laserTopEnd);
+            if(heal.efficiency(this) > 0f)
+                drawBeam(x, y, rotation, length, id, target, team, strength,
+                        pulseStroke, pulseRadius, beamWidth, lastEnd, offset, laserColor, laserTopColor,
+                        laser, laserEnd, laserTop, laserTopEnd);
         }
 
         @Override
         public float progress(){
-            return progress;
+            return fogProgress;
         }
 
         @Override
         public void write(Writes write){
             super.write(write);
 
-            write.f(progress);
+            write.f(fogProgress);
         }
 
         @Override
         public void read(Reads read, byte revision){
             super.read(read, revision);
 
-            progress = read.f();
+            fogProgress = read.f();
         }
     }
 }
