@@ -882,7 +882,9 @@ public class SvBlocks{
             requirements(Category.effect, with(spaclanium, 60));
             researchCost = with(spaclanium,300);
 
-            consumePower(0.3f);
+            consumePower(0.15f);
+            consumeLiquid(polygen,0.3f);
+
             size = 1;
             reload = 200f;
             range = 40f;
@@ -890,7 +892,6 @@ public class SvBlocks{
             phaseBoost = 4f;
             phaseRangeBoost = 20f;
             health = 80;
-            consumeLiquid(polygen,0.3f).boost();
         }};
 
         regenProjector = new MendProjector("regen-projector"){{
@@ -898,6 +899,8 @@ public class SvBlocks{
             researchCost = with(spaclanium,500,clay,280,iridium,100);
 
             consumePower(0.3f);
+            consumeLiquid(polygen,0.5f);
+
             size = 2;
             reload = 100f;
             range = 40f*2;
@@ -905,7 +908,6 @@ public class SvBlocks{
             phaseBoost = 4f;
             phaseRangeBoost = 20f;
             health = 400;
-            consumeLiquid(polygen,1f).boost();
         }};
 
         //exploration

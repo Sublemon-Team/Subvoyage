@@ -9,17 +9,17 @@ public class SvLiquids{
             //liquid
             polygen,
             //gas
-            argon
+            argon, propane, nitrogen, oxygen
     ;
 
     public static void load() {
+
         polygen = new Liquid("meta-water", Color.valueOf("8997FF")) {{
-            heatCapacity = 1.5f;
-            effect = StatusEffects.corroded;
+            heatCapacity = 0.35f;
             boilPoint = 0.5f;
             gasColor = Color.grays(0.9f);
             flammability = 0f;
-
+            coolant = false;
             moveThroughBlocks = true;
         }};
 
@@ -27,6 +27,17 @@ public class SvLiquids{
             gas = true;
             flammability = 1f;
         }};
+
+        propane = new Liquid("propane",Color.valueOf("FFB03A")) {{
+            gas = true;
+            flammability = 1f;
+            explosiveness = 0.6f;
+            blockReactive = true;
+            temperature = 0.8f;
+            gasColor = color;
+        }};
+
+        nitrogen = Liquids.nitrogen;
     }
 
 }

@@ -2,10 +2,10 @@ package subvoyage.content.world.planets.atlacian;
 
 import arc.Core;
 import arc.struct.*;
-import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
+import subvoyage.content.liquids.SvLiquids;
 
 import static mindustry.content.Liquids.*;
 import static subvoyage.content.liquids.SvLiquids.*;
@@ -251,7 +251,12 @@ public class AtlacianTechTree {
                     });
                 });
                 node(argon,with(produce(argon)),() -> {
+                    node(propane,with(produce(propane)),() -> {
 
+                    });
+                    node(SvLiquids.nitrogen,with(produce(SvLiquids.nitrogen)),() -> {
+
+                    });
                 });
             });
 
