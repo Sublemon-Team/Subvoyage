@@ -39,6 +39,11 @@ public class HydromechUnitEntity extends LegsUnit {
 
 
     @Override
+    public void controlWeapons(boolean rotate, boolean shoot) {
+        super.controlWeapons(rotate, shoot);
+    }
+
+    @Override
     public Vec2 legOffset(Vec2 out, int index) {
         return isOnLiquid() ? Vec2.ZERO : super.legOffset(out, index);
     }

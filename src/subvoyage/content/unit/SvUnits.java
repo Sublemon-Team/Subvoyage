@@ -1,13 +1,18 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
+import arc.graphics.g2d.Draw;
 import arc.math.*;
+import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.ai.types.*;
 import mindustry.content.*;
+import mindustry.entities.Mover;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -19,6 +24,7 @@ import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
+import subvoyage.entities.shoot.ShootLeeft;
 
 public class SvUnits{
     public static UnitType
@@ -933,7 +939,7 @@ public class SvUnits{
             speed = 1.6f;
             rotateSpeed = 8f;
             health = 1100;
-            hitSize = 20f;
+            hitSize = 14f;
             flying = false;
 
             legCount = 4;
@@ -951,6 +957,79 @@ public class SvUnits{
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
+
+
+            weapons.add(new Weapon(name + "-weapon") {{
+                shoot = new ShootLeeft() {{shots = 2;}};
+                reload = 40f;
+                recoil = 3f;
+                inaccuracy = 10f;
+                shootY = 0;
+                x = 0;
+                mirror = false;
+                shootSound = Sounds.blaster;
+                soundPitchMin = 0.4f;
+                soundPitchMax = 0.45f;
+
+                bullet = new BasicBulletType(4f,18f) {{
+                    shootEffect = SvFx.pulverize;
+                    smokeEffect = Fx.none;
+                    hitColor = backColor = trailColor = Pal.missileYellow;
+                    frontColor = Color.white;
+                    lifetime = 40f;
+                    trailWidth = 3f;
+                    trailLength = 8;
+                    trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
+                    hitEffect = despawnEffect = Fx.hitBulletColor;
+                }
+
+                    @Override
+                    public void update(Bullet b) {
+                        super.update(b);
+                        b.damage = b.type.damage - (b.fin()*9);
+                    }
+
+                    @Override
+                    public void draw(Bullet b) {
+                        drawTrail(b);
+                        drawParts(b);
+                        float shrink = shrinkInterp.apply(b.fout());
+                        float height = this.height * ((1f - shrinkY) + shrinkY * shrink);
+                        float width = this.width * ((1f - shrinkX) + shrinkX * shrink);
+                        float offset = -90 + (spin != 0 ? Mathf.randomSeed(b.id, 360f) + b.time * spin : 0f) + rotationOffset;
+
+                        Color mix = Tmp.c1.set(mixColorFrom).lerp(mixColorTo, b.fin());
+
+                        Draw.mixcol(mix, mix.a);
+
+                        if(backRegion.found()){
+                            Draw.color(b.team.color);
+                            Draw.rect(backRegion, b.x, b.y, width, height, b.rotation() + offset);
+                        }
+
+                        Draw.color(frontColor);
+                        Draw.rect(frontRegion, b.x, b.y, width, height, b.rotation() + offset);
+
+                        Draw.reset();
+                    }
+
+                    @Override
+                    public void drawTrail(Bullet b) {
+                        if(trailLength > 0 && b.trail != null){
+                            float z = Draw.z();
+                            Draw.z(z - 0.0001f);
+                            b.trail.draw(b.team.color, trailWidth*b.damage/b.type.damage*2);
+                            Draw.z(z);
+                        }
+                    }
+                };
+            }
+                @Override
+                protected void handleBullet(Unit unit, WeaponMount mount, Bullet bullet) {
+                    super.handleBullet(unit, mount, bullet);
+                    if(unit instanceof HydromechUnitEntity hm && hm.isOnLiquid()) bullet.lifetime *= 1.7f;
+                }
+            });
             //researchCostMultiplier = 0f;
         }};
 
