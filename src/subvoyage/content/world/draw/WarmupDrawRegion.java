@@ -2,12 +2,15 @@ package subvoyage.content.world.draw;
 
 import arc.*;
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.util.*;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.*;
 import mindustry.world.draw.*;
+
+import java.util.HashMap;
 
 public class WarmupDrawRegion extends DrawBlock{
     public TextureRegion region;
@@ -17,6 +20,7 @@ public class WarmupDrawRegion extends DrawBlock{
     public boolean buildingRotate = false;
     public float x, y, rotation;
     public float layer = -1;
+    public HashMap<Building,Float> smoothEfficiencies = new HashMap<>();
 
     public WarmupDrawRegion(String suffix){
         this.suffix = suffix;
@@ -33,11 +37,14 @@ public class WarmupDrawRegion extends DrawBlock{
     @Override
     public void draw(Building build){
         float z = Draw.z();
+        float smoothEfficiency = smoothEfficiencies.getOrDefault(build,0f);
+        smoothEfficiency = Mathf.lerp(smoothEfficiency,build.efficiency(),Time.delta/40f);
+        smoothEfficiencies.put(build,smoothEfficiency);
         if(layer > 0) Draw.z(layer);
         if(spinSprite){
-            Drawf.spinSprite(region, build.x + x, build.y + y, build.totalProgress() * build.warmup() + rotation + (buildingRotate ? build.rotdeg() : 0));
+            Drawf.spinSprite(region, build.x + x, build.y + y, build.totalProgress() * smoothEfficiency + rotation + (buildingRotate ? build.rotdeg() : 0));
         }else{
-            Draw.rect(region, build.x + x, build.y + y, build.totalProgress() * build.warmup() + rotation + (buildingRotate ? build.rotdeg() : 0));
+            Draw.rect(region, build.x + x, build.y + y, build.totalProgress() * smoothEfficiency + rotation + (buildingRotate ? build.rotdeg() : 0));
         }
         Draw.z(z);
     }
