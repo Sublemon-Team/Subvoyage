@@ -26,13 +26,17 @@ public class SvUnits{
     marine,
     //helicopters
     lapetus, skath, charon, callees,ganymede,
+    //hydromechs
+    leeft,
     //cargo
     bulker;
 
     public static int mapHelicopter = 0;
+    public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
-
+        hmech("leeft");
+        //core
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
@@ -117,6 +121,7 @@ public class SvUnits{
             }});
         }};
 
+        //helicopter
         lapetus = new HelicopterUnitType("lapetus"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
@@ -920,6 +925,36 @@ public class SvUnits{
             }});
         }};
 
+        //hydromech
+        leeft = new HydromechUnitType("leeft") {{
+
+            constructor = HydromechUnitEntity::create;
+            drag = 0.07f;
+            speed = 1.6f;
+            rotateSpeed = 8f;
+            health = 1100;
+            hitSize = 20f;
+            flying = false;
+
+            legCount = 4;
+            legLength = 9f;
+            legForwardScl = 0.6f;
+            legMoveSpace = 1.4f;
+
+            mechSideSway = 0.55f;
+            mechFrontSway = 0.15f;
+
+            allowLegStep = true;
+            hovering = true;
+            legPhysicsLayer = false;
+
+            shadowElevation = 0.1f;
+            groundLayer = Layer.legUnit - 1f;
+            targetAir = true;
+            //researchCostMultiplier = 0f;
+        }};
+
+        //other
         bulker = new AtlacianUnitType("bulker"){{
             controller = u -> new CargoAI();
             constructor = BuildingTetherPayloadUnit::create;
@@ -953,8 +988,14 @@ public class SvUnits{
     public static void helicopter(String id) {
         mapHelicopter = EntityMapping.register(id,HelicopterUnitEntity::new);
     }
+    public static void hmech(String id) {
+        mapHMech = EntityMapping.register(id,HydromechUnitEntity::create);
+    }
 
     public static void helicopter(String... ids) {
         for (String id : ids) helicopter(id);
+    }
+    public static void hmech(String... ids) {
+        for (String id : ids) hmech(id);
     }
 }
