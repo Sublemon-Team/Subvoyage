@@ -75,6 +75,14 @@ public class WaterSifter extends Block {
         super.setBars();
         addBar("harvestspeed", (WaterSifterBuild e) ->
                 new Bar(() -> Core.bundle.format("bar.harvestspeed", Strings.fixed(60f/e.getHarvestTime() * e.efficiency, 2)), () -> Pal.ammo, () -> e.efficiency));
+        addBar("itemprogress",(WaterSifterBuild e) -> {
+            Item item = getPopulatedOreItemCached(e.tileX(),e.tileY());
+            return new Bar(
+                    () -> item.localizedName,
+                    () -> item.color,
+                    () -> e.progress
+            );
+        });
     }
 
     @Override
