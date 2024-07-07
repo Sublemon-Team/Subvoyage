@@ -50,6 +50,12 @@ public class HydromechUnitType extends AtlacianUnitType {
     }
 
     @Override
+    public void init() {
+        super.init();
+        naval = true;
+    }
+
+    @Override
     public Unit spawn(Position pos, Team team) {
         return super.spawn(pos, team);
     }

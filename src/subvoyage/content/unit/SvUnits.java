@@ -947,6 +947,9 @@ public class SvUnits{
             hitSize = 15f;
             flying = false;
 
+            bodyHeat = true;
+            heatColor = Color.red;
+
             legCount = 4;
             legLength = 9f;
             legForwardScl = 0.6f;
@@ -973,7 +976,7 @@ public class SvUnits{
                 x = 0;
                 y = 0.25f;
 
-                top = false;
+                top = true;
                 mirror = false;
                 shootSound = Sounds.blaster;
                 soundPitchMin = 0.4f;
@@ -1047,6 +1050,11 @@ public class SvUnits{
             health = 1520;
             hitSize = 20f;
             flying = false;
+
+            bodyHeat = true;
+            heatColor = Color.red;
+
+            bodyScale = 0.9f;
 
             legGroupSize = 3;
             lockLegBase = true;
@@ -1321,13 +1329,16 @@ public class SvUnits{
                 reload = 40f;
                 recoil = 3f;
                 inaccuracy = 10f;
+
                 shootY = 0;
-                top = false;
+                top = true;
                 mirror = true;
-                x = 6.5f;
+                flipSprite = true;
+                x = 9f;
                 shootSound = Sounds.blaster;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.45f;
+
                 bullet = new BasicBulletType(4f,9f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
@@ -1370,6 +1381,7 @@ public class SvUnits{
                         Draw.reset();
                     }
 
+
                     @Override
                     public void drawTrail(Bullet b) {
                         if(trailLength > 0 && b.trail != null){
@@ -1390,6 +1402,14 @@ public class SvUnits{
                         bullet.damage *= 2f;
                     }
                 }
+
+                @Override
+                public void draw(Unit unit, WeaponMount mount) {
+                    Draw.scl(1.65f, 1.5f);
+                    super.draw(unit, mount);
+                    Draw.scl();
+                }
+
             });
         }};
 
