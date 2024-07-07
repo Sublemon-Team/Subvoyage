@@ -962,12 +962,13 @@ public class SvUnits{
                 recoil = 3f;
                 inaccuracy = 10f;
                 shootY = 0;
-                x = 0;
-                mirror = false;
+                x = 6.25f;
+
+                top = false;
+                mirror = true;
                 shootSound = Sounds.blaster;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.45f;
-
                 bullet = new BasicBulletType(4f,18f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
