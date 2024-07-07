@@ -1047,6 +1047,8 @@ public class SvUnits{
             hitSize = 20f;
             flying = false;
 
+            bodyScale = 0.9f;
+
             legGroupSize = 3;
             lockLegBase = true;
             legContinuousMove = true;
