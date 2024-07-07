@@ -218,7 +218,8 @@ public class OffloadCore extends CoreBlock {
 
         private UnitType getEnemy(int currentWave,boolean[] hasBoss) {
             UnitType[][] unitTypes = new UnitType[][] {
-                    {SvUnits.lapetus,SvUnits.skath,SvUnits.charon,SvUnits.callees}
+                    {SvUnits.lapetus,SvUnits.skath,SvUnits.charon,SvUnits.callees},
+                    {SvUnits.leeft,SvUnits.flagshi,SvUnits.leeft,SvUnits.flagshi}
             };
             int tier = rand.nextInt((currentWave > 50 && !hasBoss[0]) ? 4:  currentWave > 30 ? 3 : currentWave > 10 ? 2 : 1);
             if(tier == 3) hasBoss[0] = true;

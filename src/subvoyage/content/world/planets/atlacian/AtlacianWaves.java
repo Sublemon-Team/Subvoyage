@@ -18,6 +18,7 @@ public class AtlacianWaves {
 
         UnitType[][] species = {
                 {lapetus, skath, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
+                {leeft, flagshi, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
                 //{dagger, mace, fortress, scepter, reign},
                 //{nova, pulsar, quasar, vela, corvus},
                 //{crawler, atrax, spiroct, arkyid, toxopid},
