@@ -1,23 +1,17 @@
 package subvoyage.content.unit.entity;
 
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.geom.Vec2;
-import arc.util.Time;
-import arc.util.Tmp;
-import mindustry.Vars;
-import mindustry.content.Blocks;
-import mindustry.gen.LegsUnit;
-import mindustry.gen.MechUnit;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Trail;
-import mindustry.world.blocks.environment.Floor;
-import subvoyage.content.unit.SvUnits;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.world.blocks.environment.*;
+import subvoyage.content.unit.*;
 
 public class HydromechUnitEntity extends LegsUnit {
-
     protected transient Trail tleft;
     protected transient Color trailColor;
     protected transient Trail tright;
@@ -36,7 +30,6 @@ public class HydromechUnitEntity extends LegsUnit {
     public static HydromechUnitEntity create() {
         return  new HydromechUnitEntity();
     }
-
 
     @Override
     public void controlWeapons(boolean rotate, boolean shoot) {
@@ -66,17 +59,22 @@ public class HydromechUnitEntity extends LegsUnit {
     public void draw() {
         super.draw();
         if(isOnLiquid()) {
-            Draw.z(Layer.groundUnit-5f);
-            tleft.draw(trailColor,8f);
-            tright.draw(trailColor,8f);
+            float z;
+            this.type.draw(this);
+            z = Draw.z();
+            Draw.z(20.0F);
+            Floor floor = this.tileOn() == null ? Blocks.air.asFloor() : this.tileOn().floor();
+            Color color = Tmp.c1.set(floor.mapColor.equals(Color.black) ? Blocks.water.mapColor : floor.mapColor).mul(1.5F);
+            this.trailColor.lerp(color, Mathf.clamp(Time.delta * 0.04F));
+            this.tleft.draw(this.trailColor, this.type.trailScl);
+            this.tright.draw(this.trailColor, this.type.trailScl);
+            Draw.z(z);
         }
     }
 
     @Override
     public void update() {
         super.update();
-
-
         for(int i = 0; i < 2; ++i) {
             Trail t = i == 0 ? this.tleft : this.tright;
             t.length = this.type.trailLength;

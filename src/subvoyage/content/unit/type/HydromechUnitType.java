@@ -1,19 +1,19 @@
 package subvoyage.content.unit.type;
 
-import arc.math.geom.Position;
-import mindustry.game.Team;
-import mindustry.gen.TimedKillc;
-import mindustry.gen.Unit;
-import subvoyage.content.unit.entity.HelicopterUnitEntity;
+import arc.math.geom.*;
+import mindustry.game.*;
+import mindustry.gen.*;
+import subvoyage.content.unit.entity.*;
 
-import java.util.function.Consumer;
+import java.util.function.*;
 
 public class HydromechUnitType extends AtlacianUnitType {
-    public Consumer<HelicopterUnitEntity> onUpdate = (e) -> {};
-    public Consumer<HelicopterUnitEntity> onDraw = (e) -> {};
+    public Consumer<HydromechUnitEntity> onDraw = (e) -> {
+    };
 
     public HydromechUnitType(String name) {
         super(name);
+        trailScl = 8;
         trailLength = 9;
         waveTrailX = 4f;
         waveTrailY = -3f;
@@ -31,7 +31,7 @@ public class HydromechUnitType extends AtlacianUnitType {
 
     @Override
     public void draw(Unit unit) {
-        if(unit instanceof HelicopterUnitEntity h) onDraw.accept(h);
+        if(unit instanceof HydromechUnitEntity h) onDraw.accept(h);
         super.draw(unit);
     }
 

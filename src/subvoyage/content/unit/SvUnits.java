@@ -1,18 +1,16 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
-import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.util.Time;
-import arc.util.Tmp;
+import arc.util.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
-import mindustry.entities.Mover;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.units.WeaponMount;
+import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -24,7 +22,7 @@ import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
-import subvoyage.entities.shoot.ShootLeeft;
+import subvoyage.entities.shoot.*;
 
 public class SvUnits{
     public static UnitType
@@ -33,7 +31,7 @@ public class SvUnits{
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
-    leeft,
+    leeft, riight,
     //cargo
     bulker;
 
@@ -41,7 +39,7 @@ public class SvUnits{
     public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
-        hmech("leeft");
+        hmech("leeft", "riight");
         //core
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
@@ -933,13 +931,12 @@ public class SvUnits{
 
         //hydromech
         leeft = new HydromechUnitType("leeft") {{
-
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
             speed = 1.6f;
             rotateSpeed = 8f;
             health = 1100;
-            hitSize = 14f;
+            hitSize = 15f;
             flying = false;
 
             legCount = 4;
@@ -1032,6 +1029,44 @@ public class SvUnits{
             });
             //researchCostMultiplier = 0f;
         }};
+
+        //lmao
+        riight = new HydromechUnitType("riight"){{
+            constructor = HydromechUnitEntity::create;
+            drag = 0.07f;
+            speed = 1.6f;
+            rotateSpeed = 8f;
+            health = 1100;
+            hitSize = 20f;
+            flying = false;
+
+            legStraightness = 0.3f;
+            stepShake = 0f;
+
+            legCount = 6;
+            legLength = 14f;
+            legGroupSize = 3;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legExtension = -3f;
+            legBaseOffset = 7f;
+            legMaxLength = 1.1f;
+            legMinLength = 0.2f;
+            legLengthScl = 0.95f;
+            legForwardScl = 0.9f;
+
+            allowLegStep = true;
+            mechSideSway = 0.55f;
+            mechFrontSway = 0.15f;
+            hovering = true;
+            legPhysicsLayer = false;
+
+            shadowElevation = 0.1f;
+            groundLayer = Layer.legUnit - 1f;
+            targetAir = true;
+            //researchCostMultiplier = 0f;
+        }};
+
 
         //other
         bulker = new AtlacianUnitType("bulker"){{
