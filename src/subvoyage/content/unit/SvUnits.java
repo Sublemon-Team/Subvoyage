@@ -979,8 +979,8 @@ public class SvUnits{
                 top = true;
                 mirror = false;
                 shootSound = Sounds.blaster;
-                soundPitchMin = 0.4f;
-                soundPitchMax = 0.45f;
+                soundPitchMin = 0.5f;
+                soundPitchMax = 0.55f;
                 bullet = new BasicBulletType(4f,18f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
@@ -1261,7 +1261,6 @@ public class SvUnits{
                     HealBeamMount heal = (HealBeamMount)mount;
                     boolean isLiquid = (unit instanceof HydromechUnitEntity hm) && hm.isOnLiquid();
                     boolean canShoot = mount.shoot && isLiquid;
-                    System.out.println(isLiquid + "&" + canShoot);
 
                     if(!autoTarget){
                         heal.target = null;

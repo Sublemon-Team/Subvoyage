@@ -1,5 +1,6 @@
 package subvoyage.content.unit.type;
 
+import arc.graphics.g2d.Draw;
 import arc.math.geom.*;
 import mindustry.game.*;
 import mindustry.gen.*;
@@ -47,6 +48,16 @@ public class HydromechUnitType extends AtlacianUnitType {
             u.lifetime(lifetime);
         }
         return unit;
+    }
+
+
+
+    @Override
+    public <T extends Unit & Legsc> void drawLegs(T unit) {
+        float v = unit instanceof HydromechUnitEntity hm ? hm.liquidedSmooth() : 0f;
+        Draw.scl(1-v);
+        Draw.alpha(1-v);
+        if(v < 0.5f) super.drawLegs(unit);
     }
 
     @Override
