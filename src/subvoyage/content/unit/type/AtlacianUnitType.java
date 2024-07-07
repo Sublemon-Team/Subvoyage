@@ -23,7 +23,7 @@ public class AtlacianUnitType extends UnitType{
         float scl = Draw.scl;
         Draw.scl(bodyScale);
         super.drawBody(unit);
-        Draw.scl(scl);
+        Draw.scl();
     }
 
     @Override
@@ -31,6 +31,6 @@ public class AtlacianUnitType extends UnitType{
         float scl = Draw.scl;
         Draw.scl(bodyScale);
         super.drawCell(unit);
-        Draw.scl(scl);
+        Draw.scl();
     }
 }
