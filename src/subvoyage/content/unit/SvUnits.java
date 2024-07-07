@@ -3,15 +3,14 @@ package subvoyage.content.unit;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.math.geom.Vec2;
+import arc.math.geom.*;
 import arc.util.*;
-import mindustry.Vars;
+import mindustry.*;
 import mindustry.ai.types.*;
-import mindustry.audio.SoundLoop;
+import mindustry.audio.*;
 import mindustry.content.*;
-import mindustry.core.World;
-import mindustry.entities.Predict;
-import mindustry.entities.Sized;
+import mindustry.core.*;
+import mindustry.entities.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
@@ -23,7 +22,7 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
-import mindustry.world.blocks.units.RepairTurret;
+import mindustry.world.blocks.units.*;
 import subvoyage.*;
 import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
@@ -971,9 +970,11 @@ public class SvUnits{
                 recoil = 3f;
                 inaccuracy = 10f;
                 shootY = 0;
+                x = 0;
+                y = 0.25f;
+
                 top = false;
                 mirror = false;
-                x = 0;
                 shootSound = Sounds.blaster;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.45f;
@@ -1390,7 +1391,6 @@ public class SvUnits{
                     }
                 }
             });
-            //researchCostMultiplier = 0f;
         }};
 
 
