@@ -1053,18 +1053,18 @@ public class SvUnits{
             legContinuousMove = true;
             legMaxLength = 1.1f;
             legMinLength = 0.2f;
-            legLengthScl = 0.8f;
+            legLengthScl = 0.95f;
             legSplashDamage = 1.1f;
             legStraightness = 0.4f;
 
             legCount = 6;
-            legLength = 13f;
-            legForwardScl = 0.6f;
+            legLength = 15f;
+            legForwardScl = 0.7f;
             legMoveSpace = 2f;
             rippleScale = 2f;
             stepShake = 0.1f;
             legExtension = -5f;
-            legBaseOffset = 5f;
+            legBaseOffset = 8f;
 
             allowLegStep = true;
             mechSideSway = 0.9f;
