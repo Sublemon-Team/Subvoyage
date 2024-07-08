@@ -943,7 +943,7 @@ public class SvUnits{
             drag = 0.07f;
             speed = 1.6f;
             rotateSpeed = 8f;
-            health = 1100;
+            health = 1500;
             hitSize = 15f;
             flying = false;
 
@@ -1047,7 +1047,7 @@ public class SvUnits{
             drag = 0.07f;
             speed = 1.6f;
             rotateSpeed = 8f;
-            health = 1520;
+            health = 3220;
             hitSize = 20f;
             flying = false;
 
@@ -1398,7 +1398,7 @@ public class SvUnits{
                     if(unit instanceof HydromechUnitEntity hm && hm.isOnLiquid()) {
                         bullet.lifetime *= 1.7f;
                     } else if (unit instanceof HydromechUnitEntity) {
-                        bullet.damage *= 2f;
+                        bullet.damage *= 3f;
                     }
                 }
 
