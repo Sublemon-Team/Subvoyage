@@ -18,6 +18,10 @@ public class HydromechWeapon extends Weapon {
         super(id);
     }
 
+    public HydromechWeapon() {
+        super();
+    }
+
     @Override
     protected void shoot(Unit unit, WeaponMount mount, float shootX, float shootY, float rotation) {
         boolean canShoot = true;

@@ -15,6 +15,7 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import subvoyage.*;
+import subvoyage.content.unit.ai.StraightMissileAI;
 import subvoyage.content.unit.bullet.*;
 import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
@@ -22,6 +23,8 @@ import subvoyage.content.unit.weapons.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
+
+import java.security.cert.Certificate;
 
 public class SvUnits{
     public static UnitType
@@ -1121,11 +1124,12 @@ public class SvUnits{
 
             withStates(
             HydromechState.GROUND, new UnitStatState(){{
-                speed = 0.8f;
+                speed = 0.6f;
+                inwardsDamageMul = 0.6f;
             }},
             HydromechState.WATER, new UnitStatState(){{
-                speed = 1.6f;
-                inwardsDamageMul = 1.2f;
+                speed = 0.9f;
+                inwardsDamageMul = 0.8f;
             }}
             );
 
@@ -1157,60 +1161,36 @@ public class SvUnits{
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
-            weapons.add(new HydromechRepairBeam(name + "-repair-weapon"){{
-                widthSinMag = 0.11f;
-                reload = 20f;
-                x = 0f;
-                y = 6.5f;
-                rotate = false;
-                shootY = 0f;
-                beamWidth = 0.7f;
-                repairSpeed = 3.1f;
-                fractionRepairSpeed = 0.06f;
-                aimDst = 0f;
-                shootCone = 15f;
-                mirror = false;
 
-                activationState = HydromechState.WATER;
 
-                targetUnits = true;
-                targetBuildings = false;
-                autoTarget = true;
-                controllable = false;
-                laserColor = Pal.heal;
-                healColor = Pal.heal;
+            parts.add(
+                    new RegionPart("-rifle"){{
+                        moveRot = 20f;
+                        moveX = 1f;
+                        x = 0;
+                        y = 0;
+                        progress = PartProgress.heat;
+                        heatColor = Color.red;
+                        mirror = true;
+                    }});
 
-                bullet = new BulletType(){{
-                    maxRange = 60f;
-                }};
-            }});
-
-            weapons.add(new HydromechWeapon(name + "-rifle"){{
-                shoot = new ShootLeeft(){{
-                    shots = 3;
-                }};
-
-                reload = 80f;
-                recoil = 4f;
-                inaccuracy = 60f;
+            weapons.add(new HydromechWeapon() {{
+                reload = 100f;
+                recoil = 6f;
+                inaccuracy = 0f;
                 x = 0;
                 y = 0;
                 heatColor = Color.red;
-
+                mirror = false;
                 alternate = false;
                 top = false;
-                mirror = true;
                 shootSound = Sounds.missileLaunch;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.25f;
-                groundStat = new WeaponStatState(){{
-                    lifetime = 50;
-                    damage = 25f;
-                }};
-                waterStat = new WeaponStatState(){{
-                    lifetime = 78;
-                    damage = 9f;
-                }};
+
+                activationState = HydromechState.WATER;
+                activationBasedDraw = true;
+                cooldownTime = reload;
 
                 bullet = new BulletType(){{
                     shootEffect = Fx.sparkShoot;
@@ -1221,12 +1201,33 @@ public class SvUnits{
                     keepVelocity = false;
                     collidesAir = true;
 
-                    spawnUnit = new MissileUnitType("vanguard-missile"){{
+                    spawnUnit = new MissileUnitType("vanguard-missile-water"){{
+                        controller = u -> new StraightMissileAI();
+                        constructor = () -> {
+                            TimedKillUnit u = TimedKillUnit.create();
+                            u.apply(StatusEffects.invincible,120f);
+                            return u;
+                        };
                         outlineColor = Pal.darkOutline;
                         trailRotation = true;
                         targetAir = true;
                         physics = true;
                         lowAltitude = true;
+
+                        lifetime = 60f;
+                        health = 1000f;
+
+                        abilities.add(new ShieldArcAbility(){{
+                            region = "subvoyage-vanguard-missile-shield";
+                            radius = 18f;
+                            angle = 82f;
+                            regen = 0.6f;
+                            cooldown = 0f;
+                            max = 2000f;
+                            y = -20f;
+                            width = 6f;
+                            whenShooting = false;
+                        }});
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
@@ -1238,7 +1239,6 @@ public class SvUnits{
                         speed = 4.6f;
                         maxRange = 3f;
                         health = 40;
-                        homingDelay = 5f;
 
                         engineSize = 3f;
                         hitColor = engineColor = trailColor = Color.valueOf("feb380");
@@ -1250,85 +1250,92 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(250, 50f){{
+                            bullet = new ExplosionBulletType(50f, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
-
-
-                                fragBullets = 2;
-                                fragBullet = new BasicBulletType(10f, 60f){{
-                                    sprite = "missile-large";
-                                    width = height = 8f;
-                                    maxRange = 50f;
-                                    ignoreRotation = true;
-
-                                    hitColor = trailColor = Color.valueOf("feb380");
-                                    frontColor = Color.white;
-                                    trailWidth = 2f;
-                                    trailLength = 8;
-                                    hitEffect = despawnEffect = Fx.blastExplosion;
-                                    smokeEffect = SvFx.shootLauncher;
-                                    hitSound = Sounds.plasmaboom;
-
-                                    backColor = Color.valueOf("feb380");
-                                    frontColor = Color.white;
-                                    mixColorTo = Color.white;
-
-                                    ejectEffect = Fx.none;
-                                    hitSize = 22f;
-
-                                    collidesAir = true;
-                                    lifetime = 30f;
-
-                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                    keepVelocity = false;
-                                    weaveMag = 2f;
-                                    weaveScale = 1f;
-                                    speed = 0.8f;
-                                    drag = -0.020f;
-                                    homingPower = 0.01f;
-
-                                    fragBullets = 10;
-                                    fragBullet = new BasicBulletType(20f, 30f){{
-                                        sprite = "missile-large";
-                                        width = height = 8f;
-                                        maxRange = 50f;
-                                        ignoreRotation = true;
-
-                                        hitColor = trailColor = Color.valueOf("feb380");
-                                        frontColor = Color.white;
-                                        trailWidth = 2f;
-                                        trailLength = 8;
-                                        hitEffect = despawnEffect = Fx.blastExplosion;
-                                        smokeEffect = SvFx.shootLauncher;
-                                        hitSound = Sounds.plasmaboom;
-
-                                        backColor = Color.valueOf("feb380");
-                                        frontColor = Color.white;
-                                        mixColorTo = Color.white;
-
-                                        ejectEffect = Fx.none;
-                                        hitSize = 22f;
-
-                                        collidesAir = true;
-                                        lifetime = 30f;
-
-                                        hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                        keepVelocity = false;
-                                        weaveMag = 2f;
-                                        weaveScale = 1f;
-                                        speed = 0.8f;
-                                        drag = -0.020f;
-                                        homingPower = 0.01f;
-
-                                        splashDamage = 20f;
-                                        splashDamageRadius = 10f;
-                                    }};
-
-                                    splashDamage = 20f;
-                                    splashDamageRadius = 10f;
+                                shootEffect = new ExplosionEffect(){{
+                                    lifetime = 50f;
+                                    waveStroke = 5f;
+                                    waveLife = 8f;
+                                    waveColor = Color.white;
+                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    waveRad = 40f;
+                                    smokeSize = 4f;
+                                    smokes = 7;
+                                    smokeSizeBase = 0f;
+                                    sparks = 10;
+                                    sparkRad = 40f;
+                                    sparkLen = 6f;
+                                    sparkStroke = 2f;
                                 }};
+                            }};
+                        }});
+                    }};
+                }};
+            }});
 
+            weapons.add(new HydromechWeapon() {{
+                reload = 80f;
+                recoil = 4f;
+                inaccuracy = 10f;
+                x = 0;
+                y = 0;
+                heatColor = Color.red;
+                mirror = false;
+                alternate = false;
+                top = false;
+                shootSound = Sounds.missileLaunch;
+                soundPitchMin = 0.4f;
+                soundPitchMax = 0.25f;
+
+                activationState = HydromechState.GROUND;
+                activationBasedDraw = true;
+
+                cooldownTime = reload;
+
+                bullet = new BulletType(){{
+                    shootEffect = Fx.sparkShoot;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    hitColor = Pal.suppress;
+                    shake = 1f;
+                    speed = 0f;
+                    keepVelocity = false;
+                    collidesAir = true;
+
+                    spawnUnit = new MissileUnitType("vanguard-missile"){{
+                        controller = u -> new StraightMissileAI();
+                        outlineColor = Pal.darkOutline;
+                        trailRotation = true;
+                        targetAir = true;
+                        physics = true;
+                        lowAltitude = true;
+
+                        lifetime = 50f;
+
+                        hitEffect = despawnEffect = Fx.blastExplosion;
+                        smokeEffect = SvFx.shootLauncher;
+                        trailEffect = SvFx.missileTrailSmoke;
+                        trailInterval = 3f;
+                        trailWidth = 1f;
+                        trailLength = 6;
+
+                        speed = 4.6f;
+                        maxRange = 3f;
+                        health = 40;
+
+                        engineSize = 3f;
+                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        engineLayer = Layer.effect;
+                        deathExplosionEffect = Fx.none;
+                        loopSoundVolume = 0.1f;
+                        weapons.add(new Weapon(){{
+                            shootCone = 360f;
+                            mirror = false;
+                            reload = 1f;
+                            shootOnDeath = true;
+                            bullet = new ExplosionBulletType(90, 50f){{
+                                collidesAir = true;
+                                suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
                                     lifetime = 50f;
                                     waveStroke = 5f;
