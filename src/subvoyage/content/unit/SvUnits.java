@@ -1084,7 +1084,6 @@ public class SvUnits{
                 reload = 40f;
                 recoil = 3f;
                 inaccuracy = 10f;
-
                 shootY = 0;
                 top = true;
                 mirror = true;
