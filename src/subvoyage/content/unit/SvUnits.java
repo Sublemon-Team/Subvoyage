@@ -14,6 +14,7 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
+import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import subvoyage.*;
 import subvoyage.content.unit.ai.StraightMissileAI;
 import subvoyage.content.unit.bullet.*;
@@ -1117,10 +1118,15 @@ public class SvUnits{
 
         vanguard = new HydromechUnitType("vanguard"){{
             constructor = HydromechUnitEntity::create;
-            drag = 0.07f;
-            rotateSpeed = 8f;
+            drag = 0.14f;
+            rotateSpeed = 5f;
             health = 3220;
             hitSize = 20f;
+
+            trailScl = 12;
+            trailLength = 25;
+
+            accel = 0.4f;
 
             withStates(
             HydromechState.GROUND, new UnitStatState(){{
@@ -1132,6 +1138,7 @@ public class SvUnits{
                 inwardsDamageMul = 0.8f;
             }}
             );
+
 
             bodyHeat = true;
             heatColor = Color.red;
@@ -1273,7 +1280,6 @@ public class SvUnits{
                     }};
                 }};
             }});
-
             weapons.add(new HydromechWeapon() {{
                 reload = 80f;
                 recoil = 4f;
@@ -1355,6 +1361,18 @@ public class SvUnits{
                         }});
                     }};
                 }};
+            }});
+            weapons.add(new HydromechWeapon(name+"-hydrogun") {{
+                rotate = true;
+                x = 0f;
+                y = -2f;
+                mirror = false;
+                controllable = true;
+                cooldownTime = 1f;
+                hasHeat = false;
+
+
+                bullet = new LiquidBulletType(Liquids.water);
             }});
         }};
 

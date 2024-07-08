@@ -12,6 +12,7 @@ public class HydromechWeapon extends Weapon {
     public WeaponStatState groundStat, waterStat;
     public HydromechState activationState = HydromechState.ANY;
     public boolean activationBasedDraw = false;
+    public boolean hasHeat = true;
     public float sclX,sclY = 1f;
 
     public HydromechWeapon(String id) {

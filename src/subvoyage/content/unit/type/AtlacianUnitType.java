@@ -12,6 +12,7 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.world.meta.*;
+import subvoyage.content.unit.weapons.HydromechWeapon;
 import subvoyage.content.world.items.*;
 
 public class AtlacianUnitType extends UnitType{
@@ -50,6 +51,7 @@ public class AtlacianUnitType extends UnitType{
         if(regionHeat != null && regionHeat.found()) {
             float warmup = 0f;
             for (WeaponMount mount : unit.mounts) {
+                if(mount.weapon instanceof HydromechWeapon hw && !hw.hasHeat) continue;
                 warmup = Math.max(warmup, mount.heat);
                 //mount.heat = mount.warmup;
             }

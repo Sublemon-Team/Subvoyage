@@ -13,6 +13,7 @@ import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import subvoyage.content.unit.entity.*;
+import subvoyage.content.unit.weapons.HydromechWeapon;
 
 import java.util.*;
 import java.util.function.*;
@@ -42,7 +43,7 @@ public class HydromechUnitType extends AtlacianUnitType {
         hovering = true;
 
         trailScl = 8;
-        trailLength = 9;
+        trailLength = 20;
         waveTrailX = 4f;
         waveTrailY = -3f;
     }
@@ -125,6 +126,7 @@ public class HydromechUnitType extends AtlacianUnitType {
                 float warmup = 0f;
 
                 for (WeaponMount mount : unit.mounts) {
+                    if(mount.weapon instanceof HydromechWeapon hw && !hw.hasHeat) continue;
                     warmup = Math.max(warmup, mount.heat);
                     //mount.heat = mount.warmup;
                 }
