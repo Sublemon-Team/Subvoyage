@@ -1194,7 +1194,7 @@ public class SvUnits{
                 mirror = false;
                 alternate = false;
                 top = false;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.missileSmall;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.25f;
 
@@ -1221,7 +1221,7 @@ public class SvUnits{
                         outlineColor = Pal.darkOutline;
                         trailRotation = true;
                         targetAir = true;
-                        physics = true;
+                        physics = false;
                         lowAltitude = true;
 
                         lifetime = 60f;
@@ -1293,7 +1293,7 @@ public class SvUnits{
                 mirror = false;
                 alternate = false;
                 top = false;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.missileSmall;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.25f;
 
@@ -1316,7 +1316,7 @@ public class SvUnits{
                         outlineColor = Pal.darkOutline;
                         trailRotation = true;
                         targetAir = true;
-                        physics = true;
+                        physics = false;
                         lowAltitude = true;
 
                         lifetime = 50f;
@@ -1375,7 +1375,9 @@ public class SvUnits{
                 hasHeat = false;
                 rotateSpeed = 5f;
                 alwaysShootWhenMoving = true;
+                recoil = 0.1f;
 
+                shootSound = Sounds.none;
 
                 bullet = new LiquidBulletType(Liquids.water);
             }});
