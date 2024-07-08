@@ -198,6 +198,11 @@ public class AtlacianTechTree {
                                 )
                         )
                 );
+                node(hydromechFactory,with(research(helium)),() -> {
+                    node(leeft,() -> {
+
+                    });
+                });
             });
 
             node(coreShore,() -> {
