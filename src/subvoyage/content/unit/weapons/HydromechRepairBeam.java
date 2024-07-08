@@ -228,9 +228,8 @@ public class HydromechRepairBeam extends RepairBeamWeapon {
     }
 
     private boolean canUse(Unit unit) {
-        if(activationState == HydromechState.ANY) return true;
         if(unit instanceof HydromechUnitEntity hm) {
-            return hm.getState() == activationState;
+            return hm.sameStateAs(activationState);
         }
         return true;
     }

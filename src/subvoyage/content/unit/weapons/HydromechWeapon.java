@@ -21,8 +21,8 @@ public class HydromechWeapon extends Weapon {
     @Override
     protected void shoot(Unit unit, WeaponMount mount, float shootX, float shootY, float rotation) {
         boolean canShoot = true;
-        if(activationState != HydromechState.ANY && unit instanceof HydromechUnitEntity hm)
-            canShoot = hm.getState() == activationState;
+        if(unit instanceof HydromechUnitEntity hm)
+            canShoot = hm.sameStateAs(activationState);
         if(canShoot) super.shoot(unit, mount, shootX, shootY, rotation);
     }
 
@@ -38,8 +38,8 @@ public class HydromechWeapon extends Weapon {
     public void draw(Unit unit, WeaponMount mount) {
         if(activationBasedDraw) {
             boolean canShoot = true;
-            if(activationState != HydromechState.ANY && unit instanceof HydromechUnitEntity hm)
-                canShoot = hm.getState() == activationState;
+            if(unit instanceof HydromechUnitEntity hm)
+                canShoot = hm.sameStateAs(activationState);
             if(!canShoot) return;
         }
         Draw.scl(sclX,sclY);

@@ -1,28 +1,19 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
-import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.math.geom.*;
-import arc.util.*;
-import mindustry.*;
 import mindustry.ai.types.*;
-import mindustry.audio.*;
 import mindustry.content.*;
-import mindustry.core.*;
-import mindustry.entities.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
-import mindustry.world.blocks.units.*;
 import subvoyage.*;
 import subvoyage.content.unit.bullet.DecayingBulletType;
 import subvoyage.content.unit.entity.*;
@@ -33,8 +24,6 @@ import subvoyage.content.unit.weapons.WeaponStatState;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
-
-import static mindustry.Vars.*;
 
 public class SvUnits{
     public static UnitType
@@ -945,11 +934,20 @@ public class SvUnits{
         leeft = new HydromechUnitType("leeft") {{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
-            speed = 1.6f;
             rotateSpeed = 8f;
             health = 1500;
             hitSize = 15f;
             flying = false;
+
+            withStates(
+                    HydromechState.GROUND,new UnitStatState() {{
+                        speed = 0.8f;
+                        inwardsDamageMul = 1.2f;
+                    }},
+                    HydromechState.WATER,new UnitStatState() {{
+                        speed = 1.6f;
+                    }}
+            );
 
             bodyHeat = true;
             heatColor = Color.red;
@@ -1011,11 +1009,20 @@ public class SvUnits{
         flagshi = new HydromechUnitType("flagshi"){{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
-            speed = 1.6f;
             rotateSpeed = 8f;
             health = 3220;
             hitSize = 20f;
             flying = false;
+
+            withStates(
+                    HydromechState.GROUND,new UnitStatState() {{
+                        speed = 0.8f;
+                    }},
+                    HydromechState.WATER,new UnitStatState() {{
+                        speed = 1.6f;
+                        inwardsDamageMul = 1.2f;
+                    }}
+            );
 
             bodyHeat = true;
             heatColor = Color.red;

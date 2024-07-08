@@ -22,6 +22,8 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.environment.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.unit.type.HydromechState;
+import subvoyage.content.unit.type.HydromechUnitType;
+import subvoyage.content.unit.type.UnitStatState;
 
 import java.util.Iterator;
 
@@ -43,8 +45,18 @@ public class HydromechUnitEntity extends LegsUnit {
         this.tright = new Trail(1);
     }
 
+    public boolean sameStateAs(HydromechState state) {
+        if(state == HydromechState.ANY) return true;
+        else return getState() == state;
+    }
     public HydromechState getState() {
         return liquidedSmooth() > 0.5f ? HydromechState.WATER : HydromechState.GROUND;
+    }
+    public UnitStatState getStatState() {
+        return ((HydromechUnitType) type).states.get(getState());
+    }
+    public UnitStatState getStatState(UnitStatState def) {
+        return ((HydromechUnitType) type).states.getOrDefault(getState(),def);
     }
 
     public static HydromechUnitEntity create() {
@@ -79,7 +91,7 @@ public class HydromechUnitEntity extends LegsUnit {
 
     @Override
     public void damage(float amount) {
-        super.damage(amount* (isOnLiquid() ? 1f : 1.2f));
+        super.damage(amount*getStatState().inwardsDamageMul);
     }
 
     @Override
@@ -509,9 +521,8 @@ public class HydromechUnitEntity extends LegsUnit {
         }
         liquidedSmooth = Mathf.lerp(liquidedSmooth,isOnLiquid() ? 1f : 0f, Time.delta/10f);
     }
-
     @Override
     public float speed() {
-        return super.speed() * (isOnLiquid() ? 1f : 0.5f);
+        return getStatState().speed;
     }
 }

@@ -6,13 +6,23 @@ import mindustry.game.*;
 import mindustry.gen.*;
 import subvoyage.content.unit.entity.*;
 
+import java.util.HashMap;
 import java.util.function.*;
 
 public class HydromechUnitType extends AtlacianUnitType {
     public Consumer<HydromechUnitEntity> onDraw = (e) -> {
     };
 
-
+    public HashMap<HydromechState, UnitStatState> states = new HashMap<>();
+    public <A> void withStates(A... elements) {
+        HashMap<HydromechState,UnitStatState> map = new HashMap<>();
+        for (int i = 0; i < elements.length; i+=2) {
+            HydromechState state = (HydromechState) elements[i];
+            UnitStatState stat = (UnitStatState) elements[i+1];
+            map.put(state,stat);
+        }
+        states = map;
+    }
 
 
     public HydromechUnitType(String name) {
