@@ -8,6 +8,7 @@ public class WeaponStatState {
 
 
     public void apply(Bullet bullet) {
+        if(bullet == null) return;
         bullet.damage = damage;
         bullet.lifetime = lifetime;
     }

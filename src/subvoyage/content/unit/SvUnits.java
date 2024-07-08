@@ -1193,7 +1193,8 @@ public class SvUnits{
                 recoil = 3f;
                 inaccuracy = 10f;
                 shootY = 0;
-
+                x = 0;
+                y = 0;
 //                x = 3.25f;
 //                y = 5;
 //                layerOffset = -1f;
