@@ -76,7 +76,7 @@ public class SvBlocks{
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
-            helicopterFactory,
+            helicopterFactory,hydromechFactory,
             //EXPLORATION
             buoy,tower,beacon,
             //STORAGE
@@ -125,6 +125,19 @@ public class SvBlocks{
             );
             size = 3;
             consumePower(1.2f);
+        }};
+
+        hydromechFactory = new UnitFactory("hydromech-factory") {{
+            requirements(Category.units, atl(), with(iridium, 60, clay, 70, chromium, 30));
+
+            researchCost = with(iridium,600,clay,600,chromium,120);
+
+            consumeLiquid(helium,1.2f);
+            plans = Seq.with(
+                    new UnitPlan(leeft, 60f * 10, with(iridium, 20))
+            );
+            size = 3;
+            consumePower(1f);
         }};
 
         //drills

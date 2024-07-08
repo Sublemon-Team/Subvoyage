@@ -50,8 +50,8 @@ public class AtlacianUnitType extends UnitType{
         if(regionHeat != null && regionHeat.found()) {
             float warmup = 0f;
             for (WeaponMount mount : unit.mounts) {
-                warmup = Math.max(warmup, mount.warmup);
-                mount.heat = mount.warmup;
+                warmup = Math.max(warmup, mount.heat);
+                //mount.heat = mount.warmup;
             }
             Draw.blend(Blending.additive);
             Draw.color(heatColor,warmup);
