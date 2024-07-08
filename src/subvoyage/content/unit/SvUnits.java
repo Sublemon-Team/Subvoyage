@@ -1189,21 +1189,20 @@ public class SvUnits{
                 shoot = new ShootLeeft(){{
                     shots = 3;
                 }};
-                reload = 40f;
-                recoil = 3f;
-                inaccuracy = 10f;
-                shootY = 0;
+
+                reload = 80f;
+                recoil = 4f;
+                inaccuracy = 60f;
                 x = 0;
                 y = 0;
-//                x = 3.25f;
-//                y = 5;
-//                layerOffset = -1f;
+                heatColor = Color.red;
 
+                alternate = false;
                 top = false;
                 mirror = true;
                 shootSound = Sounds.missileLaunch;
                 soundPitchMin = 0.4f;
-                soundPitchMax = 0.45f;
+                soundPitchMax = 0.25f;
                 groundStat = new WeaponStatState(){{
                     lifetime = 50;
                     damage = 25f;
@@ -1222,7 +1221,6 @@ public class SvUnits{
                     keepVelocity = false;
                     collidesAir = true;
 
-                    // todo (to draw :>)
                     spawnUnit = new MissileUnitType("vanguard-missile"){{
                         outlineColor = Pal.darkOutline;
                         trailRotation = true;
