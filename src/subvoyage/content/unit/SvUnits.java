@@ -959,6 +959,7 @@ public class SvUnits{
             mechFrontSway = 0.15f;
 
             allowLegStep = true;
+            canDrown = false;
             hovering = true;
             legPhysicsLayer = false;
 
@@ -1011,6 +1012,7 @@ public class SvUnits{
             health = 3220;
             hitSize = 20f;
             flying = false;
+            canDrown = false;
 
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
