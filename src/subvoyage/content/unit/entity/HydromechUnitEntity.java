@@ -95,6 +95,16 @@ public class HydromechUnitEntity extends LegsUnit {
     }
 
     @Override
+    public boolean canDrown() {
+        return false;
+    }
+
+    @Override
+    public void updateDrowning() {
+
+    }
+
+    @Override
     public boolean emitWalkSound() {
         return false;
     }
