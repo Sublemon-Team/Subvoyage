@@ -935,8 +935,6 @@ public class SvUnits{
             rotateSpeed = 8f;
             health = 1500;
             hitSize = 15f;
-            flying = false;
-
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
                         speed = 0.8f;
@@ -959,15 +957,10 @@ public class SvUnits{
             mechFrontSway = 0.15f;
 
             allowLegStep = true;
-            canDrown = false;
-            hovering = true;
             legPhysicsLayer = false;
-
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
-
-
             weapons.add(new HydromechWeapon(name + "-weapon") {{
                 shoot = new ShootLeeft() {{shots = 2;}};
                 reload = 40f;
@@ -1011,9 +1004,6 @@ public class SvUnits{
             rotateSpeed = 8f;
             health = 3220;
             hitSize = 20f;
-            flying = false;
-            canDrown = false;
-
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
                         speed = 0.8f;
@@ -1050,15 +1040,11 @@ public class SvUnits{
             allowLegStep = true;
             mechSideSway = 0.9f;
             mechFrontSway = 0.9f;
-
-            hovering = true;
             legPhysicsLayer = false;
 
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
-
-
             weapons.add(new HydromechRepairBeam(name + "-repair-weapon") {{
                 widthSinMag = 0.11f;
                 reload = 20f;
@@ -1132,7 +1118,6 @@ public class SvUnits{
             rotateSpeed = 8f;
             health = 3220;
             hitSize = 20f;
-            flying = false;
 
             withStates(
             HydromechState.GROUND, new UnitStatState(){{
@@ -1167,8 +1152,6 @@ public class SvUnits{
             allowLegStep = true;
             mechSideSway = 0.9f;
             mechFrontSway = 0.9f;
-
-            hovering = true;
             legPhysicsLayer = false;
 
             shadowElevation = 0.1f;

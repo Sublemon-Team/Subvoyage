@@ -28,6 +28,9 @@ public class HydromechUnitType extends AtlacianUnitType {
     public HydromechUnitType(String name) {
         super(name);
         canDrown = false;
+        flying = false;
+        hovering = true;
+
         trailScl = 8;
         trailLength = 9;
         waveTrailX = 4f;
