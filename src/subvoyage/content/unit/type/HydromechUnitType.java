@@ -1,12 +1,12 @@
 package subvoyage.content.unit.type;
 
-import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.*;
 import arc.math.geom.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import subvoyage.content.unit.entity.*;
 
-import java.util.HashMap;
+import java.util.*;
 import java.util.function.*;
 
 public class HydromechUnitType extends AtlacianUnitType {
@@ -27,6 +27,7 @@ public class HydromechUnitType extends AtlacianUnitType {
 
     public HydromechUnitType(String name) {
         super(name);
+        canDrown = false;
         trailScl = 8;
         trailLength = 9;
         waveTrailX = 4f;

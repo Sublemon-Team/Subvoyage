@@ -15,12 +15,10 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import subvoyage.*;
-import subvoyage.content.unit.bullet.DecayingBulletType;
+import subvoyage.content.unit.bullet.*;
 import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
-import subvoyage.content.unit.weapons.HydromechRepairBeam;
-import subvoyage.content.unit.weapons.HydromechWeapon;
-import subvoyage.content.unit.weapons.WeaponStatState;
+import subvoyage.content.unit.weapons.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
@@ -32,7 +30,7 @@ public class SvUnits{
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
-    leeft, flagshi,
+    leeft, flagshi, vanguard,
     //cargo
     bulker;
 
@@ -40,7 +38,7 @@ public class SvUnits{
     public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
-        hmech("leeft", "flagshi");
+        hmech("leeft", "flagshi", "vanguard");
         //core
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
@@ -1126,6 +1124,248 @@ public class SvUnits{
             }});
         }};
 
+        vanguard = new HydromechUnitType("vanguard"){{
+            constructor = HydromechUnitEntity::create;
+            drag = 0.07f;
+            rotateSpeed = 8f;
+            health = 3220;
+            hitSize = 20f;
+            flying = false;
+
+            withStates(
+            HydromechState.GROUND, new UnitStatState(){{
+                speed = 0.8f;
+            }},
+            HydromechState.WATER, new UnitStatState(){{
+                speed = 1.6f;
+                inwardsDamageMul = 1.2f;
+            }}
+            );
+
+            bodyHeat = true;
+            heatColor = Color.red;
+            legGroupSize = 3;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legMaxLength = 1.1f;
+            legMinLength = 0.2f;
+            legLengthScl = 0.95f;
+            legSplashDamage = 1.1f;
+            legStraightness = 0.4f;
+
+            legCount = 6;
+            legLength = 15f;
+            legForwardScl = 0.7f;
+            legMoveSpace = 2f;
+            rippleScale = 2f;
+            stepShake = 0.1f;
+            legExtension = -5f;
+            legBaseOffset = 8f;
+
+            allowLegStep = true;
+            mechSideSway = 0.9f;
+            mechFrontSway = 0.9f;
+
+            hovering = true;
+            legPhysicsLayer = false;
+
+            shadowElevation = 0.1f;
+            groundLayer = Layer.legUnit - 1f;
+            targetAir = true;
+            weapons.add(new HydromechRepairBeam(name + "-repair-weapon"){{
+                widthSinMag = 0.11f;
+                reload = 20f;
+                x = 0f;
+                y = 6.5f;
+                rotate = false;
+                shootY = 0f;
+                beamWidth = 0.7f;
+                repairSpeed = 3.1f;
+                fractionRepairSpeed = 0.06f;
+                aimDst = 0f;
+                shootCone = 15f;
+                mirror = false;
+
+                activationState = HydromechState.WATER;
+
+                targetUnits = true;
+                targetBuildings = false;
+                autoTarget = true;
+                controllable = false;
+                laserColor = Pal.heal;
+                healColor = Pal.heal;
+
+                bullet = new BulletType(){{
+                    maxRange = 60f;
+                }};
+            }});
+
+            weapons.add(new HydromechWeapon(name + "-rifle"){{
+                shoot = new ShootLeeft(){{
+                    shots = 3;
+                }};
+                reload = 40f;
+                recoil = 3f;
+                inaccuracy = 10f;
+                shootY = 0;
+
+//                x = 3.25f;
+//                y = 5;
+//                layerOffset = -1f;
+
+                top = false;
+                mirror = true;
+                shootSound = Sounds.missileLaunch;
+                soundPitchMin = 0.4f;
+                soundPitchMax = 0.45f;
+                groundStat = new WeaponStatState(){{
+                    lifetime = 50;
+                    damage = 25f;
+                }};
+                waterStat = new WeaponStatState(){{
+                    lifetime = 78;
+                    damage = 9f;
+                }};
+
+                bullet = new BulletType(){{
+                    shootEffect = Fx.sparkShoot;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    hitColor = Pal.suppress;
+                    shake = 1f;
+                    speed = 0f;
+                    keepVelocity = false;
+                    collidesAir = true;
+
+                    // todo (to draw :>)
+                    spawnUnit = new MissileUnitType("vanguard-missile"){{
+                        outlineColor = Pal.darkOutline;
+                        trailRotation = true;
+                        targetAir = true;
+                        physics = true;
+                        lowAltitude = true;
+
+                        hitEffect = despawnEffect = Fx.blastExplosion;
+                        smokeEffect = SvFx.shootLauncher;
+                        trailEffect = SvFx.missileTrailSmoke;
+                        trailInterval = 3f;
+                        trailWidth = 1f;
+                        trailLength = 6;
+
+                        speed = 4.6f;
+                        maxRange = 3f;
+                        health = 40;
+                        homingDelay = 5f;
+
+                        engineSize = 3f;
+                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        engineLayer = Layer.effect;
+                        deathExplosionEffect = Fx.none;
+                        loopSoundVolume = 0.1f;
+                        weapons.add(new Weapon(){{
+                            shootCone = 360f;
+                            mirror = false;
+                            reload = 1f;
+                            shootOnDeath = true;
+                            bullet = new ExplosionBulletType(250, 50f){{
+                                collidesAir = true;
+                                suppressionRange = 80f;
+
+
+                                fragBullets = 2;
+                                fragBullet = new BasicBulletType(10f, 60f){{
+                                    sprite = "missile-large";
+                                    width = height = 8f;
+                                    maxRange = 50f;
+                                    ignoreRotation = true;
+
+                                    hitColor = trailColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    trailWidth = 2f;
+                                    trailLength = 8;
+                                    hitEffect = despawnEffect = Fx.blastExplosion;
+                                    smokeEffect = SvFx.shootLauncher;
+                                    hitSound = Sounds.plasmaboom;
+
+                                    backColor = Color.valueOf("feb380");
+                                    frontColor = Color.white;
+                                    mixColorTo = Color.white;
+
+                                    ejectEffect = Fx.none;
+                                    hitSize = 22f;
+
+                                    collidesAir = true;
+                                    lifetime = 30f;
+
+                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                                    keepVelocity = false;
+                                    weaveMag = 2f;
+                                    weaveScale = 1f;
+                                    speed = 0.8f;
+                                    drag = -0.020f;
+                                    homingPower = 0.01f;
+
+                                    fragBullets = 10;
+                                    fragBullet = new BasicBulletType(20f, 30f){{
+                                        sprite = "missile-large";
+                                        width = height = 8f;
+                                        maxRange = 50f;
+                                        ignoreRotation = true;
+
+                                        hitColor = trailColor = Color.valueOf("feb380");
+                                        frontColor = Color.white;
+                                        trailWidth = 2f;
+                                        trailLength = 8;
+                                        hitEffect = despawnEffect = Fx.blastExplosion;
+                                        smokeEffect = SvFx.shootLauncher;
+                                        hitSound = Sounds.plasmaboom;
+
+                                        backColor = Color.valueOf("feb380");
+                                        frontColor = Color.white;
+                                        mixColorTo = Color.white;
+
+                                        ejectEffect = Fx.none;
+                                        hitSize = 22f;
+
+                                        collidesAir = true;
+                                        lifetime = 30f;
+
+                                        hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
+                                        keepVelocity = false;
+                                        weaveMag = 2f;
+                                        weaveScale = 1f;
+                                        speed = 0.8f;
+                                        drag = -0.020f;
+                                        homingPower = 0.01f;
+
+                                        splashDamage = 20f;
+                                        splashDamageRadius = 10f;
+                                    }};
+
+                                    splashDamage = 20f;
+                                    splashDamageRadius = 10f;
+                                }};
+
+                                shootEffect = new ExplosionEffect(){{
+                                    lifetime = 50f;
+                                    waveStroke = 5f;
+                                    waveLife = 8f;
+                                    waveColor = Color.white;
+                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    waveRad = 40f;
+                                    smokeSize = 4f;
+                                    smokes = 7;
+                                    smokeSizeBase = 0f;
+                                    sparks = 10;
+                                    sparkRad = 40f;
+                                    sparkLen = 6f;
+                                    sparkStroke = 2f;
+                                }};
+                            }};
+                        }});
+                    }};
+                }};
+            }});
+        }};
 
         //other
         bulker = new AtlacianUnitType("bulker"){{
