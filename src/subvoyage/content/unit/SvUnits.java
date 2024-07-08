@@ -1123,6 +1123,9 @@ public class SvUnits{
             health = 3220;
             hitSize = 20f;
 
+            waveTrailX = 8f;
+            waveTrailY = -8f;
+
             trailScl = 12;
             trailLength = 25;
 
@@ -1370,6 +1373,8 @@ public class SvUnits{
                 controllable = true;
                 cooldownTime = 1f;
                 hasHeat = false;
+                rotateSpeed = 5f;
+                alwaysShootWhenMoving = true;
 
 
                 bullet = new LiquidBulletType(Liquids.water);
