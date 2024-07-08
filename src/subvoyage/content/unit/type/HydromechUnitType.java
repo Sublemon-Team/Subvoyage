@@ -12,6 +12,9 @@ public class HydromechUnitType extends AtlacianUnitType {
     public Consumer<HydromechUnitEntity> onDraw = (e) -> {
     };
 
+
+
+
     public HydromechUnitType(String name) {
         super(name);
         trailScl = 8;

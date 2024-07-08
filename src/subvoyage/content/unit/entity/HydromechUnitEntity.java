@@ -21,6 +21,7 @@ import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.*;
 import subvoyage.content.unit.*;
+import subvoyage.content.unit.type.HydromechState;
 
 import java.util.Iterator;
 
@@ -40,6 +41,10 @@ public class HydromechUnitEntity extends LegsUnit {
         this.tleft = new Trail(1);
         this.trailColor = Blocks.water.mapColor.cpy().mul(1.5F);
         this.tright = new Trail(1);
+    }
+
+    public HydromechState getState() {
+        return liquidedSmooth() > 0.5f ? HydromechState.WATER : HydromechState.GROUND;
     }
 
     public static HydromechUnitEntity create() {
