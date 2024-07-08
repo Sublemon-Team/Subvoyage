@@ -1191,13 +1191,12 @@ public class SvBlocks{
             drawer = new DrawMulti(new DrawDefault(), new DrawEnergyGlow());
             size = 2;
         }};
-
         spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
             requirements(Category.power,atl(), with(corallite, 20, clay, 30, iridium, 25));
 
             researchCost = with(corallite,200,clay,150,iridium,100);
 
-            powerProduction = 1.2f;
+            powerProduction = 5.4f;
             itemDuration = 120f;
             envDisabled |= Env.scorching;
 
@@ -1243,9 +1242,9 @@ public class SvBlocks{
             health = 900;
             ambientSound = Sounds.hum;
             ambientSoundVolume = 0.24f;
-            powerProduction = 6;
+            powerProduction = 24;
 
-            consumePower(20f/30);
+            consumePower(2f);
             consumeItem(chromium,2);
             consumeLiquid(polygen, heating / coolantPower).update(false);
         }};
