@@ -18,7 +18,8 @@ public class DecayingBulletType extends BasicBulletType {
     @Override
     public void update(Bullet b) {
         super.update(b);
-        b.damage -= dmgReduction/b.lifetime*Time.delta;
+        if(b.time >= Time.delta/60f)
+            b.damage -= dmgReduction/b.lifetime*Time.delta;
         if(b.damage <= 0) b.absorb();
     }
 
@@ -52,8 +53,28 @@ public class DecayingBulletType extends BasicBulletType {
         if(trailLength > 0 && b.trail != null){
             float z = Draw.z();
             Draw.z(z - 0.0001f);
-            b.trail.draw(b.team.color, trailWidth*b.damage/b.type.damage*2);
+            b.trail.draw(b.team.color, trailWidth*(Mathf.clamp(b.fout()*2)));
             Draw.z(z);
+        }
+    }
+
+    @Override
+    public void updateTrail(Bullet b) {
+        super.updateTrail(b);
+    }
+
+    @Override
+    public void updateTrailEffects(Bullet b) {
+        if(trailChance > 0){
+            if(Mathf.chanceDelta(trailChance)){
+                trailEffect.at(b.x, b.y, trailRotation ? b.rotation() : trailParam, b.team.color);
+            }
+        }
+
+        if(trailInterval > 0f){
+            if(b.timer(0, trailInterval)){
+                trailEffect.at(b.x, b.y, trailRotation ? b.rotation() : trailParam, b.team.color);
+            }
         }
     }
 }

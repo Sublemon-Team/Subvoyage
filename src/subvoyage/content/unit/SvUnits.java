@@ -988,11 +988,11 @@ public class SvUnits{
 
                 groundStat = new WeaponStatState() {{
                     damage = 18f;
-                    lifetime = 5 * 60f;
+                    lifetime = 40f;
                 }};
                 waterStat = new WeaponStatState() {{
                     damage = 18f;
-                    lifetime = 7 * 60f;
+                    lifetime = 68f;
                 }};
                 bullet = new DecayingBulletType(4f,18f,9f) {{
                     shootEffect = SvFx.pulverize;
@@ -1000,7 +1000,7 @@ public class SvUnits{
                     hitColor = backColor = trailColor = Pal.missileYellow;
                     frontColor = Color.white;
                     lifetime = 40f;
-                    trailWidth = 3f;
+                    trailWidth = 5f;
                     trailLength = 8;
                     trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
                     hitEffect = despawnEffect = Fx.hitBulletColor;
@@ -1098,11 +1098,11 @@ public class SvUnits{
                 sclY = 1.5f;
 
                 groundStat = new WeaponStatState() {{
-                    lifetime = 60 * 5f;
+                    lifetime = 50;
                     damage = 25f;
                 }};
                 waterStat = new WeaponStatState() {{
-                    lifetime = 60 * 8f;
+                    lifetime = 78;
                     damage = 9f;
                 }};
 
@@ -1112,7 +1112,7 @@ public class SvUnits{
                     hitColor = backColor = trailColor = Pal.missileYellow;
                     frontColor = Color.white;
                     lifetime = 70f;
-                    trailWidth = 3f;
+                    trailWidth = 6f;
                     trailLength = 8;
                     trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
                     hitEffect = despawnEffect = Fx.hitBulletColor;
