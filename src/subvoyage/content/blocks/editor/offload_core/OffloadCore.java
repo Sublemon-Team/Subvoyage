@@ -56,8 +56,8 @@ public class OffloadCore extends CoreBlock {
 
         public float lastHitTime = 0f;
         public float enemySpawnProgress = 0f;
-        public final float enemySpawnTimeF = 1.1f*60*60f;
-        public float enemySpawnTime = 2.3f*60*60f;
+        public final float enemySpawnTimeF = 3.1f*60*60f;
+        public float enemySpawnTime = 5.1f*60*60f;
         public int currentWave = 0;
 
 
