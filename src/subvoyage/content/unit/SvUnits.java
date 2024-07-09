@@ -188,13 +188,13 @@ public class SvUnits{
             weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
-                reload = 180f;
+                reload = 200f;
                 recoil = 2f;
                 shootSound = Sounds.mediumCannon;
 
                 top = false;
-                alternate = false;
-                shoot.shots = 8;
+                alternate = true;
+                shoot.shots = 6;
                 shoot.shotDelay = 15f;
                 bullet = new BasicBulletType(){{
                     sprite = "missile-large";
@@ -228,7 +228,7 @@ public class SvUnits{
                     drag = -0.020f;
                     homingPower = 0.05f;
 
-                    splashDamage = 2f;
+                    splashDamage = 3f;
                     splashDamageRadius = 20f;
                 }};
             }});
