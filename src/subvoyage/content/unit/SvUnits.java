@@ -1,6 +1,7 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
+import arc.graphics.g2d.Draw;
 import arc.math.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
@@ -1173,7 +1174,7 @@ public class SvUnits{
 
             parts.add(
                     new RegionPart("-rifle"){{
-                        moveRot = 20f;
+                        moveRot = 30f;
                         moveX = 1f;
                         x = 0;
                         y = 0;
@@ -1183,7 +1184,7 @@ public class SvUnits{
                     }});
 
             weapons.add(new HydromechWeapon() {{
-                reload = 100f;
+                reload = 240f;
                 recoil = 6f;
                 inaccuracy = 0f;
                 x = 0;
@@ -1281,7 +1282,7 @@ public class SvUnits{
                         }});
 
                         abilities.add(new MoveEffectAbility(){{
-                            effect = SvFx.missileTrailSmokeMedium;
+                            effect = SvFx.missileTrailSmokeSmall;
 
                             rotation = 180f;
                             y = -9f;
@@ -1293,7 +1294,7 @@ public class SvUnits{
             }});
 
             weapons.add(new HydromechWeapon() {{
-                reload = 80f;
+                reload = 100f;
                 recoil = 4f;
                 inaccuracy = 10f;
                 x = 0;
@@ -1321,6 +1322,8 @@ public class SvUnits{
                     keepVelocity = false;
                     collidesAir = true;
 
+                    shootEffect = Fx.rocketSmokeLarge;
+
                     spawnUnit = new MissileUnitType("vanguard-missile"){{
                         controller = u -> new StraightMissileAI();
                         outlineColor = Pal.darkOutline;
@@ -1333,6 +1336,8 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
+                        trailEffect = SvFx.missileTrailSmokeMedium;
+
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -1346,6 +1351,24 @@ public class SvUnits{
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
+
+                        abilities.add(new MoveEffectAbility(){{
+                            effect = SvFx.missileTrailSmokeMedium;
+
+                            rotation = 180f;
+                            y = -9f;
+                            color = Color.grays(0.6f).lerp(Color.white, 0.5f).a(0.4f);
+                            interval = 1.5f;
+                        }});
+                        abilities.add(new MoveEffectAbility(){{
+                            effect = SvFx.hitLaserOrange;
+
+                            rotation = 180f;
+                            y = -9f;
+                            color = Color.grays(0.6f).lerp(Color.white, 0.5f).a(0.4f);
+                            interval = 1.5f;
+                        }});
+
                         weapons.add(new Weapon(){{
                             shootCone = 360f;
                             mirror = false;
@@ -1371,7 +1394,22 @@ public class SvUnits{
                                 }};
                             }};
                         }});
-                    }};
+                    }
+
+                        @Override
+                        public void draw(Unit unit) {
+                            Draw.scl(1.5f);
+                            super.draw(unit);
+                            Draw.scl();
+                        }
+
+                        @Override
+                        public void drawBody(Unit unit) {
+                            Draw.scl(1.5f);
+                            super.drawBody(unit);
+                            Draw.scl();
+                        }
+                    };
                 }};
             }});
 
