@@ -1119,7 +1119,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 5f;
-            health = 3220;
+            health = 6220;
             hitSize = 20f;
 
             waveTrailX = 8f;
