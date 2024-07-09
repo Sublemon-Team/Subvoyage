@@ -120,7 +120,7 @@ public class SvBlocks{
 
             researchCost = with(iridium,400,clay,500);
 
-            consumeLiquid(argon,1f);
+            consumeLiquid(argon,0.2f);
             plans = Seq.with(
                     new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
             );
@@ -175,7 +175,7 @@ public class SvBlocks{
             squareSprite = false;
             scaleTop = false;
 
-            consumeLiquid(argon, 1.8f);
+            consumeLiquid(argon, 0.2f);
             consumeCoolant(1.2f);
         }};
 
@@ -1637,7 +1637,7 @@ public class SvBlocks{
             consumeItem(sulfur,1);
             consumeItem(corallite, 2);
             consumePower(0.8f);
-            outputLiquid = new LiquidStack(argon, 8/60f);
+            outputLiquid = new LiquidStack(argon, 16/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),
@@ -1660,7 +1660,7 @@ public class SvBlocks{
             consumeItem(sulfur,2);
             consumeItem(corallite, 4);
             consumePower(1.3f);
-            outputLiquid = new LiquidStack(argon, 30/60f);
+            outputLiquid = new LiquidStack(argon, 50/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),
