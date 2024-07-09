@@ -1,17 +1,15 @@
 package subvoyage.content.world;
 
-import arc.Core;
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
-import arc.util.Tmp;
-import mindustry.content.Fx;
+import arc.util.*;
 import mindustry.entities.*;
 import mindustry.graphics.*;
 
-import static arc.graphics.g2d.Draw.alpha;
-import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
@@ -149,7 +147,27 @@ public class SvFx{
         Drawf.light(e.x, e.y, 23f, Pal.lightOrange, e.fout() * 0.7f);
     }),
 
-    missileTrailSmoke = new Effect(60f, 100f, b -> {
+    missileTrailSmokeMedium = new Effect(120f, 200f, b -> {
+        float intensity = 2f;
+        color(b.color, 0.7f);
+        for(int i = 0; i < 4; i++){
+            rand.setSeed(b.id * 2 + i);
+            float lenScl = rand.random(0.5f, 1f);
+            int fi = i;
+            b.scaled(b.lifetime * lenScl, e -> {
+                randLenVectors(e.id + fi - 1, e.fin(Interp.pow10Out), (int)(1.25f * intensity), 6.5f * intensity, (x, y, in, out) -> {
+                    float fout = e.fout(Interp.pow5Out) * rand.random(0.5f, 1f);
+                    float rad = fout * ((2f + intensity) * 1.25f);
+
+                    Fill.circle(e.x + x, e.y + y, rad);
+                    Drawf.light(e.x + x, e.y + y, rad * 1.85f, b.color, 0.5f);
+                });
+            });
+        }
+    }).layer(Layer.bullet - 1f),
+
+
+    missileTrailSmokeSmall = new Effect(60f, 100f, b -> {
         float intensity = 2f;
         color(b.color, 0.5f);
         for(int i = 0; i < 4; i++){

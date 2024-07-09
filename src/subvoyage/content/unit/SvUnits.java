@@ -14,10 +14,9 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
-import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import subvoyage.*;
-import subvoyage.content.SvPal;
-import subvoyage.content.unit.ai.StraightMissileAI;
+import subvoyage.content.*;
+import subvoyage.content.unit.ai.*;
 import subvoyage.content.unit.bullet.*;
 import subvoyage.content.unit.entity.*;
 import subvoyage.content.unit.type.*;
@@ -25,8 +24,6 @@ import subvoyage.content.unit.weapons.*;
 import subvoyage.content.world.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
-
-import java.security.cert.Certificate;
 
 public class SvUnits{
     public static UnitType
@@ -182,7 +179,7 @@ public class SvUnits{
                     splashDamageRadius = 10f;
                     splashDamage = 20f;
 
-                    trailEffect = SvFx.missileTrailSmoke;
+                    trailEffect = SvFx.missileTrailSmokeSmall;
                     trailRotation = true;
                     trailInterval = 3f;
                 }};
@@ -358,7 +355,7 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmoke;
+                        trailEffect = SvFx.missileTrailSmokeSmall;
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -574,7 +571,7 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmoke;
+                        trailEffect = SvFx.missileTrailSmokeSmall;
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -812,7 +809,7 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmoke;
+                        trailEffect = SvFx.missileTrailSmokeSmall;
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -1155,8 +1152,8 @@ public class SvUnits{
             legSplashDamage = 1.1f;
             legStraightness = 0.4f;
 
-            legCount = 6;
-            legLength = 15f;
+            legCount = 4;
+            legLength = 24f;
             legForwardScl = 0.7f;
             legMoveSpace = 2f;
             rippleScale = 2f;
@@ -1230,19 +1227,20 @@ public class SvUnits{
 
                         abilities.add(new ShieldArcAbility(){{
                             region = "subvoyage-vanguard-missile-shield";
-                            radius = 18f;
-                            angle = 82f;
+                            whenShooting = false;
+                            drawArc = false;
+
+                            radius = 360f;
                             regen = 0.6f;
-                            cooldown = 0f;
                             max = 2000f;
                             y = -20f;
-                            width = 6f;
-                            whenShooting = false;
+                            width = 0f;
                         }});
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmoke;
+                        trailEffect = SvFx.missileTrailSmokeSmall;
+
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -1281,9 +1279,19 @@ public class SvUnits{
                                 }};
                             }};
                         }});
+
+                        abilities.add(new MoveEffectAbility(){{
+                            effect = SvFx.missileTrailSmokeMedium;
+
+                            rotation = 180f;
+                            y = -9f;
+                            color = Color.grays(0.6f).lerp(Color.white, 0.5f).a(0.4f);
+                            interval = 1.5f;
+                        }});
                     }};
                 }};
             }});
+
             weapons.add(new HydromechWeapon() {{
                 reload = 80f;
                 recoil = 4f;
@@ -1306,6 +1314,7 @@ public class SvUnits{
                 bullet = new BulletType(){{
                     shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
+
                     hitColor = Pal.suppress;
                     shake = 1f;
                     speed = 0f;
@@ -1324,7 +1333,6 @@ public class SvUnits{
 
                         hitEffect = despawnEffect = Fx.blastExplosion;
                         smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmoke;
                         trailInterval = 3f;
                         trailWidth = 1f;
                         trailLength = 6;
@@ -1366,12 +1374,15 @@ public class SvUnits{
                     }};
                 }};
             }});
+
             weapons.add(new HydromechWeapon(name+"-hydrogun") {{
+                autoTarget = true;
+                controllable = false;
                 rotate = true;
+
                 x = 0f;
                 y = -2f;
                 mirror = false;
-                controllable = true;
                 cooldownTime = 1f;
                 hasHeat = false;
                 rotateSpeed = 5f;
