@@ -27,6 +27,7 @@ import mindustry.world.meta.BlockStatus;
 import mindustry.world.meta.Env;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
+import subvoyage.content.SvPal;
 
 import java.util.Arrays;
 
@@ -41,7 +42,7 @@ public class EnergyCross extends PowerBlock {
     public TextureRegion laserEnd;
 
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = Color.valueOf("D9F2FF");
+    public Color laserColor2 = SvPal.energyLaser;
     public float pulseScl = 7, pulseMag = 0.05f;
     public float laserWidth = 0.4f;
 

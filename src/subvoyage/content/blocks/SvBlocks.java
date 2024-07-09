@@ -28,6 +28,7 @@ import mindustry.world.blocks.units.*;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.content.SvPal;
 import subvoyage.content.blocks.editor.SubvoyageCoreBlock;
 import subvoyage.content.blocks.fog.Beacon;
 import subvoyage.content.blocks.fog.Buoy;
@@ -199,7 +200,7 @@ public class SvBlocks{
             new DrawGlowRegion(){{
                 alpha = 0.75f;
                 glowScale = 6f;
-                color = Color.valueOf("feb380");
+                color = SvPal.heatGlow;
             }},
 
             new DrawBlurSpin("-rotator", 4),
@@ -561,7 +562,7 @@ public class SvBlocks{
             scaledHealth = 160;
             rotateSpeed = 10;
 
-            laserColor = Color.valueOf("FF4023");
+            laserColor = SvPal.inspirationLaser;
 
             consumePower(3f);
             consumeLiquid(argon,0.3f);
@@ -642,7 +643,7 @@ public class SvBlocks{
                 shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
 
-                hitColor = backColor = trailColor = Color.valueOf("d5cba3");
+                hitColor = backColor = trailColor = SvPal.chromiumLightish;
                 frontColor = Color.white;
 
                 homingPower = 0.18f;
@@ -672,7 +673,7 @@ public class SvBlocks{
                 shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
 
-                hitColor = backColor = trailColor = Color.valueOf("95b3b1");
+                hitColor = backColor = trailColor = SvPal.tugSheetLightish;
                 frontColor = Color.white;
 
                 trailRotation = true;
@@ -689,7 +690,7 @@ public class SvBlocks{
                 hitEffect = Fx.hitBulletColor;
                 despawnEffect = new MultiEffect(Fx.hitBulletColor, new WaveEffect(){{
                     sizeTo = 16f;
-                    colorFrom = colorTo = Color.valueOf("95b3b1");
+                    colorFrom = colorTo = SvPal.tugSheetLightish;
                     lifetime = 12;
                 }});
             }}
@@ -703,7 +704,7 @@ public class SvBlocks{
                 parts.addAll(new RegionPart("-blade"){{
                                  progress = PartProgress.warmup;
                                  heatProgress = PartProgress.warmup;
-                                 heatColor = Color.valueOf("ffffc4");
+                                 heatColor = SvPal.turretHeatGlow;
                     mirror = true;
                     under = true;
                                  moveX = 2f;
@@ -716,13 +717,13 @@ public class SvBlocks{
                     heatProgress = PartProgress.recoil;
                     under = true;
                     moveY = -4f;
-                    heatColor = Color.valueOf("ffffc4");
+                    heatColor = SvPal.turretHeatGlow;
                 }},
 
                 new RegionPart("-mid"){{
                     heatProgress = heatp;
                     progress = PartProgress.warmup;
-                    heatColor = Color.valueOf("ffffc4");
+                    heatColor = SvPal.turretHeatGlow;
                     moveY = -8f;
                     mirror = false;
                     under = true;
@@ -854,7 +855,7 @@ public class SvBlocks{
 
             researchCost = with(tugSheet,150);
 
-            glowColor = Color.valueOf("bee8d7").a(0.5f);
+            glowColor = SvPal.tugSheetGlow.a(0.5f);
             glowMag = 0.8f;
             glowScl = 12f;
 
@@ -874,7 +875,7 @@ public class SvBlocks{
 
             consumePower(3*4f / 60f);
 
-            glowColor = Color.valueOf("bee8d7").a(0.5f);
+            glowColor = SvPal.tugSheetGlow.a(0.5f);
             glowMag = 0.8f;
             glowScl = 12f;
 
@@ -1060,7 +1061,7 @@ public class SvBlocks{
             researchCost = with(clay,3);
 
             envDisabled |= Env.scorching;
-            botColor = Color.valueOf("54333c");
+            botColor = SvPal.clayDarkish;
 
             health = 45;
         }};
@@ -1071,7 +1072,7 @@ public class SvBlocks{
             researchCost = with(clay,400,chromium,100);
 
             envDisabled |= Env.scorching;
-            botColor = Color.valueOf("54333c");
+            botColor = SvPal.clayDarkish;
             liquidCapacity = 16f;
             liquidPressure = 1.225f;
 
@@ -1664,8 +1665,8 @@ public class SvBlocks{
                     new DrawDefault(),
             new DrawLiquidRegion(argon),
             new DrawArcSmelt(){{
-                flameColor = Color.valueOf("bd4453");
-                midColor = Color.valueOf("ff8c99");
+                flameColor = SvPal.argonFlame;
+                midColor = SvPal.argonMidSmelt;
                 flameRad = 1.0F;
                 circleSpace = 1.0F;
                 flameRadiusScl = 3.0F;
@@ -1746,7 +1747,7 @@ public class SvBlocks{
             consumeItem(fineSand,8);
             consumeLiquid(argon,1.2f);
             consumePower(6f);
-            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(Color.valueOf("FDE8E2")), new DrawDefault());
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(SvPal.quartzWeave), new DrawDefault());
             outputItem = new ItemStack(quartzFiber,2);
 
             hasItems = true;

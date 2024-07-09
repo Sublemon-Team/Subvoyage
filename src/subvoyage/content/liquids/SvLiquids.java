@@ -3,6 +3,7 @@ package subvoyage.content.liquids;
 import arc.graphics.*;
 import mindustry.content.*;
 import mindustry.type.*;
+import subvoyage.content.SvPal;
 
 public class SvLiquids{
     public static Liquid
@@ -14,7 +15,7 @@ public class SvLiquids{
 
     public static void load() {
 
-        polygen = new Liquid("meta-water", Color.valueOf("8997FF")) {{
+        polygen = new Liquid("meta-water", SvPal.polygen) {{
             heatCapacity = 0.35f;
             boilPoint = 0.5f;
             gasColor = Color.grays(0.9f);
@@ -23,12 +24,12 @@ public class SvLiquids{
             moveThroughBlocks = true;
         }};
 
-        argon = new Liquid("argon",Color.valueOf("FF8C99")) {{
+        argon = new Liquid("argon",SvPal.argon) {{
             gas = true;
             flammability = 1f;
         }};
 
-        propane = new Liquid("propane",Color.valueOf("FFB03A")) {{
+        propane = new Liquid("propane",SvPal.propane) {{
             gas = true;
             flammability = 1f;
             explosiveness = 0.6f;
@@ -37,7 +38,7 @@ public class SvLiquids{
             gasColor = color;
         }};
 
-        helium = new Liquid("helium",Color.valueOf("DEC3F1")) {{
+        helium = new Liquid("helium",SvPal.helium) {{
             gas = true;
             flammability = 0.5f;
             explosiveness = 0.3f;
@@ -45,7 +46,7 @@ public class SvLiquids{
             gasColor = color;
         }};
 
-        nitrogen = new Liquid("nitrogen",Color.valueOf("AEAFF1")) {{
+        nitrogen = new Liquid("nitrogen",SvPal.nitrogen) {{
             gas = true;
             coolant = true;
 

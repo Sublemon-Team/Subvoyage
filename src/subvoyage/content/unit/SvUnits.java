@@ -16,6 +16,7 @@ import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.blocks.defense.turrets.LiquidTurret;
 import subvoyage.*;
+import subvoyage.content.SvPal;
 import subvoyage.content.unit.ai.StraightMissileAI;
 import subvoyage.content.unit.bullet.*;
 import subvoyage.content.unit.entity.*;
@@ -172,7 +173,7 @@ public class SvUnits{
                     height = 13f;
                     lifetime = 70f;
                     hitSize = 6f;
-                    hitColor = backColor = trailColor = Color.valueOf("feb380");
+                    hitColor = backColor = trailColor = SvPal.heatGlow;
                     frontColor = Color.white;
                     trailWidth = 2f;
                     trailLength = 8;
@@ -244,7 +245,7 @@ public class SvUnits{
                     maxRange = 50f;
                     ignoreRotation = true;
 
-                    hitColor = trailColor = Color.valueOf("feb380");
+                    hitColor = trailColor = SvPal.heatGlow;
                     frontColor = Color.white;
                     trailWidth = 2f;
                     trailLength = 8;
@@ -252,7 +253,7 @@ public class SvUnits{
                     smokeEffect = SvFx.shootLauncher;
                     hitSound = Sounds.plasmaboom;
 
-                    backColor = Color.valueOf("feb380");
+                    backColor = SvPal.heatGlow;
                     frontColor = Color.white;
                     mixColorTo = Color.white;
 
@@ -368,7 +369,7 @@ public class SvUnits{
                         homingDelay = 5f;
 
                         engineSize = 3f;
-                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        hitColor = engineColor = trailColor = SvPal.heatGlow;
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
@@ -377,7 +378,7 @@ public class SvUnits{
                             circle = true;
                             y = -0.25f;
                             radius = 1.5f;
-                            color = Color.valueOf("feb380");
+                            color = SvPal.heatGlow;
                             colorTo = Color.white;
                             progress = PartProgress.life.curve(Interp.pow5In);
                         }});
@@ -407,7 +408,7 @@ public class SvUnits{
                                     maxRange = 50f;
                                     ignoreRotation = true;
 
-                                    hitColor = trailColor = Color.valueOf("feb380");
+                                    hitColor = trailColor = SvPal.heatGlow;
                                     frontColor = Color.white;
                                     trailWidth = 2f;
                                     trailLength = 8;
@@ -415,7 +416,7 @@ public class SvUnits{
                                     smokeEffect = SvFx.shootLauncher;
                                     hitSound = Sounds.plasmaboom;
 
-                                    backColor = Color.valueOf("feb380");
+                                    backColor = SvPal.heatGlow;
                                     frontColor = Color.white;
                                     mixColorTo = Color.white;
 
@@ -442,7 +443,7 @@ public class SvUnits{
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
-                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    sparkColor = smokeColor = SvPal.heatGlow;
                                     waveRad = 40f;
                                     smokeSize = 4f;
                                     smokes = 7;
@@ -494,7 +495,7 @@ public class SvUnits{
                 x = -0.25f;
                 y = -8;
                 radius = 2f;
-                color = Color.valueOf("feb380");
+                color = SvPal.heatGlow;
                 colorTo = Color.white;
                 progress = PartProgress.life.curve(Interp.pow5In);
             }});
@@ -504,8 +505,8 @@ public class SvUnits{
                 orbRadius = 0.65f;
                 y = 6f;
 
-                color = Color.valueOf("feb380");
-                particleColor = Color.valueOf("FE6C4C");
+                color = SvPal.heatGlow;
+                particleColor = SvPal.suppresion;
             }});
 
             trailLength = 20;
@@ -546,7 +547,7 @@ public class SvUnits{
                 parts.add(new RegionPart("-blade"){{
                     heatProgress = PartProgress.warmup;
                     progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = Color.valueOf("feb380");
+                    heatColor = SvPal.heatGlow;
                     x = 5 / 4f;
                     y = 0f;
                     moveRot = -33f;
@@ -584,7 +585,7 @@ public class SvUnits{
                         homingDelay = 5f;
 
                         engineSize = 3f;
-                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        hitColor = engineColor = trailColor = SvPal.heatGlow;
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
@@ -601,7 +602,7 @@ public class SvUnits{
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
-                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    sparkColor = smokeColor = SvPal.heatGlow;
                                     waveRad = 40f;
                                     smokeSize = 4f;
                                     smokes = 7;
@@ -664,8 +665,8 @@ public class SvUnits{
                 orbRadius = 0.65f;
                 y = 18f;
 
-                color = Color.valueOf("feb380");
-                particleColor = Color.valueOf("FE6C4C");
+                color = SvPal.heatGlow;
+                particleColor = SvPal.suppresion;
             }});
 
             trailLength = 20;
@@ -757,7 +758,7 @@ public class SvUnits{
                     incendChance = 0.03f;
                     incendSpread = 5f;
                     incendAmount = 1;
-                    colors = new Color[]{Color.valueOf("feb380").a(.2f), Color.valueOf("feb380").a(.5f), Color.valueOf("feb380").mul(1.2f), Color.white};
+                    colors = new Color[]{SvPal.heatGlow.a(.2f), SvPal.heatGlow.a(.5f), SvPal.heatGlow.mul(1.2f), Color.white};
                 }};
             }});
 
@@ -784,7 +785,7 @@ public class SvUnits{
                 parts.add(new RegionPart("-blade"){{
                     heatProgress = PartProgress.warmup;
                     progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = Color.valueOf("feb380");
+                    heatColor = SvPal.heatGlow;
                     x = 5 / 4f;
                     y = 0f;
                     moveRot = -33f;
@@ -822,7 +823,7 @@ public class SvUnits{
                         homingDelay = 5f;
 
                         engineSize = 3f;
-                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        hitColor = engineColor = trailColor = SvPal.heatGlow;
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
@@ -843,7 +844,7 @@ public class SvUnits{
                                     maxRange = 50f;
                                     ignoreRotation = true;
 
-                                    hitColor = trailColor = Color.valueOf("feb380");
+                                    hitColor = trailColor = SvPal.heatGlow;
                                     frontColor = Color.white;
                                     trailWidth = 2f;
                                     trailLength = 8;
@@ -851,7 +852,7 @@ public class SvUnits{
                                     smokeEffect = SvFx.shootLauncher;
                                     hitSound = Sounds.plasmaboom;
 
-                                    backColor = Color.valueOf("feb380");
+                                    backColor = SvPal.heatGlow;
                                     frontColor = Color.white;
                                     mixColorTo = Color.white;
 
@@ -876,7 +877,7 @@ public class SvUnits{
                                         maxRange = 50f;
                                         ignoreRotation = true;
 
-                                        hitColor = trailColor = Color.valueOf("feb380");
+                                        hitColor = trailColor = SvPal.heatGlow;
                                         frontColor = Color.white;
                                         trailWidth = 2f;
                                         trailLength = 8;
@@ -884,7 +885,7 @@ public class SvUnits{
                                         smokeEffect = SvFx.shootLauncher;
                                         hitSound = Sounds.plasmaboom;
 
-                                        backColor = Color.valueOf("feb380");
+                                        backColor = SvPal.heatGlow;
                                         frontColor = Color.white;
                                         mixColorTo = Color.white;
 
@@ -915,7 +916,7 @@ public class SvUnits{
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
-                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    sparkColor = smokeColor = SvPal.heatGlow;
                                     waveRad = 40f;
                                     smokeSize = 4f;
                                     smokes = 7;
@@ -1251,7 +1252,7 @@ public class SvUnits{
                         health = 40;
 
                         engineSize = 3f;
-                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        hitColor = engineColor = trailColor = SvPal.heatGlow;
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
@@ -1268,7 +1269,7 @@ public class SvUnits{
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
-                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    sparkColor = smokeColor = SvPal.heatGlow;
                                     waveRad = 40f;
                                     smokeSize = 4f;
                                     smokes = 7;
@@ -1333,7 +1334,7 @@ public class SvUnits{
                         health = 40;
 
                         engineSize = 3f;
-                        hitColor = engineColor = trailColor = Color.valueOf("feb380");
+                        hitColor = engineColor = trailColor = SvPal.heatGlow;
                         engineLayer = Layer.effect;
                         deathExplosionEffect = Fx.none;
                         loopSoundVolume = 0.1f;
@@ -1350,7 +1351,7 @@ public class SvUnits{
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
-                                    sparkColor = smokeColor = Color.valueOf("feb380");
+                                    sparkColor = smokeColor = SvPal.heatGlow;
                                     waveRad = 40f;
                                     smokeSize = 4f;
                                     smokes = 7;

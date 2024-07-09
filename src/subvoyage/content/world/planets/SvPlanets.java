@@ -8,6 +8,7 @@ import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
+import subvoyage.content.SvPal;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
@@ -56,19 +57,19 @@ public class SvPlanets{
 
             };
 
-            iconColor = Color.valueOf("7286AD");
-            lightColor = Color.white.cpy().a(0.01f);
-            atmosphereColor = Color.valueOf("EAC7DE").a(0.05f);
+            iconColor = SvPal.atlacianIcon.cpy().lerp(SvPal.legartyte,0.5f);
+            lightColor = SvPal.tugSheetLightish.cpy().a(0.01f);
+            atmosphereColor = SvPal.atlacianAtmosphere.cpy().a(0.05f);
             atmosphereRadIn = 0.03f;
             atmosphereRadOut = 0.1f;
 
-            minZoom = 0.1f;
-            camRadius = 1f;
+            minZoom = 0.2f;
+            camRadius = 0.5f;
             startSector = 13;
             defaultEnv = Environment.legarytic | Env.terrestrial;
 
             alwaysUnlocked = true;
-            landCloudColor = Color.valueOf("4F4CB5");
+            landCloudColor = SvPal.atlacianLandCloud;
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
                     .removeAll(SvItems.atlacianItems);
         }};

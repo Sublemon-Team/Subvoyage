@@ -32,6 +32,7 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
+import subvoyage.content.SvPal;
 
 import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
@@ -45,7 +46,7 @@ public class EnergyDock extends PowerBlock {
     public boolean autolink = true, drawRange = true;
     public float laserScale = 0.25f;
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = Color.valueOf("D9F2FF");
+    public Color laserColor2 = SvPal.energyLaser;
     public TextureRegion laser, laserEnd, shadowRegion, outlineRegion;
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();

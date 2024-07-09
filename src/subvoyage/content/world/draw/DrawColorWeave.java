@@ -7,12 +7,13 @@ import arc.math.*;
 import mindustry.gen.*;
 import mindustry.world.*;
 import mindustry.world.draw.*;
+import subvoyage.content.SvPal;
 
 import java.util.HashMap;
 
 public class DrawColorWeave extends DrawBlock{
     public TextureRegion weave;
-    public Color color = Color.valueOf("ffd37f");
+    public Color color = SvPal.quartzWeave;
     public HashMap<Building,Float> degrees = new HashMap<>();
 
     public DrawColorWeave(Color color){
