@@ -1023,7 +1023,7 @@ public class SvBlocks{
 
             squareSprite = false;
             envDisabled |= Env.scorching;
-            pumpAmount = 8f / 60f;
+            pumpAmount = 15f / 60f;
 
             researchCost = with(spaclanium,5);
         }};
@@ -1037,7 +1037,7 @@ public class SvBlocks{
 
             squareSprite = false;
             envDisabled |= Env.scorching;
-            pumpAmount = 16f / 60f;
+            pumpAmount = 75f / 60f;
             consumePower(0.35f);
 
             drawer = new DrawMulti(
