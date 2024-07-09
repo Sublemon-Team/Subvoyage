@@ -1056,7 +1056,7 @@ public class SvUnits{
                 rotate = false;
                 shootY = 0f;
                 beamWidth = 0.7f;
-                repairSpeed = 3.1f;
+                repairSpeed = 1f;
                 fractionRepairSpeed = 0.06f;
                 aimDst = 0f;
                 shootCone = 15f;
