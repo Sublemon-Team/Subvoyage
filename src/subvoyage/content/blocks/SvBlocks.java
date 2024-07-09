@@ -1123,7 +1123,8 @@ public class SvBlocks{
             results = with(
                     spaclanium,3,
                     corallite,3,
-                    fineSand,2
+                    fineSand,2,
+                    sulfur,1
             );
         }};
 

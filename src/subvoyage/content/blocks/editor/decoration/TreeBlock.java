@@ -34,6 +34,7 @@ public class TreeBlock extends Block{
         rand.setSeed(tile.pos());
         float offset = rand.random(180f);
         int lobes = rand.random(lobesMin, lobesMax);
+        lobes = 1;
         for(int i = 0; i < lobes; i++){
             float ba = i / (float)lobes * 360f + offset + rand.range(spread), angle = ba + Mathf.sin(Time.time + rand.random(0, timeRange), rand.random(sclMin, sclMax), rand.random(magMin, magMax));
             Draw.z(Layer.power - 1);

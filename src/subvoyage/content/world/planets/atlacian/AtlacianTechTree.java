@@ -72,7 +72,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(submersibleDrill,with(onsector(facility)), () -> {
+            node(submersibleDrill,with(onsector(gustyRidges)), () -> {
                node(tectonicDrill, () -> {
 
                });
@@ -133,7 +133,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(spaclaniumHydrolyzer,with(onsector(facility)),() -> {
+            node(spaclaniumHydrolyzer,with(onsector(gustyRidges)),() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
@@ -158,7 +158,7 @@ public class AtlacianTechTree {
             });
 
             node(whirl, () -> {
-                node(rupture,with(onsector(facility)), () -> {
+                node(rupture,with(onsector(gustyRidges)), () -> {
                     node(awe,() -> {
                         node(resonance,with(research(burden)), () -> {
                             node(cascade,() -> {
@@ -225,15 +225,15 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
-                node(facility,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
-                    node(noxiousTarn,with(sector(facility),never()),() -> {
+                node(gustyRidges,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
+                    node(noxiousTarn,with(sector(gustyRidges),never()),() -> {
 
                     });
                 });
             });
             node(spaclanium,with(produce(spaclanium)), () -> {
                 node(corallite,with(produce(corallite)),() -> {
-                    node(iridium,with(produce(iridium),onsector(facility)),() -> {
+                    node(iridium,with(produce(iridium),onsector(gustyRidges)),() -> {
 
                     });
                     node(chromium,with(research(crudeSmelter)),() -> {

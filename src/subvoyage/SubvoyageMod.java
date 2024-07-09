@@ -7,10 +7,8 @@ import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.util.*;
 import mindustry.game.EventType.*;
-import mindustry.gen.Groups;
 import mindustry.gen.Musics;
 import mindustry.graphics.Pal;
-import mindustry.graphics.Shaders;
 import mindustry.mod.*;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
@@ -66,7 +64,7 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.on(SectorCaptureEvent.class,e -> {
-            if(e.sector.preset == SvSectorPresets.facility) {
+            if(e.sector.preset == SvSectorPresets.gustyRidges) {
                 betaCompleteDialog.show(SvPlanets.atlacian);
             };
         });
