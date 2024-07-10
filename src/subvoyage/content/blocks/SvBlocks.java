@@ -4,7 +4,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
-import mindustry.Vars;
+import mindustry.*;
 import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.entities.bullet.*;
@@ -25,23 +25,20 @@ import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
 import mindustry.world.blocks.units.*;
-import mindustry.world.consumers.ConsumeLiquid;
+import mindustry.world.consumers.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import subvoyage.content.SvPal;
-import subvoyage.content.blocks.editor.SubvoyageCoreBlock;
-import subvoyage.content.blocks.fog.Beacon;
-import subvoyage.content.blocks.fog.Buoy;
-import subvoyage.content.blocks.production.SubmersibleDrill;
-import subvoyage.content.blocks.production.TugRoller;
-import subvoyage.content.blocks.production.WaterSifter;
+import subvoyage.content.*;
+import subvoyage.content.blocks.crude_smelter.*;
+import subvoyage.content.blocks.editor.*;
+import subvoyage.content.blocks.editor.offload_core.*;
+import subvoyage.content.blocks.energy.*;
+import subvoyage.content.blocks.fog.*;
+import subvoyage.content.blocks.production.*;
 import subvoyage.content.liquids.*;
 import subvoyage.content.world.*;
-import subvoyage.content.blocks.crude_smelter.*;
-import subvoyage.content.blocks.energy.*;
-import subvoyage.content.blocks.editor.offload_core.*;
 import subvoyage.content.world.draw.*;
-import subvoyage.content.world.planets.SvPlanets;
+import subvoyage.content.world.planets.*;
 import subvoyage.entities.part.*;
 import subvoyage.entities.shoot.*;
 
@@ -294,22 +291,18 @@ public class SvBlocks{
 
         rupture = new ItemTurret("rupture"){{
             requirements(Category.turret,atl(), with(corallite, 145, clay, 125, iridium, 30));
-
-            researchCost = with(corallite,100,clay,60,iridium,30);
-
+            size = 3;
             outlineColor = Pal.darkOutline;
-
-            size = 2;
             shootCone = 360f;
             fogRadius = 6;
+
+            researchCost = with(corallite, 100, clay, 60, iridium, 30);
             targetGround = false;
             targetAir = true;
             squareSprite = false;
-
             shoot = new ShootHelix() {{
                 mag = 3;
             }};
-
 
             ammo(
             sulfur, new BasicBulletType(6f, 40){{
@@ -432,7 +425,7 @@ public class SvBlocks{
 
             shootSound = Sounds.railgun;
             reload = 80f;
-            shootY = 5f;
+            shootY = 12f;
             recoil = 0.5f;
             priority = 0;
             range = 260f;
@@ -442,7 +435,6 @@ public class SvBlocks{
 
             limitRange(6);
         }};
-
 
         awe = new PowerTurret("awe") {{
             requirements(Category.turret,atl(), with(corallite, 85, iridium, 40, spaclanium, 20));
@@ -1112,13 +1104,13 @@ public class SvBlocks{
 
         waterDiffuser = new Separator("water-diffuser") {{
             requirements(Category.liquid,atl(), with(spaclanium, 30, corallite, 10));
+            size = 2;
             craftTime = 60f;
             itemCapacity = 50;
 
             researchCost = with(spaclanium,3,corallite,1);
 
             squareSprite = false;
-
             drawer = new DrawMulti(
             new DrawDefault(),
             new DrawLiquidRegion(water)

@@ -1,7 +1,7 @@
 package subvoyage.content.unit;
 
 import arc.graphics.*;
-import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.*;
 import arc.math.*;
 import mindustry.ai.types.*;
 import mindustry.content.*;
@@ -1174,8 +1174,6 @@ public class SvUnits{
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
-
-
             parts.add(
                     new RegionPart("-rifle"){{
                         moveRot = 30f;
