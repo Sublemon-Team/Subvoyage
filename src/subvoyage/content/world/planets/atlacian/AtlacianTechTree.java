@@ -87,7 +87,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(waterSifter, () -> {
+                node(waterSifter,with(onsector(noxiousTarn)),() -> {
 
                 });
                 node(clayConduit, () -> {
@@ -186,18 +186,10 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(helicopterFactory,() -> {
-                node(lapetus,() ->
-                        node(skath,() ->
-                                node(charon,() ->
-                                        node(callees,() ->
-                                                node(ganymede,() -> {
+            node(helicopterFactory,with(onsector(noxiousTarn)),() -> {
+                node(lapetus,() -> {
 
-                                                })
-                                        )
-                                )
-                        )
-                );
+                });
                 node(hydromechFactory,with(research(helium)),() -> {
                     node(leeft,() -> {
 
@@ -226,7 +218,7 @@ public class AtlacianTechTree {
 
             node(divingPoint, () -> {
                 node(gustyRidges,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
-                    node(noxiousTarn,with(sector(gustyRidges),never()),() -> {
+                    node(noxiousTarn,with(sector(gustyRidges),research(spaclaniumHydrolyzer),research(energyDock),research(energyDistributor)),() -> {
 
                     });
                 });
@@ -365,6 +357,7 @@ public class AtlacianTechTree {
     public static Objectives.Research research(UnlockableContent content) {
         return new Objectives.Research(content);
     }
+
 
 
 

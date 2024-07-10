@@ -138,6 +138,7 @@ public class SvUnits{
             health = 800f;
             engineSize = 0;
             hitSize = 20f;
+            researchCostMultiplier = 0;
             RotatorRegionPart copter = new RotatorRegionPart(){
                 {
                     layer = Layer.flyingUnitLow;

@@ -47,7 +47,7 @@ public class SubvoyageMod extends Mod {
             }*/
         });
         Events.on(UnlockEvent.class,e -> {
-            if(e.content == SvSectorPresets.noxiousTarn) e.content.clearUnlock();
+
         });
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();

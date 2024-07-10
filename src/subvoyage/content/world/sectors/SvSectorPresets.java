@@ -45,9 +45,11 @@ public class SvSectorPresets {
 
         noxiousTarn = new SectorPreset("noxiousTarn",atlacian,31) {{
             difficulty = 3;
-            hideDetails = true;
-            description = null;
-            unlocked = false;
+            captureWave = 0;
+            rules = (r) -> {
+                r.attackMode = true;
+                r.enemyCoreBuildRadius = 400f;
+            };
         }};
     }
 }
