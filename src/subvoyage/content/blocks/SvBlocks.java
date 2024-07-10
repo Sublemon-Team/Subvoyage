@@ -178,21 +178,27 @@ public class SvBlocks{
             consumeLiquid(argon, 0.2f);
             consumeCoolant(1.2f);
         }};
-
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
             requirements(Category.production,atl(), with(corallite, 200, spaclanium, 100, iridium, 100));
 
             researchCost = with(corallite,1000,spaclanium,600,iridium,400);
 
-            craftTime = 400;
+            attribute = SvAttribute.crude;
+
+            minEfficiency = 9f - 0.0001f;
+            baseEfficiency = 0f;
+            displayEfficiency = false;
+
+            craftTime = 200;
             size = 3;
             itemCapacity = 20;
-            outputItem = new ItemStack(crude, 8);
+            outputItem = new ItemStack(crude, 3);
             hasPower = true;
             hasLiquids = false;
-            displayEfficiency = false;
             ambientSound = Sounds.drill;
             ambientSoundVolume = 0.15f;
+
+            boostScale = 1f / 9f;
 
             craftEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             drawer = new DrawMulti(
@@ -210,8 +216,7 @@ public class SvBlocks{
 
             fogRadius = 4;
             squareSprite = false;
-            consumeItems(with(sulfur, 4));
-            consumePower(2f);
+            consumePower(0.2f);
         }};
 
         //defense
@@ -1037,8 +1042,8 @@ public class SvBlocks{
 
             squareSprite = false;
             envDisabled |= Env.scorching;
-            pumpAmount = 75f / 60f;
-            consumePower(0.35f);
+            pumpAmount =20f / 60f;
+            consumePower(2.5f/60f);
 
             drawer = new DrawMulti(
             new DrawPistons() {{
@@ -1134,7 +1139,7 @@ public class SvBlocks{
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);
 
-            consumePower(0.3f);
+            consumePower(4/60f);
 
             size = 2;
             envDisabled |= Env.scorching;

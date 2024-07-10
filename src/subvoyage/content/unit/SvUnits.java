@@ -51,6 +51,9 @@ public class SvUnits{
             lowAltitude = true;
             flying = true;
 
+            mineWalls = true;
+            mineFloor = true;
+
             mineSpeed = 8f;
             mineTier = 1;
             buildSpeed = 1f;
