@@ -103,10 +103,10 @@ public class WaterSifter extends Block {
     }
     public boolean isSelf(Tile tile, int dir) {
         return switch (dir) {
-            case 0 -> tile.nearby(2,0).block() == this;
-            case 1 -> tile.nearby(0,2).block() == this;
-            case 2 -> tile.nearby(-1,0).block() == this;
-            case 3 -> tile.nearby(0,-1).block() == this;
+            case 0 -> tile.nearby(2,0) != null && tile.nearby(2,0).block() == this;
+            case 1 -> tile.nearby(0,2) != null && tile.nearby(0,2).block() == this;
+            case 2 -> tile.nearby(-1,0) != null && tile.nearby(-1,0).block() == this;
+            case 3 -> tile.nearby(0,-1) != null && tile.nearby(0,-1).block() == this;
             default -> throw new IllegalStateException("Unexpected value: " + dir);
         };
     };
