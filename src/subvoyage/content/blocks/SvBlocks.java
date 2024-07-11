@@ -64,12 +64,13 @@ public class SvBlocks{
             regenerator, regenProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
+                    propanePyrolyzer, heliumCompressor,
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
-            energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, chromiumReactor,
+            energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //TRANSPORTATION
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
@@ -1181,7 +1182,7 @@ public class SvBlocks{
         }};
 
         largeAccumulator = new Battery("large-accumulator"){{
-            requirements(Category.power,atl(), mult(accumulator.requirements,4));
+            requirements(Category.power,atl(BuildVisibility.hidden), mult(accumulator.requirements,4));
             consumePowerBuffered(4000f*5);
 
             researchCost = with(iridium,800,spaclanium,700);
@@ -1229,6 +1230,22 @@ public class SvBlocks{
 
             powerProduction = 0.2f;
             size = 2;
+        }};
+
+        hydrocarbonicGenerator = new ConsumeGenerator("hydrocarbonic-generator") {{
+            requirements(Category.power,atl(),with(corallite,300,clay,100,iridium,200, chromium,10));
+
+            researchCost = with(corallite,700,clay,350,iridium,350,chromium,50);
+
+            size = 2;
+
+            ambientSound = Sounds.glow;
+            ambientSoundVolume = 0.05f;
+
+            powerProduction = 12f;
+            itemDuration = 60f;
+            envDisabled |= Env.scorching;
+            consumeLiquid(propane,0.65f);
         }};
 
         chromiumReactor = new ChromiumReactor("chromium-reactor"){{
@@ -1678,6 +1695,42 @@ public class SvBlocks{
             }},
             new DrawGlowRegion()
             );
+        }};
+
+        propanePyrolyzer = new GenericCrafter("propane-pyrolyzer") {{
+            requirements(Category.crafting,atl(),with(iridium,300,corallite,300,clay,150));
+            researchCost = with(iridium,300,corallite,700,clay,400);
+
+            itemCapacity = 20;
+            size = 3;
+            craftEffect = Fx.fireSmoke;
+            craftTime = 30f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(corallite,1);
+            consumeItem(crude,1);
+            consumePower(0.45f);
+
+            outputLiquid = new LiquidStack(propane,1.5f);
+            hasLiquids = true;
+        }};
+
+        heliumCompressor = new GenericCrafter("helium-compressor") {{
+            requirements(Category.crafting,atl(),with(chromium,120,iridium,120,corallite,300,clay,100));
+            researchCost = with(chromium,500,iridium,600,corallite,1200,clay,800);
+
+            itemCapacity = 20;
+            size = 3;
+            craftEffect = Fx.smokeCloud;
+            craftTime = 30f;
+            envDisabled |= Env.scorching;
+
+            consumeLiquid(water,0.15f);
+            consumeLiquid(propane,0.2f);
+            consumePower(0.6f);
+
+            outputLiquid = new LiquidStack(helium,1.35f);
+            hasLiquids = true;
         }};
 
 

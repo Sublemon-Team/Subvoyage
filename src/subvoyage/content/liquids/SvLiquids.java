@@ -31,10 +31,10 @@ public class SvLiquids{
 
         propane = new Liquid("propane",SvPal.propane) {{
             gas = true;
-            flammability = 1f;
+            flammability = 0.4f;
             explosiveness = 0.6f;
             blockReactive = true;
-            temperature = 0.8f;
+            temperature = 0.6f;
             gasColor = color;
         }};
 
