@@ -1702,9 +1702,10 @@ public class SvBlocks{
             craftTime = 20f;
             envDisabled |= Env.scorching;
 
-            consumeItem(sulfur,2);
-            consumeItem(corallite, 4);
-            consumePower(1.3f);
+            consumeItem(sulfur,1);
+            consumeItem(corallite, 2);
+            consumeLiquid(helium,0.1f);
+            consumePower(0.6f);
             outputLiquid = new LiquidStack(argon, 50/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
