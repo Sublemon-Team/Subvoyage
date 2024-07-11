@@ -301,6 +301,8 @@ public class SvBlocks{
             targetGround = false;
             targetAir = true;
             squareSprite = false;
+
+            cooldownTime = 60f;
             shoot = new ShootHelix() {{
                 mag = 3;
             }};
@@ -415,6 +417,7 @@ public class SvBlocks{
                     moveX = 1.5f;
                     moveRot = -4;
                     progress = PartProgress.recoil;
+                    moves.add(new PartMove(PartProgress.warmup,1.25f,2.25f,-16));
                 }});
 
                 parts.add(new RegionPart("-blade-mid"){{
@@ -422,6 +425,34 @@ public class SvBlocks{
                     progress = PartProgress.heat;
                     moveY = -1.25f;
                 }});
+
+                parts.add(new FlarePart(){{
+                    progress = PartProgress.warmup.delay(0.05f);
+                    color1 = SvPal.quartzFiber;
+                    stroke = 3f;
+                    radius = 0f;
+                    radiusTo = 6f;
+                    layer = Layer.effect;
+                    y = -8f;
+                    x = 0f;
+                    followRotation = true;
+                    sides = 6;
+                }});
+
+                parts.add(new ShapePart(){{
+                    progress = PartProgress.warmup.delay(0.05f);
+                    color = SvPal.quartzFiber;
+                    stroke = 1f;
+                    radius = 2.5f;
+                    radiusTo = 6f;
+                    layer = Layer.effect;
+                    y = -8f;
+                    x = 0f;
+                    rotateSpeed = 1f;
+                    hollow = true;
+                    sides = 6;
+                }});
+
             }};
 
             shootSound = Sounds.railgun;
