@@ -83,7 +83,7 @@ public class SvBlocks{
 
     public static void load() {
         //non-user
-        offloadCore = new OffloadCore("offload-core") {{
+        offloadCore = new OffloadCoreBlock("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 400;
             size = 3;

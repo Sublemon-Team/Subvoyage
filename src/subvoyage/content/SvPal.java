@@ -40,6 +40,7 @@ public class SvPal {
     atlacianOcean = Color.valueOf("4265AF"),
     legartyte = Color.valueOf("125C5F"),
     legartyteLightish = Color.valueOf("137B6D"),
-    agaryte = Color.valueOf("314544")
+    agaryte = Color.valueOf("314544"),
+    danger = Color.valueOf("FF5E5E")
             ;
 }
