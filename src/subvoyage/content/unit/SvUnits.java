@@ -1468,8 +1468,8 @@ public class SvUnits{
                 activationBasedDraw = true;
 
                 warmupSpeedModifier = 0.5f;
-                warmupReloadModifier = 6/300f;
-                shootWarmupSpeed = 0.008f;
+                warmupReloadModifier = 15/300f;
+                shootWarmupSpeed = 0.01f;
 
                 warmupToHeat = true;
 
@@ -1481,7 +1481,7 @@ public class SvUnits{
                 activationBasedDraw = true;
 
                 warmupSpeedModifier = 0f;
-                warmupReloadModifier = 2/400f;
+                warmupReloadModifier = 6/400f;
                 shootWarmupSpeed = 0.001f;
 
                 warmupToHeat = true;
