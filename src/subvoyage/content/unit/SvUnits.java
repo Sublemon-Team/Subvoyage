@@ -1469,7 +1469,7 @@ public class SvUnits{
 
                 warmupSpeedModifier = 0.5f;
                 warmupReloadModifier = 1/50f;
-                shootWarmupSpeed = 0.005f;
+                shootWarmupSpeed = 0.008f;
 
                 warmupToHeat = true;
 
