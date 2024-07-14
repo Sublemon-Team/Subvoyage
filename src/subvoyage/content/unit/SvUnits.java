@@ -1476,6 +1476,19 @@ public class SvUnits{
                 reload = 300f;
             }});
 
+            weapons.add(new HydromechWeapon() {{
+                activationState = HydromechState.WATER;
+                activationBasedDraw = true;
+
+                warmupSpeedModifier = 0f;
+                warmupReloadModifier = 4/400f;
+                shootWarmupSpeed = 0.001f;
+
+                warmupToHeat = true;
+
+                reload = 400f;
+            }});
+
 
             bodyHeat = true;
             heatColor = Color.red;

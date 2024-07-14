@@ -197,6 +197,7 @@ public class HydromechWeapon extends Weapon {
             hm.mountSpeedMultiplier.put(mount, Mathf.lerp(1f, warmupSpeedModifier,mount.warmup));
         }
         if(warmupToHeat) mount.heat = mount.warmup;
+        if(unit instanceof HydromechUnitEntity hm && !hm.sameStateAs(activationState)) mount.warmup = Mathf.lerp(mount.warmup,0f,warmupReloadModifier);
     }
 
     @Override
