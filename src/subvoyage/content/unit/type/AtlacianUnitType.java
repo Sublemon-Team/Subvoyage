@@ -52,6 +52,10 @@ public class AtlacianUnitType extends UnitType{
             float warmup = 0f;
             for (WeaponMount mount : unit.mounts) {
                 if(mount.weapon instanceof HydromechWeapon hw && !hw.hasHeat) continue;
+                if(mount.weapon instanceof HydromechWeapon hw) {
+                    warmup = Math.max(warmup,hw.warmupToHeat ? mount.warmup : mount.heat);
+                    continue;
+                }
                 warmup = Math.max(warmup, mount.heat);
                 //mount.heat = mount.warmup;
             }

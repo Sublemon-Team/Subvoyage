@@ -1438,9 +1438,11 @@ public class SvUnits{
         squadron = new HydromechUnitType("squadron"){{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
-            rotateSpeed = 4f;
-            health = 8360;
+            rotateSpeed = 2f;
+            health = 7260;
             hitSize = 32f;
+
+            bodyScale = 0.9f;
 
             waveTrailX = 8f;
             waveTrailY = -8f;
@@ -1448,18 +1450,31 @@ public class SvUnits{
             trailScl = 12;
             trailLength = 25;
 
-            accel = 0.4f;
+            accel = 1f;
 
             withStates(
             HydromechState.GROUND, new UnitStatState(){{
-                speed = 0.6f;
-                inwardsDamageMul = 0.6f;
+                speed = 0.5f;
+                inwardsDamageMul = 1.5f;
             }},
             HydromechState.WATER, new UnitStatState(){{
-                speed = 0.9f;
-                inwardsDamageMul = 0.8f;
+                speed = 0.6f;
+                inwardsDamageMul = 1.4f;
             }}
             );
+
+            weapons.add(new HydromechWeapon() {{
+                activationState = HydromechState.GROUND;
+                activationBasedDraw = true;
+
+                warmupSpeedModifier = 0.5f;
+                warmupReloadModifier = 1/50f;
+                shootWarmupSpeed = 0.005f;
+
+                warmupToHeat = true;
+
+                reload = 300f;
+            }});
 
 
             bodyHeat = true;
@@ -1469,14 +1484,14 @@ public class SvUnits{
             legMinLength = 0.2f;
             legLengthScl = 0.95f;
             legSplashDamage = 1.1f;
-            legStraightness = 0.4f;
+            legStraightness = 0.2f;
 
             legCount = 6;
             legLength = 30f;
             legForwardScl = 2.1f;
-            legMoveSpace = 1.05f;
+            legMoveSpace = 1.65f;
             rippleScale = 1.2f;
-            stepShake = 0.5f;
+            stepShake = 1.5f;
             legGroupSize = 2;
             legExtension = -6f;
             legBaseOffset = 15f;

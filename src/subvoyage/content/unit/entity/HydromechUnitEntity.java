@@ -25,6 +25,7 @@ import subvoyage.content.unit.type.HydromechState;
 import subvoyage.content.unit.type.HydromechUnitType;
 import subvoyage.content.unit.type.UnitStatState;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class HydromechUnitEntity extends LegsUnit {
@@ -33,6 +34,7 @@ public class HydromechUnitEntity extends LegsUnit {
     protected transient Trail tright;
 
     public float liquidedSmooth = 0f;
+    public HashMap<WeaponMount,Float> mountSpeedMultiplier = new HashMap<>();
 
     @Override
     public int classId() {
@@ -535,6 +537,9 @@ public class HydromechUnitEntity extends LegsUnit {
     }
     @Override
     public float speed() {
-        return getStatState().speed;
+        float base = getStatState().speed;
+        for (float v : mountSpeedMultiplier.values())
+            base *= v;
+        return base;
     }
 }
