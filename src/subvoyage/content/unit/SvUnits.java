@@ -33,7 +33,7 @@ public class SvUnits{
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
-    leeft, flagshi, vanguard,
+    leeft, flagshi, vanguard, squadron,
     //cargo
     bulker;
 
@@ -41,7 +41,7 @@ public class SvUnits{
     public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
-        hmech("leeft", "flagshi", "vanguard");
+        hmech("leeft", "flagshi", "vanguard", "squadron");
         //core
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
@@ -1433,6 +1433,64 @@ public class SvUnits{
 
                 bullet = new LiquidBulletType(Liquids.water);
             }});
+        }};
+
+        squadron = new HydromechUnitType("squadron"){{
+            constructor = HydromechUnitEntity::create;
+            drag = 0.14f;
+            rotateSpeed = 4f;
+            health = 8360;
+            hitSize = 32f;
+
+            waveTrailX = 8f;
+            waveTrailY = -8f;
+
+            trailScl = 12;
+            trailLength = 25;
+
+            accel = 0.4f;
+
+            withStates(
+            HydromechState.GROUND, new UnitStatState(){{
+                speed = 0.6f;
+                inwardsDamageMul = 0.6f;
+            }},
+            HydromechState.WATER, new UnitStatState(){{
+                speed = 0.9f;
+                inwardsDamageMul = 0.8f;
+            }}
+            );
+
+
+            bodyHeat = true;
+            heatColor = Color.red;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legMinLength = 0.2f;
+            legLengthScl = 0.95f;
+            legSplashDamage = 1.1f;
+            legStraightness = 0.4f;
+
+            legCount = 6;
+            legLength = 30f;
+            legForwardScl = 2.1f;
+            legMoveSpace = 1.05f;
+            rippleScale = 1.2f;
+            stepShake = 0.5f;
+            legGroupSize = 2;
+            legExtension = -6f;
+            legBaseOffset = 15f;
+            legStraightLength = 0.9f;
+            legMaxLength = 1.2f;
+
+            allowLegStep = true;
+            mechSideSway = 0.9f;
+            mechFrontSway = 0.9f;
+            legPhysicsLayer = false;
+
+            shadowElevation = 0.1f;
+            groundLayer = Layer.legUnit - 1f;
+            targetAir = true;
         }};
 
         //other
