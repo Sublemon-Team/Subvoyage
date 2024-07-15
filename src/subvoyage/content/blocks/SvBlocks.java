@@ -85,7 +85,7 @@ public class SvBlocks{
         //non-user
         offloadCore = new OffloadCoreBlock("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
-            health = 400;
+            health = 3000;
             size = 3;
 
             lowTierUnits = new UnitType[] {lapetus,leeft};
