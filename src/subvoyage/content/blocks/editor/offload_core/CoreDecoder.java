@@ -99,7 +99,7 @@ public class CoreDecoder extends Block {
                     float dst = Mathf.dst(x,y,tileX(),tileY());
                     if(dst > radius) continue;
                     Tile tile = world.tile(x,y);
-                    if(tile.build instanceof OffloadCore.OffloadCoreBuild c) {
+                    if(tile.build instanceof OffloadCoreOld.OffloadCoreOldBuild c) {
                         if(c.completeType != 2) {
                             continue;
                         }

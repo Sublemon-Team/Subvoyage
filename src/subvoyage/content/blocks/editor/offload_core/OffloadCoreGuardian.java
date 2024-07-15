@@ -17,13 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static mindustry.Vars.*;
 import static subvoyage.content.unit.SvUnits.*;
 
-public class OffloadCoreGuardian extends OffloadCore {
+public class OffloadCoreGuardian extends OffloadCoreOld {
     public OffloadCoreGuardian(String name) {
         super(name);
     }
 
 
-    public class OffloadCoreGuardBuild extends OffloadCoreBuild {
+    public class OffloadCoreGuardBuild extends OffloadCoreOldBuild {
 
         private Unit boss;
         private boolean isBossStarted = false;
@@ -77,7 +77,7 @@ public class OffloadCoreGuardian extends OffloadCore {
         private void checkCores() {
             AtomicInteger coreCount = new AtomicInteger();
             for (Tile e : world.tiles) {
-                if(e.build instanceof OffloadCoreBuild && e.build != this) coreCount.getAndIncrement();
+                if(e.build instanceof OffloadCoreOldBuild && e.build != this) coreCount.getAndIncrement();
             }
             if(coreCount.get() <= 0 && !isBossStarted) initiateBoss();
         }
