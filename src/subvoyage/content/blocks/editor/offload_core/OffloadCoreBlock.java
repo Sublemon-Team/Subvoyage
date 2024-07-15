@@ -103,7 +103,7 @@ public class OffloadCoreBlock extends CoreBlock {
             nextUnit = switch (unitTier) {
                 case 0 -> Structs.random(rand,lapetus,leeft);
                 case 1,2 -> Structs.random(rand,skath,flagshi);
-                case 3,4 -> Structs.random(rand,charon,vanguard);
+                case 3 -> Structs.random(rand,charon,vanguard);
                 default -> Structs.random(rand,charon,vanguard,callees,squadron);
             };
             waveTimer = unitTier*10f*60f;
@@ -132,7 +132,7 @@ public class OffloadCoreBlock extends CoreBlock {
 
         private void selectNextUnit() {
             UnitType[] selectFrom = new UnitType[0];
-            if(unitTier >= 0) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 0 && unitTier < 4) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(unitTier >= 1) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(unitTier >= 4) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(selectFrom.length > 0) nextUnit = Structs.random(rand,selectFrom);
