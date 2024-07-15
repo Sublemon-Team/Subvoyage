@@ -6,21 +6,28 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
+import arc.math.Rand;
+import arc.math.geom.Point2;
 import arc.scene.ui.TextButton;
 import arc.scene.ui.layout.Table;
+import arc.util.Structs;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import mindustry.content.Fx;
 import mindustry.game.Team;
-import mindustry.graphics.Layer;
+import mindustry.gen.Sounds;
+import mindustry.gen.Unit;
+import mindustry.graphics.*;
+import mindustry.type.UnitType;
 import mindustry.ui.Styles;
 import mindustry.world.Block;
 import mindustry.world.Tile;
-import mindustry.world.blocks.production.Drill;
 import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.SvPal;
+import subvoyage.content.world.SvFx;
 
 import static mindustry.Vars.*;
+import static subvoyage.content.unit.SvUnits.*;
 
 public class OffloadCoreBlock extends CoreBlock {
     public int minShieldLayers = 3;
@@ -28,6 +35,10 @@ public class OffloadCoreBlock extends CoreBlock {
 
 
     public TextureRegion dangerIconRegion;
+
+    public UnitType[] lowTierUnits = new UnitType[0];
+    public UnitType[] midTierUnits = new UnitType[0];
+    public UnitType[] highTierUnits = new UnitType[0];
 
 
 
@@ -51,41 +62,100 @@ public class OffloadCoreBlock extends CoreBlock {
         int shieldLayers = 0;
         float smoothShieldLayers = 0;
         float waveTimer = 0;
+        boolean isFirstWave = true;
+        boolean isUpgradeWave = false;
+        int unitTier = 0;
+        float smoothTier = 0;
+        Rand rand = null;
+        UnitType nextUnit = null;
 
         @Override
         public void created() {
             super.created();
-            waveTimer = state.rules.initialWaveSpacing <= 0f ? state.rules.waveSpacing * 2f : state.rules.initialWaveSpacing;
+            waveTimer = getWaveTime();
             recalculateStats();
         }
 
         public void spawnWave() {
-            waveTimer = state.rules.initialWaveSpacing <= 0f ? state.rules.waveSpacing * 2f : state.rules.initialWaveSpacing;
+            waveTimer = getWaveTime();
+            if(nextUnit != null) {
+                Unit unit = nextUnit.spawn(team,x,y);
+                unit.rotation(-90f);
+                unit.shield(40f*unitTier);
+                nextUnit = null;
+            }
+            isFirstWave = false;
+            isUpgradeWave = false;
+            Sounds.wave.play(2f,1f,0f);
         }
 
 
 
         public void tryBreakLayer() {
+            if(shieldLayers <= 0) return;
             breakLayer();
+
         }
 
         void breakLayer() {
             shieldLayers--;
-        };
+            upgrade();
+            nextUnit = Structs.random(rand,
+                    skath, flagshi,
+                    vanguard, charon,
+                    callees, squadron);
+            waveTimer = 5f*60f;
+            isUpgradeWave = true;
+            Sounds.laserbig.play(1f,3f,0f);
+            SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
+            Fx.blastExplosion.create(x,y,0, Pal.accent,new Object());
+        }
+
+        private void upgrade() {
+            unitTier++;
+        }
 
 
         @Override
         public void updateTile() {
             super.updateTile();
-            if(waveTimer > 0) waveTimer--;
-            else spawnWave();
+            if(rand == null) rand = new Rand(Point2.pack(tileX(),tileY())* 100L +(state.rules.sector == null ? 1 : state.rules.sector.id));
+            if(nextUnit == null) selectNextUnit();
+            if(waveTimer > 0 && nextUnit != null) waveTimer--;
+            else if(nextUnit != null) spawnWave();
+            if(isUpgradeWave && Time.time % 10f <= Time.delta) {
+                Fx.shockwave.create(x,y,0,Pal.accent,new Object());
+            }
+        }
+
+        private void selectNextUnit() {
+            UnitType[] selectFrom = new UnitType[0];
+            if(unitTier >= 0) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 2) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 4) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(selectFrom.length > 0) nextUnit = Structs.random(rand,selectFrom);
         }
 
         @Override
         public void draw() {
+            smoothTier = Mathf.lerp(smoothTier,unitTier,Time.delta/90f);
             super.draw();
             drawShieldLayers();
-            drawWaveCountdown();
+            if(nextUnit != null) {
+                drawWaveCountdown();
+                drawConstructingUnit();
+            }
+        }
+
+        private void drawConstructingUnit() {
+            float progress = 1f-waveTimer/getWaveTime();
+            Draw.draw(Layer.blockOver, () -> Drawf.construct(this, nextUnit, -90f, progress, 1, Time.time));
+        }
+
+        public float getWaveTime() {
+            return (isFirstWave
+                    ? (state.rules.initialWaveSpacing <= 0f ? state.rules.waveSpacing * 2f : state.rules.initialWaveSpacing)
+                    : state.rules.waveSpacing);
         }
 
         private void drawWaveCountdown() {
@@ -123,7 +193,7 @@ public class OffloadCoreBlock extends CoreBlock {
         public void buildShieldSelection(OffloadCoreBuilding build, Table table,int minLayers,int maxLayers) {
             Table main = new Table().background(Styles.black6);
             Table cont = new Table().top();
-            cont.defaults().size(40f).width(80f);
+            cont.defaults().size(60f).width(200f);
             Runnable rebuild = () -> {
                 cont.clearChildren();
 
@@ -146,6 +216,24 @@ public class OffloadCoreBlock extends CoreBlock {
                     build.shieldLayers++;
                     button2.setChecked(false);
                 });
+                cont.row();
+                TextButton trybreak = cont.button("break layer (try)", () -> {
+
+                }).get();
+                trybreak.changed(() -> {
+                    if(!trybreak.isChecked()) return;
+                    build.tryBreakLayer();
+                    trybreak.setChecked(false);
+                });
+                cont.row();
+                TextButton trybreak2 = cont.button("break layer (straight)", () -> {
+
+                }).get();
+                trybreak2.changed(() -> {
+                    if(!trybreak2.isChecked()) return;
+                    build.breakLayer();
+                    trybreak2.setChecked(false);
+                });
             };
             rebuild.run();
             main.add(cont);
@@ -164,7 +252,7 @@ public class OffloadCoreBlock extends CoreBlock {
 
         public float calculateDamage(float damage) {
             float delta = (float) shieldLayers /minShieldLayers;
-            return damage * (1f-(delta*2));
+            return damage * (1f-(delta))/2f;
         };
 
         public void recalculateStats() {
@@ -176,6 +264,11 @@ public class OffloadCoreBlock extends CoreBlock {
         public void write(Writes write) {
             super.write(write);
             write.i(shieldLayers);
+            write.bool(isFirstWave);
+            write.f(waveTimer);
+            write.i(unitTier);
+            if(nextUnit != null) write.str(nextUnit.name);
+            else write.str("nilunit");
         }
 
         @Override
@@ -183,11 +276,16 @@ public class OffloadCoreBlock extends CoreBlock {
             super.read(read, revision);
             if(revision != version()) return;
             shieldLayers = read.i();
+            isFirstWave = read.bool();
+            waveTimer = Math.min(read.f(),getWaveTime());
+            unitTier = read.i();
+            String u = read.str();
+            if(!u.equals("nilunit")) nextUnit = content.unit(u);
         }
 
         @Override
         public byte version() {
-            return 1;
+            return 2;
         }
     }
 }

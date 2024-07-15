@@ -88,6 +88,10 @@ public class SvBlocks{
             health = 400;
             size = 3;
 
+            lowTierUnits = new UnitType[] {lapetus,leeft};
+            midTierUnits = new UnitType[] {skath,flagshi};
+            highTierUnits = new UnitType[] {charon,callees,vanguard,squadron};
+
             unitType = marine;
         }
 
