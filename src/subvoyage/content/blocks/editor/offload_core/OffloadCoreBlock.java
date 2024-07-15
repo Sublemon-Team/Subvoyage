@@ -106,7 +106,7 @@ public class OffloadCoreBlock extends CoreBlock {
                     callees, squadron);
             waveTimer = 5f*60f;
             isUpgradeWave = true;
-            Sounds.laserbig.play(1f,3f,0f);
+            Sounds.laserbig.play(0.3f,3f,0f);
             SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
             Fx.blastExplosion.create(x,y,0, Pal.accent,new Object());
         }
