@@ -10,6 +10,7 @@ import arc.math.Rand;
 import arc.math.geom.Point2;
 import arc.scene.ui.TextButton;
 import arc.scene.ui.layout.Table;
+import arc.struct.EnumSet;
 import arc.util.Structs;
 import arc.util.Time;
 import arc.util.io.Reads;
@@ -24,6 +25,8 @@ import mindustry.ui.Styles;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.meta.BlockFlag;
+import subvoyage.content.unit.SvBlockFlag;
 import subvoyage.content.world.SvFx;
 
 import static mindustry.Vars.*;

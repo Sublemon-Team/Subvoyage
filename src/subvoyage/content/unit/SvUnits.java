@@ -29,7 +29,7 @@ import subvoyage.entities.shoot.*;
 public class SvUnits{
     public static UnitType
     // core
-    marine,
+    marine,cryptal,
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
@@ -51,6 +51,10 @@ public class SvUnits{
             lowAltitude = true;
             flying = true;
 
+            targetPriority = -2;
+            targetable = false;
+            hittable = false;
+
             mineWalls = true;
             mineFloor = true;
 
@@ -58,7 +62,7 @@ public class SvUnits{
             mineTier = 1;
             buildSpeed = 1f;
             drag = 0.05f;
-            speed = 2.6f;
+            speed = 4.6f;
             rotateSpeed = 15f;
             accel = 0.1f;
             fogRadius = 0f;
@@ -128,6 +132,88 @@ public class SvUnits{
                     maxRange = 60f;
                 }};
             }});
+        }};
+        cryptal = new AtlacianUnitType("cryptal") {{
+            constructor = UnitEntity::create;
+            playerControllable = false;
+            logicControllable = false;
+            controller = (e) -> new CryptalAI();
+            //aiController = CryptalAI::new;
+            circleTarget = true;
+            isEnemy = false;
+            speed = 2f;
+            rotateSpeed = 5f;
+            omniMovement = false;
+            lowAltitude = true;
+            flying = true;
+            engineSize = 0f;
+
+            float haloY = 3.2f;
+            parts.addAll(
+                    new ShapePart() {{
+                        circle = true;
+                        hollow = true;
+                        color = Pal.accent;
+                        layer = Layer.effect;
+                        radius = 2.5f;
+                        radiusTo = 5f;
+                        stroke = 1f;
+                        strokeTo = 1.5f;
+                        y = haloY;
+                    }},
+                    new HaloPart(){{
+                             progress = PartProgress.constant(1f);
+                             color = Pal.accent;
+                             layer = Layer.effect;
+                             y = haloY;
+                             haloRotateSpeed = -1f;
+
+                             shapes = 4;
+                             shapeRotation = 180f;
+                             triLength = 0f;
+                             triLengthTo = 2f;
+                             haloRotation = 45f;
+                             haloRadius = 2.5f;
+                             tri = true;
+                             radius = 1f;
+                         }},
+
+                    new HaloPart(){{
+                        progress = PartProgress.constant(1f);
+                        color = Pal.accent;
+                        layer = Layer.effect;
+                        y = haloY;
+                        haloRotateSpeed = -1f;
+
+                        shapes = 4;
+                        shapeRotation = 180f;
+                        triLength = 0f;
+                        triLengthTo = 2f;
+                        haloRotation = 45f;
+                        haloRadius = 2.5f;
+                        tri = true;
+                        radius = 1.5f;
+                    }},
+
+                    new HaloPart(){{
+                        progress = PartProgress.constant(1f);
+                        color = Pal.accent;
+                        layer = Layer.effect;
+                        y = haloY;
+
+                        shapes = 4;
+                        triLength = 1.5f;
+                        triLengthTo = 1.5f;
+                        haloRadius = 2.8f;
+                        haloRotation = 45f;
+                        haloRotateSpeed = 2f;
+                        sides = 4;
+                        shapeRotation = 90f;
+                        shapeMoveRot = 10f;
+                        tri = true;
+                        radius = 1.5f;
+                    }});
+            setEnginesMirror(new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f));
         }};
 
         //helicopter
