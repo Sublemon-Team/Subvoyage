@@ -144,8 +144,8 @@ public class OffloadCoreBlock extends CoreBlock {
             super.draw();
             drawShieldLayers();
             if(nextUnit != null) {
-                drawWaveCountdown();
                 drawConstructingUnit();
+                drawWaveCountdown();
             }
         }
 
