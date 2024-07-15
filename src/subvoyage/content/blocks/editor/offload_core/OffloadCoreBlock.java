@@ -100,11 +100,13 @@ public class OffloadCoreBlock extends CoreBlock {
         void breakLayer() {
             shieldLayers--;
             upgrade();
-            nextUnit = Structs.random(rand,
-                    skath, flagshi,
-                    vanguard, charon,
-                    callees, squadron);
-            waveTimer = 5f*60f;
+            nextUnit = switch (unitTier) {
+                case 0 -> Structs.random(rand,lapetus,leeft);
+                case 1,2 -> Structs.random(rand,skath,flagshi);
+                case 3,4 -> Structs.random(rand,charon,vanguard);
+                default -> Structs.random(rand,charon,vanguard,callees,squadron);
+            };
+            waveTimer = unitTier*10f*60f;
             isUpgradeWave = true;
             Sounds.laserbig.play(0.3f,3f,0f);
             SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
@@ -131,7 +133,7 @@ public class OffloadCoreBlock extends CoreBlock {
         private void selectNextUnit() {
             UnitType[] selectFrom = new UnitType[0];
             if(unitTier >= 0) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
-            if(unitTier >= 2) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 1) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(unitTier >= 4) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(selectFrom.length > 0) nextUnit = Structs.random(rand,selectFrom);
         }
