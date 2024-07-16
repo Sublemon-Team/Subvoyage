@@ -139,6 +139,9 @@ public class SvUnits{
             playerControllable = false;
             logicControllable = false;
             controller = (e) -> new CryptalAI();
+
+            health = 750;
+
             //aiController = CryptalAI::new;
             circleTarget = true;
             isEnemy = false;
