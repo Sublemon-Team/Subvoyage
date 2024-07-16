@@ -258,7 +258,9 @@ public class SvUnits{
                     mount.warmup = 0f;
                 }
             });
-            setEnginesMirror(new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f));
+            setEnginesMirror(
+                    new UnitEngine(16 / 4f, -28 / 4f, 1.8f, 315f),
+                    new UnitEngine(58 / 4f /2f, -40 / 4f / 2f, 1.5f, 315f));
         }};
 
         //helicopter

@@ -15,6 +15,7 @@ import arc.util.Structs;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.game.Team;
 import mindustry.gen.Sounds;
@@ -69,6 +70,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
         boolean isUpgradeWave = false;
         int unitTier = 0;
         float smoothTier = 0;
+        float shieldCooldown = 0f;
         Rand rand = null;
         UnitType nextUnit = null;
 
@@ -96,6 +98,9 @@ public class OffloadCore extends CoreBlock implements IOffload {
 
         public boolean tryBreakLayer() {
             if(shieldLayers <= 0) return false;
+            if(shieldCooldown > 0) return false;
+            damage(player.team(),80f);
+            Fx.pointHit.create(x,y,0,Pal.darkPyraFlame,new Object());
             breakLayer();
             return true;
         }
@@ -114,6 +119,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
             Sounds.laserbig.play(0.3f,3f,0f);
             SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
             Fx.blastExplosion.create(x,y,0, Pal.accent,new Object());
+            shieldCooldown = 60f;
         }
 
         private void upgrade() {
@@ -131,6 +137,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
             if(isUpgradeWave && Time.time % 10f <= Time.delta) {
                 Fx.shockwave.create(x,y,0,Pal.accent,new Object());
             }
+            shieldCooldown -= Time.delta;
         }
 
         private void selectNextUnit() {
