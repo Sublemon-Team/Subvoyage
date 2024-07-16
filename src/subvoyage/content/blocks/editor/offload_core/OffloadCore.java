@@ -32,7 +32,7 @@ import subvoyage.content.world.SvFx;
 import static mindustry.Vars.*;
 import static subvoyage.content.unit.SvUnits.*;
 
-public class OffloadCore extends CoreBlock {
+public class OffloadCore extends CoreBlock implements IOffload {
     public int minShieldLayers = 3;
     public int maxShieldLayers = 5;
 
@@ -60,7 +60,7 @@ public class OffloadCore extends CoreBlock {
     @Override public boolean canReplace(Block other) {return false;}
 
 
-    public class OffloadCoreBuilding extends CoreBuild {
+    public class OffloadCoreBuilding extends CoreBuild  implements IOffload {
 
         int shieldLayers = 0;
         float smoothShieldLayers = 0;
@@ -94,10 +94,10 @@ public class OffloadCore extends CoreBlock {
 
 
 
-        public void tryBreakLayer() {
-            if(shieldLayers <= 0) return;
+        public boolean tryBreakLayer() {
+            if(shieldLayers <= 0) return false;
             breakLayer();
-
+            return true;
         }
 
         void breakLayer() {

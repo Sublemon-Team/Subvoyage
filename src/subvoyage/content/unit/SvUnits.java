@@ -9,6 +9,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -212,7 +213,51 @@ public class SvUnits{
                         shapeMoveRot = 10f;
                         tri = true;
                         radius = 1.5f;
-                    }});
+                    }},
+                    new FlarePart(){{
+                        progress = PartProgress.warmup;
+                        color1 = Pal.accent;
+                        stroke = 3f;
+                        radius = 0f;
+                        radiusTo = 12f;
+                        layer = Layer.effect;
+                        y = haloY;
+                        x = 0f;
+                        followRotation = true;
+                        sides = 6;
+                    }}
+            );
+
+            weapons.add(new OffloadDestroyWeapon() {{
+                y = haloY;
+                x = 0;
+                alternate = false;
+                mirror = false;
+
+                rotate = true;
+                shootWarmupSpeed = 0.01f;
+                minWarmup = 0.8f;
+
+                bullet = new LaserBoltBulletType(1f,0f) {
+                    @Override
+                    public void draw(Bullet b) {
+                        super.draw(b);
+                    }
+
+                    @Override
+                    public void update(Bullet b) {
+                        b.remove();
+                        super.update(b);
+                    }
+                };
+            }
+
+                @Override
+                protected void handleBullet(Unit unit, WeaponMount mount, Bullet bullet) {
+                    super.handleBullet(unit, mount, bullet);
+                    mount.warmup = 0f;
+                }
+            });
             setEnginesMirror(new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f));
         }};
 
