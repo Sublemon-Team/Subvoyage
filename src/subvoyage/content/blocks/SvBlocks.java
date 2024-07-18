@@ -1733,7 +1733,7 @@ public class SvBlocks{
             );
         }};
 
-        propanePyrolyzer = new GenericCrafter("propane-pyrolyzer") {{
+        propanePyrolyzer = new GenericCrafter("propane-pyrolizer") {{
             requirements(Category.crafting,atl(),with(iridium,300,corallite,300,clay,150));
             researchCost = with(iridium,300,corallite,700,clay,400);
 
@@ -1746,6 +1746,25 @@ public class SvBlocks{
             consumeItem(corallite,1);
             consumeItem(crude,1);
             consumePower(0.45f);
+
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawLiquidRegion(propane),
+                    new DrawArcSmelt(){{
+                        flameColor = SvPal.propane;
+                        midColor = SvPal.propane;
+                        flameRad = 1.0F;
+                        circleSpace = 1.0F;
+                        flameRadiusScl = 3.0F;
+                        flameRadiusMag = 0.3F;
+                        circleStroke = 1.25F;
+                        particles = 16;
+                        particleLife = 30.0F;
+                        particleRad = 5.2F;
+                        particleStroke = 0.8F;
+                        particleLen = 2.25F;
+                    }}
+            );
 
             outputLiquid = new LiquidStack(propane,1.5f);
             hasLiquids = true;
