@@ -5,6 +5,7 @@ import arc.graphics.*;
 
 public class SvPal {
     public static Color
+    outline = Color.valueOf("191820"),
     spaclanium = Color.valueOf("D8C4FF"),
     corallite = Color.valueOf("81AA72"),
     sulfur = Color.valueOf("C4A981"),
