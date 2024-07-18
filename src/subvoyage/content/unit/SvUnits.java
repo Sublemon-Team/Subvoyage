@@ -1599,7 +1599,28 @@ public class SvUnits{
             }}
             );
 
-            weapons.add(new HydromechWeapon() {{
+            parts.add(
+                    new FlarePart() {{
+                        progress = PartProgress.warmup;
+                        y = -3f;
+                        followRotation = true;
+                        spinSpeed = 1f;
+                        color1 = SvPal.hydromech;
+                        layer = Layer.effect;
+                        radius = 0f;
+                        radiusTo = 8f;
+                    }
+
+                        @Override
+                        public void draw(PartParams params) {
+                            Draw.blend(Blending.additive);
+                            super.draw(params);
+                            Draw.blend(Blending.normal);
+                        }
+                    }
+            );
+
+            weapons.add(new HydromechWeapon(name+"-gatling-ground") {{
                 activationState = HydromechState.GROUND;
                 activationBasedDraw = true;
 
@@ -1607,18 +1628,34 @@ public class SvUnits{
                 warmupReloadModifier = 15/300f;
                 shootWarmupSpeed = 0.01f;
 
+                heatColor = Color.red;
+
+                mirror = false;
+                alternate = false;
+
+                x = 0;
+                y = -12f;
+
                 warmupToHeat = true;
 
                 reload = 300f;
             }});
 
-            weapons.add(new HydromechWeapon() {{
+            weapons.add(new HydromechWeapon(name+"-gatling-water") {{
                 activationState = HydromechState.WATER;
                 activationBasedDraw = true;
 
                 warmupSpeedModifier = 0f;
                 warmupReloadModifier = 4/400f;
                 shootWarmupSpeed = 0.0005f;
+
+                heatColor = Color.red;
+
+                mirror = false;
+                alternate = false;
+
+                x = 0;
+                y = -12f;
 
                 warmupToHeat = true;
 

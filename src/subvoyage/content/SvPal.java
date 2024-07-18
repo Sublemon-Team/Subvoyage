@@ -41,6 +41,7 @@ public class SvPal {
     legartyte = Color.valueOf("125C5F"),
     legartyteLightish = Color.valueOf("137B6D"),
     agaryte = Color.valueOf("314544"),
-    danger = Color.valueOf("FF5E5E")
-            ;
+    danger = Color.valueOf("FF5E5E"),
+    hydromech = Color.valueOf("A6E8DF")
+    ;
 }
