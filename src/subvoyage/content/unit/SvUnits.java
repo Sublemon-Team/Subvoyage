@@ -1602,7 +1602,7 @@ public class SvUnits{
             parts.add(
                     new FlarePart() {{
                         progress = PartProgress.warmup;
-                        y = -3f;
+                        y = 6f;
                         followRotation = true;
                         spinSpeed = 1f;
                         color1 = SvPal.hydromech;
@@ -1620,21 +1620,36 @@ public class SvUnits{
                     }
             );
 
-            weapons.add(new HydromechWeapon(name+"-gatling-ground") {{
+            weapons.add(new HydromechWeapon(name+"-weapon") {{
                 activationState = HydromechState.GROUND;
                 activationBasedDraw = true;
 
                 warmupSpeedModifier = 0.5f;
                 warmupReloadModifier = 15/300f;
-                shootWarmupSpeed = 0.01f;
+                shootWarmupSpeed = 0.001f;
+
+                top = true;
 
                 heatColor = Color.red;
+                layerOffset = 0.015f;
+
+                parts.add(new RegionPart("-blade"){{
+                    //todo barrel rotating, fix outline render
+                    outlineLayerOffset = -0.001f;
+                    layerOffset = 0.01f;
+                    outline = true;
+                    mirror = true;
+                    moveRot = -25f;
+                    under = false;
+                    moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
+                    heatColor = Color.red;
+                    cooldownTime = 60f;
+                }});
 
                 mirror = false;
-                alternate = false;
 
                 x = 0;
-                y = -12f;
+                y = 0f;
 
                 warmupToHeat = true;
 
