@@ -26,7 +26,7 @@ public class HydromechWeapon extends Weapon {
     public boolean activationBasedDraw = false;
     public boolean hasHeat = true;
     public boolean warmupToHeat = false;
-    public float sclX,sclY = 1f;
+    public float sclX= 1f; public float sclY = 1f;
     public float warmupSpeedModifier = 1f;
     public float warmupReloadModifier = 1f;
 
