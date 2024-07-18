@@ -9,7 +9,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.units.WeaponMount;
+import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -1599,7 +1599,8 @@ public class SvUnits{
             }}
             );
 
-            weapons.add(new HydromechWeapon() {{
+            weapons.add(new HydromechWeapon(name + "-weapon"){{
+                mirror = false;
                 activationState = HydromechState.GROUND;
                 activationBasedDraw = true;
 
@@ -1608,11 +1609,21 @@ public class SvUnits{
                 shootWarmupSpeed = 0.01f;
 
                 warmupToHeat = true;
-
                 reload = 300f;
+                parts.add(new RegionPart("-blade"){{
+                    //todo barrel rotating, fix outline render
+                    mirror = true;
+                    moveRot = -25f;
+                    under = true;
+                    moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
+
+                    heatColor = Color.red;
+                    cooldownTime = 60f;
+                }});
             }});
 
-            weapons.add(new HydromechWeapon() {{
+            weapons.add(new HydromechWeapon(name + "-weapon"){{
+                mirror = false;
                 activationState = HydromechState.WATER;
                 activationBasedDraw = true;
 
@@ -1621,7 +1632,6 @@ public class SvUnits{
                 shootWarmupSpeed = 0.0005f;
 
                 warmupToHeat = true;
-
                 reload = 400f;
             }});
 
@@ -1643,7 +1653,7 @@ public class SvUnits{
             stepShake = 1.5f;
             legGroupSize = 2;
             legExtension = -6f;
-            legBaseOffset = 15f;
+            legBaseOffset = 13f;
             legStraightLength = 0.9f;
             legMaxLength = 1.2f;
 

@@ -1,18 +1,16 @@
 package subvoyage.content.unit.type;
 
-import arc.Core;
-import arc.graphics.Blending;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import mindustry.content.UnitTypes;
-import mindustry.entities.units.WeaponMount;
-import mindustry.gen.Unit;
+import arc.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import mindustry.entities.units.*;
+import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.world.meta.*;
-import subvoyage.content.unit.weapons.HydromechWeapon;
+import subvoyage.content.*;
+import subvoyage.content.unit.weapons.*;
 import subvoyage.content.world.items.*;
 
 public class AtlacianUnitType extends UnitType{
@@ -22,7 +20,7 @@ public class AtlacianUnitType extends UnitType{
     public Color heatColor = Pal.turretHeat;
     public AtlacianUnitType(String name){
         super(name);
-        outlineColor = Pal.darkOutline;
+        outlineColor = SvPal.outline;
         envDisabled = Env.space;
         ammoType = new ItemAmmoType(SvItems.corallite);
         researchCostMultiplier = 10f;
