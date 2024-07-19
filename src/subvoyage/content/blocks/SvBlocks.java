@@ -1750,6 +1750,7 @@ public class SvBlocks{
             drawer = new DrawMulti(
                     new DrawDefault(),
                     new DrawLiquidRegion(propane),
+                    new DrawHeatGlow(),
                     new DrawArcSmelt(){{
                         flameColor = SvPal.propane;
                         midColor = SvPal.propane;
