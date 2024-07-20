@@ -1266,7 +1266,6 @@ public class SvBlocks{
             powerProduction = 0.2f;
             size = 2;
         }};
-
         hydrocarbonicGenerator = new ConsumeGenerator("hydrocarbonic-generator") {{
             requirements(Category.power,atl(),with(corallite,300,clay,100,iridium,200, chromium,10));
 
@@ -1277,7 +1276,13 @@ public class SvBlocks{
             ambientSound = Sounds.glow;
             ambientSoundVolume = 0.05f;
 
-            powerProduction = 12f;
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawWarmupRegion(),
+                    new DrawGlowRegion()
+            );
+
+            powerProduction = 24f;
             itemDuration = 60f;
             envDisabled |= Env.scorching;
             consumeLiquid(propane,0.65f);
@@ -1293,9 +1298,9 @@ public class SvBlocks{
             health = 900;
             ambientSound = Sounds.hum;
             ambientSoundVolume = 0.24f;
-            powerProduction = 24;
+            powerProduction = 60;
 
-            consumePower(2f);
+            consumePower(12f);
             consumeItem(chromium,2);
             consumeLiquid(polygen, heating / coolantPower).update(false);
         }};
