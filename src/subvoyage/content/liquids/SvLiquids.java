@@ -1,6 +1,7 @@
 package subvoyage.content.liquids;
 
 import arc.graphics.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.type.*;
 import subvoyage.content.SvPal;
@@ -45,9 +46,8 @@ public class SvLiquids{
             temperature = 0.4f;
             gasColor = color;
         }};
-
         nitrogen = new Liquid("nitrogen",SvPal.nitrogen) {{
-            gas = true;
+            //gas = true;
             coolant = true;
 
             explosiveness = 0f; //turrets can go kaboom
