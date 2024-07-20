@@ -3,17 +3,13 @@ package subvoyage.content.unit;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.math.geom.Mat3D;
-import arc.math.geom.Quat;
-import arc.util.Time;
-import arc.util.Tmp;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.units.WeaponMount;
+import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -1603,65 +1599,63 @@ public class SvUnits{
             }}
             );
 
-            parts.add(
-                    new FlarePart() {{
-                        progress = PartProgress.warmup;
-                        y = 6f;
-                        followRotation = true;
-                        spinSpeed = 1f;
-                        color1 = SvPal.hydromech;
-                        layer = Layer.effect;
-                        radius = 0f;
-                        radiusTo = 8f;
-                    }
+            parts.add(new FlarePart(){
+                {
+                    progress = PartProgress.warmup;
+                    y = 6f;
+                    followRotation = true;
+                    spinSpeed = 1f;
+                    color1 = SvPal.hydromech;
+                    layer = Layer.effect;
+                    radius = 0f;
+                    radiusTo = 8f;
+                }
 
-                        @Override
-                        public void draw(PartParams params) {
-                            Draw.blend(Blending.additive);
-                            super.draw(params);
-                            Draw.blend(Blending.normal);
-                        }
-                    }
-            );
+                @Override
+                public void draw(PartParams params){
+                    Draw.blend(Blending.additive);
+                    super.draw(params);
+                    Draw.blend(Blending.normal);
+                }
+            });
 
-            weapons.add(new HydromechWeapon(name+"-weapon") {
-                            {
-                                activationState = HydromechState.GROUND;
-                                activationBasedDraw = true;
+            weapons.add(new HydromechWeapon(name + "-weapon"){
+                {
+                    activationState = HydromechState.GROUND;
+                    activationBasedDraw = true;
 
-                                warmupSpeedModifier = 0.5f;
-                                warmupReloadModifier = 15 / 300f;
-                                shootWarmupSpeed = 0.001f;
+                    warmupSpeedModifier = 0.5f;
+                    warmupReloadModifier = 15 / 300f;
+                    shootWarmupSpeed = 0.001f;
 
-                                top = true;
+                    top = true;
 
-                                heatColor = Color.red;
-                                layerOffset = 0.015f;
+                    heatColor = Color.red;
+                    layerOffset = 0.015f;
 
-                                parts.add(new RegionPart("-blade") {{
-                                    //todo barrel rotating, fix outline render
-                                    outlineLayerOffset = -0.001f;
-                                    layerOffset = 0.01f;
-                                    outline = true;
-                                    mirror = true;
-                                    moveRot = -25f;
-                                    under = false;
-                                    moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
-                                    heatColor = Color.red;
-                                    cooldownTime = 60f;
-                                }});
+                    parts.add(new RegionPart("-blade"){{
+                        //todo barrel rotating
+                        outlineLayerOffset = -0.001f;
+                        layerOffset = 0.01f;
+                        outline = true;
+                        mirror = true;
+                        moveRot = -25f;
+                        under = false;
+                        moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
+                        heatColor = Color.red;
+                        cooldownTime = 60f;
+                    }});
 
-                                mirror = false;
-                                x = 0;
-                                y = 0f;
+                    mirror = false;
+                    x = 0;
+                    y = 0f;
 
-                                warmupToHeat = true;
+                    warmupToHeat = true;
+                    reload = 300f;
+                }
+            });
 
-                                reload = 300f;
-                            }}
-            );
-
-            weapons.add(new HydromechWeapon(name+"-gatling-water") {{
+            weapons.add(new HydromechWeapon(name + "-weapon"){{
                 activationState = HydromechState.WATER;
                 activationBasedDraw = true;
 
@@ -1669,17 +1663,30 @@ public class SvUnits{
                 warmupReloadModifier = 4/400f;
                 shootWarmupSpeed = 0.0005f;
 
+                top = true;
+
                 heatColor = Color.red;
+                layerOffset = 0.015f;
+
+                parts.add(new RegionPart("-blade"){{
+                    //todo barrel rotating
+                    outlineLayerOffset = -0.001f;
+                    layerOffset = 0.01f;
+                    outline = true;
+                    mirror = true;
+                    moveRot = -25f;
+                    under = false;
+                    moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
+                    heatColor = Color.red;
+                    cooldownTime = 60f;
+                }});
 
                 mirror = false;
-                alternate = false;
-
                 x = 0;
-                y = -12f;
+                y = 0f;
 
                 warmupToHeat = true;
-
-                reload = 400f;
+                reload = 300f;
             }});
 
 
