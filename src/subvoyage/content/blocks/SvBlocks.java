@@ -364,7 +364,7 @@ public class SvBlocks{
                 fragBullets = 3;
                 fragVelocityMin = 1f;
             }},
-            quartzFiber, new BasicBulletType(5f, 40){{
+            quartzFiber, new BasicBulletType(5f, 90){{
                         width = 12f;
                         height = 12f;
                         lifetime = 30f;
