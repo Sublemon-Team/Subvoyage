@@ -1653,13 +1653,19 @@ public class SvBlocks{
 
         poweredEnhancer = new GenericCrafter("powered-enhancer") {{
             requirements(Category.crafting,atl(), with(chromium, 200, iridium, 100));
-            outputLiquid = new LiquidStack(SvLiquids.polygen, 2);
-            craftTime = 1f;
+            craftTime = 10f;
 
             researchCost = with(chromium,1600,iridium,3200);
 
             itemCapacity = 30;
             size = 3;
+
+            regionRotated1 = 3;
+            outputLiquids = LiquidStack.with(SvLiquids.polygen, 2f, nitrogen, .4f);
+            liquidOutputDirections = new int[]{1, 3};
+
+            rotate = true;
+            invertFlip = true;
 
             hasItems = true;
             hasLiquids = true;
@@ -1668,8 +1674,9 @@ public class SvBlocks{
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
                     new DrawMixer(),
-                    new DrawDefault(),
-                    new DrawRegion("-top")
+                    new DrawRegion(),
+                    new DrawRegion("-top"),
+                    new DrawLiquidOutputs()
             );
 
             consumeLiquid(water,0.5f);

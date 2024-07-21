@@ -49,7 +49,7 @@ public class SvLiquids{
         nitrogen = new Liquid("nitrogen",SvPal.nitrogen) {{
             //gas = true;
             coolant = true;
-
+            boilPoint = -1f;
             explosiveness = 0f; //turrets can go kaboom
             temperature = 0.2f;
             gasColor = color;
