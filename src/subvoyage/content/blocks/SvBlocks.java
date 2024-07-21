@@ -1795,6 +1795,11 @@ public class SvBlocks{
             consumeLiquid(propane,0.2f);
             consumePower(0.6f);
 
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawLiquidRegion(helium)
+            );
+
             outputLiquid = new LiquidStack(helium,1.35f);
             hasLiquids = true;
         }};
