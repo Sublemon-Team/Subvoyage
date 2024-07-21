@@ -1576,7 +1576,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 7260;
+            health = 8260;
             hitSize = 32f;
 
             bodyScale = 0.9f;
@@ -1592,11 +1592,11 @@ public class SvUnits{
             withStates(
             HydromechState.GROUND, new UnitStatState(){{
                 speed = 0.5f;
-                inwardsDamageMul = 1.5f;
+                inwardsDamageMul = 1.1f;
             }},
             HydromechState.WATER, new UnitStatState(){{
                 speed = 0.6f;
-                inwardsDamageMul = 1.4f;
+                inwardsDamageMul = 1f;
             }}
             );
 
