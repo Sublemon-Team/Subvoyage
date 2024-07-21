@@ -1576,7 +1576,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 8260;
+            health = 7260;
             hitSize = 32f;
 
             bodyScale = 0.9f;
