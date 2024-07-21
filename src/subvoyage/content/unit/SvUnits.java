@@ -1837,7 +1837,7 @@ public class SvUnits{
             legCount = 6;
             legLength = 30f;
             legForwardScl = 2.1f;
-            legMoveSpace = 1.65f;
+            legMoveSpace = 1f;
             rippleScale = 1.2f;
             stepShake = 1.5f;
             legGroupSize = 2;
