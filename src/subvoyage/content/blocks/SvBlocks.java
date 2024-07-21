@@ -924,23 +924,21 @@ public class SvBlocks{
         }};
 
         coreDecoder = new CoreDecoder("core-decoder") {{
-            requirements(Category.effect,atl(), with(iridium,300,chromium,200,corallite,20));
+            requirements(Category.effect,atl(),with(iridium,400,chromium,300,quartzFiber,250));
 
             researchCost = with(iridium,800,chromium,500,corallite,400);
 
-            health = 560;
-
-            priority = TargetPriority.core-0.2f;
-            fogRadius = 10;
+            health = 2560;
+            priority = TargetPriority.core;
+            fogRadius = 16;
             size = 2;
-            consumePower(5f);
-
+            consumePower(6f);
+            consumeLiquid(propane,0.95f);
             destructible = true;
-
             envDisabled |= Env.scorching;
         }};
 
-        coreDecrypter = new CoreDecoder("core-decrypter") {{
+        /*coreDecrypter = new CoreDecoder("core-decrypter") {{
             requirements(Category.effect,atl(),with(iridium,400,chromium,300,quartzFiber,250));
 
             researchCost = with(iridium,1600,chromium,1000,quartzFiber,820);
@@ -955,7 +953,7 @@ public class SvBlocks{
             minAttempts = 50;
             frequency = 80;
             hackChance = 0.02f;
-        }};
+        }};*/
 
         regenerator = new MendProjector("regenerator"){{
             requirements(Category.effect,atl(), with(spaclanium, 60));

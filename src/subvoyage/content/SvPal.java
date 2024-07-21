@@ -5,7 +5,7 @@ import arc.graphics.*;
 
 public class SvPal {
     public static Color
-    outline = Color.valueOf("191820"),
+    outline = Color.valueOf("191820").a(0f),
     spaclanium = Color.valueOf("D8C4FF"),
     corallite = Color.valueOf("81AA72"),
     sulfur = Color.valueOf("C4A981"),
@@ -31,9 +31,9 @@ public class SvPal {
     energyLaser = Color.valueOf("D9F2FF"),
     polygen = Color.valueOf("8997FF"),
     argon = Color.valueOf("FF8C99"),
-    propane = Color.valueOf("FFB03A"),
-    helium = Color.valueOf("DEC3F1"),
-    nitrogen = Color.valueOf("AEAFF1"),
+    propane = Color.valueOf("E2992D"),
+    helium = Color.valueOf("C1D0CA"),
+    nitrogen = Color.valueOf("E7E1B9"),
     suppresion = Color.valueOf("FE6C4C"),
     atlacianIcon = Color.valueOf("7286AD"),
     atlacianAtmosphere = Color.valueOf("5177FF"),

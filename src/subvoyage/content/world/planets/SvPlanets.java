@@ -50,7 +50,7 @@ public class SvPlanets{
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
                 r.loadout = Seq.with();
-                r.enemyCoreBuildRadius = 2*3*tilesize;
+                r.enemyCoreBuildRadius = 300f;
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;

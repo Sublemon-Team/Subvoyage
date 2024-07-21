@@ -3,6 +3,7 @@ package subvoyage.content.unit.ai;
 import arc.math.Mathf;
 import arc.math.geom.Geometry;
 import arc.struct.Seq;
+import arc.util.Time;
 import mindustry.ai.types.FlyingAI;
 import mindustry.content.Fx;
 import mindustry.entities.effect.MultiEffect;
@@ -11,19 +12,24 @@ import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.gen.Teamc;
+import mindustry.gen.Unit;
 import mindustry.graphics.Pal;
 import mindustry.world.meta.BlockFlag;
 import subvoyage.content.blocks.editor.offload_core.IOffload;
 import subvoyage.content.blocks.editor.offload_core.OffloadCore;
 import subvoyage.content.world.SvFx;
 
+import java.util.HashMap;
+
 import static mindustry.Vars.*;
 
 public class CryptalAI extends FlyingAI {
+    public HashMap<Unit,Float> timePassed = new HashMap<>();
     @Override
     public void updateMovement() {
         unloadPayloads();
-
+        if(target == null) timePassed.put(unit,timePassed.getOrDefault(unit,0f)+ Time.delta);
+        if(timePassed.getOrDefault(unit,0f) > 60*15f) unit.kill();
         if(target != null && unit.hasWeapons()){
             if(unit.type.circleTarget){
                 circleAttack(120f);
