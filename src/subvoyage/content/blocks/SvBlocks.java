@@ -123,6 +123,7 @@ public class SvBlocks{
             researchCost = with(iridium,400,clay,500);
 
             consumeLiquid(argon,0.2f);
+            configurable = false;
             plans = Seq.with(
                     new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
             );
@@ -136,6 +137,7 @@ public class SvBlocks{
             researchCost = with(iridium,600,clay,600,chromium,120);
 
             consumeLiquid(helium,1.2f);
+            configurable = false;
             plans = Seq.with(
                     new UnitPlan(leeft, 60f * 10, with(iridium, 20))
             );
