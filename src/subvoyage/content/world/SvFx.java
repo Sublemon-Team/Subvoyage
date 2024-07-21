@@ -1,6 +1,7 @@
 package subvoyage.content.world;
 
 import arc.*;
+import arc.func.Func;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -209,6 +210,34 @@ public class SvFx{
         drawLaser(x1,y1,x2,y2,2,2);
         Draw.reset();
     });
+
+    public static Func<Object,Effect>
+            hitLaserColor = c -> new Effect(8, e -> {
+                color(Color.white, (Color) c, e.fin());
+                stroke(0.5f + e.fout());
+                Lines.circle(e.x, e.y, e.fin() * 5f);
+
+                Drawf.light(e.x, e.y, 23f, (Color) c, e.fout() * 0.7f);
+            }),
+            colorRadExplosion = cr -> new Effect(60f, 160f, e -> {
+                Color c = (Color) ((Object[]) cr)[0];
+                float r = (float) ((Object[]) cr)[1];
+                color(c);
+                stroke(e.fout() * 2f);
+                float circleRad = e.finpow() * r;
+                Lines.circle(e.x, e.y, circleRad);
+
+                rand.setSeed(e.id);
+                for(int i = 0; i < 16; i++){
+                    float angle = rand.random(360f);
+                    float lenRand = rand.random(0.5f, 1f);
+                    Tmp.v1.trns(angle, circleRad);
+
+                    for(int s : Mathf.signs){
+                        Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 6f, e.fout() * 10f * lenRand + 6f, angle + 90f + s * 90f);
+                    }
+                }
+            });
 
 
     public static void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2){

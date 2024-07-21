@@ -3,6 +3,7 @@ package subvoyage.content.unit;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.struct.Seq;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -1599,26 +1600,6 @@ public class SvUnits{
             }}
             );
 
-            parts.add(new FlarePart(){
-                {
-                    progress = PartProgress.warmup;
-                    y = 6f;
-                    followRotation = true;
-                    spinSpeed = 1f;
-                    color1 = SvPal.hydromech;
-                    layer = Layer.effect;
-                    radius = 0f;
-                    radiusTo = 8f;
-                }
-
-                @Override
-                public void draw(PartParams params){
-                    Draw.blend(Blending.additive);
-                    super.draw(params);
-                    Draw.blend(Blending.normal);
-                }
-            });
-
             weapons.add(new HydromechWeapon(name + "-weapon"){
                 {
                     activationState = HydromechState.GROUND;
@@ -1633,18 +1614,149 @@ public class SvUnits{
                     heatColor = Color.red;
                     layerOffset = 0.015f;
 
+                    bullet = new BulletType(){{
+                        shootEffect = Fx.sparkShoot;
+                        smokeEffect = Fx.shootSmokeTitan;
+
+                        hitColor = Pal.suppress;
+                        shake = 1f;
+                        speed = 0f;
+                        keepVelocity = false;
+                        collidesAir = true;
+
+                        shootEffect = Fx.rocketSmokeLarge;
+
+                        spawnUnit = new MissileUnitType("squadron-missile"){{
+                            controller = u -> new StraightMissileAI();
+                            outlineColor = SvPal.outline;
+                            trailRotation = true;
+                            targetAir = true;
+                            physics = false;
+                            lowAltitude = true;
+
+                            lifetime = 30f;
+
+                            hitEffect = despawnEffect = Fx.blastExplosion;
+                            smokeEffect = SvFx.shootLauncher;
+                            trailEffect = SvFx.missileTrailSmokeMedium;
+
+                            trailInterval = 3f;
+                            trailWidth = 1f;
+                            trailLength = 6;
+
+                            speed = 4.6f;
+                            maxRange = 3f;
+                            health = 40;
+
+                            engineSize = 3f;
+                            hitColor = engineColor = trailColor = SvPal.hydromech;
+                            engineLayer = Layer.effect;
+                            deathExplosionEffect = Fx.none;
+                            loopSoundVolume = 0.1f;
+                            parts.add(new FlarePart(){
+                                {
+                                    progress = PartProgress.constant(1f);
+                                    y = 8f;
+                                    followRotation = true;
+                                    spinSpeed = 0f;
+                                    color1 = SvPal.hydromech;
+                                    layer = Layer.effect;
+                                    radius = 1f;
+                                    radiusTo = 8f;
+                                }
+                                @Override
+                                public void draw(PartParams params){
+                                    Draw.blend(Blending.additive);
+                                    super.draw(params);
+                                    Draw.blend(Blending.normal);
+                                }
+                            });
+                            abilities.add(new MoveEffectAbility(){{
+                                effect = SvFx.hitLaserColor.get(SvPal.hydromech);
+
+                                rotation = 180f;
+                                y = -9f;
+                                color = Color.grays(0.6f).lerp(Color.white, 0.5f).a(0.4f);
+                                interval = 1.5f;
+                            }});
+
+                            weapons.add(new Weapon(){{
+                                shootCone = 360f;
+                                mirror = false;
+                                reload = 1f;
+                                shootOnDeath = true;
+                                bullet = new ExplosionBulletType(90, 50f){{
+                                    collidesAir = true;
+                                    suppressionRange = 80f;
+                                    shootEffect = new MultiEffect(
+                                    SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,50f}),
+                                    new ExplosionEffect(){{
+                                        lifetime = 50f;
+                                        waveStroke = 5f;
+                                        waveLife = 8f;
+                                        waveColor = Color.white;
+                                        sparkColor = smokeColor = SvPal.hydromech;
+                                        waveRad = 40f;
+                                        smokeSize = 4f;
+                                        smokes = 7;
+                                        smokeSizeBase = 0f;
+                                        sparks = 10;
+                                        sparkRad = 40f;
+                                        sparkLen = 6f;
+                                        sparkStroke = 2f;
+                                    }});
+                                }};
+                            }});
+                        }
+
+                            @Override
+                            public void draw(Unit unit) {
+                                Draw.scl(1.5f);
+                                super.draw(unit);
+                                Draw.scl();
+                            }
+
+                            @Override
+                            public void drawBody(Unit unit) {
+                                Draw.scl(1.5f);
+                                super.drawBody(unit);
+                                Draw.scl();
+                            }
+                        };
+                    }};
+
                     parts.add(new RegionPart("-blade"){{
                         //todo barrel rotating
                         outlineLayerOffset = -0.001f;
                         layerOffset = 0.01f;
                         outline = true;
                         mirror = true;
-                        moveRot = -25f;
+                        moveRot = -40f;
+                        moveY = 2f;
+                        progress = PartProgress.smoothReload.inv().mul(PartProgress.warmup.mul(1f).clamp());
                         under = false;
                         moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
                         heatColor = Color.red;
                         cooldownTime = 60f;
                     }});
+                    parts.add(new FlarePart(){
+                        {
+                            progress = PartProgress.smoothReload.inv().mul(PartProgress.warmup.mul(1.3f).clamp());
+                            y = 8f;
+                            followRotation = true;
+                            spinSpeed = 0f;
+                            color1 = SvPal.hydromech;
+                            layer = Layer.effect;
+                            radius = 1f;
+                            radiusTo = 8f;
+                        }
+                        @Override
+                        public void draw(PartParams params){
+                            Draw.blend(Blending.additive);
+                            super.draw(params);
+                            Draw.blend(Blending.normal);
+                        }
+                    });
 
                     mirror = false;
                     x = 0;
@@ -1660,8 +1772,8 @@ public class SvUnits{
                 activationBasedDraw = true;
 
                 warmupSpeedModifier = 0f;
-                warmupReloadModifier = 4/400f;
-                shootWarmupSpeed = 0.0005f;
+                warmupReloadModifier = 3/300f;
+                shootWarmupSpeed = 0.0004f;
 
                 top = true;
 
@@ -1674,12 +1786,32 @@ public class SvUnits{
                     layerOffset = 0.01f;
                     outline = true;
                     mirror = true;
-                    moveRot = -25f;
+                    moveRot = -30f;
+                    moveY = 2f;
+                    progress = PartProgress.smoothReload.inv().mul(PartProgress.warmup.mul(1f).clamp());
                     under = false;
                     moves.add(new PartMove(PartProgress.reload, 1f, 0f, 0));
                     heatColor = Color.red;
                     cooldownTime = 60f;
                 }});
+                parts.add(new FlarePart(){
+                    {
+                        progress = PartProgress.smoothReload.inv().mul(PartProgress.warmup.mul(1.3f).clamp());
+                        y = 8f;
+                        followRotation = true;
+                        spinSpeed = 0f;
+                        color1 = SvPal.hydromech;
+                        layer = Layer.effect;
+                        radius = 1f;
+                        radiusTo = 8f;
+                    }
+                    @Override
+                    public void draw(PartParams params){
+                        Draw.blend(Blending.additive);
+                        super.draw(params);
+                        Draw.blend(Blending.normal);
+                    }
+                });
 
                 mirror = false;
                 x = 0;
