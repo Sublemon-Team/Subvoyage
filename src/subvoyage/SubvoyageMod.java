@@ -114,6 +114,7 @@ public class SubvoyageMod extends Mod {
     public void loadContent(){
         Log.info("Poof-poof, Subvoyage loads up!");
         SvMusic.load();
+        SvSounds.load();
 
         SvItems.load();
         SvLiquids.load();

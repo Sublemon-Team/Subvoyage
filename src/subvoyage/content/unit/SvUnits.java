@@ -1607,6 +1607,7 @@ public class SvUnits{
 
                     warmupSpeedModifier = 0.5f;
                     warmupReloadModifier = 15 / 300f;
+                    shootSound = SvSounds.poweredMissileShoot;
                     shootWarmupSpeed = 0.001f;
 
                     top = true;
@@ -1653,6 +1654,7 @@ public class SvUnits{
                             engineLayer = Layer.effect;
                             deathExplosionEffect = Fx.none;
                             loopSoundVolume = 0.1f;
+                            deathSound = SvSounds.flashExplosion;
                             parts.add(new FlarePart(){
                                 {
                                     progress = PartProgress.constant(1f);
@@ -1688,6 +1690,7 @@ public class SvUnits{
                                 bullet = new ExplosionBulletType(90, 50f){{
                                     collidesAir = true;
                                     suppressionRange = 80f;
+                                    shootSound = SvSounds.flashExplosion;
                                     shootEffect = new MultiEffect(
                                     SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,50f}),
                                     new ExplosionEffect(){{
