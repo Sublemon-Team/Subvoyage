@@ -1621,13 +1621,13 @@ public class SvBlocks{
             new DrawRegion("-top"),
             new DrawHeatGlow()
             );
-            outputItem = new ItemStack(clay,5);
+            outputItem = new ItemStack(clay,10);
             itemCapacity = 12;
 
             size = 3;
             envDisabled |= Env.scorching;
             consumeLiquid(water, 0.8f);
-            consumeItem(fineSand,2);
+            consumeItem(fineSand,3);
             consumeLiquid(propane, 0.5f);
             consumePower(2.3f);
         }};
@@ -1728,7 +1728,7 @@ public class SvBlocks{
             consumeItem(corallite, 2);
             consumeLiquid(helium,0.1f);
             consumePower(0.6f);
-            outputLiquid = new LiquidStack(argon, 50/60f);
+            outputLiquid = new LiquidStack(argon, 78/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),
