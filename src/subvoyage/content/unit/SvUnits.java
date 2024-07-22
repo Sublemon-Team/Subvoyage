@@ -764,7 +764,7 @@ public class SvUnits{
             speed = 1.8f;
             rotateSpeed = 3f;
             accel = 0.45f;
-            health = 24820f;
+            health = 18820f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -976,7 +976,7 @@ public class SvUnits{
 
 
                                 fragBullets = 2;
-                                fragBullet = new BasicBulletType(10f,60f) {{
+                                fragBullet = new BasicBulletType(10f,3f) {{
                                     sprite = "missile-large";
                                     width = height = 8f;
                                     maxRange = 50f;
@@ -1009,7 +1009,7 @@ public class SvUnits{
                                     homingPower = 0.01f;
 
                                     fragBullets = 10;
-                                    fragBullet = new BasicBulletType(20f,30f) {{
+                                    fragBullet = new BasicBulletType(20f,3f) {{
                                         sprite = "missile-large";
                                         width = height = 8f;
                                         maxRange = 50f;
@@ -1984,7 +1984,7 @@ public class SvUnits{
             trailLength = 25;
             legPhysicsLayer = false;
             abilities.add(new ShieldArcAbility(){{
-                region = "tecta-shield";
+                region = "subvoyage-armada-shield";
                 radius = 42f;
                 angle = 82f;
                 regen = 0.6f;
