@@ -42,7 +42,7 @@ public class SvLiquids{
         helium = new Liquid("helium",SvPal.helium) {{
             gas = true;
             flammability = 0.5f;
-            explosiveness = 0.6f;
+            explosiveness = 0f;
             temperature = 0.4f;
             gasColor = color;
         }};

@@ -590,19 +590,24 @@ public class SvBlocks{
             hasPower = true;
             hasLiquids = true;
             size = 2;
-            force = 20f;
+            force = 40f;
             scaledForce = 6f;
             range = 240f;
-            damage = 2f;
+            damage = 6f/60f;
             scaledHealth = 160;
             rotateSpeed = 10;
 
             laserWidth = 0.25f;
             laserColor = SvPal.inspirationLaser;
 
+            status = StatusEffects.slow;
+
             consumePower(3f);
             consumeLiquid(argon,0.3f);
             consumeLiquid(helium,0.4f);
+
+            outlineColor = Pal.darkOutline;
+            squareSprite = false;
 
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
         }};
