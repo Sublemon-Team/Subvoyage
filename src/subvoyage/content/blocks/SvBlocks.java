@@ -1843,7 +1843,7 @@ public class SvBlocks{
             itemCapacity = 30;
             size = 3;
             craftEffect = Fx.smokePuff;
-            recipes = recipes(spaclanium, 4, 60, corallite, 3, 80, iridium, 2, 90, chromium, 1, 120);
+            recipes = recipes(spaclanium, 8, 60, corallite, 6, 80, iridium,5, 90, chromium, 3, 120);
 
             drawer = new DrawMulti(
                     new DrawDefault(),
