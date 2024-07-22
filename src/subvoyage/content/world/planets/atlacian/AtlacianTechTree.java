@@ -150,7 +150,9 @@ public class AtlacianTechTree {
                     });
                 });
                 node(windTurbine,with(research(accumulator)), () -> {
+                    node(hydrocarbonicGenerator,with(research(propanePyrolyzer)),() -> {
 
+                    });
                 });
                 node(chromiumReactor,with(research(crudeSmelter)),() -> {
 

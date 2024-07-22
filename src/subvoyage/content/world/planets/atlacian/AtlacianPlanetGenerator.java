@@ -237,7 +237,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
                 brush(pathE,9);
                 brushWithBlock(pathE,7, Blocks.water);
-                eraseWithBlock(coreX,coreY,12,Blocks.water);
+                eraseWithBlock(coreX,coreY,8,Blocks.water);
 
                 offloadCorePositions.add(new Vec2(coreX,coreY));
                 existingCores.add(degree[0]);
@@ -300,6 +300,16 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 block = hauntedTree;
             }
 
+            /*if(floor == legartyteStone && (block.isFloor()) && rand.chance(0.005)) {
+                //block = crudesQuarry;
+                for (int xi = -1; xi <= 1; xi++) {
+                    for (int yi = -1; yi <= 1; yi++) {
+                        tiles.get(x+xi,y+yi).setFloor((Floor) crudesQuarry);
+                        tiles.get(x+xi,y+yi).setBlock(crudesQuarry);
+                    }
+                }
+            }*/
+
             boolean allowed = floor == Blocks.water || floor == Blocks.darksandWater;
             if(allowed && rand.chance(0.0005)){
                 block = Blocks.redweed;
@@ -357,7 +367,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 int wx = cx + x, wy = cy + y;
                 if(Structs.inBounds(wx, wy, width, height) && Mathf.within(x, y, rad)){
                     Tile other = tiles.getn(wx, wy);
-                    if(block == Blocks.water) other.setFloor(block.asFloor());
+                    if(block == Blocks.water || block.isFloor()) other.setFloor(block.asFloor());
                     else other.setBlock(block);
                 }
             }
