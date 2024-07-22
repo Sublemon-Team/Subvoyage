@@ -597,6 +597,7 @@ public class SvBlocks{
             scaledHealth = 160;
             rotateSpeed = 10;
 
+            laserWidth = 0.25f;
             laserColor = SvPal.inspirationLaser;
 
             consumePower(3f);
