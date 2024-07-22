@@ -1,11 +1,13 @@
 package subvoyage;
 
 import arc.*;
+import arc.audio.Music;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.util.*;
+import mindustry.Vars;
 import mindustry.game.EventType.*;
 import mindustry.gen.Musics;
 import mindustry.graphics.Pal;
@@ -77,8 +79,16 @@ public class SubvoyageMod extends Mod {
         });
         Events.run(Trigger.update,() -> {
             if(state.isGame()) {
+                if(SvMusic.theAtlacian.isPlaying()) {
+                    SvMusic.theAtlacian.pause(false);
+                    control.sound.stop();
+                }
                 if (!state.isPaused()) {
                     vaporControl.update();
+                }
+            } else {
+                if(SvMusic.theAtlacian.isPlaying()) {
+                    SvMusic.theAtlacian.pause(true);
                 }
             }
         });
