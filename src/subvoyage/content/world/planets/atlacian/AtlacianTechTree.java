@@ -120,6 +120,11 @@ public class AtlacianTechTree {
                     node(argonCondenser,() -> {
 
                     });
+                    node(propanePyrolyzer,with(research(crude)),() -> {
+                        node(heliumCompressor,() -> {
+
+                        });
+                    });
                     node(quartzScutcher,with(research(poweredEnhancer)), () -> {
                         node(tugRoller,with(research(argonCondenser)),() -> {
 
@@ -249,13 +254,13 @@ public class AtlacianTechTree {
                     });
                 });
                 node(argon,with(produce(argon)),() -> {
-                    node(propane,with(produce(propane)),() -> {
+                    nodeProduce(propane,() -> {
 
                     });
-                    node(helium,with(produce(helium)),() -> {
+                    nodeProduce(helium,() -> {
 
                     });
-                    node(SvLiquids.nitrogen,with(produce(SvLiquids.nitrogen)),() -> {
+                    nodeProduce(SvLiquids.nitrogen,() -> {
 
                     });
                 });
