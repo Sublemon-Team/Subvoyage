@@ -61,7 +61,7 @@ public class AtlacianUnitType extends UnitType{
             Draw.color(heatColor,warmup);
             Draw.scl(bodyScale);
             Draw.rect(regionHeat, unit.x, unit.y, unit.rotation - 90);
-            Draw.blend();
+            Draw.blend(Blending.normal);
         }
         Draw.scl();
     }

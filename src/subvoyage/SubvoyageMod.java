@@ -8,10 +8,12 @@ import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.util.*;
 import mindustry.Vars;
+import mindustry.content.UnitTypes;
 import mindustry.game.EventType.*;
 import mindustry.gen.Musics;
 import mindustry.graphics.Pal;
 import mindustry.mod.*;
+import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
 import subvoyage.content.blocks.editor.vapor.VaporControl;
@@ -121,6 +123,12 @@ public class SubvoyageMod extends Mod {
     }
 
     @Override
+    public void init() {
+        super.init();
+        loadSettings();
+    }
+
+    @Override
     public void loadContent(){
         Log.info("Poof-poof, Subvoyage loads up!");
         SvMusic.load();
@@ -145,6 +153,20 @@ public class SubvoyageMod extends Mod {
 
         vaporControl = new VaporControl();
         VaporControl.load();
+    }
+
+    void loadSettings() {
+        ui.settings.addCategory(bundle.get("setting.sv-title"),"subvoyage-icon",t -> {
+            t.checkPref("sv-leeft-uwu",false,(v) -> {
+                SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(v ? "-uwu" :""));
+                SvUnits.leeft.drawCell = !v;
+                SvUnits.leeft.weapons.first().layerOffset = v ? -1 : 0;
+            });
+            t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
+        });
+        SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(settings.getBool("sv-leeft-uwu") ? "-uwu" :""));
+        SvUnits.leeft.weapons.first().layerOffset = settings.getBool("sv-leeft-uwu") ? -1 : 0;
+        SvUnits.leeft.drawCell = !settings.getBool("sv-leeft-uwu");
     }
 
 }

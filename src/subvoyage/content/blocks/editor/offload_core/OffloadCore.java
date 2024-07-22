@@ -30,6 +30,7 @@ import mindustry.world.meta.BlockFlag;
 import subvoyage.content.unit.SvBlockFlag;
 import subvoyage.content.world.SvFx;
 
+import static arc.Core.settings;
 import static mindustry.Vars.*;
 import static subvoyage.content.unit.SvUnits.*;
 
@@ -192,8 +193,9 @@ public class OffloadCore extends CoreBlock implements IOffload {
 
             Draw.z(Layer.shields);
             Draw.color(team.color);
-            Fill.poly(x,y,6,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
-
+            int sides = settings.getInt("sv-offload-shield-sides");
+            if(sides == 10) Fill.circle(x,y,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
+            else Fill.poly(x,y,sides,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
             Draw.reset();
         }
 
