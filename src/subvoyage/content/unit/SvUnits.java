@@ -3,7 +3,6 @@ package subvoyage.content.unit;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import arc.struct.Seq;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -35,7 +34,7 @@ public class SvUnits{
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
-    leeft, flagshi, vanguard, squadron,
+    leeft, flagshi, vanguard, squadron, armada,
     //cargo
     bulker;
 
@@ -43,7 +42,7 @@ public class SvUnits{
     public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
-        hmech("leeft", "flagshi", "vanguard", "squadron");
+        hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
         //core
         marine = new AtlacianUnitType("marine"){{
             aiController = BuilderAI::new;
@@ -1845,6 +1844,65 @@ public class SvUnits{
             legBaseOffset = 15f;
             legStraightLength = 0.9f;
             legMaxLength = 1.2f;
+
+            allowLegStep = true;
+            mechSideSway = 0.9f;
+            mechFrontSway = 0.9f;
+            legPhysicsLayer = false;
+
+            shadowElevation = 0.1f;
+            groundLayer = Layer.legUnit - 1f;
+            targetAir = true;
+        }};
+
+        //todo: stats, guns
+        armada = new HydromechUnitType("armada"){{
+            constructor = HydromechUnitEntity::create;
+            drag = 0.14f;
+            rotateSpeed = 2f;
+            health = 7260;
+            hitSize = 32f;
+
+            bodyScale = 0.9f;
+
+            waveTrailX = 8f;
+            waveTrailY = -8f;
+
+            trailScl = 12;
+            trailLength = 25;
+
+            accel = 1f;
+            withStates(
+            HydromechState.GROUND, new UnitStatState(){{
+                speed = 0.5f;
+                inwardsDamageMul = 1.5f;
+            }},
+            HydromechState.WATER, new UnitStatState(){{
+                speed = 0.6f;
+                inwardsDamageMul = 1.4f;
+            }}
+            );
+
+            bodyHeat = true;
+            heatColor = Color.red;
+            lockLegBase = true;
+            legContinuousMove = true;
+            legMinLength = 0.2f;
+            legLengthScl = 0.95f;
+            legSplashDamage = 1.1f;
+            legStraightness = 0.2f;
+
+            legCount = 8;
+            legLength = 36f;
+            legForwardScl = 0.25f;
+            legMoveSpace = 1.5f;
+            rippleScale = 1.2f;
+            stepShake = 1.6f;
+            legGroupSize = 3;
+            legExtension = -6f;
+            legBaseOffset = 15f;
+            legStraightLength = 0.9f;
+            legMaxLength = 1.4f;
 
             allowLegStep = true;
             mechSideSway = 0.9f;
