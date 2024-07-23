@@ -63,8 +63,10 @@ public class SvBlocks{
             coreDecoder, coreDecrypter,
             regenerator, regenProjector,
             //CRAFTERS
-            waterMetallizer, poweredEnhancer, ceramicBurner, terracottaBlaster, argonCentrifuge, argonCondenser,
-                    propanePyrolyzer, heliumCompressor,
+            waterMetallizer, poweredEnhancer,
+            ceramicBurner, terracottaBlaster, circularCrusher,
+            argonCentrifuge, argonCondenser,
+            propanePyrolyzer, heliumCompressor,
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
@@ -1630,6 +1632,25 @@ public class SvBlocks{
             consumeItem(fineSand,3);
             consumeLiquid(propane, 0.5f);
             consumePower(2.3f);
+        }};
+
+        circularCrusher = new CircCrusher("circular-crusher") {{
+            requirements(Category.crafting,atl(), with(corallite,120,iridium,20));
+            size = 3;
+            researchCost = with(corallite,600,iridium,400);
+
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = Fx.crawlDust;
+            craftTime = 40f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(crude,1);
+            consumePower(0.6f);
+
+            outputItem = new ItemStack(fineSand,3);
+            hasItems = true;
+            hasPower = true;
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
