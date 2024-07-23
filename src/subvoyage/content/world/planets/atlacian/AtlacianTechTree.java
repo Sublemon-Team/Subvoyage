@@ -108,6 +108,9 @@ public class AtlacianTechTree {
             });
 
             node(ceramicBurner,() -> {
+                node(circularCrusher,with(produce(crude)),() -> {
+
+                });
                 node(terracottaBlaster, () -> {
 
                 });

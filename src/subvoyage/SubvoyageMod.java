@@ -69,7 +69,7 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.on(SectorCaptureEvent.class,e -> {
-            if(e.sector.preset == SvSectorPresets.gustyRidges) {
+            if(e.sector.preset == SvSectorPresets.noxiousTarn) {
                 betaCompleteDialog.show(SvPlanets.atlacian);
             };
         });

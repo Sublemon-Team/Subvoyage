@@ -127,7 +127,7 @@ public class SvBlocks{
             consumeLiquid(argon,0.2f);
             configurable = false;
             plans = Seq.with(
-                    new UnitPlan(lapetus, 60f * 15, with(iridium, 15))
+                    new UnitPlan(lapetus, 60f * 25, with(iridium, 15))
             );
             size = 3;
             consumePower(1.2f);
