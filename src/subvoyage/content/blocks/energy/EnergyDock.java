@@ -32,6 +32,7 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.modules.PowerModule;
+import subvoyage.content.SvPal;
 
 import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
@@ -45,7 +46,7 @@ public class EnergyDock extends PowerBlock {
     public boolean autolink = true, drawRange = true;
     public float laserScale = 0.25f;
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = Color.valueOf("D9F2FF");
+    public Color laserColor2 = SvPal.energyLaser;
     public TextureRegion laser, laserEnd, shadowRegion, outlineRegion;
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();
@@ -484,57 +485,58 @@ public class EnergyDock extends PowerBlock {
             for(int i = 0; i < power.links.size; i++){
                 Building link = world.build(power.links.get(i));
                 if(!linkValid(this, link)) continue;
-                if(isInProgress) {
-                    float consumerX = link.x;
-                    float consumerY = link.y;
-                    float thisX = x;
-                    float thisY = y;
-                    float shipX = Mathf.lerp(thisX,consumerX,progress);
-                    float shipY = Mathf.lerp(thisY,consumerY,progress);
-                    Vec2 shipPos = new Vec2(shipX,shipY);
-                    Vec2 thisPos = new Vec2(thisX,thisY);
-                    float endAngle = shipPos.sub(thisPos).nor().angle();
-                    float starterAngle =  thisPos.sub(shipPos).nor().angle();
-                    float angle;
-                    if(endAngle < starterAngle) angle = 360-Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
-                    else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
-                    float distanceToPoints = Math.min(
-                            Mathf.dst(shipX,shipY,thisX,thisY),
-                            Mathf.dst(shipX,shipY,consumerX,consumerY));
-                    float alpha = 1f;
-                    if(nodeCount > 4)  {alpha/=((nodeCount-3)/8f);
-                                        alpha = Mathf.clamp(alpha,0.4f,1f);}
+                if(team != Team.derelict) // don't draw ships, you're fcking dead!!!
+                    if(isInProgress) {
+                        float consumerX = link.x;
+                        float consumerY = link.y;
+                        float thisX = x;
+                        float thisY = y;
+                        float shipX = Mathf.lerp(thisX,consumerX,progress);
+                        float shipY = Mathf.lerp(thisY,consumerY,progress);
+                        Vec2 shipPos = new Vec2(shipX,shipY);
+                        Vec2 thisPos = new Vec2(thisX,thisY);
+                        float endAngle = shipPos.sub(thisPos).nor().angle();
+                        float starterAngle =  thisPos.sub(shipPos).nor().angle();
+                        float angle;
+                        if(endAngle < starterAngle) angle = 360-Mathf.lerp(360-starterAngle,360-endAngle,Math.min(1,progress*4));
+                        else angle = Mathf.lerp(starterAngle,endAngle,Math.min(1,progress*4));
+                        float distanceToPoints = Math.min(
+                                Mathf.dst(shipX,shipY,thisX,thisY),
+                                Mathf.dst(shipX,shipY,consumerX,consumerY));
+                        float alpha = 1f;
+                        if(nodeCount > 4)  {alpha/=((nodeCount-3)/8f);
+                                            alpha = Mathf.clamp(alpha,0.4f,1f);}
 
-                    boolean isEngined = true;
+                        boolean isEngined = true;
 
-                    Block currentBlock = world.tileWorld(shipX,shipY).floor();
-                    if (currentBlock == Blocks.water || currentBlock == Blocks.darksandWater) isEngined = false;
+                        Block currentBlock = world.tileWorld(shipX,shipY).floor();
+                        if (currentBlock == Blocks.water || currentBlock == Blocks.darksandWater) isEngined = false;
 
-                    if(distanceToPoints < 12f)
-                        alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
+                        if(distanceToPoints < 12f)
+                            alpha *= Mathf.lerp(0, 1, Math.min(distanceToPoints / 24f,1));
 
-                    Draw.alpha(alpha);
-                    Draw.z(Layer.power + 2);
-                    Draw.rect(ship,shipX,shipY,angle);
-                    drawOutline(shipX, shipY, angle, 4f, alpha);
-                    if(isEngined) {
-                        Draw.z(Layer.power + 1);
-                        drawEngine(shipX, shipY,-1.85f, -0.7f, 4, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
-                        drawShadow(shipX, shipY, angle, 4f, alpha);
-                    } else {
-                        float shipXPrev = Mathf.lerp(thisX,consumerX,progress/1.05f);
-                        float shipYPrev = Mathf.lerp(thisY,consumerY,progress/1.05f);
-                        float wave = Mathf.absin(Time.time, 2f, 1f);
-                        Draw.alpha(0.3f);
-                        Draw.scl(1.05f,1.01f+(0.05f*wave*4));
-                        Draw.rect(shipWave,shipXPrev,shipYPrev,angle);
-                        Draw.scl();
-                        Draw.alpha(1f);
+                        Draw.alpha(alpha);
+                        Draw.z(Layer.power + 2);
+                        Draw.rect(ship,shipX,shipY,angle);
+                        drawOutline(shipX, shipY, angle, 4f, alpha);
+                        if(isEngined) {
+                            Draw.z(Layer.power + 1);
+                            drawEngine(shipX, shipY,-1.85f, -0.7f, 4, 0.5f, alpha, angle, 4f, Pal.techBlue, Color.white);
+                            drawShadow(shipX, shipY, angle, 4f, alpha);
+                        } else {
+                            float shipXPrev = Mathf.lerp(thisX,consumerX,progress/1.05f);
+                            float shipYPrev = Mathf.lerp(thisY,consumerY,progress/1.05f);
+                            float wave = Mathf.absin(Time.time, 2f, 1f);
+                            Draw.alpha(0.3f);
+                            Draw.scl(1.05f,1.01f+(0.05f*wave*4));
+                            Draw.rect(shipWave,shipXPrev,shipYPrev,angle);
+                            Draw.scl();
+                            Draw.alpha(1f);
 
-                        Draw.z(Layer.power);
-                        drawShadow(shipX + 12, shipY + 11, angle, 4f, alpha);
+                            Draw.z(Layer.power);
+                            drawShadow(shipX + 12, shipY + 11, angle, 4f, alpha);
+                        }
                     }
-                }
 
                 if(link.block instanceof EnergyDock && link.id >= id) continue;
                 setupColor(power.graph.getSatisfaction());

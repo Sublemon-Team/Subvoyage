@@ -1,5 +1,9 @@
 package subvoyage.content.blocks;
 
+import mindustry.content.Blocks;
+import mindustry.content.Fx;
+import mindustry.content.Items;
+import mindustry.content.UnitTypes;
 import mindustry.editor.EditorTool;
 import mindustry.type.Category;
 import mindustry.world.*;
@@ -15,8 +19,10 @@ public class SvWorldBlocks{
     public static Block
     //ores
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
+    wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
     legartyteStone, darkLegartyteStone, agaryteStone,
+    crudesQuarry,
     // walls
     legartyteWall, agaryteWall,
     // boulders
@@ -25,7 +31,6 @@ public class SvWorldBlocks{
     vapor;
 
     public static void load() {
-
         vapor = new VaporFloor("vapor") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
         }};
@@ -56,6 +61,23 @@ public class SvWorldBlocks{
             oreThreshold = 0.9f;
             oreScale = 10.42614f;
         }};
+
+        wallOreSpaclanium = new OreBlock("ore-wall-subvoyage-spaclanium", SvItems.spaclanium){{
+            wallOre = true;
+            needsSurface = false;
+        }};
+        wallOreCorallite = new OreBlock("ore-wall-subvoyage-corallite", SvItems.corallite){{
+            wallOre = true;
+            needsSurface = false;
+        }};
+        wallOreIridium = new OreBlock("ore-wall-subvoyage-iridium", SvItems.iridium){{
+            wallOre = true;
+            needsSurface = false;
+        }};
+        wallOreChromium = new OreBlock("ore-wall-subvoyage-chromium", SvItems.chromium){{
+            wallOre = true;
+            needsSurface = false;
+        }};
         legartyteStone = new Floor("legartyte-stone"){{
             attributes.set(Attribute.water, -1f);
             variants = 3;
@@ -75,6 +97,13 @@ public class SvWorldBlocks{
         agaryteWall = new StaticWall("agaryte-wall"){{
             agaryteStone.asFloor().wall = this;
             variants = 3;
+        }};
+
+        crudesQuarry = new SteamVent("crudes-quarry") {{
+            parent = blendGroup = legartyteStone;
+            attributes.set(SvAttribute.crude, 1f);
+            effect = Fx.none;
+            variants = 2;
         }};
 
         agaryteBoulder = new Prop("agaryte-boulder"){{

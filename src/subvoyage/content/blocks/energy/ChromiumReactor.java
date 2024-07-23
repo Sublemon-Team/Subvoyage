@@ -13,6 +13,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.meta.*;
+import subvoyage.content.SvPal;
 
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
@@ -22,8 +23,8 @@ import static subvoyage.content.world.items.SvItems.chromium;
 
 public class ChromiumReactor extends NuclearReactor{
     public static final Rand rand = new Rand();
-    public Color pal1 = Color.valueOf("d5cba3");
-    public Color pal2 = Color.valueOf("5f4b5b");
+    public Color pal1 = SvPal.chromiumLightish;
+    public Color pal2 = SvPal.chromiumMid;
 
     public ChromiumReactor(String name){
         super(name);
@@ -46,7 +47,7 @@ public class ChromiumReactor extends NuclearReactor{
 
         explosionRadius = 16;
         explosionDamage = 1250 * 4;
-        lightColor = Color.valueOf("e7e789");
+        lightColor = SvPal.toxicExplosion;
         explodeEffect = new Effect(30, 500f, b -> {
             float intensity = 6.8f;
             float baseLifetime = 25f + intensity * 11f;

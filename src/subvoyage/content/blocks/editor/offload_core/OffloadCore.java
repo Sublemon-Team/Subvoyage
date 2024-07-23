@@ -1,294 +1,305 @@
 package subvoyage.content.blocks.editor.offload_core;
 
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.math.geom.*;
+import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.TextureRegion;
+import arc.math.Mathf;
+import arc.math.Rand;
+import arc.math.geom.Point2;
+import arc.scene.ui.TextButton;
 import arc.scene.ui.layout.Table;
-import arc.util.*;
-import arc.util.io.*;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.gen.*;
+import arc.struct.EnumSet;
+import arc.util.Structs;
+import arc.util.Time;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
+import mindustry.Vars;
+import mindustry.content.Fx;
+import mindustry.game.Team;
+import mindustry.gen.Sounds;
+import mindustry.gen.Unit;
 import mindustry.graphics.*;
-import mindustry.type.*;
-import mindustry.world.*;
-import mindustry.world.blocks.storage.*;
-import subvoyage.content.unit.*;
+import mindustry.type.UnitType;
+import mindustry.ui.Styles;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.blocks.storage.CoreBlock;
+import mindustry.world.meta.BlockFlag;
+import subvoyage.content.unit.SvBlockFlag;
+import subvoyage.content.world.SvFx;
 
-import static arc.math.Mathf.pi;
+import static arc.Core.settings;
 import static mindustry.Vars.*;
+import static subvoyage.content.unit.SvUnits.*;
 
-public class OffloadCore extends CoreBlock {
+public class OffloadCore extends CoreBlock implements IOffload {
+    public int minShieldLayers = 3;
+    public int maxShieldLayers = 5;
+
+
+    public TextureRegion dangerIconRegion;
+
+    public UnitType[] lowTierUnits = new UnitType[0];
+    public UnitType[] midTierUnits = new UnitType[0];
+    public UnitType[] highTierUnits = new UnitType[0];
+
+
+
     public OffloadCore(String name) {
         super(name);
-        lightRadius = 0;
-        fogRadius = 0;
-        emitLight = true;
-        placeOverlapRange = 0f;
-        teamPassable = true;
+        configurable = true;
     }
 
     @Override
-    public void init() {
-        super.init();
-        lightRadius = 10f * size;
-        fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
-        emitLight = true;
-        placeOverlapRange = 0f;
+    public void load() {
+        super.load();
+        dangerIconRegion = Core.atlas.find(name+"-danger","danger-icon");
     }
 
-    @Override
-    public boolean canReplace(Block other) {
-        return false;
-    }
-
-    @Override
-    public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        return false;
-    }
+    @Override public boolean canPlaceOn(Tile tile, Team team, int rotation) {return false;}
+    @Override public boolean canReplace(Block other) {return false;}
 
 
-    public class OffloadCoreBuild extends CoreBuild {
+    public class OffloadCoreBuilding extends CoreBuild  implements IOffload {
 
-        public boolean isShieldDisabled = false;
-        public float shieldRadius = size*tilesize*2;
-
-        public float lastHitTime = 0f;
-        public float enemySpawnProgress = 0f;
-        public final float enemySpawnTimeF = 3.1f*60*60f;
-        public float enemySpawnTime = 5.1f*60*60f;
-        public int currentWave = 0;
-
-
-        //0 - just damage
-        //1 - survive waves
-        //2 - use special building
-        //3 - timer
-        //4 - item payload
-        public byte completeType = 0x79;
-
-        public float damageDealt = 0f;
-        public float timePassed = 0;
-
-        public int damageToDeal = 0;
-        public int waveToSurvive =10;
-        public int secondsToSurvive = 60;
-
-        public Rand rand = new Rand(0);
-
-        @Override
-        public void write(Writes write) {
-            super.write(write);
-            write.f(damageDealt);
-            write.f(timePassed);
-            write.i(currentWave);
-            write.f(enemySpawnTime);
-        }
-
-
-        @Override
-        public void read(Reads read, byte revision) {
-            super.read(read, revision);
-            try {
-                /*int a = 0;
-                if(read.input instanceof InputStream r){
-                    if(r.available() < 4+4+4+4) a = -1;
-                } else a = -1;
-                if(a == -1) return;*/
-                damageDealt = read.f();
-                timePassed = read.f();
-                currentWave = read.i();
-                enemySpawnTime = read.f();
-            } catch (Exception e) {
-
-            }
-        }
+        int shieldLayers = 0;
+        float smoothShieldLayers = 0;
+        float waveTimer = 0;
+        boolean isFirstWave = true;
+        boolean isUpgradeWave = false;
+        int unitTier = 0;
+        float smoothTier = 0;
+        float shieldCooldown = 0f;
+        Rand rand = null;
+        UnitType nextUnit = null;
 
         @Override
         public void created() {
             super.created();
-            rand = new Rand((long) ((long)
-                    state.rules.planet.id*(state.rules.sector == null ? 1 : state.rules.sector.id)
-                    +state.rules.planet.id
-                    +(state.rules.sector == null ? 1 : state.rules.sector.id)
-                    +x*y
-                    +x
-                    +y
-            ));
-            if(completeType == 0x79) {
-                completeType = (byte) ((byte) rand.nextInt(60)%4);
-                damageToDeal = 10000+rand.nextInt(10000);
-                waveToSurvive = 20+rand.nextInt(2*2+1)*5;
-                secondsToSurvive = 8*60+rand.nextInt(8*30)*2;
-            }
+            waveTimer = getWaveTime();
+            recalculateStats();
         }
 
+        public void spawnWave() {
+            waveTimer = getWaveTime();
+            if(nextUnit != null) {
+                Unit unit = nextUnit.spawn(team,x,y);
+                unit.rotation(-90f);
+                unit.shield(40f*unitTier);
+                nextUnit = null;
+            }
+            isFirstWave = false;
+            isUpgradeWave = false;
+            Sounds.wave.play(2f,1f,0f);
+        }
+
+
+
+        public boolean tryBreakLayer() {
+            if(shieldLayers <= 0) return false;
+            if(shieldCooldown > 0) return false;
+            damage(player.team(),80f);
+            Fx.pointHit.create(x,y,0,Pal.darkPyraFlame,new Object());
+            breakLayer();
+            return true;
+        }
+
+        void breakLayer() {
+            shieldLayers--;
+            upgrade();
+            nextUnit = switch (unitTier) {
+                case 0 -> Structs.random(rand,lapetus,leeft);
+                case 1,2 -> Structs.random(rand,skath,flagshi);
+                case 3 -> Structs.random(rand,charon,vanguard);
+                default -> Structs.random(rand,charon,vanguard,callees,squadron);
+            };
+            waveTimer = unitTier*10f*60f;
+            isUpgradeWave = true;
+            Sounds.laserbig.play(0.3f,3f,0f);
+            SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
+            Fx.blastExplosion.create(x,y,0, Pal.accent,new Object());
+            shieldCooldown = 60f;
+        }
+
+        private void upgrade() {
+            unitTier++;
+        }
+
+
+        @Override
+        public void updateTile() {
+            super.updateTile();
+            if(rand == null) rand = new Rand(Point2.pack(tileX(),tileY())* 100L +(state.rules.sector == null ? 1 : state.rules.sector.id));
+            if(nextUnit == null) selectNextUnit();
+            if(waveTimer > 0 && nextUnit != null) waveTimer--;
+            else if(nextUnit != null) spawnWave();
+            if(isUpgradeWave && Time.time % 10f <= Time.delta) {
+                Fx.shockwave.create(x,y,0,Pal.accent,new Object());
+            }
+            shieldCooldown -= Time.delta;
+        }
+
+        private void selectNextUnit() {
+            UnitType[] selectFrom = new UnitType[0];
+            if(unitTier >= 0 && unitTier < 4) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 1) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 4) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(selectFrom.length > 0) nextUnit = Structs.random(rand,selectFrom);
+        }
 
         @Override
         public void draw() {
+            smoothTier = Mathf.lerp(smoothTier,unitTier,Time.delta/90f);
             super.draw();
-            if(!isShieldDisabled) drawShield();
+            drawShieldLayers();
+            if(nextUnit != null) {
+                drawConstructingUnit();
+                drawWaveCountdown();
+            }
         }
 
+        private void drawConstructingUnit() {
+            float progress = 1f-waveTimer/getWaveTime();
+            Draw.draw(Layer.blockOver, () -> Drawf.construct(this, nextUnit, -90f, progress, 1, Time.time));
+        }
 
-        @Override
-        public void drawStatus() {
-            super.drawStatus();
+        public float getWaveTime() {
+            return (isFirstWave
+                    ? (state.rules.initialWaveSpacing <= 0f ? state.rules.waveSpacing * 2f : state.rules.initialWaveSpacing)
+                    : state.rules.waveSpacing);
+        }
+
+        private void drawWaveCountdown() {
+            Draw.z(Layer.blockOver);
+            int minutes = (int) (waveTimer/60/60);
+            int seconds = (int) (waveTimer/60)%60;
+            String m,se;
+            m = minutes+""; se = seconds < 10 ? "0"+seconds : seconds+"";
+            float width = drawPlaceText(String.format("%s:%s", m,se), tileX(), tileY(), false);
+            float dx = x + offset - width/2f - 4f, dy = y + offset + size * tilesize / 2f + 5, s = iconSmall / 4f;
+            if(dangerIconRegion.found()) {
+                Draw.mixcol(Color.darkGray, 1f);
+                Draw.rect(dangerIconRegion, dx, dy - 1, s, s);
+                Draw.reset();
+                Draw.rect(dangerIconRegion, dx, dy, s, s);
+                Draw.reset();
+            }
+        }
+
+        private void drawShieldLayers() {
+            smoothShieldLayers = Mathf.lerp(smoothShieldLayers,shieldLayers, Time.delta/10f);
+
+            Draw.z(Layer.shields);
+            Draw.color(team.color);
+            int sides = settings.getInt("sv-offload-shield-sides");
+            if(sides == 10) Fill.circle(x,y,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
+            else Fill.poly(x,y,sides,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
+            Draw.reset();
         }
 
         @Override
         public void buildConfiguration(Table table) {
-            super.buildConfiguration(table);
+            buildShieldSelection(this,table,minShieldLayers,maxShieldLayers);
         }
 
-        @Override
-        public void update() {
-            super.update();
+        public void buildShieldSelection(OffloadCoreBuilding build, Table table,int minLayers,int maxLayers) {
+            Table main = new Table().background(Styles.black6);
+            Table cont = new Table().top();
+            cont.defaults().size(60f).width(200f);
+            Runnable rebuild = () -> {
+                cont.clearChildren();
 
-            switch (completeType) {
-                case 0x0:
-                    if(damageDealt >= damageToDeal) disableShield();
-                    break;
-                case 0x1:
-                    if(currentWave >= waveToSurvive) disableShield();
-                    break;
-                case 0x2:
-                case 0x4:
-                    break;
-                case 0x3:
-                    if(timePassed >= secondsToSurvive*60f) disableShield();
-                    break;
-            }
 
-            //we don't want to player spawn wave without a core, right?
-            state.rules.waveSending = false;
+                cont.label(() -> minLayers+" ≤ ["+build.shieldLayers+"] ≤ "+maxLayers);
+                cont.row();
+                TextButton button = cont.button("-",() -> {
 
-            timePassed += Time.delta;
-            lastHitTime-=Time.delta/30f;
-            enemySpawnProgress+=Time.delta/enemySpawnTime;
+                        }).get();
+                button.changed(() -> {
+                    if(!button.isChecked()) return;
+                    build.shieldLayers--;
+                    button.setChecked(false);
+                });
+                TextButton button2 = cont.button("+",() -> {
 
-            for (Bullet bullet : Groups.bullet) {
-                if(bullet.within(x,y,shieldRadius) && bullet.team != team) {
-                    Fx.absorb.create(bullet.x,bullet.y,0,team.color,new Object());
-                    lastHitTime = 1f;
-                    enemySpawnProgress *= 0.999f;
-                    damageDealt += bullet.damage;
-                    bullet.remove();
-                }
-            }
-            for (Unit unit : Groups.unit) {
-                if(unit.within(x,y,shieldRadius)) {{
-                    unit.move(new Vec2(unit.x,unit.y).sub(x,y).nor());
-                }}
-            }
+                }).get();
+                button2.changed(() -> {
+                    if(!button2.isChecked()) return;
+                    build.shieldLayers++;
+                    button2.setChecked(false);
+                });
+                cont.row();
+                TextButton trybreak = cont.button("break layer (try)", () -> {
 
-            if(enemySpawnProgress >= 1) {
-                enemySpawnProgress %= 1f;
-                Fx.bigShockwave.create(x,y,0,team.color, new Object());
-                Fx.blastExplosion.create(x,y,0,team.color,new Object());
-                beginWave();
-            }
-        }
+                }).get();
+                trybreak.changed(() -> {
+                    if(!trybreak.isChecked()) return;
+                    build.tryBreakLayer();
+                    trybreak.setChecked(false);
+                });
+                cont.row();
+                TextButton trybreak2 = cont.button("break layer (straight)", () -> {
 
-        public void disableShield() {
-            isShieldDisabled = false;
-            Fx.instBomb.create(x,y,0, Pal.accent,new Object());
-            Call.buildDestroyed(this);
-        }
-
-        private void beginWave() {
-            state.wave = currentWave+1;
-
-            int enemyCount = currentWave == 0 ? 1 : rand.nextInt(Math.max(currentWave/5,1))+1;
-            boolean[] hasBoss = new boolean[] {false};
-            for (int i = 0; i < enemyCount; i++) {
-                UnitType currentEnemy = getEnemy(currentWave,hasBoss);
-                float spawnDegree = rand.nextFloat()*pi*2;
-                float spawnRad = shieldRadius*Mathf.sqrt(rand.nextFloat());
-                float relX = (float) (Math.cos(spawnDegree)*spawnRad);
-                float relY = (float) (Math.sin(spawnDegree)*spawnRad);
-                float unitX = x+relX;
-                float unitY = y+relY;
-                Unit unit = currentEnemy.spawn(team,unitX,unitY);
-            }
-            enemySpawnTime = enemySpawnTimeF / (float) Math.sqrt(currentWave/10f+1);
-            currentWave++;
-        }
-
-        private UnitType getEnemy(int currentWave,boolean[] hasBoss) {
-            UnitType[][] unitTypes = new UnitType[][] {
-                    {SvUnits.lapetus,SvUnits.skath,SvUnits.charon,SvUnits.callees}
+                }).get();
+                trybreak2.changed(() -> {
+                    if(!trybreak2.isChecked()) return;
+                    build.breakLayer();
+                    trybreak2.setChecked(false);
+                });
             };
-            int tier = rand.nextInt((currentWave > 50 && !hasBoss[0]) ? 4:  currentWave > 30 ? 3 : currentWave > 10 ? 2 : 1);
-            if(tier == 3) hasBoss[0] = true;
-            int unitType = rand.nextInt(unitTypes.length);
-            return unitTypes[unitType][tier];
-        }
-
-        protected void drawShield() {
-            float alpha = shieldAlpha();
-            float radius = shieldRadius-Mathf.clamp(lastHitTime);
-            float waveRadius = radius*enemySpawnProgress;
-            Fill.light(x, y, Lines.circleVertices(radius), radius,
-                    Color.clear.lerp(team.color,0.5f),
-                    Tmp.c2.set(team.color).a(0.7f * alpha)
-            );
-
-            Drawf.circles(x,y,radius,team.color);
-            Lines.stroke(Math.abs(Mathf.sinDeg((Time.time*2)%360))*3,Color.white);
-            Lines.circle(x,y,waveRadius);
-            Lines.stroke(1f,new Color(team.color).add(0.15f,0.15f,0.15f));
-            Lines.circle(x,y,waveRadius);
-
-            float progress = 1f-Mathf.clamp(switch (completeType) {
-                case 0x0 -> damageDealt/damageToDeal;
-                case 0x1 -> (float) currentWave /waveToSurvive;
-                case 0x3 -> timePassed/(secondsToSurvive*60f);
-                default -> 0f;
-            });
-            int sideCount = (completeType)+3;
-            int shapeCount = Math.max(completeType-2,0)+1;
-            float step = (float) 360 /shapeCount;
-            float dst = tilesize*size*progress;
-            float t = (Time.time/Math.max(progress,1/100f)/4f) % 360;
-            float t2 = (Time.time/4f) % 360;
-            for (int i = 0; i < shapeCount; i++) {
-                float xi = Mathf.sinDeg(step*i+t)*dst;
-                float yi = Mathf.cosDeg(step*i+t)*dst;
-                Lines.stroke(4f);
-                Draw.color(team.color);
-                Lines.poly(x+xi,y+yi,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
-
-                Lines.stroke(1f);
-                Draw.color();
-                Lines.poly(x+xi,y+yi,sideCount,tilesize*progress,i % 2 == 0 ? Time.time : Time.time+180);
-
-                float xi2 = Mathf.sinDeg(step*i+t2)*tilesize*size;
-                float yi2 = Mathf.cosDeg(step*i+t2)*tilesize*size;
-                Lines.stroke(4f);
-                Draw.color(team.color);
-                Draw.alpha(0.3f);
-                Lines.poly(x+xi2,y+yi2,sideCount,tilesize,i % 2 == 0 ? Time.time : Time.time+180);
-
-                Lines.stroke(1f);
-                Draw.color();
-                Draw.alpha(0.3f);
-                Lines.poly(x+xi2,y+yi2,sideCount,tilesize,i % 2 == 0 ? Time.time : Time.time+180);
-                Draw.reset();
-            }
-            Draw.reset();
-        }
-
-        protected float shieldAlpha() {
-            return 0.5f;
+            rebuild.run();
+            main.add(cont);
+            table.add(main);
         }
 
         @Override
         public void damage(Team source, float damage) {
-            if(isShieldDisabled) super.damage(source, damage);
-            else damageDealt += damage;
+            if(shieldLayers >= minShieldLayers) return;
+            if(source == null || source == team) return;
+            super.damage(source, calculateDamage(damage));
         }
 
+
+
+
+        public float calculateDamage(float damage) {
+            float delta = (float) shieldLayers /minShieldLayers;
+            return damage * (1f-(delta))/2f;
+        };
+
+        public void recalculateStats() {
+            shieldLayers = Mathf.clamp(shieldLayers,minShieldLayers,maxShieldLayers);
+        }
+
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+            write.i(shieldLayers);
+            write.bool(isFirstWave);
+            write.f(waveTimer);
+            write.i(unitTier);
+            if(nextUnit != null) write.str(nextUnit.name);
+            else write.str("nilunit");
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+            if(revision != version()) return;
+            shieldLayers = read.i();
+            isFirstWave = read.bool();
+            waveTimer = Math.min(read.f(),getWaveTime());
+            unitTier = read.i();
+            String u = read.str();
+            if(!u.equals("nilunit")) nextUnit = content.unit(u);
+        }
+
+        @Override
+        public byte version() {
+            return 2;
+        }
     }
 }

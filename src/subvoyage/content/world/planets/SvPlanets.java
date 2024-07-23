@@ -1,21 +1,18 @@
 package subvoyage.content.world.planets;
 
 import arc.graphics.*;
-import arc.scene.ui.Dialog;
 import arc.struct.*;
 import mindustry.content.*;
 import mindustry.game.*;
-import mindustry.gen.Musics;
-import mindustry.gen.Sounds;
 import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
+import subvoyage.content.SvPal;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.atlacian.*;
-import subvoyage.content.world.sectors.SvSectorPresets;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Planets.*;
@@ -36,8 +33,6 @@ public class SvPlanets{
                     new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.15f), 4, 0.6f, 2f, 0.41f)
             );
 
-
-
             defaultCore = SvBlocks.corePuffer;
             unlockedOnLand.add(SvBlocks.corePuffer);
 
@@ -55,26 +50,26 @@ public class SvPlanets{
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
                 r.loadout = Seq.with();
-                r.enemyCoreBuildRadius = 2*3*tilesize;
+                r.enemyCoreBuildRadius = 300f;
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
 
             };
 
-            iconColor = Color.valueOf("7286AD");
-            lightColor = Color.white.cpy().a(0.01f);
-            atmosphereColor = Color.valueOf("EAC7DE").a(0.05f);
+            iconColor = SvPal.atlacianIcon.cpy().lerp(SvPal.legartyte,0.5f);
+            lightColor = SvPal.tugSheetLightish.cpy().a(0.01f);
+            atmosphereColor = SvPal.atlacianAtmosphere.cpy().a(0.05f);
             atmosphereRadIn = 0.03f;
             atmosphereRadOut = 0.1f;
 
-            minZoom = 0.1f;
-            camRadius = 1f;
+            minZoom = 0.2f;
+            camRadius = 0.5f;
             startSector = 13;
             defaultEnv = Environment.legarytic | Env.terrestrial;
 
             alwaysUnlocked = true;
-            landCloudColor = Color.valueOf("4F4CB5");
+            landCloudColor = SvPal.atlacianLandCloud;
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
                     .removeAll(SvItems.atlacianItems);
         }};

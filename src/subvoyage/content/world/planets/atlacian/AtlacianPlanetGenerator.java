@@ -9,12 +9,14 @@ import arc.util.noise.*;
 import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
+import mindustry.graphics.Pal;
 import mindustry.graphics.g3d.PlanetGrid;
 import mindustry.maps.generators.*;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.blocks.storage.*;
+import subvoyage.content.SvPal;
 import subvoyage.content.blocks.*;
 import subvoyage.content.world.planets.SvLoadouts;
 import subvoyage.content.world.sectors.SvSectorPresets;
@@ -25,7 +27,7 @@ import static mindustry.Vars.*;
 import static subvoyage.content.blocks.SvWorldBlocks.*;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
-    float ocean = -0.4f;
+    float ocean = -0.3f;
     public static float liqThresh = 0.2f, liqScl = 60f;
     Block[][] arr = {
     {Blocks.carbonStone, legartyteStone, agaryteStone,Blocks.carbonStone, legartyteStone, Blocks.carbonStone,
@@ -96,8 +98,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
     }
 
     private float getRawHeight(Vec3 position) {
-        float noise = Simplex.noise3d(seed,4,0.7,1f,position.x,position.y,position.z);
-        float waveNoise = Ridged.noise3d(seed,position.x/6f+noise*4,position.y,position.z+Math.sin(noise)*6,1/4f);
+        float noise = Simplex.noise3d(seed,4,0.7,1f,position.x,position.x,position.z);
+        float waveNoise = Ridged.noise3d(seed,position.x/2f+noise*4,position.y,position.z+Math.sin(noise)*6,1/4f);
         float actualNoise = noise * waveNoise;
         return Math.max(actualNoise,ocean);
     }
@@ -113,10 +115,11 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         float g = 120+(noiseG*80);
         float b = 190+(noise*wiggle*wiggle*50);
 
-        if(getRawHeight(position) <= ocean) return Color.valueOf("4265AF");
-        if(invertMask > 0.7) return  Color.white;
-        if(invertMask > 0.4) return Color.cyan;
-        return Color.rgb((int) r, (int) g, (int) b);
+        if(getRawHeight(position) <= ocean) return SvPal.atlacianOcean;
+        if(invertMask > 0.6) return SvPal.agaryte;
+        if(invertMask > 0.5) return SvPal.legartyteLightish;
+        if(invertMask > 0.2) return SvPal.legartyte;
+        return Liquids.arkycite.color;
     }
 
     @Override
@@ -234,7 +237,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 Seq<Tile> pathE = pathfind(endX,endY, coreX,coreY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan);
                 brush(pathE,9);
                 brushWithBlock(pathE,7, Blocks.water);
-                eraseWithBlock(coreX,coreY,12,Blocks.water);
+                eraseWithBlock(coreX,coreY,8,Blocks.water);
 
                 offloadCorePositions.add(new Vec2(coreX,coreY));
                 existingCores.add(degree[0]);
@@ -297,6 +300,16 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 block = hauntedTree;
             }
 
+            /*if(floor == legartyteStone && (block.isFloor()) && rand.chance(0.005)) {
+                //block = crudesQuarry;
+                for (int xi = -1; xi <= 1; xi++) {
+                    for (int yi = -1; yi <= 1; yi++) {
+                        tiles.get(x+xi,y+yi).setFloor((Floor) crudesQuarry);
+                        tiles.get(x+xi,y+yi).setBlock(crudesQuarry);
+                    }
+                }
+            }*/
+
             boolean allowed = floor == Blocks.water || floor == Blocks.darksandWater;
             if(allowed && rand.chance(0.0005)){
                 block = Blocks.redweed;
@@ -354,7 +367,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
                 int wx = cx + x, wy = cy + y;
                 if(Structs.inBounds(wx, wy, width, height) && Mathf.within(x, y, rad)){
                     Tile other = tiles.getn(wx, wy);
-                    if(block == Blocks.water) other.setFloor(block.asFloor());
+                    if(block == Blocks.water || block.isFloor()) other.setFloor(block.asFloor());
                     else other.setBlock(block);
                 }
             }

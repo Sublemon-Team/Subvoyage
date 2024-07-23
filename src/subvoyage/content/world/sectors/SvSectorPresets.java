@@ -6,7 +6,7 @@ import mindustry.type.*;
 import static subvoyage.content.world.planets.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset divingPoint, facility, noxiousTarn;
+    public static SectorPreset divingPoint, gustyRidges, noxiousTarn;
 
     public static void load() {
 
@@ -32,7 +32,7 @@ public class SvSectorPresets {
         }};
 
 
-        facility = new SectorPreset("hillFacility",atlacian,25) {{
+        gustyRidges = new SectorPreset("gustyRidges",atlacian,25) {{
             difficulty = 2;
             captureWave = 20;
 
@@ -45,9 +45,11 @@ public class SvSectorPresets {
 
         noxiousTarn = new SectorPreset("noxiousTarn",atlacian,31) {{
             difficulty = 3;
-            hideDetails = true;
-            description = null;
-            unlocked = false;
+            captureWave = 0;
+            rules = (r) -> {
+                r.attackMode = true;
+                r.enemyCoreBuildRadius = 400f;
+            };
         }};
     }
 }

@@ -75,7 +75,7 @@ public class VaporControl implements SaveFileReader.CustomChunk {
         map.read.set(x + y * ww,is);
     }
     public Bits getVapor() {
-        return map == null ? null : map.read;
+        return map == null ? null :  map.read;
     }
 
 

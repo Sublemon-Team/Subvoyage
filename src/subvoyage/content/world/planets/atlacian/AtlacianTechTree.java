@@ -2,10 +2,10 @@ package subvoyage.content.world.planets.atlacian;
 
 import arc.Core;
 import arc.struct.*;
-import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
+import subvoyage.content.liquids.SvLiquids;
 
 import static mindustry.content.Liquids.*;
 import static subvoyage.content.liquids.SvLiquids.*;
@@ -72,7 +72,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(submersibleDrill,with(onsector(facility)), () -> {
+            node(submersibleDrill,with(onsector(gustyRidges)), () -> {
                node(tectonicDrill, () -> {
 
                });
@@ -87,7 +87,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(waterSifter, () -> {
+                node(waterSifter,with(onsector(noxiousTarn)),() -> {
 
                 });
                 node(clayConduit, () -> {
@@ -120,6 +120,11 @@ public class AtlacianTechTree {
                     node(argonCondenser,() -> {
 
                     });
+                    node(propanePyrolyzer,with(research(crude)),() -> {
+                        node(heliumCompressor,() -> {
+
+                        });
+                    });
                     node(quartzScutcher,with(research(poweredEnhancer)), () -> {
                         node(tugRoller,with(research(argonCondenser)),() -> {
 
@@ -133,7 +138,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(spaclaniumHydrolyzer,with(onsector(facility)),() -> {
+            node(spaclaniumHydrolyzer,with(onsector(gustyRidges)),() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
@@ -145,7 +150,9 @@ public class AtlacianTechTree {
                     });
                 });
                 node(windTurbine,with(research(accumulator)), () -> {
+                    node(hydrocarbonicGenerator,with(research(propanePyrolyzer)),() -> {
 
+                    });
                 });
                 node(chromiumReactor,with(research(crudeSmelter)),() -> {
 
@@ -158,10 +165,13 @@ public class AtlacianTechTree {
             });
 
             node(whirl, () -> {
-                node(rupture,with(onsector(facility)), () -> {
+                node(rupture,with(onsector(gustyRidges)), () -> {
                     node(awe,() -> {
                         node(resonance,with(research(burden)), () -> {
                             node(cascade,() -> {
+
+                            });
+                            node(inspiration,() -> {
 
                             });
                         });
@@ -183,18 +193,15 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(helicopterFactory,() -> {
-                node(lapetus,() ->
-                        node(skath,() ->
-                                node(charon,() ->
-                                        node(callees,() ->
-                                                node(ganymede,() -> {
+            node(helicopterFactory,with(onsector(noxiousTarn)),() -> {
+                node(lapetus,() -> {
 
-                                                })
-                                        )
-                                )
-                        )
-                );
+                });
+                node(hydromechFactory,with(research(helium)),() -> {
+                    node(leeft,() -> {
+
+                    });
+                });
             });
 
             node(coreShore,() -> {
@@ -207,9 +214,7 @@ public class AtlacianTechTree {
                     });
                 });
                 node(coreDecoder,() -> {
-                    node(coreDecrypter,with(research(coreShore)), () -> {
 
-                    });
                 });
                 node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {
 
@@ -217,15 +222,15 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
-                node(facility,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
-                    node(noxiousTarn,with(sector(facility),never()),() -> {
+                node(gustyRidges,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
+                    node(noxiousTarn,with(sector(gustyRidges),research(spaclaniumHydrolyzer),research(energyDock),research(energyDistributor)),() -> {
 
                     });
                 });
             });
             node(spaclanium,with(produce(spaclanium)), () -> {
                 node(corallite,with(produce(corallite)),() -> {
-                    node(iridium,with(produce(iridium),onsector(facility)),() -> {
+                    node(iridium,with(produce(iridium),onsector(gustyRidges)),() -> {
 
                     });
                     node(chromium,with(research(crudeSmelter)),() -> {
@@ -251,7 +256,15 @@ public class AtlacianTechTree {
                     });
                 });
                 node(argon,with(produce(argon)),() -> {
+                    nodeProduce(propane,() -> {
 
+                    });
+                    nodeProduce(helium,() -> {
+
+                    });
+                    nodeProduce(SvLiquids.nitrogen,() -> {
+
+                    });
                 });
             });
 
@@ -349,6 +362,7 @@ public class AtlacianTechTree {
     public static Objectives.Research research(UnlockableContent content) {
         return new Objectives.Research(content);
     }
+
 
 
 

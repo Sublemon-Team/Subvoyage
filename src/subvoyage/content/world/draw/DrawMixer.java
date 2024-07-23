@@ -8,9 +8,10 @@ import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.world.draw.*;
+import subvoyage.content.SvPal;
 
 public class DrawMixer extends DrawLiquidRegion{
-    public Color metaColor = Color.valueOf("6a6fc2");
+    public Color metaColor = SvPal.polygen;
     public int bubbles = 14;
     public float strokeMin = 0.25F;
     public float spread = 4.0F;

@@ -1,20 +1,23 @@
 package subvoyage;
 
 import arc.*;
+import arc.audio.Music;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.math.Mathf;
 import arc.struct.Bits;
 import arc.util.*;
+import mindustry.Vars;
+import mindustry.content.UnitTypes;
 import mindustry.game.EventType.*;
-import mindustry.gen.Groups;
 import mindustry.gen.Musics;
 import mindustry.graphics.Pal;
-import mindustry.graphics.Shaders;
 import mindustry.mod.*;
+import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.SvMusic;
 import subvoyage.content.blocks.*;
 import subvoyage.content.blocks.editor.vapor.VaporControl;
+import subvoyage.content.blocks.production.WaterSifter;
 import subvoyage.content.liquids.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
@@ -46,9 +49,10 @@ public class SubvoyageMod extends Mod {
                     content.unlock();
                 }
             }*/
+
         });
         Events.on(UnlockEvent.class,e -> {
-            if(e.content == SvSectorPresets.noxiousTarn) e.content.clearUnlock();
+
         });
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();
@@ -65,20 +69,28 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.on(SectorCaptureEvent.class,e -> {
-            if(e.sector.preset == SvSectorPresets.facility) {
+            if(e.sector.preset == SvSectorPresets.gustyRidges) {
                 betaCompleteDialog.show(SvPlanets.atlacian);
             };
         });
         Events.on(WorldLoadEvent.class, e -> {
-
+            if(SvBlocks.waterSifter instanceof WaterSifter) ((WaterSifter) SvBlocks.waterSifter).worldReset();
         });
         Events.on(MusicRegisterEvent.class, e -> {
             //control.sound.ambientMusic.add(SvMusic.theAtlacian);
         });
         Events.run(Trigger.update,() -> {
             if(state.isGame()) {
+                if(SvMusic.theAtlacian.isPlaying()) {
+                    SvMusic.theAtlacian.pause(false);
+                    control.sound.stop();
+                }
                 if (!state.isPaused()) {
                     vaporControl.update();
+                }
+            } else {
+                if(SvMusic.theAtlacian.isPlaying()) {
+                    SvMusic.theAtlacian.pause(true);
                 }
             }
         });
@@ -111,9 +123,16 @@ public class SubvoyageMod extends Mod {
     }
 
     @Override
+    public void init() {
+        super.init();
+        loadSettings();
+    }
+
+    @Override
     public void loadContent(){
         Log.info("Poof-poof, Subvoyage loads up!");
         SvMusic.load();
+        SvSounds.load();
 
         SvItems.load();
         SvLiquids.load();
@@ -134,6 +153,20 @@ public class SubvoyageMod extends Mod {
 
         vaporControl = new VaporControl();
         VaporControl.load();
+    }
+
+    void loadSettings() {
+        ui.settings.addCategory(bundle.get("setting.sv-title"),"subvoyage-icon",t -> {
+            t.checkPref("sv-leeft-uwu",false,(v) -> {
+                SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(v ? "-uwu" :""));
+                SvUnits.leeft.drawCell = !v;
+                SvUnits.leeft.weapons.first().layerOffset = v ? -1 : 0;
+            });
+            t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
+        });
+        SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(settings.getBool("sv-leeft-uwu") ? "-uwu" :""));
+        SvUnits.leeft.weapons.first().layerOffset = settings.getBool("sv-leeft-uwu") ? -1 : 0;
+        SvUnits.leeft.drawCell = !settings.getBool("sv-leeft-uwu");
     }
 
 }
