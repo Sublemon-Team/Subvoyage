@@ -149,7 +149,7 @@ public class SvBlocks{
         }};
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
-            requirements(Category.units, with(iridium, 5, chromium, 10));
+            requirements(Category.units, atl(), with(iridium, 5, chromium, 10));
             moveTime = 32f;
             canOverdrive = false;
             health = 1200;
@@ -158,7 +158,7 @@ public class SvBlocks{
         }};
 
         fortifiedPayloadRouter = new PayloadRouter("fortified-payload-router"){{
-            requirements(Category.units, with(iridium, 5, chromium, 15));
+            requirements(Category.units, atl(), with(iridium, 5, chromium, 15));
             moveTime = 32f;
             health = 1200;
             canOverdrive = false;
