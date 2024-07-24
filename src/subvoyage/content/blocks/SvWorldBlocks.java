@@ -19,10 +19,10 @@ public class SvWorldBlocks{
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, hardWater, darkHardWater,
+    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilate, hardWater, darkHardWater,
     crudesQuarry,
     // walls
-    legartyteWall, agaryteWall, archalyteWall,
+    legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
     agaryteBoulder, agaryteBlocks, hauntedTree,
     //editor
@@ -166,6 +166,14 @@ public class SvWorldBlocks{
         }};
         agaryteWall = new StaticWall("agaryte-wall"){{
             agaryteStone.asFloor().wall = this;
+            variants = 3;
+        }};
+        sodilate = new Floor("sodilate"){{
+            attributes.set(Attribute.water, -1f);
+            variants = 3;
+        }};
+        sodilateWall = new StaticWall("sodilate-wall"){{
+            sodilate.asFloor().wall = this;
             variants = 3;
         }};
 
