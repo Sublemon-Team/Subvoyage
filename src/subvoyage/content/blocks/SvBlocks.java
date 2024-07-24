@@ -21,6 +21,7 @@ import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
+import mindustry.world.blocks.payloads.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
 import mindustry.world.blocks.storage.*;
@@ -77,7 +78,7 @@ public class SvBlocks{
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
-            helicopterFactory,hydromechFactory,
+            helicopterFactory, hydromechFactory, fortifiedPayloadConveyor, fortifiedPayloadRouter,
             //EXPLORATION
             buoy,tower,beacon,
             //STORAGE
@@ -145,6 +146,24 @@ public class SvBlocks{
             );
             size = 3;
             consumePower(1f);
+        }};
+
+        fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
+            requirements(Category.units, with(iridium, 5, chromium, 10));
+            moveTime = 32f;
+            canOverdrive = false;
+            health = 1200;
+            researchCostMultiplier = 4f;
+            underBullets = true;
+        }};
+
+        fortifiedPayloadRouter = new PayloadRouter("fortified-payload-router"){{
+            requirements(Category.units, with(iridium, 5, chromium, 15));
+            moveTime = 32f;
+            health = 1200;
+            canOverdrive = false;
+            researchCostMultiplier = 4f;
+            underBullets = true;
         }};
 
         //drills
