@@ -1,23 +1,19 @@
 package subvoyage;
 
 import arc.*;
-import arc.audio.Music;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.math.Mathf;
-import arc.struct.Bits;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.struct.*;
 import arc.util.*;
-import mindustry.Vars;
-import mindustry.content.UnitTypes;
+import mindustry.game.*;
 import mindustry.game.EventType.*;
-import mindustry.gen.Musics;
-import mindustry.graphics.Pal;
+import mindustry.gen.*;
+import mindustry.graphics.*;
 import mindustry.mod.*;
-import mindustry.ui.dialogs.SettingsMenuDialog;
-import subvoyage.content.SvMusic;
+import subvoyage.content.*;
 import subvoyage.content.blocks.*;
-import subvoyage.content.blocks.editor.vapor.VaporControl;
-import subvoyage.content.blocks.production.WaterSifter;
+import subvoyage.content.blocks.editor.vapor.*;
+import subvoyage.content.blocks.production.*;
 import subvoyage.content.liquids.*;
 import subvoyage.content.unit.*;
 import subvoyage.content.world.*;
@@ -25,11 +21,10 @@ import subvoyage.content.world.items.*;
 import subvoyage.content.world.planets.*;
 import subvoyage.content.world.planets.atlacian.*;
 import subvoyage.content.world.sectors.*;
-import subvoyage.dialog.BetaCompleteDialog;
+import subvoyage.dialog.*;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
-import static mindustry.Vars.state;
 
 public class SubvoyageMod extends Mod {
     public static String ID = "subvoyage";
@@ -120,6 +115,14 @@ public class SubvoyageMod extends Mod {
                 }
             }
         });
+
+        Events.on(EventType.FileTreeInitEvent.class, e ->
+        app.post(SvShaders::init)
+        );
+
+        Events.on(EventType.DisposeEvent.class, e ->
+        SvShaders.dispose()
+        );
     }
 
     @Override
@@ -150,7 +153,6 @@ public class SubvoyageMod extends Mod {
         EnvRenderer.init();
 
         AtlacianTechTree.loadBalanced();
-
         vaporControl = new VaporControl();
         VaporControl.load();
     }

@@ -1,16 +1,13 @@
 package subvoyage.content.blocks;
 
-import mindustry.content.Blocks;
-import mindustry.content.Fx;
-import mindustry.content.Items;
-import mindustry.content.UnitTypes;
-import mindustry.editor.EditorTool;
-import mindustry.type.Category;
+import mindustry.content.*;
+import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
 import subvoyage.content.blocks.editor.decoration.TreeBlock;
-import subvoyage.content.blocks.editor.vapor.VaporFloor;
+import subvoyage.content.blocks.editor.vapor.*;
+import subvoyage.content.world.*;
 import subvoyage.content.world.items.*;
 
 import static mindustry.type.ItemStack.with;
@@ -21,7 +18,7 @@ public class SvWorldBlocks{
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, agaryteStone,
+    legartyteStone, darkLegartyteStone, agaryteStone, hardWater,
     crudesQuarry,
     // walls
     legartyteWall, agaryteWall,
@@ -33,6 +30,18 @@ public class SvWorldBlocks{
     public static void load() {
         vapor = new VaporFloor("vapor") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
+        }};
+
+        hardWater = new Floor("hard-water"){{
+            speedMultiplier = 0.5f;
+            variants = 0;
+            status = StatusEffects.wet;
+            statusDuration = 90f;
+            liquidDrop = Liquids.water;
+            isLiquid = true;
+            cacheLayer = SvShaders.hardWaterLayer;
+            albedo = 0.9f;
+            supportsOverlay = true;
         }};
 
         oreSpaclanium = new OreBlock(SvItems.spaclanium){{
