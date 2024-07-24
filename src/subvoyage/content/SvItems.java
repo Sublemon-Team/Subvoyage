@@ -61,6 +61,6 @@ public class SvItems{
             hardness = 3;
         }};
 
-        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, crude);
+        atlacianItems.addAll(spaclanium, fineSand, clay, corallite, iridium, crude,chromium,tugSheet,quartzFiber);
     }
 }
