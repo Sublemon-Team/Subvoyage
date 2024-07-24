@@ -18,13 +18,7 @@ public class AtlacianWaves {
 
         UnitType[][] species = {
                 {lapetus, skath, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
-                {leeft, flagshi, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
-                //{dagger, mace, fortress, scepter, reign},
-                //{nova, pulsar, quasar, vela, corvus},
-                //{crawler, atrax, spiroct, arkyid, toxopid},
-                //{risso, minke, bryde, sei, omura},
-                //{risso, oxynoe, cyerce, aegires, navanax}, //retusa intentionally left out as it cannot damage the core properly
-                //{flare, horizon, zenith, rand.chance(0.5) ? quad : antumbra, rand.chance(0.1) ? quad : eclipse}
+                {leeft, flagshi, vanguard, rand.chance(0.3) ? armada: squadron, armada}
         };
 
         if(airOnly) species = Structs.filter(UnitType[].class, species, v -> v[0].flying);
