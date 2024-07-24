@@ -17,8 +17,8 @@ public class AtlacianWaves {
     public static Seq<SpawnGroup> generate(float difficulty, Rand rand, boolean attack, boolean airOnly) {
 
         UnitType[][] species = {
-                {lapetus, skath, charon, rand.chance(0.3) ? ganymede: callees, ganymede},
-                {leeft, flagshi, vanguard, rand.chance(0.3) ? armada: squadron, armada}
+                {lapetus, skath, charon, callees, ganymede},
+                {leeft, flagshi, vanguard, squadron, armada}
         };
 
         if(airOnly) species = Structs.filter(UnitType[].class, species, v -> v[0].flying);
