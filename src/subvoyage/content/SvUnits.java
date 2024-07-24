@@ -35,6 +35,8 @@ import subvoyage.type.unit.hydromech.custom.UnitStatState;
 import subvoyage.type.unit.hydromech.weapons.HydromechRepairBeam;
 import subvoyage.type.unit.hydromech.weapons.HydromechWeapon;
 
+import static arc.Core.atlas;
+
 public class SvUnits{
     public static UnitType
     // core
@@ -2382,5 +2384,30 @@ public class SvUnits{
     }
     public static void hmech(String... ids) {
         for (String id : ids) hmech(id);
+    }
+
+
+    public static void loadUwu(boolean isUwu) {
+        leeft.region = atlas.find(leeft.name+(isUwu ? "-uwu" :""));
+        leeft.weapons.first().layerOffset = isUwu ? -1 : 0;
+        leeft.drawCell = !isUwu;
+
+        flagshi.region = atlas.find(flagshi.name+(isUwu ? "-uwu" :""));
+        flagshi.drawCell = !isUwu;
+        ((HydromechUnitType) flagshi).bodyHeat = !isUwu;
+
+        vanguard.region = atlas.find(vanguard.name+(isUwu ? "-uwu" :""));
+        vanguard.drawCell = !isUwu;
+        vanguard.weapons.get(2).layerOffset = isUwu ? -1 : 0;
+        ((HydromechUnitType) vanguard).bodyHeat = !isUwu;
+
+        squadron.region = atlas.find(squadron.name+(isUwu ? "-uwu" :""));
+        squadron.drawCell = !isUwu;
+        squadron.weapons.first().layerOffset = isUwu ? -1 : 0;
+        ((HydromechUnitType)squadron).bodyHeat = !isUwu;
+
+        armada.region = atlas.find(armada.name+(isUwu ? "-uwu" :""));
+        armada.drawCell = !isUwu;
+        ((HydromechUnitType) armada).bodyHeat = !isUwu;
     }
 }

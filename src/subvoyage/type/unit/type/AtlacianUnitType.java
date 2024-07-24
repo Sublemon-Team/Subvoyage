@@ -29,7 +29,7 @@ public class AtlacianUnitType extends UnitType{
     @Override
     public void load() {
         super.load();
-        if(bodyHeat) regionHeat = Core.atlas.find(name+"-heat");
+        regionHeat = Core.atlas.find(name+"-heat");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AtlacianUnitType extends UnitType{
         float scl = Draw.scl;
         Draw.scl(bodyScale);
         super.drawBody(unit);
-        if(regionHeat != null && regionHeat.found()) {
+        if(bodyHeat && regionHeat != null && regionHeat.found()) {
             float warmup = 0f;
             for (WeaponMount mount : unit.mounts) {
                 if(mount.weapon instanceof HydromechWeapon hw && !hw.hasHeat) continue;

@@ -156,16 +156,10 @@ public class SubvoyageMod extends Mod {
 
     void loadSettings() {
         ui.settings.addCategory(bundle.get("setting.sv-title"),"subvoyage-icon",t -> {
-            t.checkPref("sv-leeft-uwu",false,(v) -> {
-                SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(v ? "-uwu" :""));
-                SvUnits.leeft.drawCell = !v;
-                SvUnits.leeft.weapons.first().layerOffset = v ? -1 : 0;
-            });
+            t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
             t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
         });
-        SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(settings.getBool("sv-leeft-uwu") ? "-uwu" :""));
-        SvUnits.leeft.weapons.first().layerOffset = settings.getBool("sv-leeft-uwu") ? -1 : 0;
-        SvUnits.leeft.drawCell = !settings.getBool("sv-leeft-uwu");
+        SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }
 
 }
