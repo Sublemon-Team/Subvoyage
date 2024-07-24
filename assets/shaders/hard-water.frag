@@ -1,11 +1,11 @@
 #define HIGHP
 
-#define S1 vec4(111.0, 129.0, 219.0, 255.0) / 255.0
+#define S3 vec4(111.0, 129.0, 219.0, 255.0) / 255.0
 #define S2 vec4(90.0, 120.0, 179.0, 255.0) / 255.0
-#define S3 vec4(91.0, 105.0, 178.0, 255.0) / 255.0
+#define S1 vec4(91.0, 105.0, 178.0, 255.0) / 255.0
 
 #define NSCALE 180.0 / 2.0
-#define DSCALE 160.0 / 2.0
+#define DSCALE 130.0 / 2.0
 
 uniform sampler2D u_texture;
 uniform sampler2D u_noise;
@@ -47,7 +47,7 @@ void main(){
     }
 
     if (orig.b > 0.01){
-        /*color = max(S1, color);*/
+        color = max(S1, color);
     }
 
     gl_FragColor = color;

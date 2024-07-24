@@ -20,7 +20,7 @@ public class SvWorldBlocks{
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, agaryteStone, hardWater,
+    legartyteStone, darkLegartyteStone, agaryteStone, hardWater, darkHardWater,
     crudesQuarry,
     // walls
     legartyteWall, agaryteWall,
@@ -48,6 +48,37 @@ public class SvWorldBlocks{
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
+                liquidMultiplier = 0.01f;
+                attributes.set(SvAttribute.hardMetals, 1f);
+            }
+
+            @Override
+            public void load() {
+                super.load();
+                edgeRegion = Core.atlas.find(name + "-edge");
+            }
+
+            @Override
+            public void drawBase(Tile tile) {
+                super.drawBase(tile);
+            }
+        };
+        darkHardWater = new Floor("dark-hard-water"){
+            public Block parent = Blocks.air;
+            {
+                speedMultiplier = 0.9f;
+                variants = 0;
+                status = StatusEffects.wet;
+                statusDuration = 90f;
+                liquidDrop = Liquids.water;
+                isLiquid = true;
+                cacheLayer = SvShaders.hardWaterLayer;
+                albedo = 0.9f;
+                supportsOverlay = true;
+                hasShadow = false;
+                parent = blendGroup = Blocks.water;
+                liquidMultiplier = 0.05f;
+                attributes.set(SvAttribute.hardMetals, 1f);
             }
 
             @Override
