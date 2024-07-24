@@ -1,7 +1,6 @@
 package subvoyage.content.blocks;
 
-import arc.Core;
-import arc.graphics.g2d.Draw;
+import arc.*;
 import mindustry.content.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -20,10 +19,10 @@ public class SvWorldBlocks{
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, agaryteStone, hardWater, darkHardWater,
+    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, hardWater, darkHardWater,
     crudesQuarry,
     // walls
-    legartyteWall, agaryteWall,
+    legartyteWall, agaryteWall, archalyteWall,
     // boulders
     agaryteBoulder, agaryteBlocks, hauntedTree,
     //editor
@@ -147,6 +146,18 @@ public class SvWorldBlocks{
         }};
         legartyteWall = new StaticWall("legartyte-wall"){{
             legartyteStone.asFloor().wall = this;
+            variants = 3;
+        }};
+        archalyteStone = new Floor("archalyte-stone"){{
+            attributes.set(Attribute.water, -1f);
+            variants = 3;
+        }};
+        darkArchalyteStone = new Floor("dark-archalyte-stone"){{
+            attributes.set(Attribute.water, -1f);
+            variants = 3;
+        }};
+        archalyteWall = new StaticWall("archalyte-wall"){{
+            archalyteStone.asFloor().wall = this;
             variants = 3;
         }};
         agaryteStone = new Floor("agaryte-stone"){{
