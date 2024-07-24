@@ -1,5 +1,7 @@
 package subvoyage.content.blocks;
 
+import arc.Core;
+import arc.graphics.g2d.Draw;
 import mindustry.content.*;
 import mindustry.type.*;
 import mindustry.world.*;
@@ -32,17 +34,34 @@ public class SvWorldBlocks{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
         }};
 
-        hardWater = new Floor("hard-water"){{
-            speedMultiplier = 0.5f;
-            variants = 0;
-            status = StatusEffects.wet;
-            statusDuration = 90f;
-            liquidDrop = Liquids.water;
-            isLiquid = true;
-            cacheLayer = SvShaders.hardWaterLayer;
-            albedo = 0.9f;
-            supportsOverlay = true;
-        }};
+        hardWater = new Floor("hard-water"){
+            public Block parent = Blocks.air;
+            {
+                speedMultiplier = 0.9f;
+                variants = 0;
+                status = StatusEffects.wet;
+                statusDuration = 90f;
+                liquidDrop = Liquids.water;
+                isLiquid = true;
+                cacheLayer = SvShaders.hardWaterLayer;
+                albedo = 0.9f;
+                supportsOverlay = true;
+                hasShadow = false;
+                parent = blendGroup = Blocks.water;
+            }
+
+            @Override
+            public void load() {
+                super.load();
+                edgeRegion = Core.atlas.find(name + "-edge");
+            }
+
+            @Override
+            public void drawBase(Tile tile) {
+                super.drawBase(tile);
+            }
+        };
+       ((Floor) Blocks.water).supportsOverlay = true;
 
         oreSpaclanium = new OreBlock(SvItems.spaclanium){{
             oreDefault = false;

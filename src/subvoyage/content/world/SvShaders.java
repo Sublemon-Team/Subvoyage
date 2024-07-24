@@ -22,8 +22,9 @@ public class SvShaders{
 
     public static void init(){
         hardWater = new SurfaceShader("hard-water");
-        hardWaterLayer = new CacheLayer.ShaderLayer(hardWater);
-        CacheLayer.add(hardWaterLayer);
+        CacheLayer.addLast(
+                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater)
+        );
     }
 
     public static void dispose(){

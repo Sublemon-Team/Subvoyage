@@ -1,6 +1,7 @@
 package subvoyage.content.world.sectors;
 
 import arc.struct.Seq;
+import mindustry.content.Blocks;
 import mindustry.type.*;
 
 import static subvoyage.content.world.planets.SvPlanets.atlacian;
