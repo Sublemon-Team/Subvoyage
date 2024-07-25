@@ -2,6 +2,7 @@ package subvoyage.world.generator;
 
 import arc.graphics.Color;
 import arc.math.Mathf;
+import arc.math.Rand;
 import arc.math.geom.Geometry;
 import arc.math.geom.Vec2;
 import arc.math.geom.Vec3;
@@ -13,8 +14,11 @@ import mindustry.ai.Astar;
 import mindustry.content.Blocks;
 import mindustry.content.Liquids;
 import mindustry.game.Schematics;
+import mindustry.game.SpawnGroup;
 import mindustry.maps.filters.RiverNoiseFilter;
 import mindustry.maps.generators.PlanetGenerator;
+
+import static mindustry.Vars.state;
 import static subvoyage.content.block.SvWorldBlocks.*;
 
 import mindustry.maps.planet.ErekirPlanetGenerator;
@@ -24,6 +28,7 @@ import mindustry.world.blocks.environment.Floor;
 import mindustry.world.blocks.environment.SteamVent;
 import subvoyage.content.other.SvLoadouts;
 import subvoyage.content.other.SvPal;
+import subvoyage.world.planets.atlacian.AtlacianWaves;
 
 public class AtlacianPlanetGen extends PlanetGenerator {
     /*      GENERATION PARAMETERS       */
@@ -81,6 +86,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         rnoiseReplace(legartyteStone, Blocks.water,2,.2f,50,.1f,1f);
 
         Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
+        erase(spawnX,spawnY, 15);
         brush(path, 10);
         brushWithBlock(path, 8, Blocks.water);
         erase(endX, endY, 12);
@@ -168,6 +174,16 @@ public class AtlacianPlanetGen extends PlanetGenerator {
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
         tiles.get(endX,endY).setOverlay(Blocks.spawn);
+        Geometry.circle(spawnX,spawnY,6,(x,y) -> {
+            if(tiles.get(x,y) != tiles.get(spawnX,spawnY) && rand.chance(0.3f)) tiles.get(x,y).setOverlay(oreSpaclanium);
+        });
+
+        Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat * 1.3f, new Rand(sector.id), state.rules.attackMode, rand.chance(0.3f));
+        state.rules.spawns = spawns;
+        state.rules.waves = true;
+        state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
+        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(sector.threat, 0f));
+        sector.generateEnemyBase = false;
     }
 
     public void brushWithBlock(Seq<Tile> path, int rad, Block block){
