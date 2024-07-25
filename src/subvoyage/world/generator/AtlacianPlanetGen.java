@@ -108,7 +108,10 @@ public class AtlacianPlanetGen extends PlanetGenerator {
             }
             if(firstNoise < archalyteBiomeWeight) {
                 if(!floor.asFloor().isLiquid) floor = archalyteStone;
-                if(block.solid) block = archalyteWall;
+                if(block.solid) {
+                    block = archalyteWall;
+                    //todo: wall ores
+                }
                 return;
             }
             return;
