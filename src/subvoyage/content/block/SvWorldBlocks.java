@@ -91,7 +91,7 @@ public class SvWorldBlocks{
                 super.drawBase(tile);
             }
         };
-       ((Floor) Blocks.water).supportsOverlay = true;
+        ((Floor) Blocks.water).supportsOverlay = true;
 
         oreSpaclanium = new OreBlock(SvItems.spaclanium){{
             oreDefault = false;
@@ -187,6 +187,7 @@ public class SvWorldBlocks{
         agaryteBoulder = new Prop("agaryte-boulder"){{
             variants = 2;
             agaryteStone.asFloor().decoration = this;
+            forceDark = true;
         }};
 
         agaryteBlocks = new TallBlock("agaryte-blocks"){{

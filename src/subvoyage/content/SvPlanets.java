@@ -11,6 +11,7 @@ import mindustry.world.meta.*;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.other.SvPal;
 import subvoyage.world.*;
+import subvoyage.world.generator.AtlacianPlanetGen;
 import subvoyage.world.generator.AtlacianPlanetGenerator;
 import subvoyage.world.type.AtlacianPlanetType;
 
@@ -24,7 +25,7 @@ public class SvPlanets{
         serpulo.orbitSpacing = 3f;
 
         atlacian = new AtlacianPlanetType("atlacian", serpulo, 0.6f, 2) {{
-            generator = new AtlacianPlanetGenerator();
+            generator = new AtlacianPlanetGen();
             meshLoader = () -> new HexMesh(this, 6);
             cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.15f), 2, 0.45f, 0.9f, 0.38f),
