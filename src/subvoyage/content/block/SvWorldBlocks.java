@@ -47,7 +47,7 @@ public class SvWorldBlocks{
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
-                liquidMultiplier = 0.01f;
+                liquidMultiplier = 0f;
                 attributes.set(SvAttribute.hardMetals, 1f);
             }
 
@@ -76,7 +76,7 @@ public class SvWorldBlocks{
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
-                liquidMultiplier = 0.01f;
+                liquidMultiplier = 0f;
                 attributes.set(SvAttribute.hardMetals, 1f);
             }
 

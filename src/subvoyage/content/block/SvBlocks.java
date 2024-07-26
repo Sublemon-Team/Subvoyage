@@ -34,6 +34,8 @@ import subvoyage.content.other.*;
 import subvoyage.draw.block.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
+import subvoyage.type.block.laser.LaserNode;
+import subvoyage.type.block.laser_production.LaserGenerator;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.block.core.offload_core.*;
@@ -74,6 +76,8 @@ public class SvBlocks{
             waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
+            //LASER
+            laserProjector, laserNode, laserAmplificator,
             //TRANSPORTATION
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
@@ -118,6 +122,24 @@ public class SvBlocks{
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
         };
+
+        //laser
+
+        laserProjector = new LaserGenerator("laser-projector") {{
+            requirements(Category.units,atl(),with(iridium,300,chromium,200,clay,150));
+            outputLaserPower = 10f;
+            range = 4;
+            size = 3;
+            squareSprite = false;
+            consumePower(1.3f);
+        }};
+
+        laserNode = new LaserNode("laser-node") {{
+            requirements(Category.units,atl(),with(iridium,10,chromium,10));
+            range = 16;
+            squareSprite = false;
+            consumeLaserPower(3f);
+        }};
 
         //payload
         helicopterFactory = new UnitFactory("helicopter-factory") {{
