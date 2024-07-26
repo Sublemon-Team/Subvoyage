@@ -11,17 +11,23 @@ import arc.util.Strings;
 import mindustry.content.Fx;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.graphics.Shaders;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.consumers.ConsumePower;
 import subvoyage.content.other.SvPal;
 import subvoyage.content.other.SvStat;
 
+import static arc.Core.graphics;
+import static arc.Core.settings;
+import static mindustry.Vars.renderer;
 import static mindustry.Vars.tilesize;
 
 public class LaserBlock extends Block {
 
+    public TextureRegion heatRegion;
     public TextureRegion laserRegion;
     public TextureRegion laserTopRegion;
     public TextureRegion laserStartRegion;
@@ -62,6 +68,7 @@ public class LaserBlock extends Block {
         laserRegion = Core.atlas.find(name+"-laser","subvoyage-power-laser");
         laserTopRegion = Core.atlas.find(name+"-laser-top","subvoyage-power-laser-top");
         laserStartRegion = Core.atlas.find(name+"-laser-start","subvoyage-power-laser-start");
+        heatRegion = Core.atlas.find(name+"-heat");
     }
 
     @Override

@@ -2,6 +2,7 @@ package subvoyage.type.block.laser;
 
 import arc.Core;
 import arc.flabel.effects.GradientEffect;
+import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
@@ -26,6 +27,7 @@ import mindustry.input.Placement;
 import mindustry.ui.dialogs.EffectsDialog;
 import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Duct;
+import subvoyage.content.other.SvPal;
 import subvoyage.type.block.laser_production.LaserGenerator;
 import subvoyage.type.block.power.node.EnergyCross;
 
@@ -145,7 +147,6 @@ public class LaserNode extends LaserBlock {
     public class LaserNodeBuild extends LaserBlockBuilding {
 
         public int lastChange = -2;
-
         @Override
         public void created() {
             super.created();
@@ -282,6 +283,15 @@ public class LaserNode extends LaserBlock {
             Draw.rect(this.block.region, this.x, this.y, 0);
             this.drawTeamTop();
             Draw.rect(rotation < 2 ? topRegion1 : topRegion2, this.x, this.y, (float)(this.rotation * 90));
+            if(heatRegion.found()) {
+                Draw.color(SvPal.laserRed);
+                Draw.blend(Blending.additive);
+                Draw.alpha(rawLaserEfficiency());
+                Draw.rect(heatRegion, x, y, (float)(rotation * 90));
+                Draw.alpha(1f);
+                Draw.blend(Blending.normal);
+                Draw.color();
+            }
         }
     }
 

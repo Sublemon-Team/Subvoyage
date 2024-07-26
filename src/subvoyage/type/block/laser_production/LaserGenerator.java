@@ -14,6 +14,7 @@ import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
+import subvoyage.content.other.SvPal;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
 
@@ -129,6 +130,15 @@ public class LaserGenerator extends LaserBlock {
             Draw.rect(this.block.region, this.x, this.y, 0);
             this.drawTeamTop();
             Draw.rect(rotation < 2 ? topRegion1 : topRegion2, x, y, (float)(rotation * 90));
+            if(heatRegion.found()) {
+                Draw.color(SvPal.laserRed);
+                Draw.blend(Blending.additive);
+                Draw.alpha(lasers.smoothEfficiency);
+                Draw.rect(heatRegion, x, y, (float)(rotation * 90));
+                Draw.alpha(1f);
+                Draw.blend(Blending.normal);
+                Draw.color();
+            }
         }
 
         @Override

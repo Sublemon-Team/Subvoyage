@@ -1,6 +1,7 @@
 package subvoyage.type.block.laser;
 
 import arc.Core;
+import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
@@ -19,6 +20,7 @@ import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.world.Tile;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.other.SvPal;
 import subvoyage.type.block.laser_production.LaserGenerator;
 
 import static mindustry.Vars.tilesize;
@@ -267,6 +269,15 @@ public class LaserSplitter extends LaserBlock {
             Draw.rect(this.block.region, this.x, this.y, 0);
             this.drawTeamTop();
             Draw.rect(rotation < 2 ? topRegion1 : topRegion2, this.x, this.y, (float)(this.rotation * 90));
+            if(heatRegion.found()) {
+                Draw.color(SvPal.laserRed);
+                Draw.blend(Blending.additive);
+                Draw.alpha(rawLaserEfficiency());
+                Draw.rect(heatRegion, x, y, (float)(rotation * 90));
+                Draw.alpha(1f);
+                Draw.blend(Blending.normal);
+                Draw.color();
+            }
         }
     }
 

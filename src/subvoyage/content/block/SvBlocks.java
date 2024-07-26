@@ -150,6 +150,7 @@ public class SvBlocks{
             size = 3;
             range = 16;
             squareSprite = false;
+            consumeLaserPower(3f);
             consumeLaser = false;
         }};
 

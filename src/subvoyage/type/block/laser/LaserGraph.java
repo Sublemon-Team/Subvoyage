@@ -1,7 +1,11 @@
 package subvoyage.type.block.laser;
 
 import arc.struct.Seq;
+import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.gen.Building;
+
+import java.util.ArrayList;
 
 public class LaserGraph {
     public Seq<Building> consumers = new Seq<>(false, 16, Building.class);
@@ -26,7 +30,22 @@ public class LaserGraph {
     }
 
     public void update(Building build) {
-
+        ArrayList<Building> toRemove = new ArrayList<>();
+        consumers.each(cons -> {
+            if(Vars.world.tile(cons.tileX(),cons.tileY()).block() == Blocks.air) toRemove.add(cons);
+        });
+        suppliers.each(cons -> {
+            if(Vars.world.tile(cons.tileX(),cons.tileY()).block() == Blocks.air) toRemove.add(cons);
+        });
+        all.each(cons -> {
+            if(Vars.world.tile(cons.tileX(),cons.tileY()).block() == Blocks.air) toRemove.add(cons);
+        });
+        for (Building building : toRemove) {
+            all.remove(building);
+            consumers.remove(building);
+            suppliers.remove(building);
+            Vars.world.tile(building.tileX(),building.tileY()).build = null;
+        }
     }
 
     public Seq<Building> getSuppliers() {
