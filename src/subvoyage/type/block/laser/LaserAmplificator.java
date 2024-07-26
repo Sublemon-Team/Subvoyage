@@ -1,44 +1,35 @@
 package subvoyage.type.block.laser;
 
 import arc.Core;
-import arc.flabel.effects.GradientEffect;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
-import arc.math.Mathf;
 import arc.math.geom.Geometry;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
-import arc.math.geom.Vec2;
 import arc.struct.Seq;
-import arc.util.Eachable;
 import arc.util.Nullable;
 import arc.util.Tmp;
 import mindustry.content.Fx;
-import mindustry.entities.units.BuildPlan;
-import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
-import mindustry.ui.dialogs.EffectsDialog;
 import mindustry.world.Tile;
-import mindustry.world.blocks.distribution.Duct;
 import subvoyage.type.block.laser_production.LaserGenerator;
-import subvoyage.type.block.power.node.EnergyCross;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
-public class LaserNode extends LaserBlock {
+public class LaserAmplificator extends LaserBlock {
 
     public TextureRegion topRegion1;
     public TextureRegion topRegion2;
     public int range;
 
 
-    public LaserNode(String name) {
+    public LaserAmplificator(String name) {
         super(name);
         rotate = true;
         rotateDraw = true;
@@ -215,21 +206,11 @@ public class LaserNode extends LaserBlock {
                 lastChange = world.tileChanges;
                 reloadLinks();
             }
-            if(lasers.graph.suppliers.size > 1 /*&& false*/) {
-                for (Building supplier : lasers.graph.suppliers) {
-                    Fx.coreLaunchConstruct.create(supplier.x,supplier.y,0,Pal.accent,new Object());
-                    Fx.unitEnvKill.create(supplier.x,supplier.y,0,Pal.accent,new Object());
-                }
-                Fx.coreLaunchConstruct.create(x,y,0,Pal.accent,new Object());
-                Fx.unitEnvKill.create(x,y,0,Pal.accent,new Object());
-                Sounds.plasmadrop.play(1f,2f,0f);
-                lasers.graph.removeSuppliers(this);
-            }
         }
 
         @Override
         public float efficiency() {
-            return 1f;
+            return lasers.smoothEfficiency;
         }
 
         @Override

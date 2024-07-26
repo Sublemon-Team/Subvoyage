@@ -34,6 +34,7 @@ import subvoyage.content.other.*;
 import subvoyage.draw.block.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
+import subvoyage.type.block.laser.LaserAmplificator;
 import subvoyage.type.block.laser.LaserNode;
 import subvoyage.type.block.laser_production.LaserGenerator;
 import subvoyage.type.block.production.*;
@@ -126,7 +127,7 @@ public class SvBlocks{
         //laser
 
         laserProjector = new LaserGenerator("laser-projector") {{
-            requirements(Category.units,atl(),with(iridium,300,chromium,200,clay,150));
+            requirements(Category.units,atl(),with(iridium,300,chromium,200,spaclanium,150));
             outputLaserPower = 10f;
             range = 4;
             size = 3;
@@ -135,9 +136,19 @@ public class SvBlocks{
         }};
 
         laserNode = new LaserNode("laser-node") {{
-            requirements(Category.units,atl(),with(iridium,10,chromium,10));
+            requirements(Category.units,atl(),with(iridium,30,chromium,30));
+            size = 3;
             range = 16;
             squareSprite = false;
+            consumeLaserPower(3f);
+        }};
+
+        laserAmplificator = new LaserAmplificator("laser-amplificator") {{
+            requirements(Category.units,atl(),with(iridium,80,chromium,80,spaclanium,10));
+            size = 3;
+            range = 16;
+            squareSprite = false;
+            consumePower(4f);
             consumeLaserPower(3f);
         }};
 
