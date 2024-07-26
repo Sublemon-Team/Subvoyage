@@ -37,7 +37,7 @@ public class SvItems{
         iridium = new Item("iridium", SvPal.iridium) {{
             cost = 0.8f;
             charge = 0.4f;
-            hardness = 2;
+            hardness = 1;
         }};
         crude = new Item("crude",SvPal.crude) {{
             cost = 0.2f;
