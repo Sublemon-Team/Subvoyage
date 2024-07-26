@@ -141,6 +141,7 @@ public class SvBlocks{
             range = 16;
             squareSprite = false;
             consumeLaserPower(3f);
+            consumeLaser = false;
         }};
 
         laserAmplificator = new LaserAmplificator("laser-amplificator") {{
@@ -150,6 +151,7 @@ public class SvBlocks{
             squareSprite = false;
             consumePower(4f);
             consumeLaserPower(3f);
+            consumeLaser = false;
         }};
 
         //payload

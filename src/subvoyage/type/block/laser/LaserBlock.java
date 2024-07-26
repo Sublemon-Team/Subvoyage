@@ -14,7 +14,9 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
+import mindustry.world.consumers.ConsumePower;
 import subvoyage.content.other.SvPal;
+import subvoyage.content.other.SvStat;
 
 import static mindustry.Vars.tilesize;
 
@@ -25,6 +27,7 @@ public class LaserBlock extends Block {
     public TextureRegion laserStartRegion;
 
     private float consumeLaserPower = 0f;
+    public boolean consumeLaser = true;
     public float minLaserEfficiency = 0f;
 
     public float outputLaserPower = 0f;
@@ -56,6 +59,13 @@ public class LaserBlock extends Block {
         laserRegion = Core.atlas.find(name+"-laser","subvoyage-power-laser");
         laserTopRegion = Core.atlas.find(name+"-laser-top","subvoyage-power-laser-top");
         laserStartRegion = Core.atlas.find(name+"-laser-start","subvoyage-power-laser-start");
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        if(outputLaserPower != 0) stats.add(SvStat.laserOutput,outputLaserPower);
+        if(consumeLaserPower > 0 && consumeLaser) stats.add(SvStat.laserUse,consumeLaserPower);
     }
 
     @Override
