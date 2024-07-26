@@ -46,11 +46,14 @@ public class LaserBlock extends Block {
                 vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
                 len1 = size1 * tilesize / 2f - 1.5f, len2 = size2 * tilesize / 2f - 1.5f;
 
+        float layer = Draw.z();
+        Draw.z(layer-0.1f);
         Draw.blend(Blending.additive);
-        Drawf.laser(laserRegion, laserStartRegion, x1 + vx*len1, y1 + vy*len1, x2 - vx*len2, y2 - vy*len2, scl);
+        Drawf.laser(laserRegion, laserStartRegion, x1, y1, x2, y2, scl);
         Draw.color();
-        Drawf.laser(laserTopRegion, laserStartRegion, x1 + vx*len1, y1 + vy*len1, x2 - vx*len2, y2 - vy*len2, scl);
+        Drawf.laser(laserTopRegion, laserStartRegion, x1, y1, x2, y2, scl);
         Draw.blend(Blending.normal);
+        Draw.z(layer);
     }
 
     @Override

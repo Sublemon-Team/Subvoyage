@@ -36,6 +36,7 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.laser.LaserAmplificator;
 import subvoyage.type.block.laser.LaserNode;
+import subvoyage.type.block.laser.LaserSplitter;
 import subvoyage.type.block.laser_production.LaserGenerator;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
@@ -78,7 +79,7 @@ public class SvBlocks{
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
-            laserProjector, laserNode, laserAmplificator,
+            laserProjector, laserNode, laserAmplificator, laserSplitter,
             //TRANSPORTATION
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
@@ -144,7 +145,15 @@ public class SvBlocks{
             consumeLaser = false;
         }};
 
-        laserAmplificator = new LaserAmplificator("laser-amplificator") {{
+        laserSplitter = new LaserSplitter("laser-splitter") {{
+            requirements(Category.logic,atl(),with(iridium,50,chromium,40,spaclanium,10));
+            size = 3;
+            range = 16;
+            squareSprite = false;
+            consumeLaser = false;
+        }};
+
+        laserAmplificator = new LaserAmplificator("laser-amplifier") {{
             requirements(Category.logic,atl(),with(iridium,80,chromium,80,spaclanium,10));
             size = 3;
             range = 16;

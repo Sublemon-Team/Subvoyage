@@ -14,11 +14,12 @@ public class LaserModule extends BlockModule {
     private float laserPower = 0f;
     private float supplierLaserPower = 0f;
     public float smoothEfficiency = 0f;
+    public float supplierLaserMultiplier = 1f;
 
     public void update(Building build) {
         graph.update(build);
         smoothEfficiency = Mathf.lerp(smoothEfficiency,build.efficiency, Time.delta/20f);
-        if(build.block instanceof LaserBlock lb) laserPower = lb.outputLaserPower*smoothEfficiency+supplierLaserPower*smoothEfficiency;
+        if(build.block instanceof LaserBlock lb) laserPower = lb.outputLaserPower*smoothEfficiency+supplierLaserPower*supplierLaserMultiplier*smoothEfficiency;
         supplierLaserPower = 0;
     }
 

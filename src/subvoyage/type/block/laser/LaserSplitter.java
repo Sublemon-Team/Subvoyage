@@ -1,44 +1,37 @@
 package subvoyage.type.block.laser;
 
 import arc.Core;
-import arc.flabel.effects.GradientEffect;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Geometry;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
-import arc.math.geom.Vec2;
 import arc.struct.Seq;
-import arc.util.Eachable;
 import arc.util.Nullable;
 import arc.util.Tmp;
 import mindustry.content.Fx;
-import mindustry.entities.units.BuildPlan;
-import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
-import mindustry.ui.dialogs.EffectsDialog;
 import mindustry.world.Tile;
-import mindustry.world.blocks.distribution.Duct;
+import subvoyage.content.block.SvBlocks;
 import subvoyage.type.block.laser_production.LaserGenerator;
-import subvoyage.type.block.power.node.EnergyCross;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
-public class LaserNode extends LaserBlock {
+public class LaserSplitter extends LaserBlock {
 
     public TextureRegion topRegion1;
     public TextureRegion topRegion2;
     public int range;
 
 
-    public LaserNode(String name) {
+    public LaserSplitter(String name) {
         super(name);
         rotate = true;
         rotateDraw = true;
@@ -58,6 +51,7 @@ public class LaserNode extends LaserBlock {
         super.load();
         topRegion1 = Core.atlas.find(name+"-top1");
         topRegion2 = Core.atlas.find(name+"-top2",topRegion1);
+        region = SvBlocks.laserNode.region;
     }
 
 
@@ -80,6 +74,9 @@ public class LaserNode extends LaserBlock {
         super.drawPlace(x, y, rotation, valid);
         Draw.rect(rotation < 2 ? topRegion1 : topRegion2, x*tilesize, y*tilesize, (float)(rotation * 90));
         int offset = size/2;
+        int leftRot = (rotation+3)%4;
+        int rightRot = (rotation+1)%4;
+        int backRot = (rotation+2)%4;
         boolean foundConsumer = false;
         for(int i = 0; i < 4; i ++){
             Point2 dir = Geometry.d4[i];
@@ -93,7 +90,7 @@ public class LaserNode extends LaserBlock {
                         break;
                     }
                     LaserBlockBuilding build = ((LaserBlockBuilding) other);
-                    if((i+2)%4 == other.rotation && build.isSupplier()) {
+                    if((i+2)%4 == other.rotation && i == backRot && build.isSupplier()) {
                         //supplier
                         int dx = dir.x, dy = dir.y;
                         if(!(other.block instanceof LaserGenerator g && j-offset > g.range)) {
@@ -106,7 +103,7 @@ public class LaserNode extends LaserBlock {
                             Drawf.square(other.x, other.y, other.block.size / 2f * tilesize, 0, Pal.heal);
                         }
                     }
-                    if(i == rotation && build.isConsumer()) {
+                    if(i == leftRot || i == rightRot && build.isConsumer()) {
                         //consumer
                         int dx = dir.x, dy = dir.y;
                         Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.heal);
@@ -122,23 +119,25 @@ public class LaserNode extends LaserBlock {
                 }
             }
         }
-        Point2 dir = Geometry.d4[rotation];
-        int dx = dir.x, dy = dir.y;
-        if(!foundConsumer)
-            Drawf.dashLine(Pal.techBlue,
+        for (int i = 0; i < 2; i++) {
+            Point2 dir = Geometry.d4[i % 2 == 0 ? leftRot : rightRot];
+            int dx = dir.x, dy = dir.y;
+            if(!foundConsumer)
+                Drawf.dashLine(Pal.techBlue,
+                        x * tilesize + dx*size/2f*tilesize,
+                        y * tilesize + dy*size/2f*tilesize,
+                        x * tilesize - dx*size/2f*tilesize + dir.x*range*tilesize,
+                        y * tilesize- dy*size/2f*tilesize + dir.y*range*tilesize);
+            Drawf.arrow(
                     x * tilesize + dx*size/2f*tilesize,
                     y * tilesize + dy*size/2f*tilesize,
-                    x * tilesize - dx*size/2f*tilesize + dir.x*range*tilesize,
-                    y * tilesize- dy*size/2f*tilesize + dir.y*range*tilesize);
-        Drawf.arrow(
-                x * tilesize + dx*size/2f*tilesize,
-                y * tilesize + dy*size/2f*tilesize,
-                x * tilesize + dx*size*tilesize,
-                y * tilesize + dy*size*tilesize,
-                size/4f*tilesize,
-                size/4f*tilesize,
-                Pal.techBlue
-                );
+                    x * tilesize + dx*size*tilesize,
+                    y * tilesize + dy*size*tilesize,
+                    size/4f*tilesize,
+                    size/4f*tilesize,
+                    Pal.techBlue
+            );
+        }
     }
 
 
@@ -155,6 +154,9 @@ public class LaserNode extends LaserBlock {
         public void reloadLinks() {
             int offset = size/2;
             lasers.graph.clearGraph(this);
+            int oLeftRot = (rotation+3)%4;
+            int oRightRot = (rotation+1)%4;
+            int oBackRot = (rotation+2)%4;
             for(int i = 0; i < 4; i ++){
                 Point2 dir = Geometry.d4[i];
                 for(int j = 1 + offset; j <= range + offset; j++){
@@ -167,21 +169,7 @@ public class LaserNode extends LaserBlock {
                             int leftRot = (other.rotation+3)%4;
                             int rightRot = (other.rotation+1)%4;
                             int backRot = (other.rotation+2)%4;
-                            if((rotation == leftRot || rotation == rightRot) && ((i == rightRot || i == leftRot) || (i+2)%4 == backRot)) {
-                                Fx.coreLaunchConstruct.create(other.x,other.y,0,Pal.accent,new Object());
-                                Fx.unitEnvKill.create(other.x,other.y,0,Pal.accent,new Object());
-                                Fx.coreLaunchConstruct.create(x,y,0,Pal.accent,new Object());
-                                Fx.unitEnvKill.create(x,y,0,Pal.accent,new Object());
-                                Sounds.plasmadrop.play(1f,2.5f,0f);
-                                System.out.println("node");
-                                break;
-                            }
                             if(i == rightRot || i == leftRot) {
-                                if(i == rightRot) {
-                                    if(rotation == i) break;
-                                } else {
-                                    if(rotation == i) break;
-                                }
                                 LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
                                 lbuild.lasers.graph.addConsumer(this);
                                 lbuild.lasers.graph.suppliers.remove(this);
@@ -197,7 +185,7 @@ public class LaserNode extends LaserBlock {
                             }
                             break;
                         }
-                        if((other.rotation+2)%4 == rotation && ((i+2)%4 == other.rotation || i == rotation)) {
+                        if((rotation == oLeftRot || rotation == oRightRot) && ((i == oRightRot || i == oLeftRot) || (i+2)%4 == oBackRot)) {
                             Fx.coreLaunchConstruct.create(other.x,other.y,0,Pal.accent,new Object());
                             Fx.unitEnvKill.create(other.x,other.y,0,Pal.accent,new Object());
                             Fx.coreLaunchConstruct.create(x,y,0,Pal.accent,new Object());
@@ -205,7 +193,7 @@ public class LaserNode extends LaserBlock {
                             Sounds.plasmadrop.play(1f,2.5f,0f);
                             break;
                         }
-                        if((i+2)%4 == other.rotation) {
+                        if((i+2)%4 == other.rotation && i == oBackRot) {
                             if(!(other.block instanceof LaserGenerator g && j-offset > g.range)) {
                                 LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
                                 lbuild.lasers.graph.addConsumer(this);
@@ -214,7 +202,7 @@ public class LaserNode extends LaserBlock {
                                 lasers.graph.consumers.remove(lbuild);
                             }
                         }
-                        if(i == rotation) {
+                        if(i == oLeftRot || i == oRightRot && !(other.rotation == oLeftRot || other.rotation == oRightRot)) {
                             LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
                             lbuild.lasers.graph.addSupplier(this);
                             lbuild.lasers.graph.consumers.remove(this);
@@ -248,6 +236,7 @@ public class LaserNode extends LaserBlock {
         public void updateTile() {
             super.updateTile();
             if(lasers == null) return;
+            lasers.supplierLaserMultiplier = 0.5f;
             if(lastChange != world.tileChanges){
                 lastChange = world.tileChanges;
                 reloadLinks();
@@ -264,10 +253,6 @@ public class LaserNode extends LaserBlock {
             }
         }
 
-        @Override
-        public float efficiency() {
-            return 1f;
-        }
 
         @Override
         public void draw() {
