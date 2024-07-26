@@ -172,11 +172,13 @@ public class LaserNode extends LaserBlock {
                             break;
                         }
                         if((i+2)%4 == other.rotation) {
-                            LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
-                            lbuild.lasers.graph.addConsumer(this);
-                            lbuild.lasers.graph.suppliers.remove(this);
-                            lasers.graph.addSupplier(lbuild);
-                            lasers.graph.consumers.remove(lbuild);
+                            if(!(other.block instanceof LaserGenerator g && j-offset > g.range)) {
+                                LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
+                                lbuild.lasers.graph.addConsumer(this);
+                                lbuild.lasers.graph.suppliers.remove(this);
+                                lasers.graph.addSupplier(lbuild);
+                                lasers.graph.consumers.remove(lbuild);
+                            }
                         }
                         if(i == rotation) {
                             LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
@@ -211,6 +213,7 @@ public class LaserNode extends LaserBlock {
         @Override
         public void updateTile() {
             super.updateTile();
+            if(lasers == null) return;
             if(lastChange != world.tileChanges){
                 lastChange = world.tileChanges;
                 reloadLinks();
@@ -234,6 +237,7 @@ public class LaserNode extends LaserBlock {
 
         @Override
         public void draw() {
+            if(lasers == null) return;
             float scl = Math.max(0.1f,rawLaserEfficiency());;
             Color color = LaserUtil.getLaserColor(lasers.power());
             for (Building consumer : lasers.graph.consumers) {

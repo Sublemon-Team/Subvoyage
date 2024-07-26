@@ -85,6 +85,7 @@ public class LaserBlock extends Block {
         @Override
         public void updateTile() {
             super.updateTile();
+            if(lasers == null) return;
             lasers.update(this);
             if(lasers.power() >= maxLaserPower) {
                 Fx.hitMeltdown.create(x,y,0, Pal.accent,new Object());
@@ -119,6 +120,7 @@ public class LaserBlock extends Block {
         }
         @Override
         public float efficiency() {
+            if(lasers == null) return 0f;
             return lasers.smoothEfficiency * laserEfficiency();
         }
 

@@ -118,6 +118,7 @@ public class LaserGenerator extends LaserBlock {
 
         @Override
         public void draw() {
+            if(lasers == null) return;
             float scl = Math.max(0.1f,efficiency());
             Color color = LaserUtil.getLaserColor(lasers.power());
             for (Building consumer : lasers.graph.consumers) {
