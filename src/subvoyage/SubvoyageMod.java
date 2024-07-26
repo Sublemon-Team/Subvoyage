@@ -11,17 +11,14 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.mod.*;
 import subvoyage.content.*;
-import subvoyage.content.blocks.*;
-import subvoyage.content.blocks.editor.vapor.*;
-import subvoyage.content.blocks.production.*;
-import subvoyage.content.liquids.*;
-import subvoyage.content.unit.*;
-import subvoyage.content.world.*;
-import subvoyage.content.world.items.*;
-import subvoyage.content.world.planets.*;
-import subvoyage.content.world.planets.atlacian.*;
-import subvoyage.content.world.sectors.*;
-import subvoyage.dialog.*;
+import subvoyage.content.block.*;
+import subvoyage.content.other.*;
+import subvoyage.content.sound.*;
+import subvoyage.draw.visual.*;
+import subvoyage.type.block.environment.vapor.*;
+import subvoyage.type.block.production.*;
+import subvoyage.ui.dialog.*;
+import subvoyage.world.techtree.*;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -159,16 +156,10 @@ public class SubvoyageMod extends Mod {
 
     void loadSettings() {
         ui.settings.addCategory(bundle.get("setting.sv-title"),"subvoyage-icon",t -> {
-            t.checkPref("sv-leeft-uwu",false,(v) -> {
-                SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(v ? "-uwu" :""));
-                SvUnits.leeft.drawCell = !v;
-                SvUnits.leeft.weapons.first().layerOffset = v ? -1 : 0;
-            });
+            t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
             t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
         });
-        SvUnits.leeft.region = atlas.find(SvUnits.leeft.name+(settings.getBool("sv-leeft-uwu") ? "-uwu" :""));
-        SvUnits.leeft.weapons.first().layerOffset = settings.getBool("sv-leeft-uwu") ? -1 : 0;
-        SvUnits.leeft.drawCell = !settings.getBool("sv-leeft-uwu");
+        SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }
 
 }
