@@ -127,7 +127,7 @@ public class SvBlocks{
         //laser
 
         laserProjector = new LaserGenerator("laser-projector") {{
-            requirements(Category.units,atl(),with(iridium,300,chromium,200,spaclanium,150));
+            requirements(Category.logic,atl(),with(iridium,300,chromium,200,spaclanium,150));
             outputLaserPower = 10f;
             range = 4;
             size = 3;
@@ -136,7 +136,7 @@ public class SvBlocks{
         }};
 
         laserNode = new LaserNode("laser-node") {{
-            requirements(Category.units,atl(),with(iridium,30,chromium,30));
+            requirements(Category.logic,atl(),with(iridium,30,chromium,30));
             size = 3;
             range = 16;
             squareSprite = false;
@@ -145,7 +145,7 @@ public class SvBlocks{
         }};
 
         laserAmplificator = new LaserAmplificator("laser-amplificator") {{
-            requirements(Category.units,atl(),with(iridium,80,chromium,80,spaclanium,10));
+            requirements(Category.logic,atl(),with(iridium,80,chromium,80,spaclanium,10));
             size = 3;
             range = 16;
             squareSprite = false;
