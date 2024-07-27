@@ -196,11 +196,11 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(helicopterFactory,with(onsector(noxiousTarn)),() -> {
+            node(helicopterFabricator,with(onsector(noxiousTarn)),() -> {
                 node(lapetus,() -> {
 
                 });
-                node(hydromechFactory,with(research(helium)),() -> {
+                node(hydromechFabricator,with(research(helium)),() -> {
                     node(leeft,() -> {
 
                     });

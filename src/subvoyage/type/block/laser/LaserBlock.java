@@ -54,11 +54,13 @@ public class LaserBlock extends Block {
 
         float layer = Draw.z();
         Draw.z(layer-0.1f);
-        Draw.blend(Blending.additive);
+       // Draw.blend(Blending.additive);
         Drawf.laser(laserRegion, laserStartRegion, x1, y1, x2, y2, scl);
+        //Draw.blend();
         Draw.color();
+        //Draw.blend(Blending.additive);
         Drawf.laser(laserTopRegion, laserStartRegion, x1, y1, x2, y2, scl);
-        Draw.blend(Blending.normal);
+        //Draw.blend();
         Draw.z(layer);
     }
 

@@ -84,7 +84,9 @@ public class SvBlocks{
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
-            helicopterFactory, hydromechFactory, fortifiedPayloadConveyor, fortifiedPayloadRouter,
+            helicopterFabricator, hydromechFabricator,
+            helicopterRefabricator, hydromechRefabricator,
+            fortifiedPayloadConveyor, fortifiedPayloadRouter,
             //EXPLORATION
             buoy,tower,beacon,
             //STORAGE
@@ -165,11 +167,11 @@ public class SvBlocks{
         }};
 
         //payload
-        helicopterFactory = new UnitFactory("helicopter-factory") {{
+        helicopterFabricator = new UnitFactory("helicopter-factory") {{
             requirements(Category.units, atl(), with(iridium, 60, clay, 70));
 
             researchCost = with(iridium,400,clay,500);
-
+            regionSuffix = "-dark";
             consumeLiquid(argon,0.2f);
             configurable = false;
             plans = Seq.with(
@@ -179,9 +181,9 @@ public class SvBlocks{
             consumePower(1.2f);
         }};
 
-        hydromechFactory = new UnitFactory("hydromech-factory") {{
+        hydromechFabricator = new UnitFactory("hydromech-factory") {{
             requirements(Category.units, atl(), with(iridium, 60, clay, 70, chromium, 30));
-
+            regionSuffix = "-dark";
             researchCost = with(iridium,600,clay,600,chromium,120);
 
             consumeLiquid(helium,1.2f);
@@ -191,6 +193,34 @@ public class SvBlocks{
             );
             size = 3;
             consumePower(1f);
+        }};
+
+        helicopterRefabricator = new Reconstructor("helicopter-refabricator") {{
+            requirements(Category.units, atl(), with(iridium,100,clay,200,spaclanium,100));
+            regionSuffix = "-dark";
+            researchCost = with(iridium,1200,clay,1200,spaclanium,1670);
+            constructTime = 60f * 30f;
+            size = 3;
+            upgrades.addAll(
+                    new UnitType[]{lapetus,skath}
+            );
+            consumePower(2.5f);
+            consumeLiquid(argon, 3f / 60f);
+            consumeItems(with(iridium, 60, spaclanium,50));
+        }};
+
+        hydromechRefabricator = new Reconstructor("hydromech-refabricator") {{
+            requirements(Category.units, atl(), with(iridium,100,chromium,100,corallite,200));
+            regionSuffix = "-dark";
+            researchCost = with(iridium,1400,chromium,1000,corallite,1670);
+            constructTime = 60f * 30f;
+            size = 3;
+            upgrades.addAll(
+                    new UnitType[]{leeft,flagshi}
+            );
+            consumePower(2.5f);
+            consumeLiquid(helium, 3f / 60f);
+            consumeItems(with(iridium, 60, crude,50));
         }};
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
