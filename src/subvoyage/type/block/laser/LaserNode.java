@@ -155,6 +155,10 @@ public class LaserNode extends LaserBlock {
 
         public void reloadLinks() {
             int offset = size/2;
+            //put this in graph
+            //make it work properly with all laser blocks
+            //add variables that define the output and input of blocks
+            //just rewrite this
             lasers.graph.clearGraph(this);
             for(int i = 0; i < 4; i ++){
                 Point2 dir = Geometry.d4[i];
