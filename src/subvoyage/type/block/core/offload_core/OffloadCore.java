@@ -129,7 +129,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
             super.updateTile();
             if(rand == null) rand = new Rand(Point2.pack(tileX(),tileY())* 100L +(state.rules.sector == null ? 1 : state.rules.sector.id));
             if(nextUnit == null) selectNextUnit();
-            if(waveTimer > 0 && nextUnit != null) waveTimer--;
+            if(waveTimer > 0 && nextUnit != null) waveTimer-=Time.delta;
             else if(nextUnit != null) spawnWave();
             if(isUpgradeWave && Time.time % 10f <= Time.delta) {
                 Fx.shockwave.create(x,y,0,Pal.accent,new Object());

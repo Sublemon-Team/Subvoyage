@@ -78,7 +78,7 @@ public class SubvoyageMod extends Mod {
                     control.sound.stop();
                 }
                 if (!state.isPaused()) {
-                    vaporControl.update();
+                    //vaporControl.update();
                 }
             } else {
                 if(SvMusic.theAtlacian.isPlaying()) {
@@ -87,38 +87,15 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.run(Trigger.draw, () -> {
-            if(state.isGame()) {
-                Bits bits = vaporControl.getVapor();
-                if(bits != null) {
-                    Draw.z(VaporControl.layer);
-                    Draw.color(Pal.neoplasm1);
-                    for (int i = 0; i < bits.length(); i++) {
-                        boolean isVapor = bits.get(i);
-                        int x = i % world.width();
-                        int y = Math.floorDiv(i,world.height());
-                        if(isVapor) {
-                            Draw.alpha(0.95f);
-                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,10f,1f),
-                                    y*tilesize+Mathf.absin(Time.time+i+90f,10f,1f),tilesize);
-                            Draw.alpha(0.5f);
-                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,9f,1f),
-                                    y*tilesize+Mathf.absin(Time.time+i+90f,8f,1f),tilesize*1.5f);
-                            Draw.alpha(0.1f);
-                            Fill.circle(x*tilesize+Mathf.absin(Time.time+i,7f,1f),
-                                    y*tilesize+Mathf.absin(Time.time+i+90f,6f,1f),tilesize*2.5f);
-                        }
-                    }
-                    Draw.reset();
-                }
-            }
+
         });
 
         Events.on(EventType.FileTreeInitEvent.class, e ->
-        app.post(SvShaders::init)
+            app.post(SvShaders::init)
         );
 
         Events.on(EventType.DisposeEvent.class, e ->
-        SvShaders.dispose()
+            SvShaders.dispose()
         );
     }
 
