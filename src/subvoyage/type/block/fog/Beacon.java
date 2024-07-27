@@ -58,8 +58,7 @@ public class Beacon extends RepairTurret {
 
     @Override
     public boolean canPlaceOn(Tile tile, Team team, int rotation) {
-        return tile.floor() == Blocks.water || tile.block() == Blocks.water || tile.block() == Blocks.darksandWater ||
-                tile.floor() == Blocks.darksandWater;
+        return tile.floor().isLiquid;
     }
 
     public class BeaconBuild extends RepairPointBuild implements Ranged {
