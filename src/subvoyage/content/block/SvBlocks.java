@@ -1082,7 +1082,7 @@ public class SvBlocks{
         }};
 
         coreDecoder = new CoreDecoder("core-decoder") {{
-            requirements(Category.effect,atl(),with(iridium,400,chromium,300,quartzFiber,250));
+            requirements(Category.effect,atl(),with(iridium,150,chromium,150));
 
             researchCost = with(iridium,800,chromium,500,corallite,400);
 
