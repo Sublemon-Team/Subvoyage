@@ -214,7 +214,7 @@ public class SvBlocks{
             consumeLiquid(helium,1.2f);
             configurable = false;
             plans = Seq.with(
-                    new UnitPlan(leeft, 60f * 10, with(iridium, 20))
+                    new UnitPlan(leeft, 60f * 25, with(iridium, 20))
             );
             size = 3;
             consumePower(1f);

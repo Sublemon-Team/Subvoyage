@@ -73,7 +73,7 @@ public class LaserGraph {
                         len = finalJ;
                     }});
                     break;
-                }
+                } else if (other != null && (other.block.hasPower || other.block.hasItems || other.block.hasLiquids)) break;
             }
             //then find our suppliers
             for(int j = 1 + offset; j <= inputRange + offset; j++){
@@ -101,7 +101,7 @@ public class LaserGraph {
                         len = finalJ;
                     }});
                     break;
-                }
+                } else if (other != null && other.block.update) break;
             }
         }
         return links;
