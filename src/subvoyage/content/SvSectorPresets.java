@@ -1,6 +1,8 @@
 package subvoyage.content;
 
 import arc.struct.Seq;
+import mindustry.content.Planets;
+import mindustry.content.SectorPresets;
 import mindustry.type.*;
 
 import static subvoyage.content.SvPlanets.atlacian;
@@ -38,7 +40,6 @@ public class SvSectorPresets {
 
             rules = (r) -> {
                 r.attackMode = false;
-                r.loadout = Seq.with();
                 r.winWave = 20;
             };
         }};

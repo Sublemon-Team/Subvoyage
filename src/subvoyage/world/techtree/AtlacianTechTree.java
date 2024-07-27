@@ -200,7 +200,17 @@ public class AtlacianTechTree {
                 node(lapetus,() -> {
 
                 });
+                node(helicopterRefabricator,with(research(lapetus)),() -> {
+                    node(skath,() -> {
+
+                    });
+                });
                 node(hydromechFabricator,with(research(helium)),() -> {
+                    node(hydromechRefabricator,with(research(helicopterRefabricator),research(leeft)),() -> {
+                        node(flagshi,() -> {
+
+                        });
+                    });
                     node(leeft,() -> {
 
                     });

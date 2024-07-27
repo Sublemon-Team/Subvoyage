@@ -49,12 +49,10 @@ public class SvPlanets{
             ruleSetter = r -> {
                 r.waveTeam = Team.malis;
                 r.placeRangeCheck = false;
-                r.loadout = Seq.with();
                 r.enemyCoreBuildRadius = 300f;
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
-
             };
 
             iconColor = SvPal.atlacianIcon.cpy().lerp(SvPal.legartyte,0.5f);

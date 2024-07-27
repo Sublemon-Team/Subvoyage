@@ -346,6 +346,8 @@ public class SvUnits{
             accel = 0.25f;
             health = 1350f;
 
+            researchCostMultiplier = 0;
+
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 31f;
@@ -1157,6 +1159,7 @@ public class SvUnits{
             rotateSpeed = 8f;
             health = 3220;
             hitSize = 20f;
+            researchCostMultiplier = 0;
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
                         speed = 0.8f;
