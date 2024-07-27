@@ -1,5 +1,6 @@
 package subvoyage.content.block;
 
+import arc.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -29,29 +30,28 @@ import mindustry.world.blocks.units.*;
 import mindustry.world.consumers.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.*;
 import subvoyage.content.*;
 import subvoyage.content.other.*;
 import subvoyage.draw.block.*;
+import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
-import subvoyage.type.block.laser.LaserAmplificator;
-import subvoyage.type.block.laser.LaserNode;
-import subvoyage.type.block.laser.LaserSplitter;
-import subvoyage.type.block.laser_production.LaserGenerator;
-import subvoyage.type.block.production.*;
-import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.block.core.offload_core.*;
 import subvoyage.type.block.fog.*;
-import subvoyage.draw.part.*;
-import subvoyage.type.shoot.*;
+import subvoyage.type.block.laser.*;
+import subvoyage.type.block.laser_production.*;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
+import subvoyage.type.block.production.*;
+import subvoyage.type.block.production.crude_smelter.*;
+import subvoyage.type.shoot.*;
 
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
+import static subvoyage.content.SvItems.*;
 import static subvoyage.content.SvLiquids.*;
 import static subvoyage.content.SvUnits.*;
-import static subvoyage.content.SvItems.*;
 
 public class SvBlocks{
     
@@ -167,23 +167,33 @@ public class SvBlocks{
         }};
 
         //payload
-        helicopterFabricator = new UnitFactory("helicopter-factory") {{
-            requirements(Category.units, atl(), with(iridium, 60, clay, 70));
+        helicopterFabricator = new UnitFactory("helicopter-factory"){
+            {
+                requirements(Category.units, atl(), with(iridium, 60, clay, 70));
 
-            researchCost = with(iridium,400,clay,500);
-            regionSuffix = "-dark";
-            consumeLiquid(argon,0.2f);
-            configurable = false;
-            plans = Seq.with(
-                    new UnitPlan(lapetus, 60f * 25, with(iridium, 15))
-            );
-            size = 3;
-            consumePower(1.2f);
-        }};
+                researchCost = with(iridium, 400, clay, 500);
+                regionSuffix = "-fortified";
+                consumeLiquid(argon, 0.2f);
+                configurable = false;
+                plans = Seq.with(
+                new UnitPlan(lapetus, 60f * 25, with(iridium, 15))
+                );
+                size = 3;
+                consumePower(1.2f);
+            }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
 
         hydromechFabricator = new UnitFactory("hydromech-factory") {{
             requirements(Category.units, atl(), with(iridium, 60, clay, 70, chromium, 30));
-            regionSuffix = "-dark";
+            regionSuffix = "-fortified";
             researchCost = with(iridium,600,clay,600,chromium,120);
 
             consumeLiquid(helium,1.2f);
@@ -193,11 +203,20 @@ public class SvBlocks{
             );
             size = 3;
             consumePower(1f);
-        }};
+        }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
 
         helicopterRefabricator = new Reconstructor("helicopter-refabricator") {{
             requirements(Category.units, atl(), with(iridium,100,clay,200,spaclanium,100));
-            regionSuffix = "-dark";
+            regionSuffix = "-fortified";
             researchCost = with(iridium,1200,clay,1200,spaclanium,1670);
             constructTime = 60f * 30f;
             size = 3;
@@ -207,11 +226,21 @@ public class SvBlocks{
             consumePower(2.5f);
             consumeLiquid(argon, 3f / 60f);
             consumeItems(with(iridium, 60, spaclanium,50));
-        }};
+        }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
+
 
         hydromechRefabricator = new Reconstructor("hydromech-refabricator") {{
             requirements(Category.units, atl(), with(iridium,100,chromium,100,corallite,200));
-            regionSuffix = "-dark";
+            regionSuffix = "-fortified";
             researchCost = with(iridium,1400,chromium,1000,corallite,1670);
             constructTime = 60f * 30f;
             size = 3;
@@ -221,7 +250,17 @@ public class SvBlocks{
             consumePower(2.5f);
             consumeLiquid(helium, 3f / 60f);
             consumeItems(with(iridium, 60, crude,50));
-        }};
+        }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
+
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chromium, 10));
