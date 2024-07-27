@@ -42,7 +42,7 @@ public class SvPlanets{
             allowWaveSimulation = true;
             allowLaunchSchematics = false;
             //enemyCoreSpawnReplace = true;
-            allowLaunchLoadout = true;
+            allowLaunchLoadout = false;
 
             //doesn't play well with configs
             prebuildBase = true;

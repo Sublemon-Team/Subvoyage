@@ -344,7 +344,7 @@ public class SvUnits{
             speed = 1.3f;
             rotateSpeed = 3f;
             accel = 0.25f;
-            health = 2250f;
+            health = 1350f;
 
             engineOffset = -7.5f;
             engineSize = 0;
