@@ -135,6 +135,8 @@ public class SvBlocks{
             range = 4;
             size = 3;
             squareSprite = false;
+            outputRange = size+3;
+            setLaserOutputs(0);
             consumePower(1.3f);
         }};
 
@@ -145,6 +147,11 @@ public class SvBlocks{
             squareSprite = false;
             consumeLaserPower(3f);
             consumeLaser = false;
+            inputRange = range;
+            outputRange = range;
+            drawInputs = false;
+            setLaserOutputs(0);
+            setLaserInputs(1,2,3);
         }};
 
         laserSplitter = new LaserSplitter("laser-splitter") {{
@@ -154,6 +161,10 @@ public class SvBlocks{
             squareSprite = false;
             consumeLaserPower(3f);
             consumeLaser = false;
+            inputRange = 8;
+            outputRange = range;
+            setLaserOutputs(1,3);
+            setLaserInputs(2);
         }};
 
         laserAmplificator = new LaserAmplificator("laser-amplifier") {{
@@ -164,6 +175,10 @@ public class SvBlocks{
             consumePower(4f);
             consumeLaserPower(3f);
             consumeLaser = false;
+            inputRange = range;
+            outputRange = range;
+            setLaserOutputs(0);
+            setLaserInputs(1,2,3);
         }};
 
         //payload

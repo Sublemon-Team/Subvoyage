@@ -42,10 +42,6 @@ public class LaserAmplificator extends LaserNode {
                     lb.lasers.setPower(lasers.power());
                 }
             });
-            if(lastChange != world.tileChanges){
-                lastChange = world.tileChanges;
-                reloadLinks();
-            }
         }
     }
 

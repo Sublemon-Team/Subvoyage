@@ -81,162 +81,12 @@ public class LaserNode extends LaserBlock {
     public void drawPlace(int x, int y, int rotation, boolean valid){
         super.drawPlace(x, y, rotation, valid);
         Draw.rect(rotation < 2 ? topRegion1 : topRegion2, x*tilesize, y*tilesize, (float)(rotation * 90));
-        int offset = size/2;
-        boolean foundConsumer = false;
-        for(int i = 0; i < 4; i ++){
-            Point2 dir = Geometry.d4[i];
-            for(int j = 1 + offset; j <= range + offset; j++){
-                var other = world.build(x + j * dir.x, y + j * dir.y);
-                if(other != null && other.isInsulated()){
-                    break;
-                }
-                if(other != null && other.block instanceof LaserBlock lb){
-                    if((other.rotation+2)%4 == rotation && ((i+2)%4 == other.rotation || i == rotation)) {
-                        break;
-                    }
-                    LaserBlockBuilding build = ((LaserBlockBuilding) other);
-                    if((i+2)%4 == other.rotation && build.isSupplier()) {
-                        //supplier
-                        int dx = dir.x, dy = dir.y;
-                        if(!(other.block instanceof LaserGenerator g && j-offset > g.range)) {
-                            Drawf.square(x * tilesize, y * tilesize, size / 2f * tilesize, 0, Pal.accent);
-                            Drawf.dashLine(Pal.heal,
-                                    x * tilesize + dx * size / 2f * tilesize,
-                                    y * tilesize + dy * size / 2f * tilesize,
-                                    other.x - dx * other.block.size / 2f * tilesize,
-                                    other.y - dy * other.block.size / 2f * tilesize);
-                            Drawf.square(other.x, other.y, other.block.size / 2f * tilesize, 0, Pal.heal);
-                        }
-                    }
-                    if(i == rotation && build.isConsumer()) {
-                        //consumer
-                        int dx = dir.x, dy = dir.y;
-                        Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.heal);
-                        Drawf.dashLine(Pal.techBlue,
-                                x * tilesize + dx*size/2f*tilesize,
-                                y * tilesize + dy*size/2f*tilesize,
-                                other.x - dx*other.block.size/2f*tilesize,
-                                other.y - dy*other.block.size/2f*tilesize);
-                        Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.techBlue);
-                        foundConsumer = true;
-                    }
-                    break;
-                }
-            }
-        }
-        Point2 dir = Geometry.d4[rotation];
-        int dx = dir.x, dy = dir.y;
-        if(!foundConsumer)
-            Drawf.dashLine(Pal.techBlue,
-                    x * tilesize + dx*size/2f*tilesize,
-                    y * tilesize + dy*size/2f*tilesize,
-                    x * tilesize - dx*size/2f*tilesize + dir.x*range*tilesize,
-                    y * tilesize- dy*size/2f*tilesize + dir.y*range*tilesize);
-        Drawf.arrow(
-                x * tilesize + dx*size/2f*tilesize,
-                y * tilesize + dy*size/2f*tilesize,
-                x * tilesize + dx*size*tilesize,
-                y * tilesize + dy*size*tilesize,
-                size/4f*tilesize,
-                size/4f*tilesize,
-                Pal.techBlue
-                );
     }
 
 
     public class LaserNodeBuild extends LaserBlockBuilding {
 
         public int lastChange = -2;
-        @Override
-        public void created() {
-            super.created();
-            reloadLinks();
-        }
-
-        public void reloadLinks() {
-            int offset = size/2;
-            //put this in graph
-            //make it work properly with all laser blocks
-            //add variables that define the output and input of blocks
-            //just rewrite this
-            lasers.graph.clearGraph(this);
-            for(int i = 0; i < 4; i ++){
-                Point2 dir = Geometry.d4[i];
-                for(int j = 1 + offset; j <= range + offset; j++){
-                    var other = world.build(tile.x + j * dir.x, tile.y + j * dir.y);
-                    if(other != null && other.isInsulated()){
-                        break;
-                    }
-                    if(other != null && other.block instanceof LaserBlock lb){
-                        if(other.block instanceof LaserSplitter) {
-                            int leftRot = (other.rotation+3)%4;
-                            int rightRot = (other.rotation+1)%4;
-                            int backRot = (other.rotation+2)%4;
-                            if((rotation == leftRot || rotation == rightRot) && ((i == rightRot || i == leftRot) || (i+2)%4 == backRot)) {
-                                Fx.coreLaunchConstruct.create(other.x,other.y,0,Pal.accent,new Object());
-                                Fx.unitEnvKill.create(other.x,other.y,0,Pal.accent,new Object());
-                                Fx.coreLaunchConstruct.create(x,y,0,Pal.accent,new Object());
-                                Fx.unitEnvKill.create(x,y,0,Pal.accent,new Object());
-                                Sounds.plasmadrop.play(1f,2.5f,0f);
-                                System.out.println("node");
-                                break;
-                            }
-                            if(i == rightRot || i == leftRot) {
-                                if(i == rightRot) {
-                                    if(rotation == i) break;
-                                } else {
-                                    if(rotation == i) break;
-                                }
-                                LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
-                                lbuild.lasers.graph.addConsumer(this);
-                                lbuild.lasers.graph.suppliers.remove(this);
-                                lasers.graph.addSupplier(lbuild);
-                                lasers.graph.consumers.remove(lbuild);
-                            }
-                            if((i+2)%4 == backRot) {
-                                LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
-                                lbuild.lasers.graph.addSupplier(this);
-                                lbuild.lasers.graph.consumers.remove(this);
-                                lasers.graph.addConsumer(lbuild);
-                                lasers.graph.suppliers.remove(lbuild);
-                            }
-                            break;
-                        }
-                        if((other.rotation+2)%4 == rotation && ((i+2)%4 == other.rotation || i == rotation)) {
-                            Fx.coreLaunchConstruct.create(other.x,other.y,0,Pal.accent,new Object());
-                            Fx.unitEnvKill.create(other.x,other.y,0,Pal.accent,new Object());
-                            Fx.coreLaunchConstruct.create(x,y,0,Pal.accent,new Object());
-                            Fx.unitEnvKill.create(x,y,0,Pal.accent,new Object());
-                            Sounds.plasmadrop.play(1f,2.5f,0f);
-                            break;
-                        }
-                        if((i+2)%4 == other.rotation) {
-                            if(!(other.block instanceof LaserGenerator g && j-offset > g.range)) {
-                                LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
-                                lbuild.lasers.graph.addConsumer(this);
-                                lbuild.lasers.graph.suppliers.remove(this);
-                                lasers.graph.addSupplier(lbuild);
-                                lasers.graph.consumers.remove(lbuild);
-                            }
-                        }
-                        if(i == rotation) {
-                            LaserBlockBuilding lbuild = (LaserBlockBuilding) other;
-                            lbuild.lasers.graph.addSupplier(this);
-                            lbuild.lasers.graph.consumers.remove(this);
-                            lasers.graph.addConsumer(lbuild);
-                            lasers.graph.suppliers.remove(lbuild);
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void placed() {
-            super.placed();
-            reloadLinks();
-        }
 
         @Override
         public boolean isSupplier() {
@@ -253,10 +103,6 @@ public class LaserNode extends LaserBlock {
         public void updateTile() {
             super.updateTile();
             if(lasers == null) return;
-            if(lastChange != world.tileChanges){
-                lastChange = world.tileChanges;
-                reloadLinks();
-            }
             if(lasers.graph.suppliers.size > 1 /*&& false*/) {
                 for (Building supplier : lasers.graph.suppliers) {
                     Fx.coreLaunchConstruct.create(supplier.x,supplier.y,0,Pal.accent,new Object());

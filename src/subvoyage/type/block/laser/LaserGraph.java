@@ -1,16 +1,133 @@
 package subvoyage.type.block.laser;
 
+import arc.math.geom.Geometry;
+import arc.math.geom.Point2;
 import arc.struct.Seq;
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.content.Fx;
 import mindustry.gen.Building;
+import mindustry.gen.Sounds;
+import mindustry.graphics.Pal;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import subvoyage.type.block.laser_production.LaserGenerator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static mindustry.Vars.world;
 
 public class LaserGraph {
-    public Seq<Building> consumers = new Seq<>(false, 16, Building.class);
-    public Seq<Building> suppliers = new Seq<>(false, 16, Building.class);
-    public Seq<Building> all = new Seq<>(false,16,Building.class);
+    public Seq<Building> consumers = new Seq<>(false, 4, Building.class);
+    public Seq<Building> suppliers = new Seq<>(false, 4, Building.class);
+    public Seq<Building> all = new Seq<>(false,4,Building.class);
+    public int lastChange = -2;
+
+
+    public static List<LaserLink> getLinks(int x, int y, int rotation, Block block) {
+        List<LaserLink> links = new ArrayList<>();
+        int sides = 4;
+        LaserBlock selfBlock = (LaserBlock) block;
+        Tile tile = world.tile(x,y);
+        if(tile == null) return links;
+        int offset = selfBlock.size/2;
+        int outputRange = selfBlock.outputRange;
+        int inputRange = selfBlock.inputRange;
+
+        List<Integer> selfInputs = new ArrayList<>();
+        List<Integer> selfOutputs = new ArrayList<>();
+        for (int input : selfBlock.inputs) selfInputs.add((input+rotation)%4);
+        for (int output : selfBlock.outputs) selfOutputs.add((output+rotation)%4);
+
+
+        for (int i = 0; i < sides; i++) {
+            Point2 dir = Geometry.d4[i];
+            int invI = (i+2)%4;
+            //first find our consumers
+            for(int j = 1 + offset; j <= outputRange + offset; j++){
+                var other = world.build(tile.x + j * dir.x, tile.y + j * dir.y);
+                if(other != null && other.isInsulated()){
+                    break;
+                }
+                if(other != null && dir.y != 0 && other.tileX() != tile.x+j*dir.x) break;
+                if(other != null && dir.x != 0 && other.tileY() != tile.y+j*dir.y) break;
+                if(other != null && other.block instanceof LaserBlock lb){
+                    int[] otherInputs = lb.inputs;
+                    List<Integer> consInputs = new ArrayList<>();
+                    for (int input : otherInputs) consInputs.add((input+other.rotation)%4);
+
+                    if(!selfOutputs.contains(i)) break; //skip, it's not an output side
+                    if(!consInputs.contains(invI)) break; //skip, consumer doesn't have an input side on our side
+                    if(j > lb.inputRange+offset) break; //skip, we can't reach this block
+                    LaserBlock.LaserBlockBuilding otherBuild = (LaserBlock.LaserBlockBuilding) other;
+                    int finalI = i;
+                    int finalJ = j;
+                    links.add(new LaserLink() {{
+                        object = other;
+                        isSupplier = false;
+                        isConsumer = otherBuild.isConsumer();
+                        side = finalI;
+                        len = finalJ;
+                    }});
+                    break;
+                }
+            }
+            //then find our suppliers
+            for(int j = 1 + offset; j <= inputRange + offset; j++){
+                var other = world.build(tile.x + j * dir.x, tile.y + j * dir.y);
+                if(other != null && other.isInsulated()){
+                    break;
+                }
+                if(other != null && dir.y != 0 && other.tileX() != tile.x+j*dir.x) break;
+                if(other != null && dir.x != 0 && other.tileY() != tile.y+j*dir.y) break;
+                if(other != null && other.block instanceof LaserBlock lb){
+                    int[] otherOutputs = lb.outputs;
+                    List<Integer> consOutputs = new ArrayList<>();
+                    for (int output : otherOutputs) consOutputs.add((output+other.rotation)%4);
+
+                    if(!selfInputs.contains(i)) break; //skip, it's not an input side
+                    if(!consOutputs.contains(invI)) break; //skip, supplier doesn't have output on our side
+                    if(j > lb.outputRange+offset) break; //skip, it can't reach us
+                    LaserBlock.LaserBlockBuilding otherBuild = (LaserBlock.LaserBlockBuilding) other;
+                    int finalI = i;
+                    int finalJ = j;
+                    links.add(new LaserLink() {{
+                        object = other;
+                        isSupplier = otherBuild.isSupplier();
+                        side = finalI;
+                        len = finalJ;
+                    }});
+                    break;
+                }
+            }
+        }
+        return links;
+    }
+
+
+    public List<LaserLink> getLinks(Building building) {
+        return getLinks(building.tileX(),building.tileY(),building.rotation,building.block);
+    }
+
+    public void reloadLinks(Building building) {
+        clearGraph(building);
+        List<LaserLink> newLinks = getLinks(building);
+        for (LaserLink link : newLinks) {
+            Building obj = link.object;
+            LaserGraph objGraph = ((LaserBlock.LaserBlockBuilding) obj).lasers.graph;
+            if(link.isConsumer) {
+                addConsumer(obj); removeSupplier(obj);
+                objGraph.addSupplier(building); objGraph.removeConsumer(building);
+            }
+            if(link.isSupplier) {
+                addSupplier(obj); removeConsumer(obj);
+                objGraph.addConsumer(building); objGraph.removeSupplier(building);
+            }
+        }
+    }
 
     public void addSupplier(Building building) {
         if(!(building instanceof LaserBlock.LaserBlockBuilding laserBuild)) return;
@@ -30,6 +147,12 @@ public class LaserGraph {
     }
 
     public void update(Building build) {
+        if(lastChange != world.tileChanges){
+            lastChange = world.tileChanges;
+            reloadLinks(build);
+
+        }
+
         ArrayList<Building> toRemove = new ArrayList<>();
         consumers.each(cons -> {
             if(Vars.world.tile(cons.tileX(),cons.tileY()).block() == Blocks.air) toRemove.add(cons);

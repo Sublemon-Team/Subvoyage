@@ -57,53 +57,6 @@ public class LaserGenerator extends LaserBlock {
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
         Draw.rect(rotation < 2 ? topRegion1 : topRegion2, x*tilesize, y*tilesize, (float)(rotation * 90));
-        int offset = size/2;
-        boolean foundConsumer = false;
-        for(int i = 0; i < 4; i ++){
-            Point2 dir = Geometry.d4[i];
-            for(int j = 1 + offset; j <= range + offset; j++){
-                var other = world.build(x + j * dir.x, y + j * dir.y);
-                if(other != null && other.isInsulated()){
-                    break;
-                }
-                if(other != null && other.block instanceof LaserBlock lb){
-                    if((other.rotation+2)%4 == rotation && ((i+2)%4 == other.rotation || i == rotation)) {
-                        break;
-                    }
-                    LaserBlockBuilding build = ((LaserBlockBuilding) other);
-                    if(i == rotation && build.isConsumer()) {
-                        //consumer
-                        int dx = dir.x, dy = dir.y;
-                        Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.heal);
-                        Drawf.dashLine(Pal.techBlue,
-                                x * tilesize + dx*size/2f*tilesize,
-                                y * tilesize + dy*size/2f*tilesize,
-                                other.x - dx*other.block.size/2f*tilesize,
-                                other.y - dy*other.block.size/2f*tilesize);
-                        Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.techBlue);
-                        foundConsumer = true;
-                    }
-                    break;
-                }
-            }
-        }
-        Point2 dir = Geometry.d4[rotation];
-        int dx = dir.x, dy = dir.y;
-        if(!foundConsumer)
-            Drawf.dashLine(Pal.techBlue,
-                    x * tilesize + dx*size/2f*tilesize,
-                    y * tilesize + dy*size/2f*tilesize,
-                    x * tilesize - dx*size/2f*tilesize + dir.x*range*tilesize,
-                    y * tilesize - dy*size/2f*tilesize + dir.y*range*tilesize);
-        Drawf.arrow(
-                x * tilesize  + dx*size/2f*tilesize,
-                y * tilesize + dy*size/2f*tilesize,
-                x * tilesize + dx*size*tilesize,
-                y * tilesize + dy*size*tilesize,
-                size/4f*tilesize,
-                size/4f*tilesize,
-                Pal.techBlue
-        );
     }
 
     public class LaserGeneratorBuild extends LaserBlockBuilding {
@@ -138,14 +91,6 @@ public class LaserGenerator extends LaserBlock {
                 Draw.alpha(1f);
                 Draw.blend(Blending.normal);
                 Draw.color();
-            }
-        }
-
-        @Override
-        public void updateTile() {
-            super.updateTile();
-            if(lastChange != world.tileChanges){
-                lastChange = world.tileChanges;
             }
         }
     }

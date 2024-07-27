@@ -1,28 +1,25 @@
 package subvoyage.type.block.laser;
 
 import arc.Core;
-import arc.graphics.Blending;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.Mathf;
+import arc.math.geom.Geometry;
+import arc.math.geom.Point2;
 import arc.util.Nullable;
 import arc.util.Strings;
 import mindustry.content.Fx;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import mindustry.graphics.Shaders;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
-import mindustry.world.consumers.ConsumePower;
-import subvoyage.content.other.SvPal;
 import subvoyage.content.other.SvStat;
 
-import static arc.Core.graphics;
-import static arc.Core.settings;
-import static mindustry.Vars.renderer;
+import java.util.ArrayList;
+import java.util.List;
+
 import static mindustry.Vars.tilesize;
 
 public class LaserBlock extends Block {
@@ -39,12 +36,92 @@ public class LaserBlock extends Block {
     public float outputLaserPower = 0f;
     public static float maxLaserPower = 300f;
 
+    public int[] inputs = new int[0];
+    public int[] outputs = new int[0];
+    public int outputRange = 0;
+    public int inputRange = 0;
+
+    public boolean drawInputs = true, drawOutputs = true;
+
+
     public LaserBlock(String name) {
         super(name);
         destructible = true;
         update = true;
         solid = true;
         sync = true;
+    }
+
+    @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+        List<LaserLink> links = LaserGraph.getLinks(x,y,rotation,this);
+        LaserLink[] consLinks = new LaserLink[4];
+        LaserLink[] suppLinks = new LaserLink[4];
+        for (LaserLink link : links) {
+            Building other = link.object;
+            if(link.isConsumer) {
+                Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.techBlue);
+                consLinks[link.side] = link;
+            }
+            if(link.isSupplier) {
+                Drawf.square(other.x,other.y,other.block.size/2f*tilesize,0,Pal.heal);
+                suppLinks[link.side] = link;
+            }
+        }
+        List<Integer> selfInputs = new ArrayList<>();
+        List<Integer> selfOutputs = new ArrayList<>();
+        for (int input : inputs) selfInputs.add((input+rotation)%4);
+        for (int output : outputs) selfOutputs.add((output+rotation)%4);
+        for (int i = 0; i < 4; i++) {
+            Point2 dir = Geometry.d4[i];
+            int dx = dir.x, dy = dir.y;
+
+            float inputLen = inputRange;
+            float outputLen = outputRange;
+            LaserLink consLink = consLinks[i];
+            LaserLink suppLink = suppLinks[i];
+
+            if(!selfInputs.contains(i) || !drawInputs) inputLen = 0;
+            if(!selfOutputs.contains(i) || !drawOutputs) outputLen = 0;
+            if(consLink != null)
+                outputLen = consLink.len - consLink.object.block.size/2f;
+            if(suppLink != null)
+                inputLen = suppLink.len - suppLink.object.block.size/2f;
+
+            Drawf.dashLine(Pal.techBlue,
+                    x * tilesize + dx*size/2f*tilesize,
+                    y * tilesize + dy*size/2f*tilesize,
+                    x * tilesize + dx*size/2f*tilesize + outputLen * tilesize * dx,
+                    y * tilesize + dy*size/2f*tilesize + outputLen * tilesize * dy);
+            Drawf.dashLine(Pal.heal,
+                    x * tilesize + dx*size/2f*tilesize,
+                    y * tilesize + dy*size/2f*tilesize,
+                    x * tilesize + dx*size/2f*tilesize + inputLen * tilesize * dx,
+                    y * tilesize + dy*size/2f*tilesize + inputLen * tilesize * dy);
+
+            if(selfOutputs.contains(i) && drawOutputs) {
+                Drawf.arrow(
+                        x * tilesize  + dx*size/2f*tilesize,
+                        y * tilesize + dy*size/2f*tilesize,
+                        x * tilesize + dx*size*tilesize,
+                        y * tilesize + dy*size*tilesize,
+                        size/4f*tilesize,
+                        size/4f*tilesize,
+                        Pal.techBlue);
+            }
+
+            if(selfInputs.contains(i) && drawInputs) {
+                Drawf.arrow(
+                        x * tilesize  + dx*size*tilesize,
+                        y * tilesize + dy*size*tilesize,
+                        x * tilesize - dx*size/2f*tilesize,
+                        y * tilesize - dy*size/2f*tilesize,
+                        size/4f*tilesize,
+                        size/4f*tilesize,
+                        Pal.heal);
+            }
+        }
     }
 
     public void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl){
@@ -99,6 +176,8 @@ public class LaserBlock extends Block {
     public void consumeLaserPower(float power) {
         consumeLaserPower = power;
     }
+    public void setLaserInputs(int ...inputs) {this.inputs = inputs;}
+    public void setLaserOutputs(int ...outputs) {this.outputs = outputs;}
 
     public class LaserBlockBuilding extends Building {
         @Nullable
