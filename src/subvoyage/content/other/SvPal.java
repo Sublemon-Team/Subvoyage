@@ -30,6 +30,7 @@ public class SvPal {
     toxicExplosion = Color.valueOf("e7e789"),
     energyLaser = Color.valueOf("D9F2FF"),
     polygen = Color.valueOf("8997FF"),
+    hardWater = Color.valueOf("5a78b3"),
     argon = Color.valueOf("FF8C99"),
     propane = Color.valueOf("E2992D"),
     helium = Color.valueOf("C1D0CA"),

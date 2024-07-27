@@ -2,12 +2,12 @@ package subvoyage.content;
 
 import arc.graphics.*;
 import mindustry.type.*;
-import subvoyage.content.other.SvPal;
+import subvoyage.content.other.*;
 
 public class SvLiquids{
     public static Liquid
             //liquid
-            polygen,
+    polygen, hardWater,
             //gas
             argon, propane, nitrogen, helium
     ;
@@ -18,6 +18,12 @@ public class SvLiquids{
             heatCapacity = 0.35f;
             boilPoint = 0.5f;
             gasColor = Color.grays(0.9f);
+            flammability = 0f;
+            coolant = false;
+            moveThroughBlocks = true;
+        }};
+
+        hardWater = new Liquid("liquid-hard-water", SvPal.hardWater){{
             flammability = 0f;
             coolant = false;
             moveThroughBlocks = true;

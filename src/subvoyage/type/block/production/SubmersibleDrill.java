@@ -5,7 +5,6 @@ import arc.audio.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
-import mindustry.content.*;
 import mindustry.entities.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -28,7 +27,6 @@ public class SubmersibleDrill extends Drill{
         hardnessDrillMultiplier = 0f;
         liquidBoostIntensity = 1f;
         drillEffectRnd = 0f;
-        drillEffect = Fx.shockwave;
         ambientSoundVolume = 0.18f;
         ambientSound = Sounds.drillCharge;
     }

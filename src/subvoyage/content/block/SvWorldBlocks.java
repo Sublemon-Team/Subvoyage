@@ -6,8 +6,8 @@ import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.meta.*;
-import subvoyage.content.SvItems;
-import subvoyage.draw.visual.SvShaders;
+import subvoyage.content.*;
+import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.decoration.TreeBlock;
 import subvoyage.type.block.environment.vapor.*;
 
@@ -40,14 +40,14 @@ public class SvWorldBlocks{
                 variants = 0;
                 status = StatusEffects.wet;
                 statusDuration = 90f;
-                liquidDrop = Liquids.water;
+                liquidDrop = SvLiquids.hardWater;
                 isLiquid = true;
                 cacheLayer = SvShaders.hardWaterLayer;
                 albedo = 0.9f;
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
-                liquidMultiplier = 0f;
+                liquidMultiplier = 0.5f;
                 attributes.set(SvAttribute.hardMetals, 1f);
             }
 

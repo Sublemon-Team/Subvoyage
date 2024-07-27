@@ -75,7 +75,7 @@ public class SvBlocks{
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
-            waterDiffuser,waterSifter, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
+            waterDiffuser, waterSifter, distiller, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
@@ -276,7 +276,6 @@ public class SvBlocks{
             }
         };
 
-
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chromium, 10));
             moveTime = 32f;
@@ -296,7 +295,7 @@ public class SvBlocks{
         }};
 
         //drills
-        submersibleDrill = new SubmersibleDrill("submersible-drill") {{
+        submersibleDrill = new Drill("submersible-drill"){{
             requirements(Category.production,atl(), with(corallite, 50, spaclanium, 10));
             tier = 2;
             hardnessDrillMultiplier = 0.9f;
@@ -304,7 +303,6 @@ public class SvBlocks{
             size = 2;
             itemCapacity = 20;
             blockedItem = Items.sand;
-            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             fogRadius = 2;
             squareSprite = false;
 
@@ -313,9 +311,8 @@ public class SvBlocks{
             consumeLiquid(water, 30/60f);
         }};
 
-        featherDrill = new SubmersibleDrill("feather-drill") {{
+        featherDrill = new Drill("feather-drill"){{
             requirements(Category.production,atl(), with(corallite, 100, chromium, 50, iridium, 100, clay, 200));
-
             researchCost = with(corallite,500,chromium,200,iridium,300,clay,400);
 
             tier = 3;
@@ -324,19 +321,15 @@ public class SvBlocks{
             size = 3;
             itemCapacity = 30;
             blockedItem = Items.sand;
-            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             fogRadius = 3;
             squareSprite = false;
-            scaleTop = false;
 
             consumeLiquid(argon, 0.2f);
             consumeCoolant(1.2f);
         }};
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
             requirements(Category.production,atl(), with(corallite, 200, spaclanium, 100, iridium, 100));
-
             researchCost = with(corallite,1000,spaclanium,600,iridium,400);
-
             attribute = SvAttribute.crude;
 
             minEfficiency = 9f - 0.0001f;
@@ -354,15 +347,9 @@ public class SvBlocks{
 
             boostScale = 1f / 9f;
 
-            craftEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
+            craftEffect = new MultiEffect(Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             drawer = new DrawMulti(
             new DrawRegion("-bottom"),
-            new DrawGlowRegion(){{
-                alpha = 0.75f;
-                glowScale = 6f;
-                color = SvPal.heatGlow;
-            }},
-
             new DrawBlurSpin("-rotator", 4),
             new DrawDefault(),
             new DrawRegion("-top")
@@ -1119,6 +1106,7 @@ public class SvBlocks{
 
             consumePower(0.15f);
             consumeLiquid(polygen,0.3f);
+            squareSprite = false;
 
             size = 1;
             reload = 200f;
@@ -1135,6 +1123,7 @@ public class SvBlocks{
 
             consumePower(0.3f);
             consumeLiquid(polygen,0.5f);
+            squareSprite = false;
 
             size = 2;
             reload = 100f;
@@ -1223,25 +1212,10 @@ public class SvBlocks{
             researchCost = with(spaclanium,300,clay,320,iridium,400);
 
             size = 2;
-
             squareSprite = false;
             envDisabled |= Env.scorching;
             pumpAmount =20f / 60f;
             consumePower(2.5f/60f);
-
-            drawer = new DrawMulti(
-            new DrawPistons() {{
-                lenOffset = -4.25f;
-                sideOffset = Mathf.PI / 2f;
-                angleOffset = 90.0F;
-                sides = 2;
-
-                sinMag = 2.75f;
-                sinScl = 5f;
-            }},
-            new DrawDefault(),
-            new DrawPumpLiquid()
-            );
         }};
 
         clayConduit = new Conduit("clay-conduit") {{
@@ -1331,7 +1305,7 @@ public class SvBlocks{
             drawer = new DrawMulti(
                 new DrawDefault(),
                 new DrawLiquidRegion(water),
-                new WarmupDrawRegion("-top", true)
+            new DrawRegion("-top")
             );
         }};
 
@@ -1345,10 +1319,6 @@ public class SvBlocks{
             range = 10;
             transferTime = 40;
             squareSprite = false;
-            drawer = new DrawMulti(
-            new DrawDefault(),
-            new DrawEnergyLinksGlow()
-            );
         }};
 
         energyDistributor = new EnergyCross("energy-distributor") {{
@@ -1801,6 +1771,37 @@ public class SvBlocks{
             hasPower = true;
         }};
 
+        distiller = new GenericCrafter("distiller"){{
+            requirements(Category.crafting, atl(), with(spaclanium, 100, corallite, 60));
+            outputLiquid = new LiquidStack(water, 0.25f);
+            craftTime = 140f;
+
+            researchCost = with(spaclanium, 700, corallite, 800);
+            itemCapacity = 30;
+            size = 2;
+
+            squareSprite = false;
+            hasItems = true;
+            hasLiquids = true;
+            envDisabled |= Env.scorching;
+            drawer = new DrawMulti(
+            new DrawRegion("-bottom"),
+            new DrawLiquidTile(hardWater, 2f),
+            new DrawBubbles(Color.valueOf("7693e3")){{
+                sides = 10;
+                recurrence = 3f;
+                spread = 6;
+                radius = 1.5f;
+                amount = 20;
+            }},
+            new DrawBlurSpin("-rotator", 6f),
+            new DrawRegion("-top"),
+            new DrawDefault()
+            );
+
+            consumeLiquid(hardWater, 0.7f);
+        }};
+
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting,atl(), with(spaclanium,100,corallite,60));
             outputLiquid = new LiquidStack(SvLiquids.polygen, 1);
@@ -1915,8 +1916,7 @@ public class SvBlocks{
                 particleRad = 5.2F;
                 particleStroke = 0.8F;
                 particleLen = 2.25F;
-            }},
-            new DrawGlowRegion()
+            }}
             );
         }};
 
@@ -1936,22 +1936,7 @@ public class SvBlocks{
 
             drawer = new DrawMulti(
                     new DrawDefault(),
-                    new DrawLiquidRegion(propane),
-                    new DrawHeatGlow(),
-                    new DrawArcSmelt(){{
-                        flameColor = SvPal.propane;
-                        midColor = SvPal.propane;
-                        flameRad = 1.0F;
-                        circleSpace = 1.0F;
-                        flameRadiusScl = 3.0F;
-                        flameRadiusMag = 0.3F;
-                        circleStroke = 1.25F;
-                        particles = 16;
-                        particleLife = 30.0F;
-                        particleRad = 5.2F;
-                        particleStroke = 0.8F;
-                        particleLen = 2.25F;
-                    }}
+            new DrawHeatGlow()
             );
 
             outputLiquid = new LiquidStack(propane,1.5f);
@@ -1964,7 +1949,7 @@ public class SvBlocks{
 
             itemCapacity = 20;
             size = 3;
-            craftEffect = Fx.smokeCloud;
+            craftEffect = SvFx.smokeCloud;
             craftTime = 30f;
             envDisabled |= Env.scorching;
 

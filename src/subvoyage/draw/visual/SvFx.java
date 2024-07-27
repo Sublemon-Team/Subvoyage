@@ -1,7 +1,7 @@
 package subvoyage.draw.visual;
 
 import arc.*;
-import arc.func.Func;
+import arc.func.*;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -35,6 +35,14 @@ public class SvFx{
     public static final Effect
 
     none = new Effect(0, 0f, e -> {
+    }),
+
+    smokeCloud = new Effect(25, e -> {
+        randLenVectors(e.id, e.fin(), 15, 15f, (x, y, fin, fout) -> {
+            color(Color.gray);
+            alpha((0.5f - Math.abs(fin - 0.5f)) * 2f);
+            Fill.circle(e.x + x, e.y + y, 0.5f + fout * 4f);
+        });
     }),
 
     aweExplosion = new Effect(60f, 160f, e -> {
