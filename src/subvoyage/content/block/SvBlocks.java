@@ -40,16 +40,14 @@ import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
 import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser_blocks.*;
-import subvoyage.type.block.laser_blocks.node.LaserAmplificator;
-import subvoyage.type.block.laser_blocks.node.LaserNode;
-import subvoyage.type.block.laser_blocks.node.LaserSplitter;
-import subvoyage.type.block.laser_blocks.unit.LaserReconstructor;
+import subvoyage.type.block.laser_blocks.node.*;
+import subvoyage.type.block.laser_blocks.unit.*;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.shoot.*;
-import subvoyage.type.shoot.bullet.ContiniousLaserRangedBulletType;
+import subvoyage.type.shoot.bullet.*;
 
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
@@ -1294,7 +1292,7 @@ public class SvBlocks{
             researchCost = with(corallite,3);
 
             envDisabled |= Env.scorching;
-            botColor = SvPal.clayDarkish;
+            botColor = SvPal.veryDarkViolet;
 
             health = 45;
         }};
@@ -1305,7 +1303,7 @@ public class SvBlocks{
             researchCost = with(clay,400,chromium,100);
 
             envDisabled |= Env.scorching;
-            botColor = SvPal.clayDarkish;
+            botColor = SvPal.veryDarkViolet;
             liquidCapacity = 16f;
             liquidPressure = 1.225f;
 
@@ -1332,8 +1330,6 @@ public class SvBlocks{
             liquidCapacity = 20f;
             underBullets = true;
             solid = false;
-
-
 
             envDisabled |= Env.scorching;
         }};

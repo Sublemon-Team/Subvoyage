@@ -24,6 +24,7 @@ public class SvPal {
     turretHeatGlow = Color.valueOf("ffffc4"),
     tugSheetGlow = Color.valueOf("bee8d7"),
     clayDarkish = Color.valueOf("54333c"),
+    veryDarkViolet = Color.valueOf("1b1a1d"),
     argonFlame = Color.valueOf("bd4453"),
     argonMidSmelt = Color.valueOf("ff8c99"),
     quartzWeave = Color.valueOf("fde8e2"),
