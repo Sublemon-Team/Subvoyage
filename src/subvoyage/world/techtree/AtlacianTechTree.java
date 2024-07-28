@@ -49,6 +49,7 @@ public class AtlacianTechTree {
                 node(ductRouter,() -> {
                     node(ductDistributor);
                     node(ductSorter,() -> {
+                        node(ductInvSorter);
                         node(ductOverflow);
                         node(ductUnderflow);
                     });
