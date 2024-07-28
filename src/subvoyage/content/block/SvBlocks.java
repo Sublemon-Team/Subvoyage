@@ -197,6 +197,7 @@ public class SvBlocks{
             requirements(Category.logic,atl(),with(iridium,200,chromium,200,spaclanium,200,corallite,100));
             consumeLaserPower(300);
             minLaserEfficiency = 0.3f;
+            size = 3;
             inputRange = 16;
             drawInputs = false;
             setLaserInputs(1,2,3);
