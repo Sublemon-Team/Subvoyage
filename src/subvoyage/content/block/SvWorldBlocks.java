@@ -69,14 +69,14 @@ public class SvWorldBlocks{
                 variants = 0;
                 status = StatusEffects.wet;
                 statusDuration = 90f;
-                liquidDrop = Liquids.water;
+                liquidDrop = SvLiquids.hardWater;
+                liquidMultiplier = 0.45f;
                 isLiquid = true;
                 cacheLayer = SvShaders.hardWaterLayer;
                 albedo = 0.9f;
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
-                liquidMultiplier = 0f;
                 attributes.set(SvAttribute.hardMetals, 1f);
             }
 
