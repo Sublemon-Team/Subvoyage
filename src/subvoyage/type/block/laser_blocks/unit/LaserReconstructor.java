@@ -328,11 +328,6 @@ public class LaserReconstructor extends LaserUnitBlock {
                     lb.lasers.setPower(lasers.power());
                 }
             });
-            System.out.println("---");
-            System.out.println(lasers.smoothEfficiency);
-            System.out.println(lasers.power());
-            System.out.println(this.efficiency);
-            System.out.println(rawLaserEfficiency());
             boolean valid = false;
 
             if(payload != null){
