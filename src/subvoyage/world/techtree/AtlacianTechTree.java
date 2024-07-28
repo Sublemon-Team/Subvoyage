@@ -76,7 +76,7 @@ public class AtlacianTechTree {
                node(tectonicDrill, () -> {
 
                });
-               node(featherDrill,with(research(argonCentrifuge)), () -> {
+               node(featherDrill,with(research(argonCentrifuge),onsector(rapidEncounter)), () -> {
 
                });
             });
@@ -148,11 +148,6 @@ public class AtlacianTechTree {
                     node(energyDistributor,() -> {
 
                     });
-                    node(accumulator,() -> {
-                        node(largeAccumulator,() -> {
-
-                        });
-                    });
                 });
                 node(windTurbine,with(research(accumulator)), () -> {
                     node(hydrocarbonicGenerator,with(research(propanePyrolyzer)),() -> {
@@ -172,7 +167,7 @@ public class AtlacianTechTree {
             node(whirl, () -> {
                 node(rupture,with(onsector(gustyRidges)), () -> {
                     node(awe,() -> {
-                        node(resonance,with(research(burden)), () -> {
+                        node(resonance,with(research(burden),onsector(rapidEncounter)), () -> {
                             node(cascade,() -> {
 
                             });
@@ -202,7 +197,7 @@ public class AtlacianTechTree {
                 node(lapetus,() -> {
 
                 });
-                node(helicopterRefabricator,with(research(lapetus)),() -> {
+                node(helicopterRefabricator,with(research(lapetus),onsector(rapidEncounter)),() -> {
                     node(skath,() -> {
 
                     });
@@ -212,9 +207,30 @@ public class AtlacianTechTree {
                         node(flagshi,() -> {
 
                         });
+                        node(laserRefabricator,with(research(laserProjector)),() -> {
+                            node(charon,() -> {
+
+                            });
+                            node(vanguard,() -> {
+
+                            });
+                        });
                     });
                     node(leeft,() -> {
 
+                    });
+                });
+            });
+
+            node(laserProjector,with(),() -> {
+                node(laserNode,with(),() -> {
+                    node(laserAmplificator,with(),() -> {
+                        node(laserSplitter,with(),() -> {
+
+                        });
+                        node(laserBlaster,with(),() -> {
+
+                        });
                     });
                 });
             });
@@ -268,6 +284,9 @@ public class AtlacianTechTree {
                     });
                 });
                 node(water,with(produce(water)),() -> {
+                    nodeProduce(hardWater,() -> {
+
+                    });
                     node(polygen,with(produce(polygen)),() -> {
 
                     });

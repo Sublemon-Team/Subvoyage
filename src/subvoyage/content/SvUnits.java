@@ -536,6 +536,8 @@ public class SvUnits{
             accel = 0.45f;
             health = 4220f;
 
+            researchCostMultiplier = 0f;
+
             hitSize = 20f;
 
             engineOffset = -7.5f;
@@ -1372,6 +1374,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 5f;
+            researchCostMultiplier = 0f;
             health = 6220;
             hitSize = 20f;
 
