@@ -323,6 +323,7 @@ public class SvBlocks{
             constructTime = 60f * 40f;
             size = 5;
             inputRange = 16;
+            maxSuppliers = 1;
             minLaserEfficiency = 0.95f;
             setLaserInputs(1,2,3);
 
