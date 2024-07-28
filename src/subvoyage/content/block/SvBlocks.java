@@ -39,13 +39,17 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
 import subvoyage.type.block.fog.*;
-import subvoyage.type.block.laser.*;
-import subvoyage.type.block.laser_production.*;
+import subvoyage.type.block.laser_blocks.*;
+import subvoyage.type.block.laser_blocks.node.LaserAmplificator;
+import subvoyage.type.block.laser_blocks.node.LaserNode;
+import subvoyage.type.block.laser_blocks.node.LaserSplitter;
+import subvoyage.type.block.laser_blocks.unit.LaserReconstructor;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.shoot.*;
+import subvoyage.type.shoot.bullet.ContiniousLaserRangedBulletType;
 
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
@@ -79,13 +83,14 @@ public class SvBlocks{
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
-            laserProjector, laserNode, laserAmplificator, laserSplitter,
+            laserProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
             //TRANSPORTATION
             duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
             helicopterFabricator, hydromechFabricator,
             helicopterRefabricator, hydromechRefabricator,
+            laserRefabricator,
             fortifiedPayloadConveyor, fortifiedPayloadRouter,
             //EXPLORATION
             buoy,tower,beacon,
@@ -133,6 +138,7 @@ public class SvBlocks{
             requirements(Category.logic,atl(),with(iridium,300,chromium,200,spaclanium,150));
             outputLaserPower = 10f;
             range = 4;
+            maxSuppliers = 0;
             size = 3;
             squareSprite = false;
             outputRange = size+3;
@@ -144,6 +150,7 @@ public class SvBlocks{
             requirements(Category.logic,atl(),with(iridium,30,chromium,30));
             size = 3;
             range = 16;
+            maxSuppliers = 1;
             squareSprite = false;
             consumeLaserPower(3f);
             consumeLaser = false;
@@ -158,6 +165,8 @@ public class SvBlocks{
             requirements(Category.logic,atl(),with(iridium,50,chromium,40,spaclanium,10));
             size = 3;
             range = 16;
+            maxSuppliers = 1;
+
             squareSprite = false;
             consumeLaserPower(3f);
             consumeLaser = false;
@@ -172,6 +181,9 @@ public class SvBlocks{
             size = 3;
             range = 16;
             squareSprite = false;
+
+            maxSuppliers = 3;
+
             consumePower(4f);
             consumeLaserPower(3f);
             consumeLaser = false;
@@ -179,6 +191,35 @@ public class SvBlocks{
             outputRange = range;
             setLaserOutputs(0);
             setLaserInputs(1,2,3);
+        }};
+
+        laserBlaster = new LaserBlaster("laser-blaster") {{
+            requirements(Category.logic,atl(),with(iridium,200,chromium,200,spaclanium,200,corallite,100));
+            consumeLaserPower(300);
+            minLaserEfficiency = 0.3f;
+            inputRange = 16;
+            drawInputs = false;
+            setLaserInputs(1,2,3);
+
+            maxSuppliers = 1;
+
+            bulletType = new ContiniousLaserRangedBulletType(15){{
+                maxRange = range = length = 15*60f;
+                hitEffect = Fx.hitMeltdown;
+                hitColor = Pal.meltdownHit;
+                status = StatusEffects.melting;
+                drawSize = 420f;
+
+                damageInterval = 1f;
+
+                lifetime = shootDuration = 120f;
+                shootDelay = 4f;
+
+                incendChance = 0.4f;
+                incendSpread = 5f;
+                incendAmount = 1;
+                ammoMultiplier = 1f;
+            }};
         }};
 
         //payload
@@ -275,6 +316,31 @@ public class SvBlocks{
                 inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
             }
         };
+
+        laserRefabricator = new LaserReconstructor("laser-refabricator") {{
+            requirements(Category.units, atl(), with(iridium,500,chromium,400,corallite,300,spaclanium,300));
+            regionSuffix = "-fortified";
+            researchCost = with(iridium,3000,chromium,3000,corallite,4000,spaclanium,3500);
+            constructTime = 60f * 40f;
+            size = 5;
+            inputRange = 16;
+            minLaserEfficiency = 0.95f;
+            setLaserInputs(1,2,3);
+
+            upgrades.addAll(
+                    new UnitType[]{flagshi, vanguard},
+                    new UnitType[]{skath, charon}
+            );
+
+            hasLiquids = true;
+            liquidCapacity = 5*60f*2f;
+
+            consumeLaserPower(10f);
+            consumePower(5f);
+            consumeLiquid(helium, 5f / 60f);
+            consumeLiquid(argon, 5f / 60f);
+            consumeItems(with(iridium, 60, chromium, 20, crude,20));
+        }};
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chromium, 10));

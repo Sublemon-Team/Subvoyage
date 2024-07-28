@@ -1,25 +1,16 @@
-package subvoyage.type.block.laser_production;
+package subvoyage.type.block.laser_blocks;
 
 import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.geom.Geometry;
-import arc.math.geom.Point2;
-import mindustry.content.Fx;
 import mindustry.gen.Building;
-import mindustry.gen.Sounds;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Pal;
 import subvoyage.content.other.SvPal;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
 
 public class LaserGenerator extends LaserBlock {
     public TextureRegion laserRegion;

@@ -1,35 +1,24 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser_blocks.node;
 
 import arc.Core;
-import arc.flabel.effects.GradientEffect;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.geom.Geometry;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
-import arc.math.geom.Vec2;
 import arc.struct.Seq;
-import arc.util.Eachable;
 import arc.util.Nullable;
 import arc.util.Tmp;
 import mindustry.content.Fx;
-import mindustry.entities.units.BuildPlan;
-import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
-import mindustry.ui.dialogs.EffectsDialog;
 import mindustry.world.Tile;
-import mindustry.world.blocks.distribution.Duct;
 import subvoyage.content.other.SvPal;
-import subvoyage.type.block.laser_production.LaserGenerator;
-import subvoyage.type.block.power.node.EnergyCross;
+import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.*;
 

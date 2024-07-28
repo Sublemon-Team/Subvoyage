@@ -16,6 +16,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
+import mindustry.world.meta.BlockGroup;
 import subvoyage.content.other.SvStat;
 
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class LaserBlock extends Block {
     public int[] outputs = new int[0];
     public int outputRange = 0;
     public int inputRange = 0;
+    public int maxSuppliers = 4;
 
     public boolean drawInputs = true, drawOutputs = true;
 
@@ -52,9 +54,9 @@ public class LaserBlock extends Block {
         update = true;
         quickRotate = true;
         solid = true;
+        group = BlockGroup.logic;
         sync = true;
     }
-
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
@@ -168,7 +170,7 @@ public class LaserBlock extends Block {
                 return new Bar(
                         () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(lb.lasers.power(), 1)),
                         () -> LaserUtil.getLaserColor(lb.lasers.power()),
-                        () -> 1f);
+                        lb::laserEfficiency);
             } else return new Bar(
                     () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(0f, 1)),
                     () -> LaserUtil.getLaserColor(0f),

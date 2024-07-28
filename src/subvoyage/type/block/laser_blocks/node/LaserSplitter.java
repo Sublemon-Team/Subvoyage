@@ -1,12 +1,10 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser_blocks.node;
 
 import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Mathf;
-import arc.math.geom.Geometry;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
 import arc.struct.Seq;
@@ -15,13 +13,13 @@ import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.gen.Building;
 import mindustry.gen.Sounds;
-import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.world.Tile;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.other.SvPal;
-import subvoyage.type.block.laser_production.LaserGenerator;
+import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;

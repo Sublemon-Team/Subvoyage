@@ -1,4 +1,4 @@
-package subvoyage.type.unit.bullet;
+package subvoyage.type.shoot.bullet;
 
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;

@@ -11,11 +11,8 @@ import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
 import mindustry.world.Tile;
-import subvoyage.type.block.laser_production.LaserGenerator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static mindustry.Vars.world;
@@ -25,6 +22,7 @@ public class LaserGraph {
     public Seq<Building> suppliers = new Seq<>(false, 4, Building.class);
     public Seq<Building> all = new Seq<>(false,4,Building.class);
     public int lastChange = -2;
+    public int lastRotation = -2;
 
 
     public static List<LaserLink> getLinks(int x, int y, int rotation, Block block) {
@@ -147,10 +145,21 @@ public class LaserGraph {
     }
 
     public void update(Building build) {
-        if(lastChange != world.tileChanges){
-            lastChange = world.tileChanges;
-            reloadLinks(build);
+        if(suppliers.size > ((LaserBlock) build.block).maxSuppliers) {
+            for (Building supplier : suppliers) {
+                Fx.coreLaunchConstruct.create(supplier.x,supplier.y,0, Pal.accent,new Object());
+                Fx.unitEnvKill.create(supplier.x,supplier.y,0,Pal.accent,new Object());
+            }
+            Fx.coreLaunchConstruct.create(build.x,build.y,0,Pal.accent,new Object());
+            Fx.unitEnvKill.create(build.x,build.y,0,Pal.accent,new Object());
+            Sounds.plasmadrop.play(1f,2f,0f);
+            removeSuppliers(build);
+        }
 
+        if(lastChange != world.tileChanges || lastRotation != build.rotation){
+            lastChange = world.tileChanges;
+            lastRotation = build.rotation;
+            reloadLinks(build);
         }
 
         ArrayList<Building> toRemove = new ArrayList<>();

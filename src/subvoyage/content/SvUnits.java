@@ -21,7 +21,7 @@ import subvoyage.content.other.SvPal;
 import subvoyage.content.sound.SvSounds;
 import subvoyage.draw.visual.SvFx;
 import subvoyage.type.ai.*;
-import subvoyage.type.unit.bullet.*;
+import subvoyage.type.shoot.bullet.*;
 import subvoyage.type.unit.type.*;
 import subvoyage.type.unit.weapons.*;
 import subvoyage.draw.part.*;
