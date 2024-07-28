@@ -108,7 +108,7 @@ public class SvBlocks{
             midTierUnits = new UnitType[] {skath,flagshi};
             highTierUnits = new UnitType[] {charon,callees,vanguard,squadron};
 
-            unitType = marine;
+            unitType = shift;
         }
 
             @Override
@@ -122,8 +122,6 @@ public class SvBlocks{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
             health = 4000;
             size = 4;
-
-            unitType = marine;
         }
 
             @Override
@@ -372,6 +370,8 @@ public class SvBlocks{
             blockedItem = Items.sand;
             fogRadius = 2;
             squareSprite = false;
+            updateEffect = Fx.none;
+            drillEffect = Fx.none;
 
             researchCost = with(corallite,200,spaclanium,100);
 
@@ -1400,13 +1400,12 @@ public class SvBlocks{
         }};
 
         accumulator = new Battery("accumulator"){{
-            requirements(Category.power,atl(), with(iridium, 5, spaclanium, 20));
+            requirements(Category.power,atl(BuildVisibility.editorOnly), with(iridium, 5, spaclanium, 20));
             consumePowerBuffered(4000f);
 
             researchCost = with(iridium,80,spaclanium,100);
 
             baseExplosiveness = 1f;
-            drawer = new DrawMulti(new DrawDefault(), new DrawEnergyGlow());
         }};
 
         largeAccumulator = new Battery("large-accumulator"){{
@@ -1511,7 +1510,7 @@ public class SvBlocks{
                 scaledHealth = 55;
                 squareSprite = false;
             }
-            
+
             @Override
             protected TextureRegion[] icons() {
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
@@ -1578,7 +1577,7 @@ public class SvBlocks{
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
-            unitType = marine;
+            unitType = shift;
             health = 4000;
             itemCapacity = 3000;
             size = 4;
@@ -1603,7 +1602,7 @@ public class SvBlocks{
 
             researchCost = with(spaclanium,3000,corallite,3000,chromium,1500,iridium,1500);
 
-            unitType = marine;
+            unitType = distort;
             health = 12000;
             itemCapacity = 8000;
             size = 5;
@@ -1627,7 +1626,7 @@ public class SvBlocks{
             requirements(Category.effect,atl(), with(spaclanium,3500,corallite,2200,chromium,1300,iridium,1000,quartzFiber,1000,tugSheet,800));
 
             researchCost = with(spaclanium,8000,corallite,8000,chromium,5000,iridium,3000,quartzFiber,1000,tugSheet,1000);
-            unitType = marine;
+            unitType = commute;
             health = 24000;
             itemCapacity = 12000;
             size = 6;
@@ -1683,7 +1682,7 @@ public class SvBlocks{
             researchCost = with(corallite,16);
             envDisabled |= Env.scorching;
         }};
-        
+
         ductSorter = new Sorter("duct-sorter"){{
             requirements(Category.distribution,atl(), with(corallite, 2, spaclanium, 2));
             researchCost = with(corallite,100,spaclanium,350);
@@ -1801,7 +1800,7 @@ public class SvBlocks{
             hasItems = true;
             hasLiquids = true;
             squareSprite = false;
-            
+
             drawer = new DrawMulti(
             new DrawDefault(),
             new DrawBurner(),

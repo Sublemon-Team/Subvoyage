@@ -40,7 +40,8 @@ import static arc.Core.atlas;
 public class SvUnits{
     public static UnitType
     // core
-    marine,cryptal,
+    shift,distort,commute,
+    cryptal,
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
@@ -54,7 +55,7 @@ public class SvUnits{
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
         //core
-        marine = new AtlacianUnitType("marine"){{
+        shift = new AtlacianUnitType("shift"){{
             aiController = BuilderAI::new;
             constructor = UnitEntity::create;
             isEnemy = false;
@@ -84,39 +85,11 @@ public class SvUnits{
             hitSize = 8f;
 
             setEnginesMirror(
-                    new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f)
+                    new UnitEngine(19 / 4f, -24 / 4f, 2.5f, 315f),
+                    new UnitEngine(22 / 4f, 20 / 4f, 2.5f, -315f)
             );
 
             ammoType = new PowerAmmoType(900);
-            weapons.add(new Weapon(name + "-weapon"){{
-                top = false;
-                y = -1.25f;
-                x = 6.5f;
-                reload = 15f;
-                ejectEffect = Fx.casing1;
-                recoil = 2f;
-                shootSound = Sounds.bolt;
-                velocityRnd = 0f;
-                inaccuracy = 0f;
-                alternate = true;
-                fogRadius = 0;
-                lightRadius = 8;
-                bullet = new LaserBulletType(10){{
-                    colors = new Color[]{Pal.accent.cpy().a(0.4f), Pal.accent, Color.white};
-                    //TODO merge
-                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
-
-                    buildingDamageMultiplier = 0f;
-                    hitEffect = Fx.hitLancer;
-                    hitSize = 4;
-                    lifetime = 16f;
-                    drawSize = 400f;
-                    collidesAir = false;
-                    length = 40f;
-                    ammoMultiplier = 1f;
-                    pierceCap = 4;
-                }};
-            }});
 
             weapons.add(new RepairBeamWeapon(){{
                 widthSinMag = 0.11f;
@@ -134,8 +107,8 @@ public class SvUnits{
 
                 targetUnits = false;
                 targetBuildings = true;
-                autoTarget = true;
-                controllable =false;
+                autoTarget = false;
+                controllable = true;
                 laserColor = Pal.accent;
                 healColor = Pal.accent;
 
@@ -144,6 +117,133 @@ public class SvUnits{
                 }};
             }});
         }};
+
+        distort = new AtlacianUnitType("distort"){{
+            aiController = BuilderAI::new;
+            constructor = UnitEntity::create;
+            isEnemy = false;
+            coreUnitDock = true;
+            lowAltitude = true;
+            flying = true;
+
+            targetPriority = -2;
+            targetable = false;
+            hittable = false;
+
+            mineWalls = true;
+            mineFloor = true;
+
+            itemCapacity = 60;
+            mineSpeed = 10f;
+            mineTier = 2;
+            buildSpeed = 2f;
+            drag = 0.05f;
+            speed = 5.6f;
+            rotateSpeed = 20f;
+            accel = 0.1f;
+            fogRadius = 0f;
+            health = 600f;
+            engineOffset = 6.5f;
+            engineSize = 0;
+            hitSize = 10f;
+
+            setEnginesMirror(
+                    new UnitEngine(20 / 4f, -28 / 4f, 2.5f, 315f),
+                    new UnitEngine(24 / 4f, 12 / 4f, 2.5f, -315f)
+            );
+
+            ammoType = new PowerAmmoType(900);
+
+            weapons.add(new RepairBeamWeapon(){{
+                widthSinMag = 0.11f;
+                reload = 20f;
+                x = 0f;
+                y = 6.5f;
+                rotate = false;
+                shootY = 0f;
+                beamWidth = 0.7f;
+                repairSpeed = 3.3f;
+                fractionRepairSpeed = 0.06f;
+                aimDst = 0f;
+                shootCone = 15f;
+                mirror = false;
+
+                targetUnits = false;
+                targetBuildings = true;
+                autoTarget = false;
+                controllable = true;
+                laserColor = Pal.accent;
+                healColor = Pal.accent;
+
+                bullet = new BulletType(){{
+                    maxRange = 60f;
+                }};
+            }});
+        }};
+
+        commute = new AtlacianUnitType("commute"){{
+            aiController = BuilderAI::new;
+            constructor = UnitEntity::create;
+            isEnemy = false;
+            coreUnitDock = true;
+            lowAltitude = true;
+            flying = true;
+
+            targetPriority = -2;
+            targetable = false;
+            hittable = false;
+
+            mineWalls = true;
+            mineFloor = true;
+
+            itemCapacity = 90;
+            mineSpeed = 10f;
+            mineTier = 2;
+            buildSpeed = 3f;
+            drag = 0.05f;
+            speed = 6f;
+            rotateSpeed = 20f;
+            accel = 0.1f;
+            fogRadius = 0f;
+            health = 600f;
+            engineOffset = 6.5f;
+            engineSize = 0;
+            hitSize = 10f;
+
+            setEnginesMirror(
+                    new UnitEngine(30 / 4f, -12 / 4f, 3f, 315f),
+                    new UnitEngine(20 / 4f, -36 / 4f, 3f, 315f)
+            );
+
+            ammoType = new PowerAmmoType(900);
+
+            weapons.add(new RepairBeamWeapon(){{
+                widthSinMag = 0.11f;
+                reload = 20f;
+                x = 2f;
+                y = 6.5f;
+                rotate = false;
+                shootY = 0f;
+                beamWidth = 0.7f;
+                repairSpeed = 3.3f;
+                fractionRepairSpeed = 0.06f;
+                aimDst = 0f;
+                shootCone = 15f;
+                mirror = true;
+
+                targetUnits = true;
+                targetBuildings = true;
+                autoTarget = false;
+                controllable = true;
+                laserColor = Pal.accent;
+                healColor = Pal.accent;
+
+                bullet = new BulletType(){{
+                    maxRange = 90f;
+                }};
+            }});
+        }};
+
         cryptal = new AtlacianUnitType("cryptal") {{
             constructor = UnitEntity::create;
             playerControllable = false;

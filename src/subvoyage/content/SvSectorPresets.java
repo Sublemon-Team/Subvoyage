@@ -8,7 +8,7 @@ import mindustry.type.*;
 import static subvoyage.content.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset divingPoint, gustyRidges, noxiousTarn;
+    public static SectorPreset divingPoint, gustyRidges, noxiousTarn, rapidEncounter;
 
     public static void load() {
 
@@ -52,5 +52,14 @@ public class SvSectorPresets {
                 r.enemyCoreBuildRadius = 400f;
             };
         }};
+
+        /*rapidEncounter = new SectorPreset("rapidEncounter",atlacian,60) {{
+            difficulty = 4;
+            captureWave = 0;
+            rules = (r) -> {
+                r.attackMode = true;
+                r.enemyCoreBuildRadius = 450f;
+            };
+        }};*/
     }
 }
