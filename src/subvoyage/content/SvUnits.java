@@ -536,9 +536,10 @@ public class SvUnits{
             accel = 0.45f;
             health = 4220f;
 
+            hitSize = 21f;
+
             engineOffset = -7.5f;
             engineSize = 0;
-            hitSize = 32f;
             RotatorRegionPart copter = new RotatorRegionPart(){{
                     layer = Layer.flyingUnitLow;
                     xScl = 2f;
@@ -1372,7 +1373,7 @@ public class SvUnits{
             drag = 0.14f;
             rotateSpeed = 5f;
             health = 6220;
-            hitSize = 20f;
+            hitSize = 21f;
 
             waveTrailX = 8f;
             waveTrailY = -8f;

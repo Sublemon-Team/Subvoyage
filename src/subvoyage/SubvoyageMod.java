@@ -1,6 +1,7 @@
 package subvoyage;
 
 import arc.*;
+import arc.files.Fi;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
@@ -10,6 +11,7 @@ import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.mod.*;
+import mindustry.type.Sector;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;

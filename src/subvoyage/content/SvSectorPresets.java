@@ -53,13 +53,13 @@ public class SvSectorPresets {
             };
         }};
 
-        /*rapidEncounter = new SectorPreset("rapidEncounter",atlacian,60) {{
+        rapidEncounter = new SectorPreset("rapidEncounter",atlacian,2) {{
             difficulty = 4;
             captureWave = 0;
             rules = (r) -> {
                 r.attackMode = true;
                 r.enemyCoreBuildRadius = 450f;
             };
-        }};*/
+        }};
     }
 }
