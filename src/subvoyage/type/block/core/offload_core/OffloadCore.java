@@ -68,6 +68,9 @@ public class OffloadCore extends CoreBlock implements IOffload {
         int unitTier = 0;
         float smoothTier = 0;
         float shieldCooldown = 0f;
+
+        int minutes,seconds;
+
         Rand rand = null;
         UnitType nextUnit = null;
 
@@ -129,7 +132,11 @@ public class OffloadCore extends CoreBlock implements IOffload {
             super.updateTile();
             if(rand == null) rand = new Rand(Point2.pack(tileX(),tileY())* 100L +(state.rules.sector == null ? 1 : state.rules.sector.id));
             if(nextUnit == null) selectNextUnit();
-            if(waveTimer > 0 && nextUnit != null) waveTimer-=Time.delta;
+            if(waveTimer > 0 && nextUnit != null) {
+                waveTimer-=Time.delta;
+                minutes = (int) (waveTimer/60/60);
+                seconds = (int) (waveTimer/60)%60;
+            }
             else if(nextUnit != null) spawnWave();
             if(isUpgradeWave && Time.time % 10f <= Time.delta) {
                 Fx.shockwave.create(x,y,0,Pal.accent,new Object());
@@ -169,8 +176,6 @@ public class OffloadCore extends CoreBlock implements IOffload {
 
         private void drawWaveCountdown() {
             Draw.z(Layer.blockOver);
-            int minutes = (int) (waveTimer/60/60);
-            int seconds = (int) (waveTimer/60)%60;
             String m,se;
             m = minutes+""; se = seconds < 10 ? "0"+seconds : seconds+"";
             float width = drawPlaceText(String.format("%s:%s", m,se), tileX(), tileY(), false);
