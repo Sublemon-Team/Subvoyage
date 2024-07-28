@@ -79,13 +79,13 @@ public class SvBlocks{
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
-            waterDiffuser, waterSifter, distiller, lowTierPump, centrifugalPump, clayConduit, highPressureConduit, conduitRouter, conduitBridge,
+            waterDiffuser, waterSifter, distiller, lowTierPump, centrifugalPump, fortifiedConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
             laserProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
             //TRANSPORTATION
-            duct,highPressureDuct,ductRouter,ductBridge,ductSorter, ductUnderflow, ductOverflow, ductDistributor,
+            duct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
             helicopterFabricator, hydromechFabricator,
@@ -378,7 +378,7 @@ public class SvBlocks{
 
             researchCost = with(corallite,200,spaclanium,100);
 
-            consumeLiquid(water, 30/60f);
+            consumeLiquid(water, 5/60f);
         }};
 
         featherDrill = new Drill("feather-drill"){{
@@ -394,8 +394,8 @@ public class SvBlocks{
             fogRadius = 3;
             squareSprite = false;
 
-            consumeLiquid(argon, 0.2f);
-            consumeCoolant(1.2f);
+            consumeLiquid(argon, 2f/60f);
+            consumeCoolant(4f/60f).optional = true;
         }};
         tectonicDrill = new AttributeCrafter("tectonic-drill") {{
             requirements(Category.production,atl(), with(corallite, 200, spaclanium, 100, iridium, 100));
@@ -1288,10 +1288,10 @@ public class SvBlocks{
             consumePower(2.5f/60f);
         }};
 
-        clayConduit = new Conduit("clay-conduit") {{
-            requirements(Category.liquid,atl(), with(clay, 1));
+        fortifiedConduit = new Conduit("clay-conduit") {{
+            requirements(Category.liquid,atl(), with(corallite, 2));
 
-            researchCost = with(clay,3);
+            researchCost = with(corallite,3);
 
             envDisabled |= Env.scorching;
             botColor = SvPal.clayDarkish;
@@ -1316,7 +1316,7 @@ public class SvBlocks{
             requirements(Category.liquid,atl(), with(corallite, 4, clay, 8));
 
             researchCost = with(corallite,80,clay,40);
-            ((Conduit) clayConduit).rotBridgeReplacement = this;
+            ((Conduit) fortifiedConduit).rotBridgeReplacement = this;
             ((Conduit) highPressureConduit).rotBridgeReplacement = this;
             range = 4;
             hasPower = false;
@@ -1338,27 +1338,24 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
-        waterDiffuser = new Separator("water-diffuser") {{
-            requirements(Category.liquid,atl(), with(spaclanium, 30, corallite, 10));
+        waterDiffuser = new Diffuser("water-diffuser") {{
+            requirements(Category.liquid,atl(), with(spaclanium, 10));
             size = 2;
-            craftTime = 60f;
+            craftTime = 30f;
             itemCapacity = 50;
 
             researchCost = with(spaclanium,3,corallite,1);
 
             squareSprite = false;
-            drawer = new DrawMulti(
-            new DrawDefault(),
-            new DrawLiquidRegion(water)
-            );
+
             consumeLiquid(water, 6/60f);
             envDisabled |= Env.scorching;
-            results = with(
-                    spaclanium,3,
-                    corallite,3,
-                    fineSand,2,
-                    sulfur,1
-            );
+            results = new Item[] {
+                    spaclanium,spaclanium,
+                    corallite,corallite,
+                    sulfur,
+                    fineSand
+            };
         }};
 
         waterSifter = new WaterSifter("water-sifter") {{
@@ -1693,6 +1690,14 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
+        ductInvSorter = new Sorter("duct-inverted-sorter"){{
+            requirements(Category.distribution,atl(), with(corallite, 2, spaclanium, 2));
+            researchCost = with(corallite,100,spaclanium,350);
+            buildCostMultiplier = 3f;
+            invert = true;
+            envDisabled |= Env.scorching;
+        }};
+
         ductDistributor = new Router("duct-distributor"){{
             requirements(Category.distribution,atl(), with(corallite, 4, spaclanium, 4));
             researchCost = with(corallite,320,spaclanium,70);
@@ -1712,6 +1717,14 @@ public class SvBlocks{
             researchCost = with(corallite,300,spaclanium,300);
             buildCostMultiplier = 3f;
             invert = true;
+        }};
+
+        incinerator = new Incinerator("incinerator") {{
+            requirements(Category.distribution, with(corallite,5,spaclanium,10));
+            health = 90;
+            envEnabled |= Env.space;
+            buildCostMultiplier = 0.8f;
+            consumePower(3f/60f);
         }};
 
         /*
@@ -1788,7 +1801,7 @@ public class SvBlocks{
             itemCapacity = 3;
             size = 2;
             envDisabled |= Env.scorching;
-            consumeLiquid(water,1);
+            consumeLiquid(water,8/60f);
             consumeItem(fineSand, 1);
         }};
 
@@ -1842,7 +1855,7 @@ public class SvBlocks{
 
         distiller = new GenericCrafter("distiller"){{
             requirements(Category.crafting, atl(), with(spaclanium, 100, corallite, 60));
-            outputLiquid = new LiquidStack(water, 0.25f);
+            outputLiquid = new LiquidStack(water, 6/60f);
             craftTime = 140f;
 
             researchCost = with(spaclanium, 700, corallite, 800);
@@ -1868,7 +1881,7 @@ public class SvBlocks{
             new DrawDefault()
             );
 
-            consumeLiquid(hardWater, 0.7f);
+            consumeLiquid(hardWater, 8/60f);
         }};
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
@@ -1906,7 +1919,7 @@ public class SvBlocks{
             size = 3;
 
             regionRotated1 = 3;
-            outputLiquids = LiquidStack.with(SvLiquids.polygen, 2f, nitrogen, .4f);
+            outputLiquids = LiquidStack.with(SvLiquids.polygen, 10/60f, nitrogen, 12/60f);
             liquidOutputDirections = new int[]{1, 3};
 
             rotate = true;
@@ -1924,7 +1937,7 @@ public class SvBlocks{
                     new DrawLiquidOutputs()
             );
 
-            consumeLiquid(water,0.5f);
+            consumeLiquid(water,12/60f);
             consumeItem(corallite, 1);
             consumePower(0.8f);
         }};

@@ -92,7 +92,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(clayConduit, () -> {
+                node(fortifiedConduit, () -> {
                     node(highPressureConduit,with(research(liquidContainer)),() -> {
 
                     });
@@ -253,7 +253,7 @@ public class AtlacianTechTree {
             });
 
             node(divingPoint, () -> {
-                node(gustyRidges,with(sector(divingPoint),research(clayConduit),research(conduitRouter)),() -> {
+                node(gustyRidges,with(sector(divingPoint),research(fortifiedConduit),research(conduitRouter)),() -> {
                     node(noxiousTarn,with(sector(gustyRidges),research(spaclaniumHydrolyzer),research(energyDock),research(energyDistributor)),() -> {
                         node(rapidEncounter,with(sector(noxiousTarn),research(distiller)),() -> {
 
@@ -339,7 +339,7 @@ public class AtlacianTechTree {
                     node(waterSifter);
                     node(waterMetallizer);
                 });
-                node(clayConduit,() -> {
+                node(fortifiedConduit,() -> {
                     node(conduitRouter);
                     node(conduitBridge);
                 });
