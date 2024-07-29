@@ -39,13 +39,20 @@ public class SvFx{
 
     none = new Effect(0, 0f, e -> {
     }),
+    rocketLandDust = new Effect(100f, e -> {
+        color(e.color, e.fout(0.1f)*e.color.a);
+        rand.setSeed(e.id);
+        Tmp.v1.trns(e.rotation, e.finpow() * 90f * rand.random(0.2f, 1f));
+        Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, 8f * rand.random(0.6f, 1f) * e.fout(0.2f));
+    }).layer(Layer.groundUnit + 1f),
+
 
     payloadLaunchPadRocketLaunch = new Effect(60f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
         Draw.alpha(e.foutpowdown());
         Draw.scl(1f+e.finpow(),1f+e.finpow());
         Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fout() > 0.75f) Fx.coreLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray,new Object());
+        if(e.fout() > 0.75f) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
         if(e.fout() > 0.97f) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
     }),
     payloadLaunchPadRocketLand = new Effect(60f,e -> {
@@ -53,7 +60,7 @@ public class SvFx{
         Draw.alpha(e.finpowdown());
         Draw.scl(1f+e.foutpowdown(),1f+e.foutpowdown());
         Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fin() > 0.75f) Fx.coreLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray,new Object());
+        if(e.fin() > 0.75f) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
         if(e.fin() > 0.97f) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
     }),
 

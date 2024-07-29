@@ -2,6 +2,7 @@ package subvoyage;
 
 import arc.*;
 import arc.files.Fi;
+import arc.freetype.FreeTypeFontGenerator;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
@@ -12,6 +13,9 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.mod.*;
 import mindustry.type.Sector;
+import mindustry.ui.Fonts;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatCat;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
