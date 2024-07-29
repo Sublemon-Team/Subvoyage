@@ -537,10 +537,7 @@ public class SvBlocks{
                         trailWidth = 3f;
                         trailLength = 5;
 
-                        homingPower = 0.08f;
-                        homingRange = 50f;
-
-                        status = StatusEffects.blasted;
+                        status = StatusEffects.electrified;
                         statusDuration = 60f;
 
                         ammoMultiplier = 4f;
@@ -548,6 +545,61 @@ public class SvBlocks{
                         lightningDamage = 6;
                         lightning = 2;
                         lightningLength = 10;
+                    }},
+            quartzFiber,new MissileBulletType(4.7f, 12){{
+                        width = 9f;
+                        height = 16f;
+                        shrinkY = 0f;
+                        lifetime = 60f;
+                        splashDamageRadius = 30f;
+                        splashDamage = 13f;
+                        hitEffect = Fx.blastExplosion;
+                        despawnEffect = Fx.blastExplosion;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = SvPal.quartzWeave;
+                        frontColor = Color.white;
+                        trailWidth = 5f;
+                        trailLength = 5;
+
+                        homingPower = 0.08f;
+                        homingRange = 50f;
+
+                        status = StatusEffects.blasted;
+                        statusDuration = 60f;
+
+                        ammoMultiplier = 4f;
+                        lightningColor = SvPal.quartzFiber;
+                        lightningDamage = 18;
+                        lightning = 4;
+                        lightningLength = 12;
+
+                        fragBullet = new MissileBulletType(3.7f, 8){{
+                            width = 7f;
+                            height = 12f;
+                            shrinkY = 0f;
+                            lifetime = 60f;
+                            splashDamageRadius = 30f;
+                            splashDamage = 6f;
+                            hitEffect = Fx.blastExplosion;
+                            despawnEffect = Fx.blastExplosion;
+                            shootEffect = SvFx.pulverize;
+                            smokeEffect = Fx.none;
+                            hitColor = backColor = trailColor = SvPal.spaclanium;
+                            frontColor = Color.white;
+                            trailWidth = 3f;
+                            trailLength = 5;
+
+                            status = StatusEffects.electrified;
+                            statusDuration = 60f;
+
+                            ammoMultiplier = 4f;
+                            lightningColor = SvPal.spaclanium;
+                            lightningDamage = 6;
+                            lightning = 2;
+                            lightningLength = 10;
+                        }};
+                        fragBullets = 3;
                     }}
             );
 
