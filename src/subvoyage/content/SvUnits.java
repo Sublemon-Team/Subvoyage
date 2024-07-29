@@ -721,6 +721,7 @@ public class SvUnits{
             drag = 0.16f;
             speed = 1.6f;
             rotateSpeed = 4f;
+            researchCostMultiplier = 0f;
             accel = 0.45f;
             health = 8820f;
 
@@ -882,6 +883,7 @@ public class SvUnits{
             rotateSpeed = 3f;
             accel = 0.45f;
             health = 18820f;
+            researchCostMultiplier = 0f;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -1694,6 +1696,7 @@ public class SvUnits{
             drag = 0.14f;
             rotateSpeed = 2f;
             health = 7260;
+            researchCostMultiplier = 0f;
             hitSize = 32f;
 
             bodyScale = 0.9f;
@@ -2085,13 +2088,13 @@ public class SvUnits{
             targetAir = true;
         }};
 
-        //todo: stats, guns
         armada = new HydromechUnitType("armada"){{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
             health = 20060;
             hitSize = 32f;
+            researchCostMultiplier = 0f;
 
             bodyScale = 0.8f;
 

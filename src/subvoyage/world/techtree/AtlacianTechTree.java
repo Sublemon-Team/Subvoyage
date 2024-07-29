@@ -200,25 +200,40 @@ public class AtlacianTechTree {
                 });
                 node(helicopterRefabricator,with(research(lapetus),onsector(rapidEncounter)),() -> {
                     node(skath,() -> {
+                        node(charon,with(research(laserRefabricator)),() -> {
 
+                        });
                     });
                 });
                 node(hydromechFabricator,with(research(helium)),() -> {
                     node(hydromechRefabricator,with(research(helicopterRefabricator),research(leeft)),() -> {
                         node(flagshi,() -> {
-
-                        });
-                        node(laserRefabricator,with(research(laserProjector)),() -> {
-                            node(charon,() -> {
-
-                            });
-                            node(vanguard,() -> {
+                            node(vanguard,with(research(laserRefabricator)),() -> {
 
                             });
                         });
                     });
                     node(leeft,() -> {
 
+                    });
+                });
+                node(laserRefabricator,with(research(laserProjector)),() -> {
+                    node(helicopterAssembler,() -> {
+                        node(callees,() -> {
+                            node(ganymede,with(research(assemblyModule)),() -> {
+
+                            });
+                            node(assemblyModule,() -> {
+
+                            });
+                        });
+                    });
+                    node(hydromechAssembler,with(research(hydromechRefabricator)),() -> {
+                        node(squadron,() -> {
+                            node(armada,with(research(assemblyModule)),() -> {
+
+                            });
+                        });
                     });
                 });
             });

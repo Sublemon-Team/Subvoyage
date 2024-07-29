@@ -51,6 +51,7 @@ import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
 import subvoyage.SubvoyageMod;
 import subvoyage.content.SvUnits;
+import subvoyage.content.other.SvStat;
 import subvoyage.network.LaserAssemblerDroneSpawnedCallPacket;
 import subvoyage.network.LaserAssemblerUnitSpawnedCallPacket;
 
@@ -190,6 +191,8 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                             info.add(plan.unit.localizedName);
                             info.row();
                             info.add(Strings.autoFixed(plan.time / 60f, 1) + " " + Core.bundle.get("unit.seconds")).color(Color.lightGray);
+                            info.row();
+                            info.add(SvStat.laserUse.localized()+": "+Strings.fixed(ttier > 0 ? consumeLaserTier1 : consumeLaserTier0,0)).color(Color.lightGray);
                             if(ttier > 0){
                                 info.row();
                                 info.add(Stat.moduleTier.localized() + ": " + ttier).color(Color.lightGray);
