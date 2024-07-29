@@ -1,9 +1,13 @@
 package subvoyage.type.block.laser_blocks.unit;
 
+import mindustry.Vars;
 import mindustry.gen.Call;
+import mindustry.gen.UnitBlockSpawnCallPacket;
 import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.UnitPayload;
+import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BlockGroup;
+import subvoyage.network.LaserUnitBlockSpawnCallPacket;
 
 public class LaserUnitBlock extends LaserPayloadBlock {
     public LaserUnitBlock(String name) {
@@ -25,7 +29,16 @@ public class LaserUnitBlock extends LaserPayloadBlock {
         @Override
         public void dumpPayload(){
             if(payload.dump()){
-                Call.unitBlockSpawn(tile);
+                if (Vars.net.server() || !Vars.net.active()) {
+                    if(tile == null || !(tile.build instanceof LaserUnitBuild build)) return;
+                    build.spawned();
+                }
+
+                if (Vars.net.server()) {
+                    LaserUnitBlockSpawnCallPacket packet = new LaserUnitBlockSpawnCallPacket();
+                    packet.tile = tile;
+                    Vars.net.send(packet, true);
+                }
             }
         }
     }
