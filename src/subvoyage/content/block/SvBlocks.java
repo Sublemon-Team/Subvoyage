@@ -38,6 +38,7 @@ import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
+import subvoyage.type.block.distribution.PayloadLaunchPad;
 import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser_blocks.*;
 import subvoyage.type.block.laser_blocks.node.*;
@@ -91,6 +92,7 @@ public class SvBlocks{
             laserRefabricator,
             helicopterAssembler, hydromechAssembler, assemblyModule,
             fortifiedPayloadConveyor, fortifiedPayloadRouter,
+            payloadLaunchPad,
             //EXPLORATION
             buoy,tower,beacon,
             //STORAGE
@@ -442,6 +444,17 @@ public class SvBlocks{
             canOverdrive = false;
             researchCostMultiplier = 4f;
             underBullets = true;
+        }};
+
+        payloadLaunchPad = new PayloadLaunchPad("payload-launch-pad") {{
+            requirements(Category.units, atl(), with(corallite,250,iridium,250,chromium,150));
+            size = 3;
+            health = 1600;
+            maxPayloadSize = 3;
+            range = 30*8f;
+            launchTime = 180f;
+            transportationTime = 300f;
+            consumePower(0.5f);
         }};
 
         //drills
