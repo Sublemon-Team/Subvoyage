@@ -37,6 +37,7 @@ import subvoyage.type.unit.hydromech.weapons.HydromechRepairBeam;
 import subvoyage.type.unit.hydromech.weapons.HydromechWeapon;
 
 import static arc.Core.atlas;
+import static mindustry.Vars.tilesize;
 
 public class SvUnits{
     public static UnitType
@@ -59,11 +60,15 @@ public class SvUnits{
         //core
         shift = new AtlacianUnitType("shift"){{
             aiController = BuilderAI::new;
-            constructor = UnitEntity::create;
+            constructor =  PayloadUnit::create;
             isEnemy = false;
             coreUnitDock = true;
             lowAltitude = true;
             flying = true;
+
+            payloadCapacity = 2f * 2f * tilesize * tilesize;
+            pickupUnits = false;
+            vulnerableWithPayloads = true;
 
             targetPriority = -2;
             targetable = false;
@@ -122,7 +127,7 @@ public class SvUnits{
 
         distort = new AtlacianUnitType("distort"){{
             aiController = BuilderAI::new;
-            constructor = UnitEntity::create;
+            constructor =  PayloadUnit::create;
             isEnemy = false;
             coreUnitDock = true;
             lowAltitude = true;
@@ -131,6 +136,10 @@ public class SvUnits{
             targetPriority = -2;
             targetable = false;
             hittable = false;
+
+            payloadCapacity = 2f * 2f * tilesize * tilesize;
+            pickupUnits = false;
+            vulnerableWithPayloads = true;
 
             mineWalls = true;
             mineFloor = true;
@@ -185,7 +194,7 @@ public class SvUnits{
 
         commute = new AtlacianUnitType("commute"){{
             aiController = BuilderAI::new;
-            constructor = UnitEntity::create;
+            constructor = PayloadUnit::create;
             isEnemy = false;
             coreUnitDock = true;
             lowAltitude = true;
@@ -194,6 +203,10 @@ public class SvUnits{
             targetPriority = -2;
             targetable = false;
             hittable = false;
+
+            payloadCapacity = 2f * 2f * tilesize * tilesize;
+            pickupUnits = false;
+            vulnerableWithPayloads = true;
 
             mineWalls = true;
             mineFloor = true;

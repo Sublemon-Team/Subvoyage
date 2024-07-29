@@ -451,7 +451,7 @@ public class SvBlocks{
             size = 3;
             health = 1600;
             maxPayloadSize = 3;
-            range = 30*8f;
+            range = 60*8f;
             launchTime = 180f;
             transportationTime = 300f;
             consumePower(0.5f);
