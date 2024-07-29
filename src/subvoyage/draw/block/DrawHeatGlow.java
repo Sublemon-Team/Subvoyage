@@ -35,7 +35,7 @@ public class DrawHeatGlow extends DrawBlock{
         if(layer > 0) Draw.z(layer);
         Draw.blend(Blending.additive);
         Draw.color(color, Mathf.clamp(build.warmup()) * (color.a * (1f - pulse + Mathf.absin(pulseScl, pulse))));
-        Draw.rect(heat, build.x, build.y);
+        Draw.rect(heat, build.x, build.y, build.drawrot());
         Draw.blend();
         Draw.color();
         Draw.z(z);

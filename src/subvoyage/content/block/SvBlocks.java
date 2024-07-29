@@ -203,9 +203,16 @@ public class SvBlocks{
 
             maxSuppliers = 1;
 
-            drawer = new DrawTurret("atlacian-") {{
-
-            }};
+            drawer = new DrawMulti(
+                    new DrawRegion("-base"),
+                    new DrawOutline("") {{
+                        layer = Layer.turret;
+                        buildingRotate = true;
+                    }},
+                    new DrawHeatGlow() {{
+                        layer = Layer.turret+1f;
+                    }}
+            );
 
             bulletType = new ContiniousLaserRangedBulletType(15){{
                 maxRange = range = length = 15*60f;
