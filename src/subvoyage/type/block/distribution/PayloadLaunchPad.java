@@ -52,12 +52,13 @@ public class PayloadLaunchPad extends PayloadBlock {
 
     public float shake = 3f;
 
-    public TextureRegion rocketRegion;
+    public TextureRegion rocketRegion, rocketOpenRegion;
 
     @Override
     public void load() {
         super.load();
         rocketRegion = Core.atlas.find(name+"-rocket");
+        rocketOpenRegion = Core.atlas.find(name+"-rocket-open");
         SvFx.payloadLaunchPadRocketLaunch.lifetime = SvFx.payloadLaunchPadRocketLand.lifetime = transportationTime/3f;
     }
 
@@ -70,6 +71,8 @@ public class PayloadLaunchPad extends PayloadBlock {
         outlineIcon = true;
         sync = true;
         outputsPayload = true;
+        rotateDraw = false;
+        rotate = true;
         group = BlockGroup.units;
 
         config(Point2.class, (PayloadLaunchPadBuild tile, Point2 point) -> tile.link = Point2.pack(point.x + tile.tileX(), point.y + tile.tileY()));
@@ -266,7 +269,12 @@ public class PayloadLaunchPad extends PayloadBlock {
             super.draw();
             Draw.z(Layer.blockOver);
             Draw.alpha(1f-inProgressSmooth);
-            Draw.rect(rocketRegion,x,y);
+            if(payload != null) {
+                Draw.scl(8f/payload.size());
+                Draw.rect(payload.icon(),x,y);
+                Draw.scl();
+            }
+            Draw.rect(rocketOpenRegion,x,y);
             Draw.reset();
         }
 

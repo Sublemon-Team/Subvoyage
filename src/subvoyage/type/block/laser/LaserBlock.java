@@ -235,6 +235,7 @@ public class LaserBlock extends Block {
             return raw >= minLaserEfficiency ? raw : 0f;
         }
         public float rawLaserEfficiency() {
+            if(lasers == null) return 0f;
             return consumeLaserPower <= 0f ? 1f : Mathf.clamp(lasers.power()/consumeLaserPower);
         }
     }
