@@ -237,7 +237,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
 
         public @Nullable Vec2 commandPos;
         public Seq<Unit> units = new Seq<>();
-        public Seq<UnitAssemblerModule.UnitAssemblerModuleBuild> modules = new Seq<>();
+        public Seq<LaserUnitAssemblerModule.LaserUnitAssemblerModuleBuild> modules = new Seq<>();
         public PayloadSeq blocks = new PayloadSeq();
         public float progress, warmup, droneWarmup, powerWarmup, sameTypeWarmup;
         public float invalidWarmup = 0f;
@@ -279,12 +279,12 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
             return Mathf.equal(dst, tilesize * areaSize / 2f - tilesize/2f);
         }
 
-        public void updateModules(UnitAssemblerModule.UnitAssemblerModuleBuild build){
+        public void updateModules(LaserUnitAssemblerModule.LaserUnitAssemblerModuleBuild build){
             modules.addUnique(build);
             checkTier();
         }
 
-        public void removeModule(UnitAssemblerModule.UnitAssemblerModuleBuild build){
+        public void removeModule(LaserUnitAssemblerModule.LaserUnitAssemblerModuleBuild build){
             modules.remove(build);
             checkTier();
         }

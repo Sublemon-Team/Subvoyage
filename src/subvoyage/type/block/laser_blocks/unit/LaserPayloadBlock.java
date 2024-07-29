@@ -20,6 +20,7 @@ import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Env;
+import subvoyage.SubvoyageMod;
 import subvoyage.type.block.laser.LaserBlock;
 
 import static mindustry.Vars.tilesize;
@@ -41,9 +42,9 @@ public class LaserPayloadBlock extends LaserBlock {
     public void load(){
         super.load();
 
-        topRegion = Core.atlas.find(name + "-top", "factory-top-" + size + regionSuffix);
-        outRegion = Core.atlas.find(name + "-out", "factory-out-" + size + regionSuffix);
-        inRegion = Core.atlas.find(name + "-in", "factory-in-" + size + regionSuffix);
+        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+ "-factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+ "-factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+ "-factory-in-" + size + regionSuffix);
     }
 
     public static boolean blends(Building build, int direction){

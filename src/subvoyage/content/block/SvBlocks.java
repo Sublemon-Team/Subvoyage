@@ -397,7 +397,7 @@ public class SvBlocks{
             dronesCreated = ((LaserUnitAssembler) helicopterAssembler).dronesCreated;
         }};
 
-        assemblyModule = new UnitAssemblerModule("assembly-module") {{
+        assemblyModule = new LaserUnitAssemblerModule("assembly-module") {{
             requirements(Category.units, with(iridium,1200,quartzFiber,1200,spaclanium,1200,chromium,1200));
             consumePower(4f);
             regionSuffix = "-fortified";
