@@ -168,7 +168,7 @@ public class LaserBlock extends Block {
         addBar("laser_power",(b) -> {
             if(b instanceof LaserBlockBuilding lb) {
                 return new Bar(
-                        () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(lb.lasers.power()+0.1f, 1)),
+                        () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(lb.lasers.power() <= 0.001 ? 0 : lb.lasers.power()+0.1f, 1)),
                         () -> LaserUtil.getLaserColor(lb.lasers.power()),
                         lb::laserEfficiency);
             } else return new Bar(

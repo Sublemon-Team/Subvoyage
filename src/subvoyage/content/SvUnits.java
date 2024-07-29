@@ -16,6 +16,7 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
+import mindustry.world.meta.Env;
 import subvoyage.*;
 import subvoyage.content.other.SvPal;
 import subvoyage.content.sound.SvSounds;
@@ -46,8 +47,9 @@ public class SvUnits{
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
-    //cargo
-    bulker;
+    //cargo,payload
+    bulker,
+    pisun; //shh, don't tell anyone
 
     public static int mapHelicopter = 0;
     public static int mapHMech = 0;
@@ -2477,6 +2479,32 @@ public class SvUnits{
                     new UnitEngine(24 / 4f, -24 / 4f, 2.3f, 315f)
             );
         }};;
+
+        pisun = new AtlacianUnitType("assembler-drone"){{
+            controller = u -> new AssemblerAI();
+            constructor = BuildingTetherPayloadUnit::create;
+            flying = true;
+            drag = 0.06f;
+            accel = 0.11f;
+            speed = 1.3f;
+            health = 90;
+            engineSize = 2f;
+            engineOffset = 6.5f;
+            payloadCapacity = 0f;
+            targetable = false;
+            bounded = false;
+
+            outlineColor = SvPal.outline;
+            isEnemy = false;
+            hidden = true;
+            useUnitCap = false;
+            logicControllable = false;
+            playerControllable = false;
+            allowedInPayloads = false;
+            createWreck = false;
+            envEnabled = Env.any;
+            envDisabled = Env.none;
+        }};
     }
 
     public static void helicopter(String id) {

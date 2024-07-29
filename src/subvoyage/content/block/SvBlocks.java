@@ -89,6 +89,7 @@ public class SvBlocks{
             helicopterFabricator, hydromechFabricator,
             helicopterRefabricator, hydromechRefabricator,
             laserRefabricator,
+            helicopterAssembler, hydromechAssembler, assemblyModule,
             fortifiedPayloadConveyor, fortifiedPayloadRouter,
             //EXPLORATION
             buoy,tower,beacon,
@@ -341,6 +342,78 @@ public class SvBlocks{
             consumeLiquid(argon, 5f / 60f);
             consumeItems(with(iridium, 60, chromium, 20, crude,20));
         }};
+
+        helicopterAssembler = new LaserUnitAssembler("helicopter-assembler") {{
+            requirements(Category.units, atl(), with(iridium,1000,quartzFiber,500,corallite,750,chromium,600));
+            regionSuffix = "-fortified";
+            size = 5;
+            plans.add(
+                    new UnitAssembler.AssemblerUnitPlan(callees, 60f * 70f, PayloadStack.list(skath, 4)),
+                    new UnitAssembler.AssemblerUnitPlan(ganymede, 60f * 60f * 3f, PayloadStack.list(charon, 4))
+            );
+            areaSize = 13;
+            itemCapacity = 40;
+
+            consumePower(3.5f);
+            consumeLiquid(argon, 12f / 60f);
+            consumeItem(iridium, 20);
+            consumeItem(clay,20);
+
+            setLaserInputs(1,2,3);
+            maxSuppliers = 1;
+            inputRange = 8;
+
+            consumeLaserTier0 = 40f;
+            consumeLaserTier1 = 90f;
+            minLaserEfficiency = 0.95f;
+
+            dronesCreated = 4;
+            droneType = pisun;
+        }};
+        hydromechAssembler = new LaserUnitAssembler("hydromech-assembler") {{
+            requirements(Category.units, atl(), with(iridium,1100,quartzFiber,600,spaclanium,850,chromium,700));
+            regionSuffix = "-fortified";
+            size = 5;
+            plans.add(
+                    new UnitAssembler.AssemblerUnitPlan(squadron, 60f * 70f, PayloadStack.list(flagshi, 4)),
+                    new UnitAssembler.AssemblerUnitPlan(armada, 60f * 60f * 3f, PayloadStack.list(vanguard, 4))
+            );
+            areaSize = 13;
+            itemCapacity = 40;
+
+            consumeLaserTier0 = 40f;
+            consumeLaserTier1 = 90f;
+            minLaserEfficiency = 0.95f;
+
+            setLaserInputs(1,2,3);
+            maxSuppliers = 1;
+            inputRange = 8;
+
+            consumePower(3.5f);
+            consumeLiquid(helium, 12f / 60f);
+            consumeItem(iridium, 20);
+            consumeItem(crude,20);
+            droneType = ((LaserUnitAssembler) helicopterAssembler).droneType;
+            dronesCreated = ((LaserUnitAssembler) helicopterAssembler).dronesCreated;
+        }};
+
+        assemblyModule = new UnitAssemblerModule("assembly-module") {{
+            requirements(Category.units, with(iridium,1200,quartzFiber,1200,spaclanium,1200,chromium,1200));
+            consumePower(4f);
+            regionSuffix = "-fortified";
+            researchCostMultiplier = 0.75f;
+
+            size = 5;
+        }
+
+            @Override
+            public void load() {
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID +"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID +"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID +"factory-in-" + size + regionSuffix);
+            }
+        };
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chromium, 10));
