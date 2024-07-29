@@ -203,6 +203,10 @@ public class SvBlocks{
 
             maxSuppliers = 1;
 
+            drawer = new DrawTurret("atlacian-") {{
+
+            }};
+
             bulletType = new ContiniousLaserRangedBulletType(15){{
                 maxRange = range = length = 15*60f;
                 hitEffect = Fx.hitMeltdown;
