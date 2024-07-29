@@ -510,21 +510,34 @@ public class SvBlocks{
             researchCost = with(corallite,10,clay,10);
 
             ammo(
-            spaclanium, new BasicBulletType(3f, 36){{
-                width = 7f;
-                height = 12f;
-                lifetime = 60f;
-                shootEffect = SvFx.pulverize;
-                smokeEffect = Fx.none;
-                hitColor = backColor = trailColor = Pal.suppress;
-                frontColor = Color.white;
-                trailWidth = 3f;
-                trailLength = 5;
-                hitEffect = despawnEffect = Fx.hitBulletColor;
+            spaclanium,new MissileBulletType(3.7f, 8){{
+                        width = 7f;
+                        height = 12f;
+                        shrinkY = 0f;
+                        lifetime = 60f;
+                        splashDamageRadius = 30f;
+                        splashDamage = 6f;
+                        hitEffect = Fx.blastExplosion;
+                        despawnEffect = Fx.blastExplosion;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = SvPal.spaclanium;
+                        frontColor = Color.white;
+                        trailWidth = 3f;
+                        trailLength = 5;
 
-                homingPower = 0.08f;
-                homingRange = 50f;
-            }}
+                        homingPower = 0.08f;
+                        homingRange = 50f;
+
+                        status = StatusEffects.blasted;
+                        statusDuration = 60f;
+
+                        ammoMultiplier = 4f;
+                        lightningColor = SvPal.spaclanium;
+                        lightningDamage = 6;
+                        lightning = 2;
+                        lightningLength = 10;
+                    }}
             );
 
             size = 3;
@@ -554,7 +567,7 @@ public class SvBlocks{
             }};
 
             shootSound = Sounds.blaster;
-            reload = 35f;
+            reload = 20f;
             shootY = 5f;
             recoil = 1f;
             rotate = false;
@@ -764,7 +777,7 @@ public class SvBlocks{
             shootSound = Sounds.dullExplosion;
             range = 8*10f;
             velocityRnd = 0;
-            reload = 60f;
+            reload = 20f;
             shake = 5f;
             shootY = 0f;
             rotateSpeed = 0;
@@ -777,12 +790,24 @@ public class SvBlocks{
                 sizeTo = range;
             }});
 
-            shootType = new ExplosionBulletType(26f,range) {{
+            shootType = new ExplosionBulletType(30f,range) {{
                 collidesAir = false;
                 buildingDamageMultiplier = 1.1f;
                 ammoMultiplier = 1f;
                 speed = 0;
                 lifetime = 1f;
+
+                lightningType = new BulletType(0.0001f, 10f){{
+                    lifetime = Fx.lightning.lifetime;
+                    hitEffect = Fx.hitLancer;
+                    despawnEffect = Fx.none;
+                    status = StatusEffects.shocked;
+                    statusDuration = 10f;
+                    hittable = false;
+                    lightColor = Color.white;
+                    collidesAir = false;
+                    buildingDamageMultiplier = 0.25f;
+                }};
 
                 killShooter = false;
             }};
@@ -805,7 +830,7 @@ public class SvBlocks{
             shootSound = Sounds.cannon;
             range = 10*10f;
             velocityRnd = 0;
-            reload = 120f;
+            reload = 30f;
             shake = 5f;
             chargeSound = Sounds.lasercharge;
             shootY = 0f;
@@ -819,7 +844,7 @@ public class SvBlocks{
                 sizeTo = range;
             }});
 
-            shootType = new ExplosionBulletType(54f,range) {{
+            shootType = new ExplosionBulletType(60f,range) {{
                 collidesAir = true;
                 buildingDamageMultiplier = 1.1f;
                 ammoMultiplier = 1f;
@@ -831,6 +856,18 @@ public class SvBlocks{
                 fragSpread = 45f;
                 fragRandomSpread = 5f;
                 fragVelocityMin = 1f;
+
+                lightningType = new BulletType(0.0001f, 30f){{
+                    lifetime = Fx.lightning.lifetime;
+                    hitEffect = Fx.hitLancer;
+                    despawnEffect = Fx.none;
+                    status = StatusEffects.shocked;
+                    statusDuration = 10f;
+                    hittable = false;
+                    lightColor = Color.white;
+                    collidesAir = false;
+                    buildingDamageMultiplier = 0.25f;
+                }};
 
                 fragBullet = new BasicBulletType(6f, 6) {{
                     width = 9f;
