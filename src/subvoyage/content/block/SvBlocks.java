@@ -364,7 +364,7 @@ public class SvBlocks{
             inputRange = 8;
 
             consumeLaserTier0 = 40f;
-            consumeLaserTier1 = 90f;
+            consumeLaserTier1 = 140f;
             minLaserEfficiency = 0.95f;
 
             dronesCreated = 4;
@@ -382,7 +382,7 @@ public class SvBlocks{
             itemCapacity = 40;
 
             consumeLaserTier0 = 40f;
-            consumeLaserTier1 = 90f;
+            consumeLaserTier1 = 140f;
             minLaserEfficiency = 0.95f;
 
             setLaserInputs(1,2,3);
