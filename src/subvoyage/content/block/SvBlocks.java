@@ -78,13 +78,13 @@ public class SvBlocks{
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
-            waterDiffuser, waterSifter, distiller, lowTierPump, centrifugalPump, fortifiedConduit, highPressureConduit, conduitRouter, conduitBridge,
+            waterDiffuser, waterSifter, distiller, lowTierPump, centrifugalPump, fortifiedConduit, isolatedConduit, highPressureConduit, conduitRouter, conduitBridge,
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
             laserProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
             //TRANSPORTATION
-            duct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
+            duct,isolatedDuct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
             shipCargoStation, shipUnloadPoint,
             //PAYLOAD
             helicopterFabricator, hydromechFabricator,
@@ -1483,6 +1483,15 @@ public class SvBlocks{
             health = 45;
         }};
 
+        isolatedConduit = new ArmoredConduit("isolated-conduit") {{
+            requirements(Category.liquid,atl(), with(corallite, 2,iridium,1));
+
+            researchCost = with(corallite,30,iridium,30);
+            envDisabled |= Env.scorching;
+            botColor = SvPal.veryDarkViolet;
+            health = 125;
+        }};
+
         highPressureConduit = new Conduit("high-pressure-conduit") {{
             requirements(Category.liquid,atl(), with(chromium, 1, clay, 1));
 
@@ -1839,8 +1848,25 @@ public class SvBlocks{
             researchCost = with(corallite,2);
         }};
 
+        isolatedDuct = new Duct("isolated-duct") {{
+            requirements(Category.distribution,atl(), with(corallite, 1,iridium,1));
+            health = 270;
+            speed = 4f;
+            armored = true;
+            envDisabled |= Env.scorching;
+
+            researchCost = with(corallite,20,iridium,20);
+        }
+
+            @Override
+            public void load() {
+                super.load();
+                botRegions = ((Duct) duct).botRegions;
+            }
+        };
+
         highPressureDuct = new Duct("high-pressure-duct") {{
-            requirements(Category.distribution,atl(),with(chromium,1,corallite,1));
+            requirements(Category.distribution,atl(),with(chromium,1,iridium,1,corallite,1));
             researchCost = with(chromium,500,corallite,900);
             health = 180;
             speed = 3.2f;
