@@ -454,6 +454,7 @@ public class SvBlocks{
             range = 60*8f;
             launchTime = 180f;
             transportationTime = 300f;
+            squareSprite = false;
             consumePower(0.5f);
         }};
 

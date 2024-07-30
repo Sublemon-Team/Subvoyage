@@ -33,6 +33,7 @@ import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
+import subvoyage.SubvoyageMod;
 import subvoyage.draw.visual.SvFx;
 import subvoyage.utility.SvMath;
 
@@ -52,11 +53,16 @@ public class PayloadLaunchPad extends PayloadBlock {
 
     public float shake = 3f;
 
-    public TextureRegion rocketRegion, rocketOpenRegion;
+    public TextureRegion rocketRegion, rocketOpenRegion, side1Region,side2Region;
 
     @Override
     public void load() {
         super.load();
+        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+        side1Region = Core.atlas.find(name+"-side1");
+        side2Region = Core.atlas.find(name+"-side2",side1Region);
         rocketRegion = Core.atlas.find(name+"-rocket");
         rocketOpenRegion = Core.atlas.find(name+"-rocket-open");
         SvFx.payloadLaunchPadRocketLaunch.lifetime = SvFx.payloadLaunchPadRocketLand.lifetime = transportationTime/3f;
@@ -66,12 +72,14 @@ public class PayloadLaunchPad extends PayloadBlock {
         super(name);
         update = true;
         solid = true;
+        regionSuffix = "-fortified";
         configurable = true;
         hasPower = true;
         outlineIcon = true;
         sync = true;
         outputsPayload = true;
         rotateDraw = false;
+        regionRotated1 = 1;
         rotate = true;
         group = BlockGroup.units;
 
@@ -96,7 +104,7 @@ public class PayloadLaunchPad extends PayloadBlock {
 
     @Override
     public TextureRegion[] icons(){
-        return new TextureRegion[]{region,rocketRegion};
+        return new TextureRegion[] {outRegion,region,side1Region,rocketRegion};
     }
 
     @Override
@@ -266,7 +274,10 @@ public class PayloadLaunchPad extends PayloadBlock {
 
         @Override
         public void draw() {
+            Draw.rect(outRegion,x,y,rotation*90f);
             super.draw();
+            Draw.rect(rotation >= 2 ? side2Region : side1Region,x,y,rotation*90f);
+            Draw.rect(topRegion,x,y);
             Draw.z(Layer.blockOver);
             Draw.alpha(1f-inProgressSmooth);
             if(payload != null) {
