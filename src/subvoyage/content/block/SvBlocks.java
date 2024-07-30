@@ -38,7 +38,7 @@ import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
-import subvoyage.type.block.distribution.PayloadLaunchPad;
+import subvoyage.type.block.distribution.*;
 import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser_blocks.*;
 import subvoyage.type.block.laser_blocks.node.*;
@@ -49,6 +49,7 @@ import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
+import subvoyage.world.*;
 
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
@@ -2354,10 +2355,11 @@ public class SvBlocks{
         }};
     }
 
-    static BuildVisibility atl(BuildVisibility v) {
-        return new BuildVisibility(() -> v.visible() &&  Vars.state.rules.planet == SvPlanets.atlacian);
+    static BuildVisibility atl(BuildVisibility v){
+        return new BuildVisibility(() -> v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any);
     }
-    static BuildVisibility atl() {
+
+    static BuildVisibility atl(){
         return atl(BuildVisibility.shown);
     }
 }
