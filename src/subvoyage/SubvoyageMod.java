@@ -7,6 +7,8 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.struct.*;
 import arc.util.*;
+import mindustry.content.TechTree;
+import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
@@ -14,6 +16,7 @@ import mindustry.graphics.*;
 import mindustry.mod.*;
 import mindustry.type.Sector;
 import mindustry.ui.Fonts;
+import mindustry.ui.dialogs.SettingsMenuDialog;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import subvoyage.content.*;
@@ -24,6 +27,8 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.vapor.*;
 import subvoyage.type.block.production.*;
 import subvoyage.ui.dialog.*;
+import subvoyage.ui.setting.BannerPref;
+import subvoyage.ui.setting.ButtonPref;
 import subvoyage.utility.IconLoader;
 import subvoyage.world.techtree.*;
 
@@ -141,8 +146,33 @@ public class SubvoyageMod extends Mod {
 
     void loadSettings() {
         ui.settings.addCategory(bundle.get("setting.sv-title"),"subvoyage-icon",t -> {
-            t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
+            t.pref(new BannerPref(ID+"-modname",256));
+            t.pref(new ButtonPref(Core.bundle.get("sv-clear-campaign"),Icon.trash,() -> {
+                ui.showConfirm("@confirm", "@settings.sv-clear-campaign.confirm", () -> {
+                    Seq<Saves.SaveSlot> toDelete = Seq.with();
+                    control.saves.getSaveSlots().each(s -> {
+                        if(s.getSector().planet == SvPlanets.atlacian) toDelete.add(s);
+                    });
+                    toDelete.each(Saves.SaveSlot::delete);
+                });
+            }));
+            t.pref(new ButtonPref(Core.bundle.get("sv-clear-tech-tree"),Icon.trash,() -> {
+                ui.showConfirm("@confirm", "@settings.sv-clear-tech-tree.confirm", () -> {
+                    SvPlanets.atlacian.techTree.reset();
+                    for(TechTree.TechNode node : SvPlanets.atlacian.techTree.children){
+                        node.reset();
+                    }
+                    content.each(c -> {
+                        if(c instanceof UnlockableContent u && c.minfo != null && c.minfo.mod != null && c.minfo.mod.name.equals(ID)){
+                            u.clearUnlock();
+                        }
+                    });
+                    settings.remove("unlocks");
+                });
+            }));
+
             t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
+            t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
         });
         SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }

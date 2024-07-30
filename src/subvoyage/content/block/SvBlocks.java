@@ -1448,7 +1448,7 @@ public class SvBlocks{
 
             acceptCoolant = false;
             heal = consumePower(0.15f);
-            discover = consumeLiquid(argon,2f);
+            discover = consumeLiquid(argon,32/60f);
         }};
 
         //liquids
