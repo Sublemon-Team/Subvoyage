@@ -192,7 +192,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                             info.row();
                             info.add(Strings.autoFixed(plan.time / 60f, 1) + " " + Core.bundle.get("unit.seconds")).color(Color.lightGray);
                             info.row();
-                            info.add(SvStat.laserUse.localized()+": "+Strings.fixed(ttier > 0 ? consumeLaserTier1 : consumeLaserTier0,0)).color(Color.lightGray);
+                            info.add(SvStat.laserUse.localized()+": "+SvStat.laserPower.icon+Strings.fixed(ttier > 0 ? consumeLaserTier1 : consumeLaserTier0,0)).color(Color.lightGray);
                             if(ttier > 0){
                                 info.row();
                                 info.add(Stat.moduleTier.localized() + ": " + ttier).color(Color.lightGray);
