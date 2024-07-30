@@ -32,7 +32,7 @@ import subvoyage.world.planets.atlacian.AtlacianWaves;
 
 public class AtlacianPlanetGen extends PlanetGenerator {
     /*      GENERATION PARAMETERS       */
-    /**/float oceanLevel = -0.3f;
+    /**/float oceanLevel = 0.4f;
     /**/float sodilateBiomeWeight = 0.3f;
     /**/float archalyteBiomeWeight = 0.4f;
 
@@ -45,8 +45,10 @@ public class AtlacianPlanetGen extends PlanetGenerator {
     @Override
     public float getHeight(Vec3 position) {
         float noise = Simplex.noise3d(seed+10,4,0.9,1f,position.z/10f,position.y,position.x/2f);
+        float puddleNoise = Simplex.noise3d(seed+12,2,0.9,1f,position.x/12f,position.y/12f,position.z/12f);
         float waveNoise = Ridged.noise3d(seed+10,position.y/2f+noise*4,0,0,1/4f);
-        float actualNoise = noise * 1f * Mathf.lerp(waveNoise,1, waveNoise);
+        float actualNoise = noise*1.2f;
+        if(waveNoise > 0.7f || puddleNoise > 0.7f) return oceanLevel;
         return Math.max(actualNoise, oceanLevel);
     }
     @Override
