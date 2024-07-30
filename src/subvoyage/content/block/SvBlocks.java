@@ -1777,7 +1777,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 7;
+            unitCapModifier = 12;
 
             bannedItems.addAll(crude);
         }
@@ -1802,7 +1802,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 12;
+            unitCapModifier = 18;
 
             bannedItems.addAll(crude);
         }
@@ -1826,7 +1826,7 @@ public class SvBlocks{
             squareSprite = false;
             requiresCoreZone = false;
             envDisabled |= Env.scorching;
-            unitCapModifier = 20;
+            unitCapModifier = 30;
 
             bannedItems.addAll(crude);
         }
@@ -2094,7 +2094,7 @@ public class SvBlocks{
 
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting,atl(), with(spaclanium,100,corallite,60));
-            outputLiquid = new LiquidStack(SvLiquids.polygen, 1);
+            outputLiquid = new LiquidStack(SvLiquids.polygen, 18f/60f);
             craftTime = 20f;
 
             researchCost = with(spaclanium,700,corallite,800);
@@ -2113,7 +2113,7 @@ public class SvBlocks{
             new DrawRegion("-top")
             );
 
-            consumeLiquid(water,1);
+            consumeLiquid(water,12f/60f);
             consumeItem(corallite,1);
         }};
 
@@ -2164,7 +2164,7 @@ public class SvBlocks{
             consumeItem(sulfur,1);
             consumeItem(corallite, 2);
             consumePower(0.8f);
-            outputLiquid = new LiquidStack(argon, 16/60f);
+            outputLiquid = new LiquidStack(argon, 36/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),
@@ -2188,7 +2188,7 @@ public class SvBlocks{
             consumeItem(corallite, 2);
             consumeLiquid(helium,0.1f);
             consumePower(0.6f);
-            outputLiquid = new LiquidStack(argon, 78/60f);
+            outputLiquid = new LiquidStack(argon, 134/60f);
             hasLiquids = true;
             drawer = new DrawMulti(
                     new DrawDefault(),

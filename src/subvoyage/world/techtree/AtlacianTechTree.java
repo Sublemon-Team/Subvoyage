@@ -43,8 +43,10 @@ public class AtlacianTechTree {
             context().researchCostMultipliers = costMultipliers;
 
             node(duct, () -> {
-                node(highPressureDuct,() -> {
+                node(isolatedDuct,() -> {
+                    node(highPressureDuct,() -> {
 
+                    });
                 });
                 node(ductRouter,() -> {
                     node(ductDistributor);
@@ -61,6 +63,9 @@ public class AtlacianTechTree {
                     node(shipUnloadPoint,() -> {
 
                     });
+                });
+                node(incinerator,() -> {
+
                 });
             });
 
@@ -195,6 +200,14 @@ public class AtlacianTechTree {
             });
 
             node(helicopterFabricator,with(onsector(noxiousTarn)),() -> {
+                node(fortifiedPayloadConveyor,() -> {
+                    node(fortifiedPayloadRouter,() -> {
+
+                    });
+                    node(payloadLaunchPad,() -> {
+
+                    });
+                });
                 node(lapetus,() -> {
 
                 });
