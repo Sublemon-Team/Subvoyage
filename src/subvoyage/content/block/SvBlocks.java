@@ -137,7 +137,7 @@ public class SvBlocks{
         //laser
 
         laserProjector = new LaserGenerator("laser-projector") {{
-            requirements(Category.logic,atl(),with(iridium,300,chromium,200,spaclanium,150));
+            requirements(Category.effect, atl(), with(iridium, 300, chromium, 200, spaclanium, 150));
             outputLaserPower = 10f;
             range = 4;
             maxSuppliers = 0;
@@ -149,7 +149,7 @@ public class SvBlocks{
         }};
 
         laserNode = new LaserNode("laser-node") {{
-            requirements(Category.logic,atl(),with(iridium,30,chromium,30));
+            requirements(Category.effect, atl(), with(iridium, 30, chromium, 30));
             size = 3;
             range = 16;
             maxSuppliers = 1;
@@ -164,7 +164,7 @@ public class SvBlocks{
         }};
 
         laserSplitter = new LaserSplitter("laser-splitter") {{
-            requirements(Category.logic,atl(),with(iridium,50,chromium,40,spaclanium,10));
+            requirements(Category.effect, atl(), with(iridium, 50, chromium, 40, spaclanium, 10));
             size = 3;
             range = 16;
             maxSuppliers = 1;
@@ -179,7 +179,7 @@ public class SvBlocks{
         }};
 
         laserAmplificator = new LaserAmplificator("laser-amplifier") {{
-            requirements(Category.logic,atl(),with(iridium,80,chromium,80,spaclanium,10));
+            requirements(Category.effect, atl(), with(iridium, 80, chromium, 80, spaclanium, 10));
             size = 3;
             range = 16;
             squareSprite = false;
@@ -196,7 +196,7 @@ public class SvBlocks{
         }};
 
         laserBlaster = new LaserBlaster("laser-blaster") {{
-            requirements(Category.logic,atl(),with(iridium,200,chromium,200,spaclanium,200,corallite,100));
+            requirements(Category.effect, atl(), with(iridium, 200, chromium, 200, spaclanium, 200, corallite, 100));
             consumeLaserPower(300);
             minLaserEfficiency = 0.3f;
             size = 3;
@@ -205,7 +205,6 @@ public class SvBlocks{
             setLaserInputs(1,2,3);
 
             maxSuppliers = 1;
-
             drawer = new DrawMulti(
                     new DrawRegion("-base"),
                     new DrawOutline("") {{
@@ -217,6 +216,7 @@ public class SvBlocks{
                     }}
             );
 
+            // would be good if there were some effects like smoke, huh?
             bulletType = new ContiniousLaserRangedBulletType(15){{
                 maxRange = range = length = 15*60f;
                 hitEffect = Fx.hitMeltdown;
@@ -227,7 +227,7 @@ public class SvBlocks{
                 damageInterval = 1f;
 
                 lifetime = shootDuration = 120f;
-                shootDelay = 4f;
+                shootDelay = 120f;
 
                 incendChance = 0.4f;
                 incendSpread = 5f;
@@ -1532,7 +1532,7 @@ public class SvBlocks{
         }};
 
         waterDiffuser = new Diffuser("water-diffuser") {{
-            requirements(Category.liquid,atl(), with(spaclanium, 10));
+            requirements(Category.production, atl(), with(spaclanium, 10));
             size = 2;
             craftTime = 30f;
             itemCapacity = 50;
@@ -1552,7 +1552,7 @@ public class SvBlocks{
         }};
 
         waterSifter = new WaterSifter("water-sifter") {{
-            requirements(Category.liquid,atl(), with(spaclanium,50, corallite, 60,clay,30));
+            requirements(Category.production, atl(), with(spaclanium, 50, corallite, 60, clay, 30));
             harvestTime = 80f;
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);

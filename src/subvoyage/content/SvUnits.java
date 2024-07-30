@@ -16,25 +16,21 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
-import mindustry.world.meta.Env;
+import mindustry.world.meta.*;
 import subvoyage.*;
-import subvoyage.content.other.SvPal;
-import subvoyage.content.sound.SvSounds;
-import subvoyage.draw.visual.SvFx;
+import subvoyage.content.other.*;
+import subvoyage.content.sound.*;
+import subvoyage.draw.part.*;
+import subvoyage.draw.visual.*;
 import subvoyage.type.ai.*;
+import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
+import subvoyage.type.unit.helicopter.*;
+import subvoyage.type.unit.hydromech.*;
+import subvoyage.type.unit.hydromech.custom.*;
+import subvoyage.type.unit.hydromech.weapons.*;
 import subvoyage.type.unit.type.*;
 import subvoyage.type.unit.weapons.*;
-import subvoyage.draw.part.*;
-import subvoyage.type.shoot.*;
-import subvoyage.type.unit.helicopter.HelicopterUnitEntity;
-import subvoyage.type.unit.helicopter.HelicopterUnitType;
-import subvoyage.type.unit.hydromech.HydromechUnitEntity;
-import subvoyage.type.unit.hydromech.HydromechUnitType;
-import subvoyage.type.unit.hydromech.custom.HydromechState;
-import subvoyage.type.unit.hydromech.custom.UnitStatState;
-import subvoyage.type.unit.hydromech.weapons.HydromechRepairBeam;
-import subvoyage.type.unit.hydromech.weapons.HydromechWeapon;
 
 import static arc.Core.atlas;
 import static mindustry.Vars.tilesize;
@@ -758,17 +754,6 @@ public class SvUnits{
             };
 
             parts.add(copter);
-            parts.add(new ShapePart(){{
-                layer = Layer.effect;
-                circle = true;
-                x = -0.25f;
-                y = -8;
-                radius = 2f;
-                color = SvPal.heatGlow;
-                colorTo = Color.white;
-                progress = PartProgress.life.curve(Interp.pow5In);
-            }});
-
             abilities.add(new SuppressionFieldAbility(){{
                 layer = Layer.flyingUnitLow - 1;
                 orbRadius = 0.65f;
@@ -783,15 +768,6 @@ public class SvUnits{
             setEnginesMirror(
                 new UnitEngine(7.2f, -15, 2.25f, -90)
             );
-
-//            abilities.add(
-//            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
-//                teamColor = true;
-//            }},
-//            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
-//                teamColor = true;
-//            }}
-//            );
 
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
@@ -944,14 +920,6 @@ public class SvUnits{
             setEnginesMirror(
             new UnitEngine(14f, -20, 2.75f, -90)
             );
-//            abilities.add(
-//            new MoveEffectAbility(6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
-//                teamColor = true;
-//            }},
-//            new MoveEffectAbility(-6, engineOffset - 5.5f, Pal.sapBulletBack, SvFx.missileTrailShort, 0.5f){{
-//                teamColor = true;
-//            }}
-//            );
 
             weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
                 top = false;

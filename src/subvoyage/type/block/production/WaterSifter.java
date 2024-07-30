@@ -1,32 +1,21 @@
 package subvoyage.type.block.production;
 
-import arc.Core;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.math.geom.Geometry;
-import arc.math.geom.Point2;
-import arc.util.Eachable;
-import arc.util.Strings;
-import mindustry.content.Liquids;
-import mindustry.entities.units.BuildPlan;
-import mindustry.game.Team;
-import mindustry.gen.Building;
-import mindustry.gen.WorldLabel;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
-import mindustry.type.Item;
-import mindustry.ui.Bar;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.draw.DrawBlock;
-import mindustry.world.draw.DrawDefault;
+import arc.*;
+import arc.graphics.g2d.*;
+import arc.math.geom.*;
+import arc.util.*;
+import mindustry.content.*;
+import mindustry.entities.units.*;
+import mindustry.game.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.type.*;
+import mindustry.ui.*;
+import mindustry.world.*;
+import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static mindustry.Vars.*;
 
@@ -53,7 +42,6 @@ public class WaterSifter extends Block {
 
         sync = true;
     }
-
 
     @Override
     public void load(){
@@ -109,7 +97,6 @@ public class WaterSifter extends Block {
         };
     };
 
-
     public Item getPopulatedOreItem(Tile tile) {
         List<Item> candidates = new ArrayList<>();
         if(tile == null) return null;
@@ -153,6 +140,8 @@ public class WaterSifter extends Block {
         if(toDraw == null || toDraw.fullIcon.texture == null) {
             Draw.z(Layer.block+2);
             Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
+            WorldLabel.drawAt(Core.bundle.get("water-sifter.place.message"), (x + size / 4f) * tilesize, (y + size / 4f + size - 0.1f) * tilesize,
+            Layer.block + 3, WorldLabel.flagOutline, 0.8f);
         } else {
             Draw.z(Layer.block+2);
             Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.accent);

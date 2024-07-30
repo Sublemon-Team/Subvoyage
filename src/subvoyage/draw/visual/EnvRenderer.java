@@ -8,7 +8,7 @@ import arc.math.*;
 import arc.util.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import subvoyage.world.Environment;
+import subvoyage.world.*;
 
 import static mindustry.Vars.*;
 
@@ -66,8 +66,8 @@ public class EnvRenderer extends EnvRenderers {
                     4f,
                     windx * 2,
                     windy * 2,
-                    6.75f,
-                    0.0135f,
+            1000f,
+            1f,
                     0.8f,
                     waterColor
             ));
