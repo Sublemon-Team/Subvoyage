@@ -24,6 +24,7 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.vapor.*;
 import subvoyage.type.block.production.*;
 import subvoyage.ui.dialog.*;
+import subvoyage.utility.IconLoader;
 import subvoyage.world.techtree.*;
 
 import static arc.Core.*;
@@ -109,6 +110,7 @@ public class SubvoyageMod extends Mod {
     public void init() {
         super.init();
         loadSettings();
+        IconLoader.loadIcons();
     }
 
     @Override

@@ -157,9 +157,10 @@ public class LaserBlock extends Block {
 
     @Override
     public void setStats() {
+
         super.setStats();
-        if(outputLaserPower != 0) stats.add(SvStat.laserOutput,outputLaserPower);
-        if(consumeLaserPower > 0 && consumeLaser) stats.add(SvStat.laserUse,consumeLaserPower);
+        if(outputLaserPower != 0) stats.add(SvStat.laserOutput,outputLaserPower,SvStat.laserPower);
+        if(consumeLaserPower > 0 && consumeLaser) stats.add(SvStat.laserUse,consumeLaserPower,SvStat.laserPower);
     }
 
     @Override
