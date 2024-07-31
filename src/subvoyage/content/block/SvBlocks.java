@@ -1190,7 +1190,7 @@ public class SvBlocks{
                 fragVelocityMin = 1f;
                 fragVelocityMax = 1f;
                 bulletInterval = 10f;
-                intervalDelay = 20f;
+                intervalDelay = 5f;
                 fragBullet = intervalBullet = new LaserBulletType(20){{
                     colors = new Color[]{SvPal.tugSheetLightish.cpy().a(0.4f), SvPal.tugSheetLightish, Color.white};
                     chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
