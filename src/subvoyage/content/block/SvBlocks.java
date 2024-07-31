@@ -1328,7 +1328,7 @@ public class SvBlocks{
             }};
 
             shootSound = Sounds.railgun;
-            reload = 60f;
+            reload = 40f;
             shootY = 8f;
 
             recoil = 0.5f;
