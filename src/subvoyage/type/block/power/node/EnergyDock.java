@@ -1,38 +1,27 @@
 package subvoyage.type.block.power.node;
 
-import arc.Core;
-import arc.func.Boolf;
-import arc.func.Cons;
-import arc.graphics.Color;
+import arc.*;
+import arc.func.*;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.math.geom.Intersector;
-import arc.math.geom.Point2;
-import arc.math.geom.Vec2;
+import arc.math.*;
+import arc.math.geom.*;
 import arc.struct.*;
 import arc.util.*;
-import mindustry.content.*;
-import mindustry.core.Renderer;
-import mindustry.core.UI;
-import mindustry.core.World;
-import mindustry.entities.units.BuildPlan;
-import mindustry.game.Team;
+import mindustry.core.*;
+import mindustry.entities.units.*;
+import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
-import mindustry.input.Placement;
-import mindustry.ui.Bar;
-import mindustry.world.Block;
-import mindustry.world.Edges;
-import mindustry.world.Tile;
+import mindustry.input.*;
+import mindustry.ui.*;
+import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
-import mindustry.world.blocks.power.PowerBlock;
-import mindustry.world.blocks.power.PowerGraph;
+import mindustry.world.blocks.power.*;
 import mindustry.world.draw.*;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatUnit;
-import mindustry.world.modules.PowerModule;
-import subvoyage.content.other.SvPal;
+import mindustry.world.meta.*;
+import mindustry.world.modules.*;
+import subvoyage.content.other.*;
 
 import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
@@ -469,7 +458,6 @@ public class EnergyDock extends PowerBlock {
                 newGraph.transferTime = transferTime;
                 newGraph.reflow(this);
                 power.graph = newGraph;
-
                 getNodeLinks(tile, tile.block(), team, other -> {
                     if(!power.links.contains(other.pos())){
                         configureAny(other.pos());

@@ -1,24 +1,14 @@
 package subvoyage;
 
 import arc.*;
-import arc.files.Fi;
-import arc.freetype.FreeTypeFontGenerator;
-import arc.graphics.g2d.*;
-import arc.math.*;
 import arc.struct.*;
 import arc.util.*;
-import mindustry.content.TechTree;
-import mindustry.ctype.UnlockableContent;
+import mindustry.content.*;
+import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
-import mindustry.graphics.*;
 import mindustry.mod.*;
-import mindustry.type.Sector;
-import mindustry.ui.Fonts;
-import mindustry.ui.dialogs.SettingsMenuDialog;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatCat;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
@@ -27,9 +17,8 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.vapor.*;
 import subvoyage.type.block.production.*;
 import subvoyage.ui.dialog.*;
-import subvoyage.ui.setting.BannerPref;
-import subvoyage.ui.setting.ButtonPref;
-import subvoyage.utility.IconLoader;
+import subvoyage.ui.setting.*;
+import subvoyage.utility.*;
 import subvoyage.world.techtree.*;
 
 import static arc.Core.*;
@@ -55,17 +44,14 @@ public class SubvoyageMod extends Mod {
             }*/
 
         });
-        Events.on(UnlockEvent.class,e -> {
-
-        });
+//        Events.on(UnlockEvent.class,e -> {
+//
+//        });
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();
-
             if(core == null) return;
-
             if(!settings.getBool("skipcoreanimation") && !state.rules.pvp){
                 SvMusic.theAtlacian.stop();
-
                 if(settings.getInt("musicvol") > 0 && state.rules.planet == SvPlanets.atlacian){
                     Musics.land.stop();
                     SvMusic.theAtlacian.play();
@@ -80,27 +66,27 @@ public class SubvoyageMod extends Mod {
         Events.on(WorldLoadEvent.class, e -> {
             if(SvBlocks.waterSifter instanceof WaterSifter) ((WaterSifter) SvBlocks.waterSifter).worldReset();
         });
-        Events.on(MusicRegisterEvent.class, e -> {
-            //control.sound.ambientMusic.add(SvMusic.theAtlacian);
-        });
+//        Events.on(MusicRegisterEvent.class, e -> {
+//            //control.sound.ambientMusic.add(SvMusic.theAtlacian);
+//        });
         Events.run(Trigger.update,() -> {
             if(state.isGame()) {
                 if(SvMusic.theAtlacian.isPlaying()) {
                     SvMusic.theAtlacian.pause(false);
                     control.sound.stop();
                 }
-                if (!state.isPaused()) {
-                    //vaporControl.update();
-                }
+//                if (!state.isPaused()) {
+//                    //vaporControl.update();
+//                }
             } else {
                 if(SvMusic.theAtlacian.isPlaying()) {
                     SvMusic.theAtlacian.pause(true);
                 }
             }
         });
-        Events.run(Trigger.draw, () -> {
-
-        });
+//        Events.run(Trigger.draw, () -> {
+//
+//        });
 
         Events.on(EventType.FileTreeInitEvent.class, e ->
             app.post(SvShaders::init)

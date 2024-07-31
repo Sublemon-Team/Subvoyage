@@ -145,16 +145,12 @@ task jarAndroid{
 jar{
     archiveFileName = "${base.archivesBaseName}Desktop.jar"
 
-    from{
-        configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
-    }
-
+    from files(sourceSets.main.output.classesDirs)
+    from files(sourceSets.main.output.resourcesDir)
+    from configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
+    from files(layout.projectDirectory.dir('assets'))
     from(projectDir){
         include "mod.hjson"
-    }
-
-    from("assets/"){
-        include "**"
     }
 }
 

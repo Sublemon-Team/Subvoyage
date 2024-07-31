@@ -1,34 +1,22 @@
 package subvoyage.world.generator;
 
-import arc.graphics.Color;
-import arc.math.Mathf;
-import arc.math.Rand;
-import arc.math.geom.Geometry;
-import arc.math.geom.Vec2;
-import arc.math.geom.Vec3;
-import arc.struct.Seq;
-import arc.util.Structs;
-import arc.util.Tmp;
+import arc.graphics.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import arc.util.*;
 import arc.util.noise.*;
-import mindustry.ai.Astar;
-import mindustry.content.Blocks;
-import mindustry.content.Liquids;
-import mindustry.game.Schematics;
-import mindustry.game.SpawnGroup;
-import mindustry.maps.filters.RiverNoiseFilter;
-import mindustry.maps.generators.PlanetGenerator;
+import mindustry.ai.*;
+import mindustry.content.*;
+import mindustry.game.*;
+import mindustry.maps.generators.*;
+import mindustry.world.*;
+import mindustry.world.blocks.environment.*;
+import subvoyage.content.other.*;
+import subvoyage.world.planets.atlacian.*;
 
 import static mindustry.Vars.state;
 import static subvoyage.content.block.SvWorldBlocks.*;
-
-import mindustry.maps.planet.ErekirPlanetGenerator;
-import mindustry.world.Block;
-import mindustry.world.Tile;
-import mindustry.world.blocks.environment.Floor;
-import mindustry.world.blocks.environment.SteamVent;
-import subvoyage.content.other.SvLoadouts;
-import subvoyage.content.other.SvPal;
-import subvoyage.world.planets.atlacian.AtlacianWaves;
 
 public class AtlacianPlanetGen extends PlanetGenerator {
     /*      GENERATION PARAMETERS       */
@@ -40,7 +28,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         defaultLoadout = SvLoadouts.basicPuffer;
         baseSeed = 1;
     }
-
 
     @Override
     public float getHeight(Vec3 position) {

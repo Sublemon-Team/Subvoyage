@@ -19,7 +19,7 @@ import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.power.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static mindustry.Vars.*;
 
@@ -123,7 +123,6 @@ public class WindTurbine extends SolarGenerator {
 
         @Override
         public void draw(){
-            super.draw();
             Draw.rect(bottom, x, y);
             Drawf.spinSprite(rotator, x, y, getRot());
             Draw.rect(region, x, y);

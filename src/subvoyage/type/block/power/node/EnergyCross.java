@@ -1,38 +1,26 @@
 package subvoyage.type.block.power.node;
 
-import arc.Core;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
-import arc.math.Mathf;
-import arc.math.geom.Geometry;
-import arc.math.geom.Point2;
-import arc.struct.Seq;
-import mindustry.Vars;
-import mindustry.core.Renderer;
-import mindustry.core.UI;
-import mindustry.entities.TargetPriority;
-import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
-import mindustry.graphics.Pal;
-import mindustry.input.Placement;
-import mindustry.ui.Bar;
-import mindustry.world.Tile;
-import mindustry.world.blocks.power.BeamNode;
-import mindustry.world.blocks.power.PowerBlock;
-import mindustry.world.blocks.power.PowerGraph;
-import mindustry.world.blocks.power.PowerNode;
-import mindustry.world.meta.BlockStatus;
-import mindustry.world.meta.Env;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatUnit;
-import subvoyage.content.other.SvPal;
+import arc.*;
+import arc.graphics.*;
+import arc.graphics.g2d.*;
+import arc.math.*;
+import arc.math.geom.*;
+import arc.struct.*;
+import mindustry.*;
+import mindustry.core.*;
+import mindustry.entities.*;
+import mindustry.gen.*;
+import mindustry.graphics.*;
+import mindustry.input.*;
+import mindustry.ui.*;
+import mindustry.world.*;
+import mindustry.world.blocks.power.*;
+import mindustry.world.meta.*;
+import subvoyage.content.other.*;
 
-import java.util.Arrays;
+import java.util.*;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
 
 public class EnergyCross extends PowerBlock {
@@ -89,14 +77,12 @@ public class EnergyCross extends PowerBlock {
     @Override
     public void setStats(){
         super.setStats();
-
         stats.add(Stat.powerRange, range, StatUnit.blocks);
     }
 
     @Override
     public void init(){
         super.init();
-
         updateClipRadius((range + 1) * tilesize);
     }
 
@@ -168,7 +154,6 @@ public class EnergyCross extends PowerBlock {
         @Override
         public void draw(){
             super.draw();
-
             if(Mathf.zero(Renderer.laserOpacity)) return;
 
             Draw.z(Layer.power);
