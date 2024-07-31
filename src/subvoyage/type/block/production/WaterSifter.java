@@ -1,9 +1,8 @@
 package subvoyage.type.block.production;
 
 import arc.*;
-import arc.graphics.Color;
+import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.math.Interp;
 import arc.math.geom.*;
 import arc.util.*;
 import mindustry.content.*;
@@ -19,7 +18,6 @@ import mindustry.world.meta.*;
 
 import java.util.*;
 
-import static arc.graphics.g2d.Draw.alpha;
 import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.*;
 
@@ -68,8 +66,8 @@ public class WaterSifter extends Block {
         addBar("itemprogress",(WaterSifterBuild e) -> {
             Item item = getPopulatedOreItemCached(e.tileX(),e.tileY());
             return new Bar(
-                    () -> item.localizedName,
-                    () -> item.color,
+            () -> item != null ? item.localizedName : Core.bundle.format("bar.noresources"),
+            () -> item != null ? item.color : Color.white,
                     () -> e.progress
             );
         });
@@ -129,6 +127,7 @@ public class WaterSifter extends Block {
         return frequentItem;
     };
 
+    @Nullable
     public Item getPopulatedOreItemCached(int x, int y) {
         int pos = Point2.pack(x,y);
         Item item;
@@ -183,6 +182,8 @@ public class WaterSifter extends Block {
         public void updateTile() {
             super.updateTile();
             Item item = getPopulatedOreItemCached(tile.x,tile.y);
+            if(item == null) return;
+
             progress += getProgressIncrease(getHarvestTime());
             float liq = liquidOutput * edelta() - item.hardness*0.8f/60f;
             liquids.add(Liquids.water,liq);
@@ -196,9 +197,8 @@ public class WaterSifter extends Block {
 
         public float getHarvestTime() {
             Item item = getPopulatedOreItemCached(tile.x,tile.y);
-            return harvestTime+item.hardness*15f;
+            return item != null ? harvestTime + item.hardness * 15f : 0;
         }
-
 
         public void dumpOutputs() {
             Item item = getPopulatedOreItemCached(tile.x,tile.y);
