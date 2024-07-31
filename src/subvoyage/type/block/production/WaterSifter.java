@@ -1,7 +1,9 @@
 package subvoyage.type.block.production;
 
 import arc.*;
+import arc.graphics.Color;
 import arc.graphics.g2d.*;
+import arc.math.Interp;
 import arc.math.geom.*;
 import arc.util.*;
 import mindustry.content.*;
@@ -17,6 +19,8 @@ import mindustry.world.meta.*;
 
 import java.util.*;
 
+import static arc.graphics.g2d.Draw.alpha;
+import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.*;
 
 public class WaterSifter extends Block {
@@ -142,6 +146,9 @@ public class WaterSifter extends Block {
             Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
             WorldLabel.drawAt(Core.bundle.get("water-sifter.place.message"), (x + size / 4f) * tilesize, (y + size / 4f + size - 0.1f) * tilesize,
             Layer.block + 3, WorldLabel.flagOutline, 0.8f);
+
+            color(Color.scarlet);
+            Draw.rect(Icon.cancel.getRegion(), (x+size/4f)*tilesize,(y+size/4f+size-0.1f+0.5f)*tilesize);
         } else {
             Draw.z(Layer.block+2);
             Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.accent);
