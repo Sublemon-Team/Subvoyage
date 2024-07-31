@@ -3,12 +3,14 @@ package subvoyage;
 import arc.*;
 import arc.struct.*;
 import arc.util.*;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
+import mindustry.ui.dialogs.ModsDialog;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
@@ -137,9 +139,16 @@ public class SubvoyageMod extends Mod {
                 ui.showConfirm("@confirm", "@settings.sv-clear-campaign.confirm", () -> {
                     Seq<Saves.SaveSlot> toDelete = Seq.with();
                     control.saves.getSaveSlots().each(s -> {
-                        if(s.getSector().planet == SvPlanets.atlacian) toDelete.add(s);
+                        if(s.getSector() == null) return;
+                        if(s.getSector().planet == SvPlanets.atlacian) {
+                            toDelete.add(s);
+                            Log.info("Deleted Atlacian sector: "+s.getSector().id);
+                        }
                     });
                     toDelete.each(Saves.SaveSlot::delete);
+                    ui.showInfoOnHidden("@settings.sv-clear-campaign-close.confirm", () -> {
+                        Core.app.exit();
+                    });
                 });
             }));
             t.pref(new ButtonPref(Core.bundle.get("sv-clear-tech-tree"),Icon.trash,() -> {
@@ -160,7 +169,7 @@ public class SubvoyageMod extends Mod {
             t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
             t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
         });
-        SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
+        SvUnits.loadUwu(settings.getBool("svTr-leeft-uwu"));
     }
 
 }
