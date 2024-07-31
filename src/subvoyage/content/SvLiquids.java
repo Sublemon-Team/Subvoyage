@@ -17,10 +17,11 @@ public class SvLiquids{
         polygen = new Liquid("meta-water", SvPal.polygen) {{
             heatCapacity = 0.35f;
             boilPoint = 0.5f;
-            gasColor = Color.grays(0.9f);
+            gasColor = color;
+            gas = true;
             flammability = 0f;
-            coolant = false;
             moveThroughBlocks = true;
+
         }};
 
         hardWater = new Liquid("liquid-hard-water", SvPal.hardWater){{

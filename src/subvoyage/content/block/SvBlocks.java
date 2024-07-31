@@ -93,6 +93,7 @@ public class SvBlocks{
             laserRefabricator,
             helicopterAssembler, hydromechAssembler, assemblyModule,
             fortifiedPayloadConveyor, fortifiedPayloadRouter,
+            payloadLoader,payloadUnloader,
             payloadLaunchPad,
             //EXPLORATION
             buoy,tower,beacon,
@@ -447,8 +448,43 @@ public class SvBlocks{
             underBullets = true;
         }};
 
+        payloadLoader = new PayloadLoader("payload-loader"){{
+            requirements(Category.units,atl(), with(iridium,50,chromium,30,clay,50));
+            regionSuffix = "-fortified";
+            hasPower = true;
+            consumePower(2f);
+            size = 3;
+            fogRadius = 5;
+        }
+
+            @Override
+            public void load() {
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+            }
+        };
+
+        payloadUnloader = new PayloadUnloader("payload-unloader"){{
+            requirements(Category.units,atl(), with(iridium,50,chromium,30,clay,50));
+            regionSuffix = "-fortified";
+            hasPower = true;
+            consumePower(2f);
+            size = 3;
+            fogRadius = 5;
+        }
+            @Override
+            public void load() {
+                super.load();
+                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+            }
+        };
+
         payloadLaunchPad = new PayloadLaunchPad("payload-launch-pad") {{
-            requirements(Category.units, atl(), with(corallite,250,iridium,250,chromium,150));
+            requirements(Category.units, atl(), with(iridium,50,chromium,30,clay,50));
             size = 3;
             health = 1600;
             maxPayloadSize = 3;
@@ -476,7 +512,21 @@ public class SvBlocks{
             researchCost = with(corallite,200,spaclanium,100);
 
             consumeLiquid(water, 5/60f);
-        }};
+            consumeLiquid(polygen,4f/60f).boost();
+        }
+            @Override
+            public void setStats() {
+                super.setStats();
+                if(findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase){
+                    stats.remove(Stat.booster);
+                    stats.add(Stat.booster,
+                            StatValues.speedBoosters("{0}" + StatUnit.timesSpeed.localized(),
+                                    consBase.amount, liquidBoostIntensity, false,
+                                    l -> (consumesLiquid(l) && (findConsumer(f -> f instanceof ConsumeLiquid).booster || ((ConsumeLiquid)findConsumer(f -> f instanceof ConsumeLiquid)).liquid != l)))
+                    );
+                }
+            }
+        };
 
         featherDrill = new Drill("feather-drill"){{
             requirements(Category.production,atl(), with(corallite, 100, chromium, 50, iridium, 100, clay, 200));
@@ -492,9 +542,23 @@ public class SvBlocks{
             squareSprite = false;
 
             consumeLiquid(argon, 2f/60f);
-            consumeCoolant(4f/60f).optional = true;
-        }};
-        tectonicDrill = new AttributeCrafter("tectonic-drill") {{
+            consumeLiquid(polygen,4f/60f).boost();
+        }
+
+            @Override
+            public void setStats() {
+                super.setStats();
+                if(findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase){
+                    stats.remove(Stat.booster);
+                    stats.add(Stat.booster,
+                            StatValues.speedBoosters("{0}" + StatUnit.timesSpeed.localized(),
+                                    consBase.amount, liquidBoostIntensity, false,
+                                    l -> (consumesLiquid(l) && (findConsumer(f -> f instanceof ConsumeLiquid).booster || ((ConsumeLiquid)findConsumer(f -> f instanceof ConsumeLiquid)).liquid != l)))
+                    );
+                }
+            }
+        };
+        tectonicDrill = new AttributeCrafterBoostable("tectonic-drill") {{
             requirements(Category.production,atl(), with(corallite, 200, spaclanium, 100, iridium, 100));
             researchCost = with(corallite,1000,spaclanium,600,iridium,400);
             attribute = SvAttribute.crude;
@@ -512,7 +576,11 @@ public class SvBlocks{
             ambientSound = Sounds.drill;
             ambientSoundVolume = 0.15f;
 
+            consumeLiquid(polygen,4f/60f).boost();
+
             boostScale = 1f / 9f;
+            /*consumeCoolant()
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));*/
 
             craftEffect = new MultiEffect(Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             drawer = new DrawMulti(
@@ -1013,25 +1081,13 @@ public class SvBlocks{
                     Liquids.water, new LiquidBulletType(Liquids.water){{
                         lifetime = 49f;
                         speed = 4f;
-                        knockback = 1.7f;
+                        knockback = 2.1f;
                         puddleSize = 8f;
                         orbSize = 4f;
                         drag = 0.001f;
                         ammoMultiplier = 0.4f;
                         statusDuration = 60f * 4f;
                         damage = 0.2f;
-                        layer = Layer.bullet - 2f;
-                    }},
-                    polygen, new LiquidBulletType(polygen){{
-                        lifetime = 68f;
-                        speed = 6f;
-                        knockback = 3f;
-                        puddleSize = 12f;
-                        orbSize = 5f;
-                        drag = 0.001f;
-                        ammoMultiplier = 0.3f;
-                        statusDuration = 60f * 4f;
-                        damage = 0.3f;
                         layer = Layer.bullet - 2f;
                     }}
             );
@@ -1064,8 +1120,9 @@ public class SvBlocks{
             targetGround = true;
             targetAir = true;
             squareSprite = false;
+            shoot = new ShootSpread(2,30);
             ammo(
-            chromium, new BasicBulletType(6f, 60){{
+            chromium, new BasicBulletType(6f, 20){{
                 sprite = "large-orb";
                 inaccuracy = 1f;
                 ammoMultiplier = 10f;
@@ -1080,6 +1137,28 @@ public class SvBlocks{
                 hitColor = backColor = trailColor = SvPal.chromiumLightish;
                 frontColor = Color.white;
 
+                fragBullets = intervalBullets = 5;
+                fragVelocityMin = 1f;
+                fragVelocityMax = 1f;
+                bulletInterval = 40f;
+                intervalDelay = 10f;
+                fragBullet = intervalBullet = new LaserBulletType(10){{
+                    colors = new Color[]{SvPal.chromiumLightish.cpy().a(0.4f), SvPal.chromiumLightish, Color.white};
+                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
+
+                    buildingDamageMultiplier = 0.25f;
+                    hitEffect = Fx.hitLancer;
+                    hitSize = 4;
+                    lifetime = 16f;
+                    drawSize = 400f;
+                    collidesAir = false;
+                    length = 5*8f;
+                    ammoMultiplier = 1f;
+                    pierceCap = 4;
+
+                    status = StatusEffects.electrified;
+                }};
+
                 homingPower = 0.18f;
                 homingRange = 16f;
 
@@ -1090,11 +1169,11 @@ public class SvBlocks{
                 trailLength = 6;
                 trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
 
-                shoot = new ShootBarrel();
                 hitEffect = despawnEffect = Fx.hitBulletColor;
             }},
 
-            tugSheet, new BasicBulletType(12f, 300){{
+            tugSheet, new BasicBulletType(12f, 200){{
+
                 sprite = "large-orb";
                 inaccuracy = 3f;
                 reloadMultiplier = 1.1f;
@@ -1106,6 +1185,28 @@ public class SvBlocks{
                 lifetime = 85f;
                 shootEffect = SvFx.pulverize;
                 smokeEffect = Fx.none;
+
+                fragBullets = intervalBullets = 8;
+                fragVelocityMin = 1f;
+                fragVelocityMax = 1f;
+                bulletInterval = 10f;
+                intervalDelay = 20f;
+                fragBullet = intervalBullet = new LaserBulletType(20){{
+                    colors = new Color[]{SvPal.tugSheetLightish.cpy().a(0.4f), SvPal.tugSheetLightish, Color.white};
+                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
+
+                    buildingDamageMultiplier = 0.25f;
+                    hitEffect = Fx.hitLancer;
+                    hitSize = 4;
+                    lifetime = 16f;
+                    drawSize = 400f;
+                    collidesAir = false;
+                    length = 5*8f;
+                    ammoMultiplier = 1f;
+                    pierceCap = 4;
+
+                    status = StatusEffects.electrified;
+                }};
 
                 hitColor = backColor = trailColor = SvPal.tugSheetLightish;
                 frontColor = Color.white;
@@ -1119,7 +1220,6 @@ public class SvBlocks{
 
                 homingPower = 0.08f;
                 homingRange = 8f;
-                shoot = new ShootBarrel();
 
                 hitEffect = Fx.hitBulletColor;
                 despawnEffect = new MultiEffect(Fx.hitBulletColor, new WaveEffect(){{
@@ -1228,7 +1328,7 @@ public class SvBlocks{
             }};
 
             shootSound = Sounds.railgun;
-            reload = 15f;
+            reload = 60f;
             shootY = 8f;
 
             recoil = 0.5f;
@@ -1699,7 +1799,7 @@ public class SvBlocks{
                 researchCost = with(chromium,1000,iridium,2000);
 
                 size = 2;
-                itemCapacity = 300;
+                itemCapacity = 80;
                 scaledHealth = 55;
                 squareSprite = false;
             }
@@ -1714,7 +1814,7 @@ public class SvBlocks{
                 requirements(Category.effect,atl(), with(chromium, 500, iridium, 345));
                 researchCost = with(chromium,2000,iridium,3500);
                 size = 3;
-                itemCapacity = 1000;
+                itemCapacity = 300;
                 scaledHealth = 155;
                 squareSprite = false;
             }
@@ -1930,7 +2030,7 @@ public class SvBlocks{
         }};
 
         incinerator = new Incinerator("incinerator") {{
-            requirements(Category.distribution, with(corallite,5,spaclanium,10));
+            requirements(Category.distribution,atl(), with(corallite,5,spaclanium,10));
             health = 90;
             envEnabled |= Env.space;
             buildCostMultiplier = 0.8f;

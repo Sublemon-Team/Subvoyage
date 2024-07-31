@@ -16,6 +16,7 @@ import subvoyage.type.block.distribution.PayloadLaunchPad;
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
+import static mindustry.Vars.state;
 import static mindustry.Vars.tilesize;
 
 public class SvFx{
@@ -52,16 +53,16 @@ public class SvFx{
         Draw.alpha(e.foutpowdown());
         Draw.scl(1f+e.finpow(),1f+e.finpow());
         Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fout() > 0.75f) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fout() > 0.97f) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
+        if(e.fout() > 0.75f && !state.isPaused()) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fout() > 0.97f && !state.isPaused()) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
     }),
     payloadLaunchPadRocketLand = new Effect(60f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
         Draw.alpha(e.finpowdown());
         Draw.scl(1f+e.foutpowdown(),1f+e.foutpowdown());
         Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fin() > 0.75f) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fin() > 0.97f) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
+        if(e.fin() > 0.75f && !state.isPaused()) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fin() > 0.97f && !state.isPaused()) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
     }),
 
     smokeCloud = new Effect(25, e -> {
