@@ -39,6 +39,7 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
 import subvoyage.type.block.distribution.*;
+import subvoyage.type.block.effect.OverdriveSquareProjector;
 import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser_blocks.*;
 import subvoyage.type.block.laser_blocks.node.*;
@@ -71,6 +72,7 @@ public class SvBlocks{
             tugSheetWall, tugSheetWallLarge,
             coreDecoder, coreDecrypter,
             regenerator, regenProjector,
+            overdriveProjector,
             //CRAFTERS
             waterMetallizer, poweredEnhancer,
             ceramicBurner, terracottaBlaster, circularCrusher,
@@ -1456,38 +1458,28 @@ public class SvBlocks{
             hackChance = 0.02f;
         }};*/
 
-        regenerator = new MendProjector("regenerator"){{
-            requirements(Category.effect,atl(), with(spaclanium, 60));
-            researchCost = with(spaclanium,300);
-
-            consumePower(0.15f);
-            consumeLiquid(polygen,0.3f);
-            squareSprite = false;
-
-            size = 1;
-            reload = 200f;
-            range = 40f;
-            healPercent = 4f;
-            phaseBoost = 4f;
-            phaseRangeBoost = 20f;
-            health = 80;
-        }};
-
         regenProjector = new MendProjector("regen-projector"){{
             requirements(Category.effect,atl(), with(spaclanium, 60, clay, 80, iridium, 10));
             researchCost = with(spaclanium,500,clay,280,iridium,100);
 
             consumePower(0.3f);
-            consumeLiquid(polygen,0.5f);
             squareSprite = false;
 
             size = 2;
             reload = 100f;
-            range = 40f*2;
-            healPercent = 16f;
+            range = 48f*2;
+            healPercent = 20f;
             phaseBoost = 4f;
             phaseRangeBoost = 20f;
             health = 400;
+        }};
+
+        overdriveProjector = new OverdriveSquareProjector("overdrive-projector"){{
+            requirements(Category.effect, with(corallite,100,iridium,80,chromium,20,quartzFiber,10));
+            consumePower(3.50f);
+            researchCost = with(corallite,1000,iridium,800,chromium,1000,quartzFiber,100);
+            size = 2;
+            consumeItem(quartzFiber).boost();
         }};
 
         //exploration

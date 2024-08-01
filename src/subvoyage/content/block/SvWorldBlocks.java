@@ -11,9 +11,12 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.decoration.TreeBlock;
 import subvoyage.type.block.environment.vapor.*;
 
+import java.util.HashMap;
+
 import static mindustry.type.ItemStack.with;
 
 public class SvWorldBlocks{
+    public static HashMap<Block,Block> floorToWallOre = new HashMap<>();
     public static Block
     //ores
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
@@ -201,5 +204,10 @@ public class SvWorldBlocks{
             clipSize = 128f;
             shadowOffset = -2.5f;
         }};
+
+        floorToWallOre.put(oreSpaclanium,wallOreSpaclanium);
+        floorToWallOre.put(oreCorallite,wallOreCorallite);
+        floorToWallOre.put(oreIridium,wallOreIridium);
+        floorToWallOre.put(oreChromium,wallOreChromium);
     }
 }

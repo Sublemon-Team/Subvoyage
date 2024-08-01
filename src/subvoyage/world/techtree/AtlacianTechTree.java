@@ -163,10 +163,8 @@ public class AtlacianTechTree {
                 node(chromiumReactor,with(research(crudeSmelter)),() -> {
 
                 });
-                node(regenerator,() -> {
-                    node(regenProjector,with(research(polygen)),() -> {
+                node(regenProjector,with(research(polygen)),() -> {
 
-                    });
                 });
             });
 

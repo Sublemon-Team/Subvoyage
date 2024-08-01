@@ -12,6 +12,7 @@ import mindustry.game.*;
 import mindustry.maps.generators.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
+import subvoyage.content.block.SvWorldBlocks;
 import subvoyage.content.other.*;
 import subvoyage.world.planets.atlacian.*;
 
@@ -51,12 +52,40 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         return Liquids.arkycite.color;
     }
 
+    private Seq<Block> getOres() {
+        Seq<Block> ores = Seq.with(oreSpaclanium,oreCorallite);
+        float poles = Math.abs(sector.tile.v.y);
+        float nmag = 0.5f;
+        float scl = 1f;
+        float addscl = 1.3f;
+
+        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
+            ores.add(oreSulfur);
+        }
+
+        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.35f*addscl){
+            ores.add(oreIridium);
+        }
+
+        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.45f*addscl){
+            ores.add(oreChromium);
+        }
+
+        return ores;
+    };
+
 
     @Override
     protected void generate() {
         float spawnDegree = rand.random(360f);
         float length = width / 2.6f;
         Vec2 trns = Tmp.v1.trns(spawnDegree, length);
+        Seq<Block> ores = getOres();
+        FloatSeq frequencies = new FloatSeq();
+        float poles = Math.abs(sector.tile.v.y);
+        for(int i = 0; i < ores.size; i++){
+            frequencies.add(rand.random(-0.1f, 0.01f) + i * 0.01f + poles * 0.04f);
+        }
         int
                 spawnX = (int)(trns.x + width / 2f),
                 spawnY = (int)(trns.y + height / 2f),
@@ -140,6 +169,32 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         scatterBlock(darkLegartyteStone, hauntedTree, 0.005f/3f);
         blendRand(agaryteWall,agaryteBoulder,2f,0.3f);
         blendRand(agaryteBoulder,agaryteBlocks,1f,0.2f);
+
+        pass((x, y) -> {
+            int offsetX = x - 4, offsetY = y + 23;
+            for(int i = ores.size - 1; i >= 0; i--){
+                Block entry = ores.get(i);
+                float freq = frequencies.get(i);
+                if(block == Blocks.air && Math.abs(0.5f - noise(offsetX, offsetY + i * 888, 2, 0.7f, (10 + i * 2),1f)) > 0.24f + i * 0.01 &&
+                        Math.abs(0.5f - noise(offsetX, offsetY - i * 888, 1, 1, (15 + i * 4),1f)) > 0.37f + freq){
+                    ore = entry;
+                    break;
+                }
+            }
+        });
+
+        pass((x,y) -> {
+           if(block == sodilateWall) {
+               if(!nearAir(x,y)) return;
+               for(int i = 0; i < ores.size; i++){
+                   Block entry = ores.get(i);
+                   if(!floorToWallOre.containsKey(entry)) continue;
+                   if(noise(x/10f,y/10f,2,0.3f,1f,1f) > 0.5f+0.1f*i) continue;
+                   ore = floorToWallOre.getOrDefault(entry,entry);
+                   break;
+               }
+           };
+        });
 
         outer:
         for (Tile tile : tiles) {
