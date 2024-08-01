@@ -164,7 +164,9 @@ public class AtlacianTechTree {
 
                 });
                 node(regenProjector,with(research(polygen)),() -> {
+                    node(overdriveProjector,() -> {
 
+                    });
                 });
             });
 
@@ -271,7 +273,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(coreDecoder,() -> {
+                node(coreDecoder,with(onsector(rapidEncounter)),() -> {
 
                 });
                 node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {

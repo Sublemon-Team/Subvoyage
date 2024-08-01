@@ -15,7 +15,7 @@ description: "Aquatic-stylized mod with new planet and unique mechanics"
 subtitle: "Aquatic-stylized content in new planet."
 
 #the mod version
-version: 0.4-beta
+version: 0.5-beta
 
 #the minimum game build required to run this mod
 minGameVersion: 145
