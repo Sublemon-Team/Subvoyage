@@ -9,6 +9,7 @@ import static subvoyage.content.SvPlanets.atlacian;
 
 public class SvSectorPresets {
     public static SectorPreset divingPoint, gustyRidges, noxiousTarn, rapidEncounter;
+    public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
 
@@ -61,5 +62,7 @@ public class SvSectorPresets {
                 r.enemyCoreBuildRadius = 450f;
             };
         }};
+
+        all.addAll(divingPoint,gustyRidges,noxiousTarn,rapidEncounter);
     }
 }

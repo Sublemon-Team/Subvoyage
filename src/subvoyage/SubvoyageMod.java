@@ -3,14 +3,13 @@ package subvoyage;
 import arc.*;
 import arc.struct.*;
 import arc.util.*;
-import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
-import mindustry.ui.dialogs.ModsDialog;
+import mindustry.type.Sector;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
@@ -22,6 +21,8 @@ import subvoyage.ui.dialog.*;
 import subvoyage.ui.setting.*;
 import subvoyage.utility.*;
 import subvoyage.world.techtree.*;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
@@ -61,7 +62,14 @@ public class SubvoyageMod extends Mod {
             }
         });
         Events.on(SectorCaptureEvent.class,e -> {
-            if(e.sector.preset == SvSectorPresets.noxiousTarn) {
+            AtomicBoolean finishedAll = new AtomicBoolean(true);
+            SvSectorPresets.all.each(s -> {
+                if(s == e.sector.preset) return;
+                Sector sector = SvPlanets.atlacian.sectors.find(a -> a.preset == s);
+                boolean isCaptured = sector.isCaptured();
+                if(!isCaptured) finishedAll.set(false);
+            });
+            if(finishedAll.get()) {
                 betaCompleteDialog.show(SvPlanets.atlacian);
             };
         });
