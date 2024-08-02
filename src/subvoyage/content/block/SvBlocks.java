@@ -1786,7 +1786,7 @@ public class SvBlocks{
 
         vault = new StorageBlock("vault"){
             {
-                requirements(Category.effect,atl(), with(chromium, 80, iridium, 45));
+                requirements(Category.effect,atl(), with(chromium, 40, iridium, 85));
 
                 researchCost = with(chromium,300,iridium,300);
 
