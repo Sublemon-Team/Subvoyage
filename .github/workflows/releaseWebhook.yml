@@ -17,7 +17,7 @@ jobs:
         # Webhook URL from discord. See: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks for details
         webhook-url: ${{secrets.DISCORD_WEBHOOK}}
         # Message that is sent via the webhook.
-        content: "> Created at: <t:${{steps.timestamp.outputs.timestamp}}:R>\n${{github.event.release.body}}"
+        embed-description: "> Created at: <t:${{steps.unixtime.outputs.timestamp}}:R>\n${{github.event.release.body}}"
         # Embed title
         embed-title: "<:i_0spaclanium:1256993391346974831>Subvoyage - ${{github.event.release.tag_name}} Release Announcement<:i_8quartzfiber:1256993435370520598>" # optional
         # Embed URL
