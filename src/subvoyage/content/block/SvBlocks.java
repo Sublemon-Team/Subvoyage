@@ -38,6 +38,7 @@ import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
+import subvoyage.type.block.defense.PowerRingTurret;
 import subvoyage.type.block.distribution.*;
 import subvoyage.type.block.effect.OverdriveSquareProjector;
 import subvoyage.type.block.fog.*;
@@ -66,7 +67,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe, resonance, burden, cascade, inspiration,
+            whirl, rupture, awe, resonance, burden, cascade, inspiration, ringTurret,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -1342,6 +1343,13 @@ public class SvBlocks{
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(6);
+        }};
+
+        ringTurret = new PowerRingTurret("ring-turret") {{
+            requirements(Category.defense,with(spaclanium,1));
+            range = 40*8f;
+            consumePower(1f);
+            consumeLiquid(polygen,1f).boost();
         }};
 
 
