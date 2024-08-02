@@ -1,16 +1,9 @@
 package subvoyage.utility;
-
-import arc.util.ArcRuntimeException;
-import arc.util.Http;
-import arc.util.Nullable;
 import arc.util.Structs;
-import arc.util.serialization.Jval;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static mindustry.Vars.ghApi;
 
 public class VersionControl {
 
