@@ -10,6 +10,7 @@ import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
+import mindustry.type.Sector;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import subvoyage.content.block.SvWorldBlocks;
@@ -28,6 +29,11 @@ public class AtlacianPlanetGen extends PlanetGenerator {
     {
         defaultLoadout = SvLoadouts.basicPuffer;
         baseSeed = 1;
+    }
+
+    @Override
+    public void generateSector(Sector sector) {
+
     }
 
     @Override
@@ -231,6 +237,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
         state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(sector.threat, 0f));
         sector.generateEnemyBase = false;
+        state.rules.attackMode = false;
     }
 
     public void brushWithBlock(Seq<Tile> path, int rad, Block block){
