@@ -14,6 +14,7 @@ jobs:
     - name: Discord Webhook Action
       uses: tsickert/discord-webhook@v6.0.0
       with:
+        content: ""
         # Webhook URL from discord. See: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks for details
         webhook-url: ${{secrets.DISCORD_WEBHOOK}}
         # Message that is sent via the webhook.
