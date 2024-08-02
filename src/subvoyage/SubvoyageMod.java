@@ -3,6 +3,7 @@ package subvoyage;
 import arc.*;
 import arc.struct.*;
 import arc.util.*;
+import arc.util.serialization.Jval;
 import mindustry.content.*;
 import mindustry.ctype.*;
 import mindustry.game.*;
@@ -10,6 +11,7 @@ import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.mod.*;
 import mindustry.type.Sector;
+import mindustry.ui.dialogs.ModsDialog;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
@@ -33,11 +35,38 @@ public class SubvoyageMod extends Mod {
     public BetaCompleteDialog betaCompleteDialog;
 
     public static VaporControl vaporControl;
+    public static VersionControl versionControl = new VersionControl();
+    public static String currentTag = "v0.5b";
+    public static String repo = "Sublemon-Team/Subvoyage";
 
     public SubvoyageMod(){
         //listen for game load event
         Events.on(ClientLoadEvent.class, e -> {
             betaCompleteDialog = new BetaCompleteDialog();
+
+            boolean autoUpdate = settings.getBool("sv-autoupdate");
+            Log.info("[Subvoyage] Autoupdate: "+(autoUpdate ? "Enabled" : "Disabled"));
+            if(autoUpdate) {
+                Log.info("[Subvoyage] Fetching latest Updates...");
+                Http.get(ghApi+"/repos/"+repo+"/releases/latest", res -> {
+                    var json = Jval.read(res.getResultAsString());
+                    String tagName = json.getString("tag_name");
+                    Log.info("[Subvoyage] Latest Release Tag: "+tagName);
+                    boolean upToDate = versionControl.isUpToDate(currentTag, tagName);
+                    Log.info("[Subvoyage] "+(!upToDate ? "New update is available" : "Version is up-to-date"));
+                    if(!upToDate) {
+                        String text = bundle.format("settings.sv-update-version.confirm",tagName,currentTag);
+                        ui.showConfirm("@update", text, () -> {
+                            ui.mods.show();
+                            ui.mods.githubImportMod(repo, false, null);
+                        });
+                    }
+                },(err) -> {
+                    ui.showInfoOnHidden("@settings.sv-update-failed.show", () -> {
+
+                    });
+                });
+            }
             /*for (TechTree.TechNode node : TechTree.all) {
                 UnlockableContent content = node.content;
                 if (content.locked()) {
@@ -50,6 +79,7 @@ public class SubvoyageMod extends Mod {
 //        Events.on(UnlockEvent.class,e -> {
 //
 //        });
+
         Events.run(Trigger.newGame,() -> {
             var core = player.bestCore();
             if(core == null) return;
@@ -175,6 +205,7 @@ public class SubvoyageMod extends Mod {
             }));
 
             t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
+            t.checkPref("sv-autoupdate",true);
             t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
         });
         SvUnits.loadUwu(settings.getBool("svTr-leeft-uwu"));
