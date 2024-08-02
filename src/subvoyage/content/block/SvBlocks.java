@@ -1786,9 +1786,9 @@ public class SvBlocks{
 
         vault = new StorageBlock("vault"){
             {
-                requirements(Category.effect,atl(), with(chromium, 250, iridium, 125));
+                requirements(Category.effect,atl(), with(chromium, 80, iridium, 45));
 
-                researchCost = with(chromium,1000,iridium,2000);
+                researchCost = with(chromium,300,iridium,300);
 
                 size = 2;
                 itemCapacity = 80;
@@ -1803,8 +1803,8 @@ public class SvBlocks{
         };
         largeVault = new StorageBlock("large-vault"){
             {
-                requirements(Category.effect,atl(), with(chromium, 500, iridium, 345));
-                researchCost = with(chromium,2000,iridium,3500);
+                requirements(Category.effect,atl(), with(chromium, 100, iridium, 145));
+                researchCost = with(chromium,1000,iridium,1500);
                 size = 3;
                 itemCapacity = 300;
                 scaledHealth = 155;
