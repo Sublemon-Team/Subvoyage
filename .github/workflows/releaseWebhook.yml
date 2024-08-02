@@ -1,4 +1,4 @@
-name: ReleaseWebhook
+name: Release Webhook
 on:
   release:
     types: [published]
