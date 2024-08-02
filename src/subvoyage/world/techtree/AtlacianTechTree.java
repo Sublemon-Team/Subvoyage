@@ -78,11 +78,11 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(submersibleDrill,with(onsector(gustyRidges)), () -> {
+            node(submersibleDrill,with(onsector(ridges)), () -> {
                node(tectonicDrill, () -> {
 
                });
-               node(featherDrill,with(research(argonCentrifuge),onsector(rapidEncounter)), () -> {
+               node(featherDrill,with(research(argonCentrifuge),onsector(encounter)), () -> {
 
                });
             });
@@ -93,8 +93,8 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(waterSifter,with(onsector(noxiousTarn)),() -> {
-                    node(distiller,with(sector(noxiousTarn)),() -> {
+                node(waterSifter,with(onsector(tarn)),() -> {
+                    node(distiller,with(sector(tarn)),() -> {
 
                     });
                 });
@@ -132,7 +132,7 @@ public class AtlacianTechTree {
 
                     });
                     node(propanePyrolyzer,with(research(crude)),() -> {
-                        node(heliumCompressor,() -> {
+                        node(heliumCompressor,with(onsector(hedge)),() -> {
 
                         });
                     });
@@ -149,7 +149,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(spaclaniumHydrolyzer,with(onsector(gustyRidges)),() -> {
+            node(spaclaniumHydrolyzer,with(onsector(ridges)),() -> {
                 node(energyDock, () -> {
                     node(energyDistributor,() -> {
 
@@ -171,9 +171,9 @@ public class AtlacianTechTree {
             });
 
             node(whirl, () -> {
-                node(rupture,with(onsector(gustyRidges)), () -> {
+                node(rupture,with(onsector(ridges)), () -> {
                     node(awe,() -> {
-                        node(resonance,with(research(burden),onsector(rapidEncounter)), () -> {
+                        node(resonance,with(research(burden),onsector(encounter)), () -> {
                             node(cascade,() -> {
 
                             });
@@ -199,7 +199,7 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(helicopterFabricator,with(onsector(noxiousTarn)),() -> {
+            node(helicopterFabricator,with(onsector(tarn)),() -> {
                 node(fortifiedPayloadConveyor,() -> {
                     node(fortifiedPayloadRouter,() -> {
 
@@ -211,14 +211,14 @@ public class AtlacianTechTree {
                 node(lapetus,() -> {
 
                 });
-                node(helicopterRefabricator,with(research(lapetus),onsector(rapidEncounter)),() -> {
+                node(helicopterRefabricator,with(research(lapetus),onsector(encounter)),() -> {
                     node(skath,() -> {
                         node(charon,with(research(laserRefabricator)),() -> {
 
                         });
                     });
                 });
-                node(hydromechFabricator,with(research(helium)),() -> {
+                node(hydromechFabricator,with(onsector(hedge)),() -> {
                     node(hydromechRefabricator,with(research(helicopterRefabricator),research(leeft)),() -> {
                         node(flagshi,() -> {
                             node(vanguard,with(research(laserRefabricator)),() -> {
@@ -273,7 +273,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(coreDecoder,with(onsector(rapidEncounter)),() -> {
+                node(coreDecoder,with(onsector(encounter)),() -> {
 
                 });
                 node(coreReef,with(research(tugRoller),research(quartzScutcher)),() -> {
@@ -281,10 +281,13 @@ public class AtlacianTechTree {
                 });
             });
 
-            node(divingPoint, () -> {
-                node(gustyRidges,with(sector(divingPoint),research(fortifiedConduit),research(conduitRouter)),() -> {
-                    node(noxiousTarn,with(sector(gustyRidges),research(spaclaniumHydrolyzer),research(energyDock),research(energyDistributor)),() -> {
-                        node(rapidEncounter,with(sector(noxiousTarn),research(distiller)),() -> {
+            node(dive, () -> {
+                node(ridges,with(sector(dive),research(fortifiedConduit),research(conduitRouter)),() -> {
+                    node(tarn,with(sector(ridges),research(spaclaniumHydrolyzer),research(energyDock),research(energyDistributor)),() -> {
+                        node(encounter,with(sector(tarn),research(distiller)),() -> {
+
+                        });
+                        node(hedge,with(sector(tarn),research(propanePyrolyzer)),() -> {
 
                         });
                     });
@@ -292,7 +295,7 @@ public class AtlacianTechTree {
             });
             node(spaclanium,with(produce(spaclanium)), () -> {
                 node(corallite,with(produce(corallite)),() -> {
-                    node(iridium,with(produce(iridium),onsector(gustyRidges)),() -> {
+                    node(iridium,with(produce(iridium),onsector(ridges)),() -> {
 
                     });
                     node(chromium,with(research(crudeSmelter)),() -> {

@@ -1,20 +1,18 @@
 package subvoyage.content;
 
 import arc.struct.Seq;
-import mindustry.content.Planets;
-import mindustry.content.SectorPresets;
 import mindustry.type.*;
 
 import static subvoyage.content.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset divingPoint, gustyRidges, noxiousTarn, rapidEncounter;
+    public static SectorPreset dive, ridges, tarn, encounter, hedge;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
 
         //TODO UNCOMMENT WHEN SECTORS ARE RESTORED
-        divingPoint = new SectorPreset("divingPoint",atlacian,13) {{
+        dive = new SectorPreset("divingPoint",atlacian,13) {{
             alwaysUnlocked = true;
 
             overrideLaunchDefaults = true;
@@ -35,7 +33,7 @@ public class SvSectorPresets {
         }};
 
 
-        gustyRidges = new SectorPreset("gustyRidges",atlacian,25) {{
+        ridges = new SectorPreset("gustyRidges",atlacian,25) {{
             difficulty = 2;
             captureWave = 20;
 
@@ -45,7 +43,7 @@ public class SvSectorPresets {
             };
         }};
 
-        noxiousTarn = new SectorPreset("noxiousTarn",atlacian,31) {{
+        tarn = new SectorPreset("noxiousTarn",atlacian,31) {{
             difficulty = 3;
             captureWave = 0;
             rules = (r) -> {
@@ -54,7 +52,7 @@ public class SvSectorPresets {
             };
         }};
 
-        rapidEncounter = new SectorPreset("rapidEncounter",atlacian,2) {{
+        encounter = new SectorPreset("rapidEncounter",atlacian,2) {{
             difficulty = 4;
             captureWave = 0;
             rules = (r) -> {
@@ -63,6 +61,16 @@ public class SvSectorPresets {
             };
         }};
 
-        all.addAll(divingPoint,gustyRidges,noxiousTarn,rapidEncounter);
+        hedge = new SectorPreset("hedge",atlacian,79) {{
+            difficulty = 4;
+            captureWave = 0;
+            rules = (r) -> {
+                r.attackMode = true;
+                r.enemyCoreBuildRadius = 480f;
+            };
+        }};
+
+
+        all.addAll(dive, ridges, tarn, hedge, encounter);
     }
 }

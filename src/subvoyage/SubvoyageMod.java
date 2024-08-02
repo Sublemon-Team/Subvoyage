@@ -67,6 +67,10 @@ public class SubvoyageMod extends Mod {
                     });
                 });
             }
+
+            /*SvPlanets.atlacian.sectors.each(a -> {
+                a.save = control.saves.getSaveSlots().random();
+            });*/
             /*for (TechTree.TechNode node : TechTree.all) {
                 UnlockableContent content = node.content;
                 if (content.locked()) {
