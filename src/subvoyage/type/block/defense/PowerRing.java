@@ -8,6 +8,8 @@ import subvoyage.draw.visual.SvFx;
 public class PowerRing {
     public float x,y;
     public float charge;
+    public float angle;
+    public float lifetime;
     public boolean hasTarget;
     public float targetX, targetY;
 
@@ -20,6 +22,7 @@ public class PowerRing {
         x = build.x;
         y = build.y;
         hasTarget = false;
+        lifetime = 0;
         targetX = build.x;
         targetY = build.y;
     }

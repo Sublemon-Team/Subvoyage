@@ -1347,7 +1347,7 @@ public class SvBlocks{
 
         ringTurret = new PowerRingTurret("ring-turret") {{
             requirements(Category.defense,with(spaclanium,1));
-            range = 40*8f;
+            range = 80*8f;
             consumePower(1f);
             consumeLiquid(polygen,1f).boost();
         }};
