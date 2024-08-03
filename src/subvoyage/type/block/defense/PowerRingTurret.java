@@ -1,9 +1,11 @@
 package subvoyage.type.block.defense;
 
+import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
@@ -38,8 +40,18 @@ public class PowerRingTurret extends BaseTurret {
     public float ringRadius = 24f;
     public float ringAccuracy = 0.8f;
 
+    public TextureRegion ringRegion;
+    public TextureRegion ringSparkRegion;
+
     public PowerRingTurret(String name) {
         super(name);
+    }
+
+    @Override
+    public void load() {
+        super.load();
+        ringRegion = Core.atlas.find(name+"ring","subvoyage-tesla-ring");
+        ringSparkRegion = Core.atlas.find(name+"ring-spark","subvoyage-tesla-ring-star");
     }
 
     @Override
@@ -61,6 +73,13 @@ public class PowerRingTurret extends BaseTurret {
                 y = PowerRingTurretBuild.this.y;
             }});
             for (PowerRing ring : rings) {
+                for (PowerRing otherRing : rings) {
+                    if(otherRing == ring) continue;
+                    if(Mathf.within(ring.x,ring.y,otherRing.x,otherRing.y,ringRadius*1.5f)) {
+                        float angle = Angles.angle(ring.x,ring.y,otherRing.x,otherRing.y);
+                        otherRing.angle = angle;
+                    }
+                }
                 ring.lifetime += Time.delta;
                 if(Mathf.dst(x,y,ring.x,ring.y) > range) {
                     ring.x = x; ring.y = y;
@@ -118,14 +137,14 @@ public class PowerRingTurret extends BaseTurret {
             super.draw();
             Draw.z(Layer.effect);
             for (PowerRing ring : rings) {
-                float rad = Mathf.clamp(ring.lifetime/60f)*ringRadius-12f*ring.charge+Mathf.sin(1f,1f);
-                Lines.stroke(5f+ring.charge*3f, Pal.power);
-                Draw.alpha(0.5f);
-                Lines.circle(ring.x, ring.y, rad);
-                Lines.stroke(1f+ring.charge*1.5f, Color.white);
-                Draw.alpha(0.5f);
-                Lines.circle(ring.x, ring.y, rad);
-                Fill.circle(ring.x,ring.y,rad/3f);
+                float pulse = Mathf.sin(1f,1f)*0.05f;
+                Lines.stroke(5f+ring.charge*3f, Color.white);
+                Draw.alpha(0.5f+ring.charge*0.5f);
+                //Lines.circle(ring.x, ring.y, rad);
+                Draw.scl((Mathf.sinDeg(Time.time*6)+1)/8f+0.88f-ring.charge*0.3f+pulse);
+                Draw.rect(ringSparkRegion,ring.x,ring.y,Time.time*-5%360);
+                Draw.scl(1f-ring.charge*0.5f+pulse);
+                Draw.rect(ringRegion,ring.x,ring.y,Time.time*10%360);
             }
             Draw.reset();
         }
