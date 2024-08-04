@@ -544,6 +544,7 @@ public class SvBlocks{
             fogRadius = 3;
             squareSprite = false;
 
+            consumePower(0.67f);
             consumeLiquid(argon, 6f/60f);
             consumeLiquid(polygen,9f/60f).boost();
         }
