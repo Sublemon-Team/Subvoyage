@@ -1485,12 +1485,13 @@ public class SvBlocks{
             researchCost = with(spaclanium,500,clay,280,iridium,100);
 
             consumePower(0.3f);
+            consumeLiquid(polygen,13/60f);
             squareSprite = false;
 
             size = 2;
             reload = 100f;
             range = 48f*2;
-            healPercent = 20f;
+            healPercent = 5f;
             phaseBoost = 4f;
             phaseRangeBoost = 20f;
             health = 400;
@@ -1529,7 +1530,7 @@ public class SvBlocks{
 
             discoveryTime *= 1.5f;
 
-            consumeLiquid(polygen,0.3f);
+            consumeLiquid(polygen,4/60f);
 
             priority = 0;
             health = 360;
