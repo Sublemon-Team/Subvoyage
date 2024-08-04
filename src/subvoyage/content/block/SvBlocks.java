@@ -1348,7 +1348,21 @@ public class SvBlocks{
         ringTurret = new PowerRingTurret("ring-turret") {{
             requirements(Category.defense,with(spaclanium,1));
             range = 80*8f;
+            spacing = 40;
+            bulletType =  new ExplosionBulletType(700f,ringRadius) {{
+                killShooter = false;
+            }};
+
+            minRingCount = 1;
+            boostRingCount = 2;
+
+            ringChargeTime = 180f;
+            ringMovementSpeed = 0.5f;
+            ringRadius = 24f;
+            ringAccuracy = 0.8f;
+
             consumePower(1f);
+            consumeItem(tugSheet,2);
             consumeLiquid(polygen,1f).boost();
         }};
 
