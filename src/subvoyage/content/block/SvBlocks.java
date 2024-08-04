@@ -1346,7 +1346,7 @@ public class SvBlocks{
         }};
 
         ringTurret = new PowerRingTurret("ring-turret") {{
-            requirements(Category.defense,with(spaclanium,1));
+            requirements(Category.turret,atl(BuildVisibility.hidden),with(spaclanium,1));
             range = 80*8f;
             spacing = 40;
             bulletType =  new ExplosionBulletType(700f,ringRadius) {{
