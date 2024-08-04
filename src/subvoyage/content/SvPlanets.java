@@ -12,7 +12,6 @@ import subvoyage.content.block.SvBlocks;
 import subvoyage.content.other.SvPal;
 import subvoyage.world.*;
 import subvoyage.world.generator.AtlacianPlanetGen;
-import subvoyage.world.generator.AtlacianPlanetGenerator;
 import subvoyage.world.type.AtlacianPlanetType;
 
 import static mindustry.content.Planets.*;
