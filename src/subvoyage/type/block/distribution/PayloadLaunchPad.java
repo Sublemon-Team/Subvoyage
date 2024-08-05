@@ -232,7 +232,7 @@ public class PayloadLaunchPad extends PayloadBlock {
 
                             Effect.shake(shake, shake, this);
                             Payload pay = payload;
-
+                            payload = null;
                             //spawn rocket launching at this
                             Sounds.release.at(x,y,0.5f,0.05f);
                             Fx.launchPod.create(x,y,0,Pal.accent,new Object());
@@ -240,7 +240,6 @@ public class PayloadLaunchPad extends PayloadBlock {
 
                             Timer.schedule(() -> {
                                 //spawn rocket landing at other
-                                payload = null;
                                 loaded = false;
                                 state = idle;
                                 SvFx.payloadLaunchPadRocketLand.create(other.x,other.y,0,Pal.accent,new Object());
