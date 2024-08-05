@@ -54,6 +54,7 @@ import subvoyage.content.SvUnits;
 import subvoyage.content.other.SvStat;
 import subvoyage.network.LaserAssemblerDroneSpawnedCallPacket;
 import subvoyage.network.LaserAssemblerUnitSpawnedCallPacket;
+import subvoyage.utility.SvCall;
 
 import static mindustry.Vars.*;
 
@@ -422,16 +423,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                     unit.add();
                     units.add(unit);
                     //TODO: Call.assemblerDroneSpawned(tile, unit.id);
-                    if (Vars.net.server() || !Vars.net.active()) {
-                        LaserUnitAssembler.assemblerDroneSpawned(tile, id);
-                    }
-
-                    if (Vars.net.server()) {
-                        LaserAssemblerDroneSpawnedCallPacket packet = new LaserAssemblerDroneSpawnedCallPacket();
-                        packet.tile = tile;
-                        packet.id = id;
-                        Vars.net.send(packet, true);
-                    }
+                    SvCall.assemblerDroneSpawned(tile,unit.id);
                 }
             }
 
@@ -470,15 +462,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
 
                 if((progress += laserEfficiency() * delta() * state.rules.unitBuildSpeed(team) * eff / plan.time) >= 1f){
                     //TODO: Call.assemblerUnitSpawned(tile);
-                    if (Vars.net.server() || !Vars.net.active()) {
-                        LaserUnitAssembler.assemblerUnitSpawned(tile);
-                    }
-
-                    if (Vars.net.server()) {
-                        LaserAssemblerUnitSpawnedCallPacket packet = new LaserAssemblerUnitSpawnedCallPacket();
-                        packet.tile = tile;
-                        Vars.net.send(packet, true);
-                    }
+                    SvCall.assemblerUnitSpawned(tile);
                 }
             }else{
                 warmup = Mathf.lerpDelta(warmup, 0f, 0.1f);
