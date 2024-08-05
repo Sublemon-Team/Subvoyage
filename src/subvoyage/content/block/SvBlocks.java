@@ -2472,7 +2472,7 @@ public class SvBlocks{
     }
 
     static BuildVisibility atl(BuildVisibility v){
-        return new BuildVisibility(() -> v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any);
+        return new BuildVisibility(() -> Vars.state == null || (v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any));
     }
 
     static BuildVisibility atl(){
