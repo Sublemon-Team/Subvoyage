@@ -472,6 +472,7 @@ public class SvBlocks{
         payloadUnloader = new PayloadUnloader("payload-unloader"){{
             requirements(Category.units,atl(), with(iridium,50,chromium,30,clay,50));
             regionSuffix = "-fortified";
+            researchCostMultiplier = 0f;
             hasPower = true;
             consumePower(2f);
             size = 3;

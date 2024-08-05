@@ -204,7 +204,12 @@ public class AtlacianTechTree {
                     node(fortifiedPayloadRouter,() -> {
 
                     });
-                    node(payloadLaunchPad,() -> {
+                    node(payloadUnloader,with(onsector(hedge)),() -> {
+                        node(payloadLoader,() -> {
+
+                        });
+                    });
+                    node(payloadLaunchPad,with(onsector(hedge)), () -> {
 
                     });
                 });
