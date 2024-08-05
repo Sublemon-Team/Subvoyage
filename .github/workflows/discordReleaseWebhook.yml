@@ -24,7 +24,7 @@ jobs:
           # Embed title
           embed-title: "<:i_0spaclanium:1256993391346974831>Subvoyage - ${{github.event.release.tag_name}} Release Announcement<:i_8quartzfiber:1256993435370520598>" # optional
           # Embed URL
-          embed-url: ${{github.event.release.url}} # optional
+          embed-url: ${{github.event.release.html_url}} # optional
           # Embed color (integer)
           embed-color: 14206207 # optional
 
