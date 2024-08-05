@@ -70,6 +70,7 @@ task runClient(type: JavaExec) {
 
     classpath = files(clientFile.getAbsolutePath())
     main = 'mindustry.desktop.DesktopLauncher'
+    args("-debug")
     doLast {
         println "\u001B[32mDeleting temporary mod file..\u001B[0m"
         String modsFolder = System.getenv("APPDATA") + "\\MindustryTesting\\${project.archivesBaseName}\\Mindustry\\mods";
