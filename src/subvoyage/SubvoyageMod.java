@@ -150,6 +150,7 @@ public class SubvoyageMod extends Mod {
 
     @Override
     public void loadContent(){
+        SvCall.registerPackets();
         Log.info("Poof-poof, Subvoyage loads up!");
         SvMusic.load();
         SvSounds.load();

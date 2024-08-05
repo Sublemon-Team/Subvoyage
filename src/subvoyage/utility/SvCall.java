@@ -13,9 +13,6 @@ import subvoyage.type.block.laser_blocks.unit.LaserUnitAssembler;
 import subvoyage.type.block.laser_blocks.unit.LaserUnitBlock;
 
 public class SvCall {
-    static {
-        registerPackets();
-    }
     public static void registerPackets() {
         Net.registerPacket(LaserAssemblerDroneSpawnedCallPacket::new);
         Net.registerPacket(LaserAssemblerUnitSpawnedCallPacket::new);
