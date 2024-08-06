@@ -36,7 +36,7 @@ public class SubvoyageMod extends Mod {
 
     public static VaporControl vaporControl;
     public static VersionControl versionControl = new VersionControl();
-    public static String currentTag = "v0.5b";
+    public static String currentTag = "v0.5fb";
     public static String repo = "Sublemon-Team/Subvoyage";
 
     public SubvoyageMod(){

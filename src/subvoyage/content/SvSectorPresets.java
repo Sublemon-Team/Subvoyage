@@ -2,6 +2,7 @@ package subvoyage.content;
 
 import arc.struct.Seq;
 import mindustry.type.*;
+import subvoyage.content.block.SvBlocks;
 
 import static subvoyage.content.SvPlanets.atlacian;
 
@@ -67,6 +68,7 @@ public class SvSectorPresets {
             rules = (r) -> {
                 r.attackMode = true;
                 r.enemyCoreBuildRadius = 480f;
+                r.bannedBlocks.addAll(SvBlocks.helicopterFabricator,SvBlocks.helicopterRefabricator);
             };
         }};
 
