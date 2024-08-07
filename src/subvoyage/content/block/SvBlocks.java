@@ -67,7 +67,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe, resonance, burden, cascade, inspiration, ringTurret,
+            whirl, rupture, awe, resonance, burden, cascade, spectrum,  inspiration, ringTurret,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -1345,6 +1345,126 @@ public class SvBlocks{
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(6);
+        }};
+
+        spectrum = new ItemTurret("spectrum") {{
+            requirements(Category.turret,with(spaclanium,1));
+
+            coolantMultiplier = 1.1f;
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
+
+            outlineColor = Pal.darkOutline;
+
+            size = 4;
+            rotateSpeed = 1.4f;
+            shootSound = Sounds.mediumCannon;
+            ammoPerShot = 2;
+            maxAmmo = ammoPerShot * 3;
+            targetAir = false;
+            drawer = new DrawTurret("atlacian-") {{
+                parts.addAll(
+                        new FlarePart(){{
+                            progress = PartProgress.warmup.mul(PartProgress.reload.min(PartProgress.constant(0.2f)).inv()).delay(0.2f).curve(Interp.smoother);
+                            color1 = Pal.redLight;
+                            layer = Layer.effect;
+                            y = 4f;
+                            radius = 0f;
+                            radiusTo = 8f;
+                            spinSpeed = 1f;
+                            followRotation = true;
+                        }},
+                        new RegionPart("-blade") {{
+                            heatProgress = progress = PartProgress.warmup;
+                            mirror = true;
+                            under = true;
+                            moveX = 2f;
+                            moveY = -2f;
+                            moveRot = -5f;
+                            moves.add(new PartMove(PartProgress.heat,0,-2f,5f));
+                            moves.add(new PartMove(PartProgress.smoothReload, 0f, -2f, 3f));
+                        }},
+                        new RegionPart("-barrage") {{
+                            heatProgress = progress = PartProgress.recoil;
+                            moveX = 0f; moveY = 0f;
+                            moveRot = -10f;
+                            mirror = true;
+                            under = true;
+                            moves.add(new PartMove(PartProgress.warmup,2f,-2f,-5f));
+                            moves.add(new PartMove(PartProgress.heat,0,-2f,5f));
+                            moves.add(new PartMove(PartProgress.smoothReload, 0f, -2f, 3f));
+                        }},
+                        new RegionPart("-mid") {{
+                            mirror = false;
+                            moves.add(new PartMove(PartProgress.heat,0,-2f,0f));
+                            moves.add(new PartMove(PartProgress.smoothReload, 0f, -2f, 0f));
+                        }},
+                        new RegionPart("-wing") {{
+                            heatProgress = progress = PartProgress.warmup;
+                            moveRot = 10f;
+                            moveY = -4f;
+                            mirror = true;
+                            under = true;
+                            moves.add(new PartMove(PartProgress.heat,0,-2f,5f));
+                            moves.add(new PartMove(PartProgress.smoothReload, 0f, -2f, 3f));
+                        }},
+                        new RegionPart("-bottom") {{
+                            mirror = false;
+                            moves.add(new PartMove(PartProgress.heat,0,-2f,0f));
+                            moves.add(new PartMove(PartProgress.smoothReload, 0f, -2f, 0f));
+                        }}
+                );
+            }};
+            reload = 160f;
+            moveWhileCharging = false;
+            targetAir = true;
+            targetGround = true;
+            minWarmup = 0.5f;
+            shoot = new ShootSpread() {{
+                shots = 7;
+                spread = 20f;
+                shotDelay = 10f;
+            }};
+            inaccuracy = 0f;
+            predictTarget = false;
+            range = 180f;
+            shootY = 4f;
+            ammo(nitride,new ArtilleryBulletType(2.5f, 350, "shell") {{
+                hitEffect = new MultiEffect(Fx.titanExplosion, Fx.titanSmoke);
+                collidesAir = true;
+                collidesGround = true;
+                pierce = true;
+                pierceCap = 1;
+                despawnEffect = Fx.none;
+                knockback = 2f;
+                lifetime = 140f;
+                height = 19f;
+                width = 17f;
+                splashDamageRadius = 65f;
+                splashDamage = 350f;
+                scaledSplashDamage = true;
+                backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
+                frontColor = Color.white;
+                ammoMultiplier = 1f;
+                hitSound = Sounds.titanExplosion;
+
+                status = StatusEffects.blasted;
+
+                knockback = 5f;
+
+                trailLength = 32;
+                trailWidth = 3.35f;
+                trailSinScl = 2.5f;
+                trailSinMag = 0.5f;
+                trailEffect = Fx.none;
+                despawnShake = 7f;
+
+                shootEffect = Fx.shootTitan;
+                smokeEffect = Fx.shootSmokeTitan;
+                trailInterp = Interp.slope;
+                shrinkX = 0.2f;
+                shrinkY = 0.1f;
+                buildingDamageMultiplier = 0.3f;
+            }});
         }};
 
         ringTurret = new PowerRingTurret("ring-turret") {{

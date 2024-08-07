@@ -14,6 +14,7 @@ public class SvPal {
     clay = Color.valueOf("B28768"),
     crude = Color.valueOf("393f42"),
     chromium = Color.valueOf("8E898B"),
+    nitride = Color.valueOf("E59374"),
     tugSheet = Color.valueOf("72817d"),
     quartzFiber = Color.valueOf("f4cec2"),
     heatGlow = Color.valueOf("feb380"),
