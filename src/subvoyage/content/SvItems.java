@@ -10,7 +10,7 @@ public class SvItems{
     public static Item spaclanium, corallite,fineSand, sulfur,
             iridium,chromium,
             crude, clay,
-            nitride,tugSheet,quartzFiber;
+            tugSheet,quartzFiber;
 
     public static void load() {
 
@@ -48,9 +48,6 @@ public class SvItems{
             cost = 0.9f;
             charge = 0.3f;
             hardness = 3;
-        }};
-        nitride = new Item("nitride",SvPal.nitride) {{
-
         }};
         tugSheet = new Item("tug-sheet", SvPal.tugSheet){{
             cost = 1.2f;
