@@ -33,6 +33,7 @@ public class LaserBlock extends Block {
 
     private float consumeLaserPower = 0f;
     public boolean consumeLaser = true;
+    public boolean supplierPowerEfficiencyBased = false;
     public float minLaserEfficiency = 0f;
 
     public float outputLaserPower = 0f;

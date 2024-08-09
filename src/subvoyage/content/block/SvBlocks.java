@@ -189,6 +189,7 @@ public class SvBlocks{
             squareSprite = false;
 
             maxSuppliers = 3;
+            supplierPowerEfficiencyBased = true;
 
             consumePower(4f);
             consumeLaserPower(3f);

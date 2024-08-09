@@ -19,7 +19,10 @@ public class LaserModule extends BlockModule {
     public void update(Building build) {
         graph.update(build);
         smoothEfficiency = Mathf.lerp(smoothEfficiency,build.efficiency, Time.delta/20f);
-        if(build.block instanceof LaserBlock lb) laserPower = lb.outputLaserPower*smoothEfficiency+supplierLaserPower*supplierLaserMultiplier;
+        if(build.block instanceof LaserBlock lb) {
+            laserPower = lb.outputLaserPower*smoothEfficiency+supplierLaserPower*supplierLaserMultiplier
+                    *(lb.supplierPowerEfficiencyBased ? smoothEfficiency : 1f);
+        }
         else laserPower = supplierLaserPower*supplierLaserMultiplier;
         supplierLaserPower = 0;
     }
