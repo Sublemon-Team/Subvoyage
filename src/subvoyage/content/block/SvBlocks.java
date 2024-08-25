@@ -1898,6 +1898,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
 
+            placeableLiquid = true;
             bannedItems.addAll(crude);
         }
 
@@ -1923,6 +1924,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             unitCapModifier = 18;
 
+            placeableLiquid = true;
             bannedItems.addAll(crude);
         }
 
@@ -1947,6 +1949,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             unitCapModifier = 30;
 
+            placeableLiquid = true;
             bannedItems.addAll(crude);
         }
 
@@ -1999,6 +2002,7 @@ public class SvBlocks{
             ((Duct) duct).bridgeReplacement = this;
             ((Duct) highPressureDuct).bridgeReplacement = this;
 
+            placeableLiquid = true;
             envDisabled |= Env.scorching;
             health = 90;
             speed = 4f;
