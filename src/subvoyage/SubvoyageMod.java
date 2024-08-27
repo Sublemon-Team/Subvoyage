@@ -9,6 +9,7 @@ import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
+import mindustry.input.Binding;
 import mindustry.mod.*;
 import mindustry.type.Sector;
 import mindustry.ui.dialogs.ModsDialog;
