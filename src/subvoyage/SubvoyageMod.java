@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static arc.Core.*;
 import static mindustry.Vars.*;
+import static subvoyage.content.SvPlanets.atlacian;
 
 public class SubvoyageMod extends Mod {
     public static String ID = "subvoyage";
@@ -89,22 +90,23 @@ public class SubvoyageMod extends Mod {
             if(core == null) return;
             if(!settings.getBool("skipcoreanimation") && !state.rules.pvp){
                 SvMusic.theAtlacian.stop();
-                if(settings.getInt("musicvol") > 0 && state.rules.planet == SvPlanets.atlacian){
+                if(settings.getInt("musicvol") > 0 && state.rules.planet == atlacian){
                     Musics.land.stop();
                     SvMusic.theAtlacian.play();
                 }
             }
         });
         Events.on(SectorCaptureEvent.class,e -> {
+            if(e.sector.preset == null || e.sector.planet != atlacian) return;
             AtomicBoolean finishedAll = new AtomicBoolean(true);
             SvSectorPresets.all.each(s -> {
                 if(s == e.sector.preset) return;
-                Sector sector = SvPlanets.atlacian.sectors.find(a -> a.preset == s);
+                Sector sector = atlacian.sectors.find(a -> a.preset == s);
                 boolean isCaptured = sector.isCaptured();
                 if(!isCaptured) finishedAll.set(false);
             });
             if(finishedAll.get()) {
-                betaCompleteDialog.show(SvPlanets.atlacian);
+                betaCompleteDialog.show(atlacian);
             };
         });
         Events.on(WorldLoadEvent.class, e -> {
@@ -183,7 +185,7 @@ public class SubvoyageMod extends Mod {
                     Seq<Saves.SaveSlot> toDelete = Seq.with();
                     control.saves.getSaveSlots().each(s -> {
                         if(s.getSector() == null) return;
-                        if(s.getSector().planet == SvPlanets.atlacian) {
+                        if(s.getSector().planet == atlacian) {
                             toDelete.add(s);
                             Log.info("Deleted Atlacian sector: "+s.getSector().id);
                         }
@@ -196,8 +198,8 @@ public class SubvoyageMod extends Mod {
             }));
             t.pref(new ButtonPref(Core.bundle.get("sv-clear-tech-tree"),Icon.trash,() -> {
                 ui.showConfirm("@confirm", "@settings.sv-clear-tech-tree.confirm", () -> {
-                    SvPlanets.atlacian.techTree.reset();
-                    for(TechTree.TechNode node : SvPlanets.atlacian.techTree.children){
+                    atlacian.techTree.reset();
+                    for(TechTree.TechNode node : atlacian.techTree.children){
                         node.reset();
                     }
                     content.each(c -> {
