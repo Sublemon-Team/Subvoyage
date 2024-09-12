@@ -42,7 +42,7 @@ public class SubvoyageMod extends Mod {
     public static String repo = "Sublemon-Team/Subvoyage";
 
     public SubvoyageMod(){
-        //listen for game load event
+        //listen for game load events
         Events.on(ClientLoadEvent.class, e -> {
             betaCompleteDialog = new BetaCompleteDialog();
 
