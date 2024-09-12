@@ -1349,7 +1349,7 @@ public class SvBlocks{
         }};
 
         spectrum = new ItemTurret("spectrum") {{
-            requirements(Category.turret,with(spaclanium,1));
+            requirements(Category.turret,with(spaclanium,1)); //TODO: reqs
 
             coolantMultiplier = 1.1f;
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
@@ -1420,10 +1420,19 @@ public class SvBlocks{
             targetAir = true;
             targetGround = true;
             minWarmup = 0.5f;
-            shoot = new ShootSpread() {{
-                shots = 7;
-                spread = 20f;
+            shoot = new ShootMulti() {{
+                shots = 4;
                 shotDelay = 10f;
+                source = new ShootHelix() {{
+                    mag = 2f;
+                    scl = 10f;
+                }};
+                dest = new ShootPattern[] {
+                        new ShootSpread() {{
+                            spread = -30f;
+                            shots = 2;
+                        }}
+                };
             }};
             inaccuracy = 0f;
             predictTarget = false;
