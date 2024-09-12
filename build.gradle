@@ -79,6 +79,60 @@ task runClient(type: JavaExec) {
     }
 }
 
+task createModZipLinux (type: Zip) {
+    dependsOn jar
+    from { [zipTree("$buildDir/libs/${project.archivesBaseName}Desktop.jar")] }
+    into("mod_contents")
+}
+
+task copyJarLinux(type: Copy) {
+    dependsOn createModZipLinux
+    from("$buildDir/libs/${project.archivesBaseName}Desktop.jar")
+    into("${System.getProperty('user.home')}/.local/share/Mindustry/mods/")
+}
+
+task runClientLinux(type: JavaExec) {
+    dependsOn copyJarLinux
+    group = 'runs'
+    description = 'Mindustry RunClient'
+    String githubClientUrl = "https://github.com/Anuken/Mindustry/releases/download/${mindustry_run_version}/Mindustry.jar"
+    String dataFolder = "${System.getProperty('user.home')}/.local/share/Mindustry";
+    File dataFolderFile = new File(dataFolder);
+    dataFolderFile.mkdir();
+    File clientFile = new File(dataFolderFile, "client-${mindustry_run_version}.jar");
+    println "\u001B[33mChecking for Mindustry \u001B[35m${mindustry_run_version} \u001B[33mclient..\u001B[0m";
+    if (!clientFile.exists()) {
+        println "\u001B[33mClient not found. Download started..\u001B[0m";
+        URL url = new URL(githubClientUrl);
+        ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
+        FileOutputStream fileOutputStream = new FileOutputStream(clientFile);
+        FileChannel fileChannel = fileOutputStream.getChannel();
+        clientFile.createNewFile();
+        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+
+        readableByteChannel.close();
+        fileOutputStream.close();
+        fileChannel.close();
+
+        println "\u001B[32mClient has been downloaded successfully.\u001B[0m";
+    }
+    println "\u001B[32mStarting Mindustry client..\u001B[0m"
+
+    environment "APPDATA", "${dataFolder}\\${project.archivesBaseName}";
+
+    classpath = files(clientFile.getAbsolutePath())
+    main = 'mindustry.desktop.DesktopLauncher'
+    args("-debug")
+    doLast {
+        println "\u001B[32mDeleting temporary mod file..\u001B[0m"
+        String modsFolder = System.getenv("APPDATA") + "\\MindustryTesting\\${project.archivesBaseName}\\Mindustry\\mods";
+        File modFile = new File(modsFolder,"${project.archivesBaseName}Desktop.jar");
+        modFile.delete();
+    }
+}
+
+
+
 repositories{
     mavenCentral()
     maven{ url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
