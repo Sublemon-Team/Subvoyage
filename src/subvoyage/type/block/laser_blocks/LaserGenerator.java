@@ -5,7 +5,11 @@ import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
+import arc.math.Mathf;
+import arc.util.Time;
 import mindustry.gen.Building;
+import mindustry.world.blocks.power.ConsumeGenerator;
+import mindustry.world.blocks.power.PowerGenerator;
 import subvoyage.content.other.SvPal;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
@@ -18,6 +22,9 @@ public class LaserGenerator extends LaserBlock {
     public TextureRegion topRegion1;
     public TextureRegion topRegion2;
     public int range;
+    public float itemDuration = 120f;
+
+
     public LaserGenerator(String name) {
         super(name);
         rotate = true;
@@ -53,12 +60,24 @@ public class LaserGenerator extends LaserBlock {
     public class LaserGeneratorBuild extends LaserBlockBuilding {
 
         public int lastChange = -2;
+        float generationTime = 0f;
 
         @Override public boolean isConsumer() {
             return false;
         }
         @Override public boolean isSupplier() {
             return true;
+        }
+
+        @Override
+        public void updateTile() {
+            super.updateTile();
+            boolean valid = this.efficiency > 0.0F;
+            if (hasItems && valid && this.generationTime <= 0.0F) {
+                this.consume();
+                generationTime = 1.0F;
+            }
+            generationTime-=delta()/itemDuration;
         }
 
         @Override

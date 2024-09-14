@@ -7,25 +7,35 @@ import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.Mathf;
+import arc.math.Rand;
+import arc.math.geom.Vec2;
+import arc.struct.OrderedMap;
 import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.entities.UnitSorts;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
+import mindustry.entities.part.DrawPart;
 import mindustry.game.Team;
 import mindustry.gen.Posc;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.BaseTurret;
+import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.consumers.ConsumeLiquidBase;
+import mindustry.world.draw.DrawBlock;
+import mindustry.world.draw.DrawTurret;
+import mindustry.world.meta.BlockFlag;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatValues;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
+import static subvoyage.draw.visual.SvFx.rand;
 
 public class PowerRingTurret extends BaseTurret {
     public final int timerTarget = timers++;
@@ -46,9 +56,24 @@ public class PowerRingTurret extends BaseTurret {
     public TextureRegion ringSparkRegion;
 
     public BulletType bulletType;
+    public DrawBlock drawer;
+
+    public float recoilTime;
+    public float cooldownTime;
+    public float recoilPow;
+    public float recoil;
+
+    public Color heatColor;
+    public float elevation;
 
     public PowerRingTurret(String name) {
         super(name);
+        elevation = -1f;
+        heatColor = Color.red;
+        recoilTime = 30f;
+        cooldownTime = 20f;
+        recoil = 5f;
+        recoilPow = 1;
     }
 
     @Override
@@ -56,12 +81,29 @@ public class PowerRingTurret extends BaseTurret {
         super.load();
         ringRegion = Core.atlas.find(name+"ring","subvoyage-tesla-ring");
         ringSparkRegion = Core.atlas.find(name+"ring-spark","subvoyage-tesla-ring-star");
+        this.drawer.load(this);
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        this.stats.add(Stat.ammo, StatValues.ammo(OrderedMap.of(
+                this,bulletType
+        )));
+    }
+
+    public TextureRegion[] icons() {
+        return this.drawer.finalIcons(this);
+    }
+
+    public void getRegionsToOutline(Seq<TextureRegion> out) {
+        this.drawer.getRegionsToOutline(this, out);
     }
 
     @Override
     public void init() {
         super.init();
-        clipSize = size + range*2;
+        clipSize = size*2 + range*4;
     }
 
     public static void select(float x, float y, float radius, float size, Color color){
@@ -103,53 +145,92 @@ public class PowerRingTurret extends BaseTurret {
     }
 
     public class PowerRingTurretBuild extends BaseTurretBuild {
+        public Vec2 recoilOffset = new Vec2();
         List<PowerRing> rings = new ArrayList<>();
+        public float curRecoil;
+        public float heat;
+        public float smoothWarmup = 0;
+
         @Override
         public void updateTile() {
             super.updateTile();
             int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
             int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
+            smoothWarmup = Mathf.lerp(smoothWarmup,(float) estimatedRingCount/(minRingCount+boostRingCount),Time.delta/40f);
+            float rr =ringRadius*1.5f;
             if(rings.size() > estimatedRingCount) rings = rings.subList(0,estimatedRingCount);
             if(rings.size() < estimatedRingCount) rings.add(new PowerRing() {{
-                x = PowerRingTurretBuild.this.x;
-                y = PowerRingTurretBuild.this.y;
+                x = PowerRingTurretBuild.this.x+(rand.nextFloat()*rr*2f-rr);
+                y = PowerRingTurretBuild.this.y+(rand.nextFloat()*rr*2f-rr);
             }});
+            float ringAccuracy = ((PowerRingTurret) block).ringAccuracy*(1f+boost());
+            this.curRecoil = Mathf.approachDelta(this.curRecoil, 0.0F, 1.0F / recoilTime);
+            this.heat = Mathf.approachDelta(heat, 0.0F, 1.0F / cooldownTime);
+            float targetRingX = 0f;
+            float targetRingY = 0f;
+            boolean targetRingHas = false;
             for (PowerRing ring : rings) {
+                if(!Mathf.within(ring.x,ring.y,x,y,range+rr)) {
+                    ring.x = x; ring.y = y;
+                    ring.targetX = 0; ring.targetY = 0;
+                    ring.hasTarget = false;
+                    continue;
+                }
                 for (PowerRing otherRing : rings) {
                     if(otherRing == ring) continue;
-                    if(Mathf.within(ring.x,ring.y,otherRing.x,otherRing.y,ringRadius*1.5f)) {
+                    if(Mathf.within(ring.x,ring.y,otherRing.x,otherRing.y,ringRadius*1.25f)) {
                         float angle = Angles.angle(ring.x,ring.y,otherRing.x,otherRing.y);
                         otherRing.angle = angle;
                         break;
                     }
                 }
-                ring.lifetime += Time.delta;
                 if(ring.hasTarget) {
+                    targetRingX += ring.x;
+                    targetRingY += ring.y;
+                    targetRingHas = true;
+                    if(!Mathf.within(ring.targetX,ring.targetY,x,y,range*2f)) {
+                        ring.hasTarget = false;
+                        continue;
+                    }
+                    ring.lifetime += Time.delta;
                     Tmp.v1.setZero();
-                    Tmp.v1.trns(ring.angle,ringMovementSpeed*Time.delta);
+                    Tmp.v1.trns(ring.angle,ringMovementSpeed*delta());
                     ring.x += Tmp.v1.x;
                     ring.y += Tmp.v1.y;
                     /*ring.x = Mathf.approachDelta(ring.x,ring.targetX,ringMovementSpeed*8f);
                     ring.targetX += Mathf.sinDeg((Time.time)%360)*(1f-ringAccuracy)*Time.delta * 1f;
                     ring.y = Mathf.approachDelta(ring.y,ring.targetY,ringMovementSpeed*8f);
                     ring.targetY += Mathf.cosDeg((Time.time)%360)*(1f-ringAccuracy)*Time.delta * 1f;*/
-                    if(Mathf.within(ring.x,ring.y,ring.targetX,ring.targetY,ringRadius)) {
-                        ring.charge += Time.delta/ringChargeTime;
+                    if(Mathf.within(ring.x,ring.y,ring.targetX,ring.targetY,rr)) {
+                        ring.charge += delta()/ringChargeTime;
                     } else {
                         float targetAngle = Mathf.round(Mathf.angleExact(ring.targetX-ring.x,ring.targetY-ring.y));
                         ring.angle = Angles.moveToward(ring.angle, targetAngle, rotateSpeed *ringAccuracy * delta() * potentialEfficiency);
-                        ring.charge -= Time.delta/ringChargeTime;
+                        ring.charge -= delta()/ringChargeTime/2f;
                     }
                     ring.charge = Mathf.clamp(ring.charge);
                     if(ring.charge >= 1f) {
                         ring.charge %= 1f;
                         consume();
                         ring.shoot(this);
+                        curRecoil = 2f;
+                        heat = 1;
                     }
                 }
             }
+
+            if(findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase) {
+                consBase.update(this);
+            }
+            this.recoilOffset.trns(this.rotation, -Mathf.pow(this.curRecoil, recoilPow) * recoil);
             if(timer(timerTarget, targetInterval)){
                 findTargets();
+            }
+            if(targetRingHas) {
+                targetRingX /= rings.size();
+                targetRingY /= rings.size();
+                float targetAngle = Angles.angle(x,y,targetRingX,targetRingY);
+                rotation = Angles.moveToward(rotation,targetAngle,10f/Time.delta);
             }
         }
 
@@ -157,12 +238,12 @@ public class PowerRingTurret extends BaseTurret {
             float range = range();
             Seq<Posc> existingTargets = Seq.with();
             for (PowerRing ring : rings) {
-                Posc target = Units.bestTarget(team, ring.x, ring.y, range,
-                        e -> !e.dead() && !existingTargets.contains(e),
-                        b -> !existingTargets.contains(b), UnitSorts.closest);
-                if(target == null) target = Units.bestTarget(team, ring.x, ring.y, range,
-                        e -> !e.dead(),
-                        b -> true, UnitSorts.closest);
+                Posc target = Units.bestTarget(team, x, y, range,
+                        e -> !e.dead() && !existingTargets.contains(e) && Mathf.within(e.x,e.y,x,y,range*2f),
+                        b -> !existingTargets.contains(b) && Mathf.within(b.x,b.y,x,y,range*2f), UnitSorts.closest);
+                if(target == null) target = Units.bestTarget(team, x, y, range,
+                        e -> !e.dead() && Mathf.within(e.x,e.y,x,y,range*2f),
+                        b -> Mathf.within(b.x,b.y,x,y,range*2f), UnitSorts.closest);
                 if(target == null) continue;
                 existingTargets.add(target);
                 ring.targetX = target.x();
@@ -171,22 +252,30 @@ public class PowerRingTurret extends BaseTurret {
             }
             existingTargets.clear();
         }
-
+        public final Rand rand = new Rand();
         @Override
         public void draw() {
-            super.draw();
+            drawer.draw(this);
             Draw.z(Layer.effect);
             for (PowerRing ring : rings) {
                 float pulse = Mathf.sin(1f,1f)*0.05f;
                 Lines.stroke(5f+ring.charge*3f, Color.white);
-                Draw.alpha(0.6f+ring.charge*0.4f);
+                float v = Mathf.clamp(ring.lifetime/10f);
+                Draw.alpha((0.75f+ring.charge*0.25f)*v);
                 //Lines.circle(ring.x, ring.y, rad);
-                Draw.scl((Mathf.sinDeg(Time.time*6)+1)/8f+0.88f-ring.charge*0.3f+pulse);
-                Draw.rect(ringSparkRegion,ring.x,ring.y,Time.time*-5%360);
-                Draw.scl(1f-ring.charge*0.5f+pulse);
-                Draw.rect(ringRegion,ring.x,ring.y,Time.time*10%360);
+                Draw.scl(((Mathf.sinDeg(Time.time*6)+1)/8f+0.88f-ring.charge*0.3f+pulse)*v);
+                Draw.rect(ringSparkRegion,ring.x,ring.y,state.isPaused() ? 0f : rand.nextFloat()*360f);
+                Draw.scl((1f-ring.charge*0.5f+pulse)*v);
+                Draw.rect(ringRegion,ring.x,ring.y, state.isPaused() ? 0f : rand.nextFloat()*360f);
             }
             Draw.reset();
+        }
+
+        @Override
+        public float warmup() {
+            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
+            int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
+            return (float) smoothWarmup;
         }
 
         public float boost() {

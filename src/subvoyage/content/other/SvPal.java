@@ -6,6 +6,8 @@ import arc.graphics.*;
 public class SvPal {
     public static Color
     outline = Color.valueOf("191820").a(1f),
+    teslaCharge = Color.valueOf("ffee94"),
+    photoFlash = Color.valueOf("eceeff"),
     spaclanium = Color.valueOf("D8C4FF"),
     corallite = Color.valueOf("81AA72"),
     sulfur = Color.valueOf("C4A981"),
@@ -15,6 +17,7 @@ public class SvPal {
     crude = Color.valueOf("393f42"),
     chromium = Color.valueOf("8E898B"),
     nitride = Color.valueOf("E59374"),
+    phosphide = SvPal.spaclanium.cpy().lerp(SvPal.iridium,0.3f),
     tugSheet = Color.valueOf("72817d"),
     quartzFiber = Color.valueOf("f4cec2"),
     heatGlow = Color.valueOf("feb380"),

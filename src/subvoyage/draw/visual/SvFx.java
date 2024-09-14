@@ -11,6 +11,7 @@ import mindustry.content.Fx;
 import mindustry.entities.*;
 import mindustry.graphics.*;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.other.SvPal;
 import subvoyage.type.block.distribution.PayloadLaunchPad;
 
 import static arc.graphics.g2d.Draw.*;
@@ -40,6 +41,13 @@ public class SvFx{
 
     none = new Effect(0, 0f, e -> {
     }),
+
+    photosynthFlash = new Effect(30f, e -> {
+        stroke(e.fout(Interp.pow2Out), SvPal.photoFlash);
+        Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
+        Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
+    }),
+
     rocketLandDust = new Effect(100f, e -> {
         color(e.color, e.fout(0.1f)*e.color.a);
         rand.setSeed(e.id);
@@ -74,8 +82,8 @@ public class SvFx{
     }),
 
     aweExplosion = new Effect(60f, 160f, e -> {
-        color(Pal.stoneGray);
-        stroke(e.fout() * 2f);
+        color(SvPal.teslaCharge);
+        stroke(e.fout() * 4f);
         float circleRad = e.finpow() * 6*8f;
         Lines.circle(e.x, e.y, circleRad);
 
@@ -92,7 +100,7 @@ public class SvFx{
     }),
 
     resonanceExplosion = new Effect(60f, 160f, e -> {
-        color(Pal.stoneGray);
+        color(Color.white);
         stroke(e.fout() * 2f);
         float circleRad = e.finpow() * 10*8f;
         Lines.circle(e.x, e.y, circleRad);
@@ -109,9 +117,9 @@ public class SvFx{
         }
     }),
     aweExplosionDust = new Effect(60f, 160f, e -> {
-        color(Pal.stoneGray);
+        color(SvPal.teslaCharge);
         alpha(0.3f);
-        stroke(e.fout() * 2f);
+        stroke(e.fout() * 5f);
         float circleRad = e.finpow() * 6*8f;
         Lines.circle(e.x, e.y, circleRad);
 
@@ -128,7 +136,7 @@ public class SvFx{
         }
     }),
     resonanceExplosionDust = new Effect(60f, 160f, e -> {
-        color(Pal.stoneGray);
+        color(Color.white);
         alpha(0.3f);
         stroke(e.fout() * 2f);
         float circleRad = e.finpow() * 10*8f;

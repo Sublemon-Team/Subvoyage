@@ -38,6 +38,7 @@ import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
+import subvoyage.type.block.defense.DrawRingTurret;
 import subvoyage.type.block.defense.PowerRingTurret;
 import subvoyage.type.block.distribution.*;
 import subvoyage.type.block.effect.OverdriveSquareProjector;
@@ -53,6 +54,7 @@ import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
 import subvoyage.world.*;
 
+import static mindustry.Vars.tilesize;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
 import static subvoyage.content.SvItems.*;
@@ -67,7 +69,7 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe, resonance, burden, cascade, spectrum,  inspiration, ringTurret,
+            whirl, rupture, awe, resonance, burden, cascade, spectrum,  inspiration, resistance,
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -79,6 +81,7 @@ public class SvBlocks{
             ceramicBurner, terracottaBlaster, circularCrusher,
             argonCentrifuge, argonCondenser,
             propanePyrolyzer, heliumCompressor,
+            phosphidePhotosynthesizer,
             crudeSmelter, crudeCrucible,
             quartzScutcher, tugRoller,
             //LIQUIDS
@@ -86,7 +89,7 @@ public class SvBlocks{
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
-            laserProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
+            laserProjector, luminescentProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
             //TRANSPORTATION
             duct,isolatedDuct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
             shipCargoStation, shipUnloadPoint,
@@ -149,6 +152,20 @@ public class SvBlocks{
             squareSprite = false;
             outputRange = size+3;
             setLaserOutputs(0);
+            consumePower(1.3f);
+        }};
+
+        luminescentProjector = new LaserGenerator("luminescent-projector") {{
+            requirements(Category.effect, atl(), with(iridium, 300, chromium, 200, spaclanium, 150)); //TODO:reqs
+            outputLaserPower = 60f;
+            range = 4;
+            maxSuppliers = 0;
+            size = 3;
+            squareSprite = false;
+            outputRange = size+4;
+            setLaserOutputs(0);
+            itemDuration = 60f*4f;
+            consumeItem(phosphide,1);
             consumePower(1.3f);
         }};
 
@@ -604,7 +621,7 @@ public class SvBlocks{
         //defense
         whirl = new ItemTurret("whirl"){{
             requirements(Category.turret,atl(), with(corallite, 85, clay, 45));
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             squareSprite = false;
 
             researchCost = with(corallite,10,clay,10);
@@ -742,7 +759,7 @@ public class SvBlocks{
         rupture = new ItemTurret("rupture"){{
             requirements(Category.turret,atl(), with(corallite, 145, clay, 125, iridium, 30));
             size = 3;
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             shootCone = 360f;
             fogRadius = 6;
 
@@ -920,7 +937,7 @@ public class SvBlocks{
         awe = new PowerTurret("awe") {{
             requirements(Category.turret,atl(), with(corallite, 85, iridium, 40, spaclanium, 20));
             size = 2;
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             shootCone = 360f;
             targetGround = true;
             targetAir = false;
@@ -973,16 +990,16 @@ public class SvBlocks{
             researchCost = with(corallite,800,iridium,500,chromium,300);
 
             size = 3;
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             shootCone = 360f;
             targetGround = true;
             targetAir = true;
-            fogRadius = 9;
+            fogRadius = 8;
             health = 540;
             shootSound = Sounds.cannon;
-            range = 10*10f;
+            range = 12*10f;
             velocityRnd = 0;
-            reload = 30f;
+            reload = 160f;
             shake = 5f;
             chargeSound = Sounds.lasercharge;
             shootY = 0f;
@@ -1009,17 +1026,11 @@ public class SvBlocks{
                 fragRandomSpread = 5f;
                 fragVelocityMin = 1f;
 
-                lightningType = new BulletType(0.0001f, 30f){{
-                    lifetime = Fx.lightning.lifetime;
-                    hitEffect = Fx.hitLancer;
-                    despawnEffect = Fx.none;
-                    status = StatusEffects.shocked;
-                    statusDuration = 10f;
-                    hittable = false;
-                    lightColor = Color.white;
-                    collidesAir = false;
-                    buildingDamageMultiplier = 0.25f;
-                }};
+                lightningColor = Color.white;
+                lightningDamage = 6;
+                lightning = 8;
+                lightningLength = 10;
+
 
                 fragBullet = new BasicBulletType(6f, 6) {{
                     width = 9f;
@@ -1032,6 +1043,15 @@ public class SvBlocks{
                     frontColor = Color.white;
                     trailWidth = 2.1f;
                     trailLength = 5;
+
+                    weaveMag = 10f;
+                    weaveScale = 18f;
+
+                    lightningColor = Color.white;
+                    lightningDamage = 3;
+                    lightning = 2;
+                    lightningLength = 10;
+
                     hitEffect = despawnEffect = new WaveEffect(){{
                         colorFrom = colorTo = Pal.lightishGray;
                         sizeTo = 4f;
@@ -1045,6 +1065,7 @@ public class SvBlocks{
             }};
             consumePower(3.3f);
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
+            coolantMultiplier = 8f;
         }};
         inspiration = new TractorBeamTurret("inspiration"){{
             requirements(Category.turret,atl(), with(corallite,200,iridium,150,chromium,35));
@@ -1073,14 +1094,14 @@ public class SvBlocks{
             consumeLiquid(argon,0.3f);
             consumeLiquid(helium,0.4f);
 
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             squareSprite = false;
 
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
         }};
 
         burden = new LiquidTurret("burden") {{
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
             requirements(Category.turret,atl(), with(clay,200,iridium,140,chromium,120));
             researchCost = with(clay,1000,iridium,600,chromium,400);
             ammo(
@@ -1118,7 +1139,7 @@ public class SvBlocks{
 
             researchCost = with(clay,1000,iridium,800,chromium,700,spaclanium,600);
 
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
 
             size = 3;
             shootCone = 360f;
@@ -1354,7 +1375,7 @@ public class SvBlocks{
             coolantMultiplier = 1.1f;
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
-            outlineColor = Pal.darkOutline;
+            outlineColor = SvPal.outline;
 
             size = 4;
             rotateSpeed = 1.4f;
@@ -1477,25 +1498,164 @@ public class SvBlocks{
             }});
         }};
 
-        ringTurret = new PowerRingTurret("ring-turret") {{
-            requirements(Category.turret,atl(BuildVisibility.hidden),with(spaclanium,1));
-            range = 80*8f;
-            spacing = 40;
-            bulletType =  new ExplosionBulletType(700f,ringRadius) {{
+        resistance = new PowerRingTurret("resistance") {{
+            requirements(Category.turret,atl(),with(spaclanium,1));
+            range = 180*tilesize;
+            fogRadius = 15;
+            spacing = 160;
+            fogRadiusMultiplier = 0.4F;
+
+            bulletType = new ExplosionBulletType(850f,4*tilesize) {{
+                buildingDamageMultiplier = 0.4f;
+                ammoMultiplier = 1f;
+                speed = 0;
+                lifetime = 1f;
+
+                despawnShake = 10f;
+                hitShake = 10f;
+
+                pierce = true;
+                pierceBuilding = true;
+                pierceArmor = true;
+
+                fragBullet = new BasicBulletType(6f, 80,"shell") {{
+                    width = 9f;
+                    hitSize = 5f;
+                    height = 15f;
+                    pierce = true;
+                    lifetime = 35f;
+                    weaveMag = 10f;
+                    weaveScale = 18f;
+                    pierceBuilding = true;
+                    hitColor = backColor = trailColor = SvPal.teslaCharge;
+                    frontColor = Color.white;
+                    trailLength = 32;
+                    trailWidth = 3.35f;
+                    trailSinScl = 2.5f;
+                    trailSinMag = 0.5f;
+                    trailEffect = Fx.none;
+
+                    status = StatusEffects.slow;
+                    statusDuration = 60f;
+                    hitEffect = despawnEffect = new WaveEffect(){{
+                        colorFrom = colorTo = SvPal.teslaCharge;
+                        sizeTo = 4f;
+                        strokeFrom = 4f;
+                        lifetime = 10f;
+                    }};
+                    buildingDamageMultiplier = 0.3f;
+                    homingPower = 0.2f;
+                    homingRange = 30f;
+                }};
+
+                fragRandomSpread = 0f;
+                fragSpread = 30f;
+                fragBullets = 10;
+                fragVelocityMin = 1f;
+
+                lightningColor = SvPal.teslaCharge;
+                lightningDamage = 30;
+                lightning = 16;
+                lightningLength = 10;
+
                 killShooter = false;
+            }};
+            consumePower(3.3f);
+            coolant = (ConsumeLiquid) consume(new ConsumeLiquid(polygen, 120f / 60f)).boost();
+
+            liquidCapacity = 300f;
+
+            size = 5;
+
+            cooldownTime = 120f;
+            recoilTime = 50f;
+            recoilPow = 2;
+            recoil = 1f;
+
+            outlineColor = SvPal.outline;
+            heatColor = SvPal.teslaCharge;
+
+            drawer = new DrawRingTurret("atlacian-") {{
+                parts.addAll(
+                    new RegionPart("-blade") {{
+                        mirror = true;
+                        x = 0;
+                        y = 0;
+
+                        heatProgress = progress = PartProgress.warmup;
+                        moveRot = -25f;
+
+                        moves.add(new PartMove() {{progress = PartProgress.recoil.inv(); moveY = -5f;}});
+                        moves.add(new PartMove() {{progress = PartProgress.heat; moveRot = -10;}});
+                    }},
+                    new RegionPart("-mid") {{
+                        mirror = false;
+                        x = 0;
+                        y = 0;
+                        heatProgress = progress = PartProgress.warmup;
+                        moveY = -2f;
+                        moves.add(new PartMove() {{progress = PartProgress.recoil.inv(); moveY = -5f;}});
+                    }},
+                    new RegionPart("-arc") {{
+                        mirror = false;
+                        x = 0;
+                        y = 0;
+                        heatProgress = progress = PartProgress.warmup;
+                        moveY = -4f;
+                        moves.add(new PartMove() {{progress = PartProgress.recoil.inv(); moveY = -5f;}});
+                    }},
+                    new FlarePart(){{
+                        progress = PartProgress.warmup.delay(0.09f);
+                        color1 = SvPal.teslaCharge;
+                        layer = Layer.effect;
+                        stroke = 3f;
+                        radius = 0f;
+                        radiusTo = 8f;
+                        y = 7f;
+                        x = 0f;
+                        followRotation = true;
+                        sides = 6;
+                    }},
+
+                    new ShapePart(){{
+                        progress = PartProgress.warmup.delay(0.08f);
+                        color = SvPal.teslaCharge;
+                        layer = Layer.effect;
+                        stroke = 2f;
+                        radius = 0f;
+                        radiusTo = 8f;
+                        y = 7f;
+                        x = 0f;
+                        rotateSpeed = 2f;
+                        hollow = true;
+                        sides = 6;
+                    }},
+                    new ShapePart(){{
+                        progress = PartProgress.warmup.delay(0.05f);
+                        color = SvPal.teslaCharge;
+                        layer = Layer.effect;
+                        stroke = 2f;
+                        radius = 0f;
+                        radiusTo = 12f;
+                        y = 7f;
+                        x = 0f;
+                        rotateSpeed = -2f;
+                        hollow = true;
+                        sides = 6;
+                    }}
+                );
             }};
 
             minRingCount = 1;
             boostRingCount = 2;
 
-            ringChargeTime = 180f;
-            ringMovementSpeed = 0.5f;
+            ringChargeTime = 140f;
+            ringMovementSpeed = 1f;
             ringRadius = 24f;
             ringAccuracy = 0.8f;
 
             consumePower(1f);
             consumeItem(tugSheet,2);
-            consumeLiquid(polygen,1f).boost();
         }};
 
 
@@ -2348,7 +2508,7 @@ public class SvBlocks{
         waterMetallizer = new GenericCrafter("water-metallizer") {{
             requirements(Category.crafting,atl(), with(spaclanium,100,corallite,60));
             outputLiquid = new LiquidStack(SvLiquids.polygen, 18f/60f);
-            craftTime = 20f;
+            craftTime = 60f;
 
             researchCost = with(spaclanium,700,corallite,800);
 
@@ -2372,7 +2532,7 @@ public class SvBlocks{
 
         poweredEnhancer = new GenericCrafter("powered-enhancer") {{
             requirements(Category.crafting,atl(), with(chromium, 200, iridium, 100));
-            craftTime = 10f;
+            craftTime = 50f;
 
             researchCost = with(chromium,1600,iridium,3200);
 
@@ -2380,7 +2540,7 @@ public class SvBlocks{
             size = 3;
 
             regionRotated1 = 3;
-            outputLiquids = LiquidStack.with(SvLiquids.polygen, 10/60f, nitrogen, 12/60f);
+            outputLiquids = LiquidStack.with(SvLiquids.polygen, 38/60f, nitrogen, 12/60f);
             liquidOutputDirections = new int[]{1, 3};
 
             rotate = true;
@@ -2508,6 +2668,42 @@ public class SvBlocks{
             outputLiquid = new LiquidStack(helium,1.35f);
             hasLiquids = true;
         }};
+
+        phosphidePhotosynthesizer = new LaserCrafter("phosphide-photosynthesizer") {{
+            requirements(Category.crafting,atl(),with(spaclanium,100,iridium,50,clay,30)); //TODO: reqs
+            //TODO: reserach cost
+            itemCapacity = 25;
+            size = 3;
+            craftEffect = SvFx.photosynthFlash;
+            craftTime = 90f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(iridium,1);
+            consumeItem(spaclanium,2);
+            consumePower(0.8f);
+            consumeLaserPower(15f);
+            laserOverpowerScale = 0.8f;
+            maxLaserEfficiency = 2.50f;
+
+            setLaserInputs(0,1,2,3);
+            maxSuppliers = 1;
+            inputRange = 8;
+            drawInputs = false;
+
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawPistons(),
+                    new DrawRegion("-top")
+            );
+
+            outputItem = new ItemStack(phosphide,3);
+        }
+
+            @Override
+            public TextureRegion[] icons() {
+                return new TextureRegion[] {fullIcon};
+            }
+        };
 
 
         crudeSmelter = new CrudeSmelter("crude-smelter") {{

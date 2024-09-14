@@ -31,7 +31,7 @@ public class LaserBlock extends Block {
     public TextureRegion laserTopRegion;
     public TextureRegion laserStartRegion;
 
-    private float consumeLaserPower = 0f;
+    protected float consumeLaserPower = 0f;
     public boolean consumeLaser = true;
     public boolean supplierPowerEfficiencyBased = false;
     public float minLaserEfficiency = 0f;
