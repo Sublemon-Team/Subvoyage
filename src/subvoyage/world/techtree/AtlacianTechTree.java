@@ -155,7 +155,7 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(windTurbine,with(research(accumulator)), () -> {
+                node(windTurbine,with(research(energyDistributor)), () -> {
                     node(hydrocarbonicGenerator,with(research(propanePyrolyzer)),() -> {
 
                     });

@@ -3,6 +3,7 @@ package subvoyage.content;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.math.geom.Rect;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.abilities.*;
@@ -29,6 +30,7 @@ import subvoyage.type.unit.helicopter.*;
 import subvoyage.type.unit.hydromech.*;
 import subvoyage.type.unit.hydromech.custom.*;
 import subvoyage.type.unit.hydromech.weapons.*;
+import subvoyage.type.unit.rover.RoverUnitType;
 import subvoyage.type.unit.type.*;
 import subvoyage.type.unit.weapons.*;
 
@@ -44,6 +46,8 @@ public class SvUnits{
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
+    //rovers
+    stunt,
     //cargo,payload
     bulker,
     pisun; //shh, don't tell anyone
@@ -53,6 +57,7 @@ public class SvUnits{
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
+
         //core
         shift = new AtlacianUnitType("shift"){{
             aiController = BuilderAI::new;
@@ -2432,6 +2437,23 @@ public class SvUnits{
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit + 1f;
             targetAir = true;
+        }};
+        //rover
+        stunt = new RoverUnitType("stunt") {{
+            constructor = TankUnit::create;
+            itemCapacity = 5;
+
+            health = 800;
+            armor = 4f;
+            researchCostMultiplier = 0;
+            hitSize = 12;
+
+            speed = 1f;
+
+            treadPullOffset = 14;
+            treadRects = new Rect[] {
+                    new Rect(6-32f,14-32f,18,47)
+            };
         }};
 
         //other
