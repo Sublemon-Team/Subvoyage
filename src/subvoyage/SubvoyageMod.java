@@ -20,6 +20,7 @@ import subvoyage.content.sound.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.vapor.*;
 import subvoyage.type.block.production.*;
+import subvoyage.type.unit.ability.LegionfieldAbility;
 import subvoyage.ui.dialog.*;
 import subvoyage.ui.setting.*;
 import subvoyage.utility.*;
@@ -125,6 +126,7 @@ public class SubvoyageMod extends Mod {
 //                if (!state.isPaused()) {
 //                    //vaporControl.update();
 //                }
+                LegionfieldAbility.update();
             } else {
                 if(SvMusic.theAtlacian.isPlaying()) {
                     SvMusic.theAtlacian.pause(true);

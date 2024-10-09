@@ -26,6 +26,7 @@ import subvoyage.draw.visual.*;
 import subvoyage.type.ai.*;
 import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
+import subvoyage.type.unit.ability.LegionfieldAbility;
 import subvoyage.type.unit.helicopter.*;
 import subvoyage.type.unit.hydromech.*;
 import subvoyage.type.unit.hydromech.custom.*;
@@ -2443,10 +2444,14 @@ public class SvUnits{
             constructor = TankUnit::create;
             itemCapacity = 5;
 
-            health = 800;
-            armor = 4f;
+            health = 850;
+            armor = 6f;
             researchCostMultiplier = 0;
             hitSize = 12;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 2f;
+            }});
 
             speed = 1f;
 
@@ -2454,6 +2459,83 @@ public class SvUnits{
             treadRects = new Rect[] {
                     new Rect(6-32f,14-32f,18,47)
             };
+
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 60f;
+                alternate = false;
+                linearWarmup = false;
+                minWarmup = 0.8f;
+
+                top = false;
+                layerOffset = -0.01f;
+
+                x = 6f;
+                y = 5f;
+
+                rotate = true;
+                rotateSpeed = 5f;
+
+                shoot = new ShootStunt();
+
+                maxRange = 60;
+
+                bullet = new BasicBulletType(4f,2f) {{
+                    sprite = "shell";
+                    width = 9f;
+                    height = 9f;
+                    lifetime = 30f;
+                    hitSize = 9f;
+
+                    hitColor = backColor = trailColor = Pal.sap;
+                    frontColor = SvPal.spaclanium;
+                    trailWidth = 5f;
+                    trailLength = 5;
+                    trailInterp = Interp.circleIn;
+                    hitEffect = despawnEffect = Fx.trailFade;
+                    smokeEffect = SvFx.shootLauncher;
+                    splashDamageRadius = 10f;
+                    splashDamage = 20f;
+
+                    intervalDelay = 15f;
+                    intervalAngle = 0f;
+                    intervalSpread = 0;
+                    intervalRandomSpread = 0f;
+                    bulletInterval = 20f;
+
+                    intervalBullets = 1;
+
+                    fragOnHit = true;
+                    fragOnAbsorb = false;
+                    fragAngle = 0f;
+                    fragSpread = 0;
+                    fragRandomSpread = 0f;
+                    fragVelocityMax = fragVelocityMin = 0;
+                    fragLifeMin = 1;
+                    fragBullets = 1;
+
+                    fragBullet = intervalBullet = new BombBulletType(3f,13f) {{
+                        width = 10f;
+                        height = 14f;
+                        hitEffect = SvFx.colorRadExplosion.get(new Object[] {SvPal.spaclanium,6f});
+                        shootEffect = Fx.none;
+                        smokeEffect = Fx.none;
+
+                        keepVelocity = false;
+
+                        hitColor = backColor = trailColor = Pal.sap;
+                        frontColor = SvPal.spaclanium;
+
+                        status = StatusEffects.blasted;
+                        statusDuration = 60f;
+                    }};
+
+                    trailEffect = SvFx.missileTrailSmokeSmall;
+                    trailRotation = true;
+                    trailInterval = 3f;
+                }};
+
+                mirror = true;
+            }});
         }};
 
         //other
