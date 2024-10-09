@@ -2463,19 +2463,21 @@ public class SvUnits{
             weapons.add(new Weapon(name+"-weapon") {{
                 reload = 60f;
                 alternate = false;
+                mirror = false;
                 linearWarmup = false;
                 minWarmup = 0.8f;
 
-                top = false;
-                layerOffset = -0.01f;
+                top = true;
 
-                x = 6f;
-                y = 5f;
+                x = 0f;
+                y = 0f;
 
                 rotate = true;
                 rotateSpeed = 5f;
 
-                shoot = new ShootStunt();
+                shoot = new ShootStunt() {{
+                    shots = 2;
+                }};
 
                 maxRange = 60;
 
@@ -2513,6 +2515,8 @@ public class SvUnits{
                     fragLifeMin = 1;
                     fragBullets = 1;
 
+                    shootSound = Sounds.shootAlt;
+
                     fragBullet = intervalBullet = new BombBulletType(3f,13f) {{
                         width = 10f;
                         height = 14f;
@@ -2521,6 +2525,8 @@ public class SvUnits{
                         smokeEffect = Fx.none;
 
                         keepVelocity = false;
+
+                        shootSound = Sounds.laser;
 
                         hitColor = backColor = trailColor = Pal.sap;
                         frontColor = SvPal.spaclanium;

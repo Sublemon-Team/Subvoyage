@@ -4,6 +4,7 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.scene.ui.layout.Table;
 import arc.struct.ObjectMap;
 import arc.util.Time;
 import mindustry.content.StatusEffects;
@@ -13,7 +14,9 @@ import mindustry.gen.Groups;
 import mindustry.gen.Unit;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 import subvoyage.content.SvEffects;
 
 import java.util.ArrayList;
@@ -27,6 +30,22 @@ public class LegionfieldAbility extends Ability {
     public LegionfieldAbility() {
 
     };
+
+    @Override
+    public void addStats(Table t) {
+        t.add("[lightgray]" + Stat.range.localized() + ": [white]" + Math.round(radius) + " " + StatUnit.blocks.localized());
+        t.row();
+    }
+
+    @Override
+    public void displayBars(Unit unit, Table bars) {
+        bars.add(new Bar("stat.fieldpower", Pal.accent, () -> {
+            float mult = Mathf.clamp(radius(unit.team)/(radius),0f,3f);
+            if(!Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team)))
+                mult = 0;
+            return mult/3;
+        })).row();
+    }
 
     public static ObjectMap<Team,Float> lastRadius = new ObjectMap<>();
     public static ObjectMap<Team,Vec2> point = new ObjectMap<>();
