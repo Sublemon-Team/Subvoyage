@@ -48,6 +48,20 @@ public class SvFx{
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
     }),
 
+    scutchFlash = new Effect(30f, e -> {
+        stroke(e.fout(Interp.pow2Out), SvPal.quartzFiber);
+        Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
+        Lines.poly(e.x,e.y,8,e.fin()*3*tilesize,0);
+        Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
+    }),
+
+    tugPress = new Effect(30f, e -> {
+        stroke(e.fout(Interp.pow2Out), SvPal.tugSheetGlow);
+        Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize,0);
+        Lines.line(e.x+tilesize*2f*e.finpowdown(),e.y-tilesize*2f,e.x+tilesize*2f*e.finpowdown(),e.y+tilesize*2f);
+        Lines.line(e.x-tilesize*2f*e.finpowdown(),e.y-tilesize*2f,e.x-tilesize*2f*e.finpowdown(),e.y+tilesize*2f);
+    }),
+
     rocketLandDust = new Effect(100f, e -> {
         color(e.color, e.fout(0.1f)*e.color.a);
         rand.setSeed(e.id);

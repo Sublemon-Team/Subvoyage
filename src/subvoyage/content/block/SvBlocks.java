@@ -33,6 +33,7 @@ import mindustry.world.meta.*;
 import subvoyage.*;
 import subvoyage.content.*;
 import subvoyage.content.other.*;
+import subvoyage.content.sound.SvSounds;
 import subvoyage.draw.block.*;
 import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
@@ -89,7 +90,7 @@ public class SvBlocks{
             //ENERGY
             energyDock, energyDistributor, accumulator, largeAccumulator, spaclaniumHydrolyzer, windTurbine, hydrocarbonicGenerator, chromiumReactor,
             //LASER
-            laserProjector, luminescentProjector, laserNode, laserAmplificator, laserSplitter, laserBlaster,
+            laserProjector, luminescentProjector, laserSource, laserNode, laserAmplificator, laserSplitter, laserBlaster,
             //TRANSPORTATION
             duct,isolatedDuct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
             shipCargoStation, shipUnloadPoint,
@@ -167,6 +168,17 @@ public class SvBlocks{
             itemDuration = 60f*4f;
             consumeItem(phosphide,1);
             consumePower(1.3f);
+        }};
+
+        laserSource = new LaserGenerator("laser-source") {{
+            requirements(Category.effect, atl(BuildVisibility.sandboxOnly), with());
+            outputLaserPower = 300f;
+            range = 32;
+            maxSuppliers = 0;
+            size = 3;
+            squareSprite = false;
+            outputRange = size+16;
+            setLaserOutputs(0);
         }};
 
         laserNode = new LaserNode("laser-node") {{
@@ -1370,7 +1382,7 @@ public class SvBlocks{
         }};
 
         spectrum = new ItemTurret("spectrum") {{
-            requirements(Category.turret,with(spaclanium,1)); //TODO: reqs
+            requirements(Category.turret,atl(),with(spaclanium,1)); //TODO: reqs
 
             coolantMultiplier = 1.1f;
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
@@ -1517,8 +1529,10 @@ public class SvBlocks{
                 pierce = true;
                 pierceBuilding = true;
                 pierceArmor = true;
+                hitSound = despawnSound = SvSounds.flashExplosion;
 
                 fragBullet = new BasicBulletType(6f, 80,"shell") {{
+                    hitSound = despawnSound = Sounds.bang;
                     width = 9f;
                     hitSize = 5f;
                     height = 15f;
@@ -2755,23 +2769,32 @@ public class SvBlocks{
             hasPower = true;
         }};
 
-        quartzScutcher = new AttributeCrafter("quartz-scutcher") {{
+        quartzScutcher = new LaserCrafter("quartz-scutcher") {{
             requirements(Category.crafting,atl(),with(chromium,220,spaclanium,120,fineSand,80,iridium,30));
 
             researchCost = with(chromium,3000,spaclanium,5000,fineSand,3500,iridium,6000);
 
             itemCapacity = 30;
             size = 3;
-            craftEffect = Fx.smeltsmoke;
+            craftEffect = SvFx.scutchFlash;
             craftTime = 100f;
             envDisabled |= Env.scorching;
 
-            consumeItem(spaclanium,6);
-            consumeItem(fineSand,8);
-            consumeLiquid(argon,1.2f);
-            consumePower(6f);
+            consumeItem(spaclanium,3);
+            consumeItem(fineSand,2);
+            consumeLiquid(argon,55/60f);
+            consumePower(400/60f);
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(SvPal.quartzWeave), new DrawDefault());
-            outputItem = new ItemStack(quartzFiber,2);
+            outputItem = new ItemStack(quartzFiber,3);
+
+            consumeLaserPower(45f);
+            laserOverpowerScale = 0.8f;
+            maxLaserEfficiency = 4f;
+
+            setLaserInputs(0,1,2,3);
+            maxSuppliers = 1;
+            inputRange = 8;
+            drawInputs = false;
 
             hasItems = true;
             hasLiquids = true;
@@ -2785,17 +2808,26 @@ public class SvBlocks{
 
             itemCapacity = 30;
             size = 3;
-            craftEffect = Fx.generatespark;
+            craftEffect = SvFx.tugPress;
             craftTime = 100f;
             envDisabled |= Env.scorching;
 
-            consumeItem(chromium,6);
-            consumeItem(sulfur,8);
-            consumeLiquid(polygen,0.8f);
-            consumeLiquid(helium,1.3f);
-            consumePower(9f);
+            consumeItem(chromium,3);
+            consumeItem(phosphide,4);
+            consumeLiquid(polygen,80/60f);
+            consumeLiquid(helium,65/60f);
+            consumePower(1280/60f);
 
-            outputItem = new ItemStack(tugSheet,1);
+            consumeLaserPower(60f);
+            laserOverpowerScale = 0.75f;
+            maxLaserEfficiency = 4f;
+
+            setLaserInputs(0,1,2,3);
+            maxSuppliers = 1;
+            inputRange = 8;
+            drawInputs = false;
+
+            outputItem = new ItemStack(tugSheet,3);
             hasItems = true;
             hasLiquids = true;
             hasPower = true;
@@ -2803,7 +2835,7 @@ public class SvBlocks{
     }
 
     static BuildVisibility atl(BuildVisibility v){
-        return new BuildVisibility(() -> Vars.state == null || (v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any));
+        return new BuildVisibility(() -> Vars.state == null || (v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any || Vars.state.rules.planet == Planets.sun));
     }
 
     static BuildVisibility atl(){

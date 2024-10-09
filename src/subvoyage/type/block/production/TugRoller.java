@@ -9,8 +9,9 @@ import mindustry.*;
 import mindustry.type.*;
 import mindustry.world.blocks.production.*;
 import subvoyage.content.SvItems;
+import subvoyage.type.block.laser_blocks.LaserCrafter;
 
-public class TugRoller extends AttributeCrafter{
+public class TugRoller extends LaserCrafter {
     public float sinMag = 4f, sinScl = 10f, sideOffset = 0f, lenOffset = -1f, horiOffset = 0f, angleOffset = 0f;
     public TextureRegion region1, region2, bottom, pistons;
 
@@ -32,7 +33,7 @@ public class TugRoller extends AttributeCrafter{
         return new TextureRegion[] {bottom,pistons,region};
     }
 
-    public class TugRollerBuild extends AttributeCrafterBuild{
+    public class TugRollerBuild extends LaserCrafterBuild{
         Seq<ItemParticle> particles = new Seq<>();
 
         @Override

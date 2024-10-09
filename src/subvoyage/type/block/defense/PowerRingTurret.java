@@ -74,6 +74,7 @@ public class PowerRingTurret extends BaseTurret {
         cooldownTime = 20f;
         recoil = 5f;
         recoilPow = 1;
+
     }
 
     @Override
@@ -137,6 +138,7 @@ public class PowerRingTurret extends BaseTurret {
         for(int x = tile.x - spacing + off; x <= tile.x + spacing; x++){
             for(int y = tile.y - spacing + off; y <= tile.y + spacing; y++){
                 Tile other = world.tile(x, y);
+                if(other != null && other.build != null && other.build.team != team) continue;
                 if(other != null && other.block() instanceof PowerRingTurret turbine && (turbine == this || turbine.intersectsSpacing(other.build.tile, tile))) return false;
             }
         }
@@ -152,8 +154,14 @@ public class PowerRingTurret extends BaseTurret {
         public float smoothWarmup = 0;
 
         @Override
+        public boolean wasVisible() {
+            return true;
+        }
+
+        @Override
         public void updateTile() {
             super.updateTile();
+            wasVisible = true;
             int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
             int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
             smoothWarmup = Mathf.lerp(smoothWarmup,(float) estimatedRingCount/(minRingCount+boostRingCount),Time.delta/40f);
