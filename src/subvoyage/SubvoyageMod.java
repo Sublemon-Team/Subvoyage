@@ -218,7 +218,7 @@ public class SubvoyageMod extends Mod {
             t.checkPref("sv-autoupdate",true);
             t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
         });
-        SvUnits.loadUwu(settings.getBool("svTr-leeft-uwu"));
+        SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }
 
 }

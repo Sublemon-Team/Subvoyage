@@ -2479,7 +2479,7 @@ public class SvUnits{
                     shots = 2;
                 }};
 
-                maxRange = 60;
+                range = 60;
 
                 bullet = new BasicBulletType(4f,2f) {{
                     sprite = "shell";
@@ -2488,15 +2488,19 @@ public class SvUnits{
                     lifetime = 30f;
                     hitSize = 9f;
 
-                    hitColor = backColor = trailColor = Pal.sap;
+                    hitColor = backColor = trailColor = Pal.sap.cpy().a(0.5f);
                     frontColor = SvPal.spaclanium;
-                    trailWidth = 5f;
-                    trailLength = 5;
+                    trailWidth = 3f;
+                    trailLength = 2;
                     trailInterp = Interp.circleIn;
                     hitEffect = despawnEffect = Fx.trailFade;
                     smokeEffect = SvFx.shootLauncher;
                     splashDamageRadius = 10f;
                     splashDamage = 20f;
+
+                    pierce = true;
+                    pierceCap = 3;
+                    pierceBuilding = true;
 
                     intervalDelay = 15f;
                     intervalAngle = 0f;
@@ -2520,7 +2524,10 @@ public class SvUnits{
                     fragBullet = intervalBullet = new BombBulletType(3f,13f) {{
                         width = 10f;
                         height = 14f;
-                        hitEffect = SvFx.colorRadExplosion.get(new Object[] {SvPal.spaclanium,6f});
+                        hitEffect = new WaveEffect() {{
+                            sizeTo = 12f;
+                            colorTo = SvPal.spaclanium;
+                        }};
                         shootEffect = Fx.none;
                         smokeEffect = Fx.none;
 
@@ -2528,8 +2535,8 @@ public class SvUnits{
 
                         shootSound = Sounds.laser;
 
-                        hitColor = backColor = trailColor = Pal.sap;
-                        frontColor = SvPal.spaclanium;
+                        hitColor = backColor = trailColor = Pal.sap.cpy().a(0.7f);
+                        frontColor = SvPal.spaclanium.cpy().a(0.7f);
 
                         status = StatusEffects.blasted;
                         statusDuration = 60f;
