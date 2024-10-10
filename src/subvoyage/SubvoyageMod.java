@@ -10,6 +10,7 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.serialization.Jval;
 import mindustry.content.*;
+import mindustry.core.GameState;
 import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
@@ -54,7 +55,12 @@ public class SubvoyageMod extends Mod {
     public SubvoyageMod(){
         //listen for game load events
         Events.on(ClientLoadEvent.class, e -> {
+
             betaCompleteDialog = new BetaCompleteDialog();
+            if(settings.getBool("sv-dont")) {
+                world.loadSector(Planets.tantros.getLastSector());
+                state.set(GameState.State.playing);
+            }
 
             boolean autoUpdate = settings.getBool("sv-autoupdate");
             Log.info("[Subvoyage] Autoupdate: "+(autoUpdate ? "Enabled" : "Disabled"));
@@ -251,6 +257,15 @@ public class SubvoyageMod extends Mod {
 
             checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
             checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);
+            checkPref(t,ID+"-sublemon_frog","sv-dont",false,(changed) -> {
+                if(changed) {
+                    ui.showInfoOnHidden("", () -> {
+                        Core.app.exit();
+                    });
+                } else {
+                    ui.showInfo(":p");
+                }
+            });
         });
         SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }
