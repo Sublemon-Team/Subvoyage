@@ -51,7 +51,7 @@ public class SvWorldBlocks{
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
                 liquidMultiplier = 0.5f;
-                attributes.set(SvAttribute.hardMetals, 1f);
+                attributes.set(SvAttribute.sodilate, 1f);
             }
 
             @Override
@@ -80,7 +80,7 @@ public class SvWorldBlocks{
                 supportsOverlay = true;
                 hasShadow = false;
                 parent = blendGroup = Blocks.water;
-                attributes.set(SvAttribute.hardMetals, 1f);
+                attributes.set(SvAttribute.sodilate, 1f);
             }
 
             @Override
@@ -173,10 +173,12 @@ public class SvWorldBlocks{
         }};
         sodilate = new Floor("sodilate"){{
             attributes.set(Attribute.water, -1f);
+            attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
         }};
         sodilateWall = new StaticWall("sodilate-wall"){{
             sodilate.asFloor().wall = this;
+            attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
         }};
 

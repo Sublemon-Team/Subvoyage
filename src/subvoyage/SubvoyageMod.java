@@ -1,6 +1,10 @@
 package subvoyage;
 
 import arc.*;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.TextureRegion;
+import arc.graphics.gl.FrameBuffer;
 import arc.struct.*;
 import arc.util.*;
 import arc.util.serialization.Jval;
@@ -9,6 +13,7 @@ import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
+import mindustry.graphics.Layer;
 import mindustry.input.Binding;
 import mindustry.mod.*;
 import mindustry.type.Sector;
@@ -41,6 +46,8 @@ public class SubvoyageMod extends Mod {
     public static VersionControl versionControl = new VersionControl();
     public static String currentTag = "v0.6b";
     public static String repo = "Sublemon-Team/Subvoyage";
+
+    public FrameBuffer buffer;
 
     public SubvoyageMod(){
         //listen for game load events
@@ -144,6 +151,25 @@ public class SubvoyageMod extends Mod {
         Events.on(EventType.DisposeEvent.class, e ->
             SvShaders.dispose()
         );
+
+
+        Events.run(EventType.Trigger.draw,() -> {
+            Draw.draw(Layer.min,() -> {
+                if(buffer == null) buffer = new FrameBuffer();
+                buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
+                buffer.begin(Color.clear);
+            });
+            Draw.draw(Layer.light+1,() -> {
+                buffer.end();
+                //buffer.blit(Shaders.screenspace);
+                buffer.blit(SvShaders.underwaterRegion);
+            });
+            SvVars.effectBuffer = buffer;
+        });
+
+        Events.run(EventType.Trigger.update,() -> SvVars.underwaterMap.update());
+        Events.on(EventType.ResetEvent.class, e -> SvVars.underwaterMap.stop());
+        Events.on(EventType.WorldLoadEndEvent.class,e -> SvVars.underwaterMap.recalc());
     }
 
     @Override

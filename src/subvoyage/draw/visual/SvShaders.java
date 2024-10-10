@@ -7,6 +7,7 @@ import arc.graphics.Texture.*;
 import arc.graphics.gl.*;
 import arc.util.*;
 import mindustry.graphics.*;
+import subvoyage.SvVars;
 
 import static mindustry.Vars.*;
 import static mindustry.graphics.Shaders.getShaderFi;
@@ -14,6 +15,8 @@ import static mindustry.graphics.Shaders.getShaderFi;
 
 public class SvShaders{
     public static SurfaceShader hardWater;
+    public static SurfaceShader underwaterRegion;
+
     public static CacheLayer.ShaderLayer hardWaterLayer;
 
     public static Fi file(String name){
@@ -22,6 +25,39 @@ public class SvShaders{
 
     public static void init(){
         hardWater = new SurfaceShader("hard-water");
+        underwaterRegion = new SurfaceShader("underwater-region") {
+            @Override
+            public void apply() {
+                setUniformf("u_campos", Core.camera.position.x - Core.camera.width / 2, Core.camera.position.y - Core.camera.height / 2);
+                setUniformf("u_resolution", Core.camera.width, Core.camera.height);
+                setUniformf("u_time", Time.time);
+
+                setUniformf("u_ww",world.width()*tilesize);
+                setUniformf("u_wh",world.height()*tilesize);
+
+                if(hasUniform("u_noise")){
+                    if(noiseTex == null){
+                        noiseTex = Core.assets.get("sprites/" + textureName() + ".png", Texture.class);
+                    }
+
+                    noiseTex.bind(1);
+                    if(SvVars.effectBuffer != null) SvVars.effectBuffer.getTexture().bind(0);
+                    else renderer.effectBuffer.getTexture().bind(0);
+
+                    setUniformi("u_noise", 1);
+                }
+                if(hasUniform("u_distortmap")){
+                    Texture heatTex = SvVars.underwaterMap.toTexture();
+                    if(heatTex == null) return;
+
+                    heatTex.bind(2);
+                    if(SvVars.effectBuffer != null) SvVars.effectBuffer.getTexture().bind(0);
+                    else renderer.effectBuffer.getTexture().bind(0);
+
+                    setUniformi("u_distortmap", 2);
+                }
+            }
+        };
         CacheLayer.addLast(
                 hardWaterLayer = new CacheLayer.ShaderLayer(hardWater)
         );
@@ -62,6 +98,9 @@ public class SvShaders{
             setUniformf("u_campos", Core.camera.position.x - Core.camera.width / 2, Core.camera.position.y - Core.camera.height / 2);
             setUniformf("u_resolution", Core.camera.width, Core.camera.height);
             setUniformf("u_time", Time.time);
+
+            setUniformf("u_ww",world.width()*tilesize);
+            setUniformf("u_wh",world.height()*tilesize);
 
             if(hasUniform("u_noise")){
                 if(noiseTex == null){
