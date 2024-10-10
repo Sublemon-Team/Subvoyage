@@ -15,7 +15,7 @@ import static mindustry.Vars.world;
 public class UnderwaterMap {
     private float[] map;
     public int w,h;
-    public int blurAmount = 5;
+    public int blurAmount = 1;
     public Texture textureMap;
 
     private @Nullable Thread heatMapThread;

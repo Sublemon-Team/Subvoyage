@@ -26,6 +26,12 @@ public class SvShaders{
     public static void init(){
         hardWater = new SurfaceShader("hard-water");
         underwaterRegion = new SurfaceShader("underwater-region") {
+
+            @Override
+            public String textureName() {
+                return "noise";
+            }
+
             @Override
             public void apply() {
                 setUniformf("u_campos", Core.camera.position.x - Core.camera.width / 2, Core.camera.position.y - Core.camera.height / 2);
@@ -34,6 +40,8 @@ public class SvShaders{
 
                 setUniformf("u_ww",world.width()*tilesize);
                 setUniformf("u_wh",world.height()*tilesize);
+
+                setUniformf("u_opacity",Core.settings.getInt("sv-metal-fuming-opacity")/100f);
 
                 if(hasUniform("u_noise")){
                     if(noiseTex == null){

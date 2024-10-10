@@ -1,6 +1,7 @@
 package subvoyage;
 
 import arc.*;
+import arc.func.Boolc;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
@@ -18,6 +19,7 @@ import mindustry.input.Binding;
 import mindustry.mod.*;
 import mindustry.type.Sector;
 import mindustry.ui.dialogs.ModsDialog;
+import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
@@ -240,11 +242,27 @@ public class SubvoyageMod extends Mod {
                 });
             }));
 
-            t.sliderPref("sv-offload-shield-sides", 6, 3, 10, s -> s == 10 ? bundle.get("circle") : s+"");
-            t.checkPref("sv-autoupdate",true);
-            t.checkPref("sv-leeft-uwu",false, SvUnits::loadUwu);
+            sliderPref(t,ID+"-offload-core-ico","sv-offload-shield-sides",
+                    6,3,10,
+                    s -> s == 10 ? bundle.get("circle") : s+"");
+            sliderPref(t,ID+"-liquid-hard-water","sv-metal-fuming-opacity",
+                    75,0,100,
+                    s -> s == 0 ? bundle.get("off") : s+"%");
+
+            checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
+            checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);
         });
         SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
+    }
+
+    void sliderPref(SettingsMenuDialog.SettingsTable t, String ico, String name, int def, int min, int max, SettingsMenuDialog.StringProcessor p) {
+        t.pref(new SliderIconSetting(ico,name, def,min,max,1,p));
+    }
+    void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def) {
+        t.pref(new CheckIconSetting(ico,name,def,null));
+    }
+    void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def, Boolc changed) {
+        t.pref(new CheckIconSetting(ico,name,def,changed));
     }
 
 }

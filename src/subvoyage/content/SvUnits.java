@@ -2645,5 +2645,11 @@ public class SvUnits{
         armada.region = atlas.find(armada.name+(isUwu ? "-uwu" :""));
         armada.drawCell = !isUwu;
         ((HydromechUnitType) armada).bodyHeat = !isUwu;
+
+        lapetus.region = atlas.find(lapetus.name+(isUwu ? "-uwu" : ""));
+        lapetus.drawCell = !isUwu;
+        if(lapetus.parts.first() instanceof RotatorRegionPart part) {
+            part.xScl = isUwu ? 0 : 1;
+        }
     }
 }
