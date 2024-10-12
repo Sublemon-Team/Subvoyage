@@ -15,7 +15,7 @@ public class ShootStunt extends ShootPattern {
             handler.shoot(0, 0, 0, firstShotDelay + shotDelay * i,
                     b -> {
                 b.moveRelative(0f, Mathf.sin(b.time + offset, scl, mag * sign));
-                if(b.time/b.type.lifetime >= 0.5) b.moveRelative(-b.type.speed*2,0);
+                if(b.time/b.type.lifetime >= 0.65) b.moveRelative(-b.type.speed*2,0);
             });
         }
     }

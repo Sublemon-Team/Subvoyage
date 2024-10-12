@@ -14,10 +14,9 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.Tile;
 import mindustry.world.blocks.payloads.Payload;
-import mindustry.world.blocks.units.UnitAssembler;
 import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.Stat;
-import subvoyage.SubvoyageMod;
+import subvoyage.Subvoyage;
 
 import static mindustry.Vars.*;
 import static mindustry.Vars.world;
@@ -34,9 +33,9 @@ public class LaserUnitAssemblerModule extends LaserPayloadBlock {
     @Override
     public void load() {
         super.load();
-        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+ "-factory-top-" + size + regionSuffix);
-        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-factory-out-" + size + regionSuffix);
-        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-factory-in-" + size + regionSuffix);
+        topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+ "-factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-factory-in-" + size + regionSuffix);
     }
 
     @Override

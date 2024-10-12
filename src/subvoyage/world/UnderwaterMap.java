@@ -142,7 +142,7 @@ public class UnderwaterMap {
         int i = 0;
         for (float v : map) {
             int x = i % w;
-            int y = i / h;
+            int y = i / w;
             pixmap.set(x,y,new Color(v,0,-v,Math.abs(v)));
             i++;
         }

@@ -106,7 +106,7 @@ public class LegionfieldAbility extends Ability {
         if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team))) {
             float mult = Mathf.clamp(radius(unit.team)/(radius),1f,3f);
             unit.speedMultiplier(Mathf.clamp(radius(unit.team)/(radius),1f,3f));
-            unit.apply(StatusEffects.shielded);
+            if(radius(unit.team) > radius) unit.apply(StatusEffects.shielded);
 
             if(mult >= 3f) {
                 unit.unapply(SvEffects.buff);

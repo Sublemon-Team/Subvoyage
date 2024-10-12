@@ -4,7 +4,6 @@ import arc.*;
 import arc.func.Boolc;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.TextureRegion;
 import arc.graphics.gl.FrameBuffer;
 import arc.struct.*;
 import arc.util.*;
@@ -16,15 +15,14 @@ import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
-import mindustry.input.Binding;
 import mindustry.mod.*;
 import mindustry.type.Sector;
-import mindustry.ui.dialogs.ModsDialog;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.*;
 import subvoyage.content.block.*;
 import subvoyage.content.other.*;
 import subvoyage.content.sound.*;
+import subvoyage.core.Logic;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.vapor.*;
 import subvoyage.type.block.production.*;
@@ -40,7 +38,7 @@ import static arc.Core.*;
 import static mindustry.Vars.*;
 import static subvoyage.content.SvPlanets.atlacian;
 
-public class SubvoyageMod extends Mod {
+public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
 
     public BetaCompleteDialog betaCompleteDialog;
@@ -52,14 +50,26 @@ public class SubvoyageMod extends Mod {
 
     public FrameBuffer buffer;
 
-    public SubvoyageMod(){
+    public Subvoyage(){
         //listen for game load events
-        Events.on(ClientLoadEvent.class, e -> {
+        AtomicBoolean hell = new AtomicBoolean(false);
 
+        Events.run(Trigger.update,() -> {
+            if(hell.get()) {
+                if(state.isMenu()) {
+                    world.loadSector(Planets.tantros.getLastSector());
+                    state.set(GameState.State.playing);
+                }
+            }
+        });
+        Events.on(ClientLoadEvent.class, e -> {
+            Logic.clientLoad();
             betaCompleteDialog = new BetaCompleteDialog();
             if(settings.getBool("sv-dont")) {
+                hell.set(true);
                 world.loadSector(Planets.tantros.getLastSector());
                 state.set(GameState.State.playing);
+                settings.put("sv-dont",false);
             }
 
             boolean autoUpdate = settings.getBool("sv-autoupdate");

@@ -19,7 +19,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import static mindustry.Vars.*;
-import static subvoyage.SubvoyageMod.vaporControl;
+import static subvoyage.Subvoyage.vaporControl;
 
 public class VaporControl implements SaveFileReader.CustomChunk {
 

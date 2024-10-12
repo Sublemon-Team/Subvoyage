@@ -17,7 +17,7 @@ public class RotatorRegionPart extends DrawPart{
     public boolean mirror = false;
 
     public @Nullable Color color;
-    public String suffix = SubvoyageMod.ID + "-base-rotator";
+    public String suffix = Subvoyage.ID + "-base-rotator";
     public boolean outline = false;
     public boolean blur = true;
 

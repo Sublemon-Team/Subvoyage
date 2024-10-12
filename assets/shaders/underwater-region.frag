@@ -48,7 +48,7 @@ void main() {
     gl_FragColor = orig; // in case something breaks
 
     float stime = u_time / 5.0;
-    float distortAmount = clamp(texture2D(u_distortmap, vec2(worldc.x / u_ww+4.0/u_wh, worldc.y / u_wh+4.0/u_wh)).r,0.0,1.0);
+    float distortAmount = clamp(texture2D(u_distortmap, vec2(worldc.x / u_ww+4.0/u_ww, worldc.y / u_wh+4.0/u_wh)).r,0.0,1.0);
     if(!(0 <= worldc.x && worldc.x < u_ww && 0 <= worldc.y && worldc.y < u_wh)) distortAmount = 0;
     vec2 distortOffset = vec2(sin(stime/3.0+coords.y/8.0)*v.x*0.25, sin(stime/2.5+coords.x/8.0)*v.y*0.5);
     vec2 distortOffset2 = vec2(sin(stime/3.0+coords.y/8.0+distortAmount*1.5)*v.x*0.25, sin(stime/2.5+coords.x/8.0+distortAmount*1.5)*v.y*0.5);

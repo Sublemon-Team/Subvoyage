@@ -398,10 +398,10 @@ public class SvUnits{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             drag = 0.05f;
-            speed = 1.6f;
+            speed = 1.4f;
             rotateSpeed = 4f;
             accel = 0.1f;
-            health = 800f;
+            health = 450f;
             engineSize = 0;
             hitSize = 20f;
             researchCostMultiplier = 0;
@@ -422,7 +422,7 @@ public class SvUnits{
             };
 
             parts.add(copter);
-            weapons.add(new Weapon(SubvoyageMod.ID + "-marine-weapon"){{
+            weapons.add(new Weapon(Subvoyage.ID + "-marine-weapon"){{
                 x = 5f;
                 layerOffset = -2;
                 reload = 60f;
@@ -432,7 +432,7 @@ public class SvUnits{
                 inaccuracy = 0f;
                 top = false;
                 alternate = false;
-                bullet = new BasicBulletType(3f, 8){{
+                bullet = new BasicBulletType(3f, 25){{
                     sprite = "missile-large";
                     width = 6f;
                     height = 13f;
@@ -445,7 +445,7 @@ public class SvUnits{
                     hitEffect = despawnEffect = Fx.blastExplosion;
                     smokeEffect = SvFx.shootLauncher;
                     splashDamageRadius = 10f;
-                    splashDamage = 20f;
+                    splashDamage = 25f;
 
                     trailEffect = SvFx.missileTrailSmokeSmall;
                     trailRotation = true;
@@ -495,7 +495,7 @@ public class SvUnits{
             };
 
             parts.addAll(copter, tail);
-            weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
+            weapons.add(new Weapon(Subvoyage.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
                 reload = 200f;
@@ -603,7 +603,7 @@ public class SvUnits{
                 }};
             }});
 
-            weapons.add(new Weapon(SubvoyageMod.ID + "-rocket-launcher"){{
+            weapons.add(new Weapon(Subvoyage.ID + "-rocket-launcher"){{
                 top = false;
                 alternate = false;
                 x = 6f;
@@ -743,7 +743,7 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 45f;
-            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+            RotatorRegionPart copter = new RotatorRegionPart(Subvoyage.ID + "-medium-rotator"){{
                     mirror = true;
                     layer = Layer.flyingUnitLow;
                     xScl = 1.2f;
@@ -883,7 +883,7 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 64f;
-            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+            RotatorRegionPart copter = new RotatorRegionPart(Subvoyage.ID + "-medium-rotator"){{
                 mirror = true;
                 layer = Layer.flyingUnitLow;
                 xScl = 1.6f;
@@ -893,7 +893,7 @@ public class SvUnits{
                 rotationSpeed = 400f;
             }};
 
-            RotatorRegionPart tail = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+            RotatorRegionPart tail = new RotatorRegionPart(Subvoyage.ID + "-medium-rotator"){{
                 layer = Layer.flyingUnitLow;
                 xScl = 0.8f;
                 yScl = 0.8f;
@@ -964,7 +964,7 @@ public class SvUnits{
                 }};
             }});
 
-            weapons.add(new Weapon(SubvoyageMod.ID + "-beam-weapon"){{
+            weapons.add(new Weapon(Subvoyage.ID + "-beam-weapon"){{
                 shadow = 20f;
                 controllable = false;
                 autoTarget = true;
@@ -1182,15 +1182,16 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
             rotateSpeed = 8f;
-            health = 1500;
+            armor = 4;
+            health = 610;
             hitSize = 15f;
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
-                        speed = 0.8f;
+                        speed = 1.1f;
                         inwardsDamageMul = 1.2f;
                     }},
                     HydromechState.WATER,new UnitStatState() {{
-                        speed = 1.6f;
+                        speed = 1.8f;
                     }}
             );
 
@@ -1226,14 +1227,14 @@ public class SvUnits{
                 soundPitchMax = 0.55f;
 
                 groundStat = new WeaponStatState() {{
-                    damage = 18f;
+                    damage = 10f;
                     lifetime = 40f;
                 }};
                 waterStat = new WeaponStatState() {{
-                    damage = 18f;
+                    damage = 10f;
                     lifetime = 68f;
                 }};
-                bullet = new DecayingBulletType(4f,18f,9f) {{
+                bullet = new DecayingBulletType(4f,10f,2f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
                     hitColor = backColor = trailColor = Pal.missileYellow;
@@ -2444,8 +2445,8 @@ public class SvUnits{
             constructor = TankUnit::create;
             itemCapacity = 5;
 
-            health = 850;
-            armor = 6f;
+            health = 400;
+            armor = 1f;
             researchCostMultiplier = 0;
             hitSize = 12;
 
@@ -2502,14 +2503,6 @@ public class SvUnits{
                     pierceCap = 3;
                     pierceBuilding = true;
 
-                    intervalDelay = 15f;
-                    intervalAngle = 0f;
-                    intervalSpread = 0;
-                    intervalRandomSpread = 0f;
-                    bulletInterval = 20f;
-
-                    intervalBullets = 1;
-
                     fragOnHit = true;
                     fragOnAbsorb = false;
                     fragAngle = 0f;
@@ -2521,7 +2514,7 @@ public class SvUnits{
 
                     shootSound = Sounds.shootAlt;
 
-                    fragBullet = intervalBullet = new BombBulletType(3f,13f) {{
+                    fragBullet = new BombBulletType(8f,13f) {{
                         width = 10f;
                         height = 14f;
                         hitEffect = new WaveEffect() {{

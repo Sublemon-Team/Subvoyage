@@ -38,12 +38,10 @@ import mindustry.ui.Styles;
 import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.blocks.units.Reconstructor;
-import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import subvoyage.SubvoyageMod;
-import subvoyage.type.block.laser.LaserModule;
+import subvoyage.Subvoyage;
 
 import static mindustry.Vars.state;
 
@@ -64,9 +62,9 @@ public class LaserReconstructor extends LaserUnitBlock {
     @Override
     public void load(){
         super.load();
-        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
-        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
-        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+        topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
     }
     @Override
     public void drawPlanRegion(BuildPlan plan, Eachable<BuildPlan> list){

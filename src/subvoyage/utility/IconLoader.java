@@ -10,7 +10,7 @@ import arc.util.Log;
 import arc.util.Scaling;
 import mindustry.Vars;
 import mindustry.ui.Fonts;
-import subvoyage.SubvoyageMod;
+import subvoyage.Subvoyage;
 
 import java.util.Scanner;
 
@@ -19,7 +19,7 @@ public class IconLoader {
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
         Texture uitex = Core.atlas.find("logo").texture;
         int size = (int)(Fonts.def.getData().lineHeight/Fonts.def.getData().scaleY);
-        try(Scanner scan = new Scanner(Vars.tree.get("icons/"+ SubvoyageMod.ID +"-icons.properties").read(512))){
+        try(Scanner scan = new Scanner(Vars.tree.get("icons/"+ Subvoyage.ID +"-icons.properties").read(512))){
             while(scan.hasNextLine()){
                 String line = scan.nextLine();
                 String[] split = line.split("=");

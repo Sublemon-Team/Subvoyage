@@ -18,10 +18,8 @@ import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.Vars;
 import mindustry.ai.types.AssemblerAI;
 import mindustry.content.Fx;
-import mindustry.content.UnitTypes;
 import mindustry.entities.EntityCollisions;
 import mindustry.entities.Units;
 import mindustry.entities.units.BuildPlan;
@@ -49,11 +47,9 @@ import mindustry.world.consumers.ConsumePayloadDynamic;
 import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
-import subvoyage.SubvoyageMod;
+import subvoyage.Subvoyage;
 import subvoyage.content.SvUnits;
 import subvoyage.content.other.SvStat;
-import subvoyage.network.LaserAssemblerDroneSpawnedCallPacket;
-import subvoyage.network.LaserAssemblerUnitSpawnedCallPacket;
 import subvoyage.utility.SvCall;
 
 import static mindustry.Vars.*;
@@ -90,9 +86,9 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
     @Override
     public void load() {
         super.load();
-        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+ "-factory-top-" + size + regionSuffix);
-        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-factory-out-" + size + regionSuffix);
-        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-factory-in-" + size + regionSuffix);
+        topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+ "-factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-factory-in-" + size + regionSuffix);
         sideRegion1 = Core.atlas.find(name+"-side1");
         sideRegion2 = Core.atlas.find(name+"-side2");
     }

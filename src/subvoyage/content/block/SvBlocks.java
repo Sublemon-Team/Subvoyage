@@ -289,9 +289,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -312,9 +312,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -335,9 +335,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -359,9 +359,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -457,9 +457,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID +"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID +"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID +"factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID +"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID +"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID +"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -493,9 +493,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -511,9 +511,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -639,13 +639,11 @@ public class SvBlocks{
             researchCost = with(corallite,10,clay,10);
 
             ammo(
-            spaclanium,new MissileBulletType(3.7f, 8){{
+            spaclanium,new MissileBulletType(3.7f, 9){{
                         width = 7f;
                         height = 12f;
                         shrinkY = 0f;
                         lifetime = 60f;
-                        splashDamageRadius = 30f;
-                        splashDamage = 6f;
                         hitEffect = Fx.blastExplosion;
                         despawnEffect = Fx.blastExplosion;
                         shootEffect = SvFx.pulverize;
@@ -660,7 +658,7 @@ public class SvBlocks{
 
                         ammoMultiplier = 4f;
                         lightningColor = SvPal.spaclanium;
-                        lightningDamage = 6;
+                        lightningDamage = 2;
                         lightning = 2;
                         lightningLength = 10;
                     }},
@@ -686,7 +684,7 @@ public class SvBlocks{
                         status = StatusEffects.blasted;
                         statusDuration = 60f;
 
-                        ammoMultiplier = 4f;
+                        ammoMultiplier = 1f;
                         lightningColor = SvPal.quartzFiber;
                         lightningDamage = 18;
                         lightning = 4;
@@ -717,7 +715,7 @@ public class SvBlocks{
                             lightning = 2;
                             lightningLength = 10;
                         }};
-                        fragBullets = 3;
+                        fragBullets = 1;
                     }}
             );
 
@@ -762,7 +760,9 @@ public class SvBlocks{
 
             priority = 0;
             range = 170f;
-            scaledHealth = 200;
+            scaledHealth = 900/9f;
+
+            coolantMultiplier = 1f;
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(2);
@@ -836,10 +836,10 @@ public class SvBlocks{
                 fragBullets = 3;
                 fragVelocityMin = 1f;
             }},
-            quartzFiber, new BasicBulletType(5f, 90){{
+            quartzFiber, new BasicBulletType(7f, 90){{
                         width = 12f;
                         height = 12f;
-                        lifetime = 30f;
+                        lifetime = 20f;
                         shootEffect = SvFx.pulverize;
                         smokeEffect = Fx.none;
                         hitColor = backColor = trailColor = Pal.thoriumPink;
@@ -941,6 +941,7 @@ public class SvBlocks{
             range = 260f;
             scaledHealth = 200;
 
+            coolantMultiplier = 2f;
             coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
 
             limitRange(6);
@@ -1673,8 +1674,8 @@ public class SvBlocks{
         }};
 
 
-        int wallHealthMultiplier = 4;
-        int largeWallHealthMultiplier = 20;
+        int wallHealthMultiplier = 800/4;
+        int largeWallHealthMultiplier = 800;
         finesandWall = new Wall("finesand-wall"){{
             requirements(Category.defense,atl(), with(fineSand, 8));
 
@@ -1699,7 +1700,7 @@ public class SvBlocks{
 
             researchCost = with(clay,15);
 
-            health = 160 * wallHealthMultiplier;
+            health = 1 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
@@ -1708,7 +1709,7 @@ public class SvBlocks{
 
             researchCost = with(clay,100);
 
-            health = 160 * largeWallHealthMultiplier;
+            health = 1 * largeWallHealthMultiplier;
             size = 2;
             envDisabled |= Env.scorching;
         }};
@@ -1729,7 +1730,7 @@ public class SvBlocks{
             conductivePower = true;
             chanceDeflect = 10f;
             armor = 15f;
-            health = 200 * wallHealthMultiplier;
+            health = 4 * wallHealthMultiplier;
             envDisabled |= Env.scorching;
         }};
 
@@ -1749,7 +1750,7 @@ public class SvBlocks{
             conductivePower = true;
             chanceDeflect = 20f;
             armor = 15f;
-            health = 200 * largeWallHealthMultiplier;
+            health = 4 * largeWallHealthMultiplier;
             envDisabled |= Env.scorching;
             size = 2;
         }};

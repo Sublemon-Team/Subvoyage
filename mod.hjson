@@ -8,7 +8,7 @@ name: "subvoyage"
 author: "Skoow, IriDark"
 
 #the fully qualified main class of the mod
-main: "subvoyage.SubvoyageMod"
+main: "subvoyage.Subvoyage"
 
 #the mod description as seen in the mod dialog
 description: "Aquatic-stylized mod with new planet and unique mechanics"

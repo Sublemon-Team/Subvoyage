@@ -5,9 +5,7 @@ import arc.audio.Sound;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
 import arc.math.Mathf;
-import arc.math.geom.Geometry;
 import arc.math.geom.Point2;
 import arc.struct.Queue;
 import arc.util.Eachable;
@@ -25,7 +23,6 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
-import mindustry.world.blocks.campaign.LaunchPad;
 import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.PayloadMassDriver;
@@ -33,7 +30,7 @@ import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
-import subvoyage.SubvoyageMod;
+import subvoyage.Subvoyage;
 import subvoyage.draw.visual.SvFx;
 import subvoyage.utility.SvMath;
 
@@ -58,9 +55,9 @@ public class PayloadLaunchPad extends PayloadBlock {
     @Override
     public void load() {
         super.load();
-        topRegion = Core.atlas.find(name + "-top", SubvoyageMod.ID+"-"+"factory-top-" + size + regionSuffix);
-        outRegion = Core.atlas.find(name + "-out", SubvoyageMod.ID+"-"+"factory-out-" + size + regionSuffix);
-        inRegion = Core.atlas.find(name + "-in", SubvoyageMod.ID+"-"+"factory-in-" + size + regionSuffix);
+        topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
+        outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
+        inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
         side1Region = Core.atlas.find(name+"-side1");
         side2Region = Core.atlas.find(name+"-side2",side1Region);
         rocketRegion = Core.atlas.find(name+"-rocket");
