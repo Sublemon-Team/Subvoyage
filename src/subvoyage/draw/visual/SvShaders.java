@@ -16,8 +16,12 @@ import static mindustry.graphics.Shaders.getShaderFi;
 public class SvShaders{
     public static SurfaceShader hardWater;
     public static SurfaceShader underwaterRegion;
+    public static SurfaceShader bloom;
+
+    public static boolean useDefaultBuffer = false;
 
     public static CacheLayer.ShaderLayer hardWaterLayer;
+    public static CacheLayer.ShaderLayer bloomLayer;
 
     public static Fi file(String name){
         return tree.get("shaders/" + name);
@@ -66,8 +70,10 @@ public class SvShaders{
                 }
             }
         };
+        bloom = new SurfaceShader("bloom");
         CacheLayer.addLast(
-                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater)
+                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater),
+                bloomLayer = new CacheLayer.ShaderLayer(bloom)
         );
     }
 

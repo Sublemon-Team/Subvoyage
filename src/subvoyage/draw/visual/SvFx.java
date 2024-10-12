@@ -47,6 +47,14 @@ public class SvFx{
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
     }),
+    coreBubble = new Effect(20, e -> {
+        z(Layer.blockUnder);
+        color(Tmp.c1.set(e.color).shiftValue(0.1f));
+        stroke(e.fout() + 0.2f);
+        randLenVectors(e.id, 2, e.rotation * 0.9f, (x, y) -> {
+            Lines.circle(e.x + x, e.y + y, 1f + e.fin() * 3f);
+        });
+    }),
 
     scutchFlash = new Effect(30f, e -> {
         stroke(e.fout(Interp.pow2Out), SvPal.quartzFiber);

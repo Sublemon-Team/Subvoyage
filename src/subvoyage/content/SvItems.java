@@ -7,7 +7,7 @@ import subvoyage.content.other.SvPal;
 public class SvItems{
     public static final Seq<Item> atlacianItems = new Seq<>();
 
-    public static Item spaclanium, corallite,fineSand, sulfur,
+    public static Item corallite,spaclanium,fineSand, sulfur,
             iridium,chromium,
             crude, clay,
             nitride,phosphide,
@@ -15,6 +15,9 @@ public class SvItems{
 
     public static void load() {
 
+        corallite = new Item("corallite", SvPal.corallite) {{
+            cost = 0.4f;
+        }};
         spaclanium = new Item("spaclanium", SvPal.spaclanium) {{
             cost = 0.3f;
             radioactivity = 0.3f;
@@ -26,9 +29,6 @@ public class SvItems{
         }};
         fineSand = new Item("finesand", SvPal.sand) {{
             cost = 0.3f;
-        }};
-        corallite = new Item("corallite", SvPal.corallite) {{
-            cost = 0.4f;
         }};
         sulfur = new Item("sulfur",SvPal.sulfur) {{
             cost = 0.6f;
