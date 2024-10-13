@@ -79,7 +79,6 @@ void main() {
     if(distortAmount>0.2) {
         gl_FragColor = lerp(gl_FragColor,vec4(0.5,0.7,1.0,1.0),distortAmount/4*u_opacity);
     }
-    //heatmap();
 }
 
 vec4 lerp(vec4 a, vec4 b, float t) {

@@ -48,6 +48,7 @@ public class Logic {
     public static void update() {
         if(state.isGame()) gameUpdate();
         if(state.isMenu()) menuUpdate();
+        SvVars.underwaterMap.update();
     }
 
     public static void gameUpdate() {

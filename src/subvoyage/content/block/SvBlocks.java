@@ -22,6 +22,7 @@ import mindustry.world.blocks.defense.*;
 import mindustry.world.blocks.defense.turrets.*;
 import mindustry.world.blocks.distribution.*;
 import mindustry.world.blocks.liquid.*;
+import mindustry.world.blocks.logic.LogicBlock;
 import mindustry.world.blocks.payloads.*;
 import mindustry.world.blocks.power.*;
 import mindustry.world.blocks.production.*;
@@ -37,6 +38,7 @@ import subvoyage.content.sound.SvSounds;
 import subvoyage.draw.block.*;
 import subvoyage.draw.part.*;
 import subvoyage.draw.visual.*;
+import subvoyage.type.block.LogicHidden;
 import subvoyage.type.block.core.*;
 import subvoyage.type.block.core.offload_core.*;
 import subvoyage.type.block.defense.DrawRingTurret;
@@ -55,6 +57,8 @@ import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
 import subvoyage.world.*;
 
+import static arc.Core.atlas;
+import static mindustry.Vars.content;
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
@@ -70,7 +74,8 @@ public class SvBlocks{
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
-            whirl, rupture, awe, resonance, burden, cascade, spectrum,  inspiration, resistance,
+            whirl,rupture,resonance,burden,cascade,spectrum,upsurge,resistance,
+            awe, inspiration, //removed
             finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
             tugSheetWall, tugSheetWallLarge,
@@ -108,6 +113,7 @@ public class SvBlocks{
             corePuffer,coreShore,coreReef, vault, largeVault, unloader, liquidContainer, liquidTank;
 
     public static void load() {
+
         //non-user
         offloadCore = new OffloadCore("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
@@ -289,9 +295,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -312,9 +318,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -335,9 +341,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -359,9 +365,9 @@ public class SvBlocks{
             @Override
             public void load(){
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
 
@@ -457,9 +463,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID +"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID +"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID +"factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID +"factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID +"factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID +"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -493,9 +499,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -511,9 +517,9 @@ public class SvBlocks{
             @Override
             public void load() {
                 super.load();
-                topRegion = Core.atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
-                outRegion = Core.atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
-                inRegion = Core.atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
+                topRegion = atlas.find(name + "-top", Subvoyage.ID+"-"+"factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID+"-"+"factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID+"-"+"factory-in-" + size + regionSuffix);
             }
         };
 
@@ -661,61 +667,6 @@ public class SvBlocks{
                         lightningDamage = 2;
                         lightning = 2;
                         lightningLength = 10;
-                    }},
-            quartzFiber,new MissileBulletType(4.7f, 12){{
-                        width = 9f;
-                        height = 16f;
-                        shrinkY = 0f;
-                        lifetime = 60f;
-                        splashDamageRadius = 30f;
-                        splashDamage = 13f;
-                        hitEffect = Fx.blastExplosion;
-                        despawnEffect = Fx.blastExplosion;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
-                        hitColor = backColor = trailColor = SvPal.quartzWeave;
-                        frontColor = Color.white;
-                        trailWidth = 5f;
-                        trailLength = 5;
-
-                        homingPower = 0.08f;
-                        homingRange = 50f;
-
-                        status = StatusEffects.blasted;
-                        statusDuration = 60f;
-
-                        ammoMultiplier = 1f;
-                        lightningColor = SvPal.quartzFiber;
-                        lightningDamage = 18;
-                        lightning = 4;
-                        lightningLength = 12;
-
-                        fragBullet = new MissileBulletType(3.7f, 8){{
-                            width = 7f;
-                            height = 12f;
-                            shrinkY = 0f;
-                            lifetime = 60f;
-                            splashDamageRadius = 30f;
-                            splashDamage = 6f;
-                            hitEffect = Fx.blastExplosion;
-                            despawnEffect = Fx.blastExplosion;
-                            shootEffect = SvFx.pulverize;
-                            smokeEffect = Fx.none;
-                            hitColor = backColor = trailColor = SvPal.spaclanium;
-                            frontColor = Color.white;
-                            trailWidth = 3f;
-                            trailLength = 5;
-
-                            status = StatusEffects.electrified;
-                            statusDuration = 60f;
-
-                            ammoMultiplier = 4f;
-                            lightningColor = SvPal.spaclanium;
-                            lightningDamage = 6;
-                            lightning = 2;
-                            lightningLength = 10;
-                        }};
-                        fragBullets = 1;
                     }}
             );
 
@@ -786,7 +737,7 @@ public class SvBlocks{
             }};
 
             ammo(
-            sulfur, new BasicBulletType(6f, 40){{
+            sulfur, new BasicBulletType(6f, 20){{
                 width = 6f;
                 height = 12f;
                 lifetime = 30f;
@@ -835,57 +786,7 @@ public class SvBlocks{
                 fragSpread = 90f;
                 fragBullets = 3;
                 fragVelocityMin = 1f;
-            }},
-            quartzFiber, new BasicBulletType(7f, 90){{
-                        width = 12f;
-                        height = 12f;
-                        lifetime = 20f;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
-                        hitColor = backColor = trailColor = Pal.thoriumPink;
-                        frontColor = Color.white;
-                        trailWidth = 6f;
-                        trailLength = 12;
-                        trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
-                        hitEffect = despawnEffect = Fx.hitBulletColor;
-                        shoot = new ShootHelix();
-
-                        fragBullet = intervalBullet = new BasicBulletType(9f, 12) {{
-                            width = 9f;
-                            hitSize = 5f;
-                            height = 15f;
-                            pierce = true;
-                            lifetime = 35f;
-                            pierceBuilding = true;
-                            hitColor = backColor = trailColor = Pal.thoriumPink;
-                            frontColor = Color.white;
-                            trailWidth = 2.1f;
-                            trailLength = 5;
-                            shoot = new ShootHelix();
-
-                            status = StatusEffects.slow;
-                            statusDuration = 60f;
-                            hitEffect = despawnEffect = new WaveEffect(){{
-                                colorFrom = colorTo = Pal.thoriumPink;
-                                sizeTo = 4f;
-                                strokeFrom = 4f;
-                                lifetime = 10f;
-                            }};
-                            buildingDamageMultiplier = 0.3f;
-                            homingPower = 0.2f;
-                            homingRange = 30f;
-                        }};
-                        intervalRandomSpread = 0f;
-                        intervalSpread = 80f;
-                        intervalBullets = 3;
-                        intervalDelay = -1f;
-                        bulletInterval = 10f;
-
-                        fragRandomSpread = 0f;
-                        fragSpread = 90f;
-                        fragBullets = 3;
-                        fragVelocityMin = 1f;
-                    }}
+            }}
             );
 
             drawer = new DrawTurret("atlacian-"){{
@@ -948,7 +849,7 @@ public class SvBlocks{
         }};
 
         awe = new PowerTurret("awe") {{
-            requirements(Category.turret,atl(), with(corallite, 85, iridium, 40, spaclanium, 20));
+            requirements(Category.turret,atl(BuildVisibility.hidden), with(corallite, 85, iridium, 40, spaclanium, 20));
             size = 2;
             outlineColor = SvPal.outline;
             shootCone = 360f;
@@ -1081,7 +982,7 @@ public class SvBlocks{
             coolantMultiplier = 8f;
         }};
         inspiration = new TractorBeamTurret("inspiration"){{
-            requirements(Category.turret,atl(), with(corallite,200,iridium,150,chromium,35));
+            requirements(Category.turret,atl(BuildVisibility.hidden), with(corallite,200,iridium,150,chromium,35));
 
             researchCost = with(corallite,1400,iridium,1200,chromium,300);
 
@@ -1395,7 +1296,6 @@ public class SvBlocks{
             shootSound = Sounds.mediumCannon;
             ammoPerShot = 2;
             maxAmmo = ammoPerShot * 3;
-            targetAir = false;
             drawer = new DrawTurret("atlacian-") {{
                 parts.addAll(
                         new FlarePart(){{
@@ -1451,7 +1351,7 @@ public class SvBlocks{
             }};
             reload = 160f;
             moveWhileCharging = false;
-            targetAir = true;
+            targetAir = false;
             targetGround = true;
             minWarmup = 0.5f;
             shoot = new ShootMulti() {{
@@ -1472,7 +1372,7 @@ public class SvBlocks{
             predictTarget = false;
             range = 180f;
             shootY = 4f;
-            ammo(nitride,new ArtilleryBulletType(2.5f, 350, "shell") {{
+            ammo(nitride,new ArtilleryBulletType(2.5f, 150, "shell") {{
                 hitEffect = new MultiEffect(Fx.titanExplosion, Fx.titanSmoke);
                 collidesAir = true;
                 collidesGround = true;
@@ -1509,6 +1409,92 @@ public class SvBlocks{
                 shrinkY = 0.1f;
                 buildingDamageMultiplier = 0.3f;
             }});
+        }};
+
+        upsurge = new ItemTurret("upsurge") {{
+            requirements(Category.turret,atl(),with(spaclanium,1)); //TODO: reqs
+
+            coolantMultiplier = 1.1f;
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));
+
+            outlineColor = SvPal.outline;
+
+            size = 4;
+            rotateSpeed = 1.4f;
+            shootSound = Sounds.mediumCannon;
+            ammoPerShot = 2;
+            maxAmmo = ammoPerShot * 3;
+            drawer = new DrawTurret("atlacian-") {{
+                parts.addAll(
+                        new RegionPart("-blade") {{
+                            mirror = true;
+                            under = true;
+                            progress = PartProgress.recoil;
+                            moveY = -1f;
+                            moveRot = -10f;
+                        }},
+                        new RegionPart("-mid") {{
+                            mirror = false;
+                        }},
+                        new RegionPart("-wing") {{
+                            mirror = true;
+                            under = true;
+                            progress = PartProgress.warmup;
+                            moveY = 2f;
+                            moveRot = -5f;
+                        }}
+                );
+            }};
+            reload = 70f;
+            moveWhileCharging = true;
+            targetAir = true;
+            targetGround = false;
+            minWarmup = 0f;
+            shoot = new ShootMulti() {{
+                source = new ShootAlternate(){{
+                    spread = 4.7f;
+                    shots = 4;
+                    barrels = 4;
+                }};
+                dest = new ShootPattern[] {new ShootUpsurge() {{
+                    shotDelay = 5f;
+                    shots = 10;
+                }}};
+            }};
+            inaccuracy = 0f;
+            predictTarget = false;
+            shootY = 4f;
+            ammo(phosphide,new BasicBulletType(){{
+                damage = 13.5f;
+                speed = 8.5f;
+                width = height = 16;
+                shrinkY = 0.3f;
+
+                pierce = true;
+                pierceCap = 3;
+
+                backSprite = "large-bomb-back";
+                sprite = "large-bomb";
+                velocityRnd = 0.11f;
+                collidesGround = false;
+                collidesTiles = false;
+                shootEffect = Fx.shootBig2;
+                smokeEffect = Fx.shootSmokeDisperse;
+                frontColor = SvPal.phosphide;
+                backColor = trailColor = hitColor = SvPal.phosphide;
+                trailChance = 0.44f;
+                ammoMultiplier = 2f;
+
+                lifetime = 21f;
+                rotationOffset = 90f;
+                trailRotation = true;
+                trailEffect = Fx.trailFade;
+                inaccuracy = 1f;
+
+                hitEffect = despawnEffect = Fx.hitBulletColor;
+            }});
+
+            range = 336f;
         }};
 
         resistance = new PowerRingTurret("resistance") {{

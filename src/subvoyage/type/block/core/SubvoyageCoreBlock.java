@@ -15,6 +15,7 @@ import arc.scene.ui.layout.Scl;
 import arc.struct.*;
 import arc.util.Reflect;
 import arc.util.Time;
+import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -31,6 +32,7 @@ import subvoyage.draw.visual.SvShaders;
 import static arc.Core.*;
 import static arc.graphics.g2d.Lines.line;
 import static mindustry.Vars.*;
+import static mindustry.logic.LAccess.progress;
 import static subvoyage.draw.visual.SvFx.rand;
 
 public class SubvoyageCoreBlock extends CoreBlock {
@@ -78,6 +80,8 @@ public class SubvoyageCoreBlock extends CoreBlock {
         }
 
     }
+
+
 
     @Override
     public void drawShadow(Tile tile) {
@@ -152,9 +156,14 @@ public class SubvoyageCoreBlock extends CoreBlock {
                     Draw.color();
                     renderer.bloom.render();
                 }
+                Draw.draw(Layer.blockOver, () -> {
+                    Draw.scl(fin);
+                    Drawf.construct(this, unitType, 0, fin, 1, Time.time);
+                    Draw.scl(1);
+                });
             }
             camera.position.add(rand.random(-fin2, fin2),rand.random(-fin2,fin2));
-
+            Reflect.set(renderer,"camerascale", Scl.scl(4f+2f*(1-fin)));
         }
 
 
