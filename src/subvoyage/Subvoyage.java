@@ -94,6 +94,8 @@ public class Subvoyage extends Mod {
 
         SvSectorPresets.load();
 
+        SvWeather.load();
+
         EnvRenderer.init();
 
         AtlacianTechTree.loadBalanced();

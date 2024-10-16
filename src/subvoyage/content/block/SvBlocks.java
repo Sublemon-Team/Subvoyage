@@ -1421,7 +1421,8 @@ public class SvBlocks{
 
             size = 4;
             rotateSpeed = 1.4f;
-            shootSound = Sounds.mediumCannon;
+            shootSound = Sounds.shotgun;
+
             ammoPerShot = 2;
             maxAmmo = ammoPerShot * 3;
             drawer = new DrawTurret("atlacian-") {{
@@ -1488,7 +1489,7 @@ public class SvBlocks{
                 lifetime = 21f;
                 rotationOffset = 90f;
                 trailRotation = true;
-                trailEffect = Fx.trailFade;
+                trailEffect = SvFx.upsurgeTrail;
                 inaccuracy = 1f;
 
                 hitEffect = despawnEffect = Fx.hitBulletColor;

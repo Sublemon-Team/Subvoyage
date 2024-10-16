@@ -47,6 +47,15 @@ public class SvFx{
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
     }),
+    upsurgeTrail = new Effect(8f, e -> {
+        color(SvPal.phosphide);
+
+        for(int i : Mathf.signs){
+            Drawf.tri(e.x, e.y, 6f * e.fout(), 24f, e.rotation + 90 + 90f * i);
+        }
+
+        Drawf.light(e.x, e.y, 60f * e.fout(), SvPal.phosphide, 0.5f);
+    }),
     coreBubble = new Effect(20, e -> {
         z(Layer.blockUnder);
         color(Tmp.c1.set(e.color).shiftValue(0.1f));
