@@ -70,7 +70,7 @@ public class SvBlocks{
     
     public static Block
             //NON-USER
-            offloadCore, offloadCoreGuardian,
+            offloadCore, offloadCoreGuardian, productionAnchor,
             //DRILLS
             submersibleDrill, featherDrill, tectonicDrill,
             //DEFENSE
@@ -147,6 +147,27 @@ public class SvBlocks{
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
         };
+
+        productionAnchor = new ProductionAnchor("production-anchor") {{
+            requirements(Category.effect, BuildVisibility.editorOnly, with());
+            health = 1500;
+            size = 3;
+
+            itemBatches = with(
+                    corallite,40,
+                    corallite,40,
+                    spaclanium,35,
+                    spaclanium,35,
+                    fineSand,20,
+                    sulfur,15,
+                    spaclanium,35,
+                    spaclanium,35,
+                    fineSand,20,
+                    sulfur,15,
+                    corallite,40,
+                    corallite,40
+            );
+        }};
 
         //laser
 

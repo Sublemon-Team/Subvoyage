@@ -73,6 +73,8 @@ public class Logic {
     public static void worldLoad() {
         if(SvBlocks.waterSifter instanceof WaterSifter sifter) sifter.worldReset();
         SvVars.underwaterMap.recalc();
+        SubvoyageCoreBlock.cutscene = false;
+        SubvoyageCoreBlock.landTime = 0f;
     }
 
 

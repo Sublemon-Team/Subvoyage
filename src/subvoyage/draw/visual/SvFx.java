@@ -42,6 +42,13 @@ public class SvFx{
     none = new Effect(0, 0f, e -> {
     }),
 
+    particle = new Effect(10f,e -> {
+        stroke(e.fin(),e.color.cpy().value(1.1f));
+        z(Layer.bullet+1f);
+        Lines.circle(e.x,e.y,e.fout()*5.5f);
+        Fill.circle(e.x,e.y,e.fout()*3.5f);
+    }),
+
     photosynthFlash = new Effect(30f, e -> {
         stroke(e.fout(Interp.pow2Out), SvPal.photoFlash);
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
