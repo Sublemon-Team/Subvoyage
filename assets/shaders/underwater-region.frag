@@ -33,6 +33,7 @@ void heatmap() {
     float coolAmount = clamp(texture2D(u_distortmap, vec2(worldc.x / u_ww, worldc.y / u_wh)).b,0.0,1.0);
     gl_FragColor = vec4(heatAmount*noise,min(1.0-heatAmount,1.0-coolAmount)*noise,coolAmount*noise,1.0);
 }
+
 void main() {
     vec2 c = v_texCoords;
     vec2 v = vec2(1.0/u_resolution.x, 1.0/u_resolution.y);
@@ -46,7 +47,9 @@ void main() {
 
     vec4 orig = texture2D(u_texture, c);
     gl_FragColor = orig; // in case something breaks
-
+    if(orig.r <= 0 && orig.g <= 0 && orig.b <= 0) {
+        return;
+    }
     float stime = u_time / 5.0;
     float distortAmount = clamp(texture2D(u_distortmap, vec2(worldc.x / u_ww+4.0/u_ww, worldc.y / u_wh+4.0/u_wh)).r,0.0,1.0);
     if(!(0 <= worldc.x && worldc.x < u_ww && 0 <= worldc.y && worldc.y < u_wh)) distortAmount = 0;

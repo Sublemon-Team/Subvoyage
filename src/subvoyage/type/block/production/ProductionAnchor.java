@@ -16,6 +16,8 @@ import arc.util.Align;
 import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.game.Team;
@@ -31,6 +33,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.content.SvItems;
+import subvoyage.content.block.SvBlocks;
 import subvoyage.draw.visual.SvDraw;
 import subvoyage.draw.visual.SvFx;
 
@@ -54,6 +57,13 @@ public class ProductionAnchor extends Block {
 
         hasItems = true;
         unloadable = false;
+
+        fogRadius = 5;
+    }
+
+    @Override
+    public boolean canBreak(Tile tile) {
+        return false;
     }
 
     @Override
@@ -107,19 +117,21 @@ public class ProductionAnchor extends Block {
 
                     Building building = world.build(out.x,out.y);
                     if(building != null && (building.block.hasItems || building.block.hasLiquids)) {
+                        int remainingClay = 25-clayCount;
+                        float remainingWater = 60f-waterCount;
                         if(building.block.hasItems && building.items.has(clay) && clayCount < 25) {
-                            clayCount += building.items.get(clay);
-                            building.items.remove(clay,building.items.get(clay));
+                            clayCount += Math.min(building.items.get(clay),remainingClay);
+                            building.items.remove(clay,Math.min(building.items.get(clay),remainingClay));
                             lastInputTeam = building.team;
                         }
                         if(building instanceof Duct.DuctBuild b && b.current == clay) {
-                            clayCount += 1;
+                            clayCount += Math.min(1,remainingClay);
                             b.current = null;
                             lastInputTeam = building.team;
                         }
                         if(building.block.hasLiquids && building.liquids.get(water) >= 1f  && waterCount < 60) {
-                            waterCount += building.liquids.get(water);
-                            building.liquids.remove(water,building.liquids.get(water));
+                            waterCount += Math.min(building.liquids.get(water),remainingWater);
+                            building.liquids.remove(water,Math.min(building.liquids.get(water),remainingWater));
                             lastInputTeam = building.team;
                         }
                     }
@@ -128,6 +140,7 @@ public class ProductionAnchor extends Block {
 
                 if(clayCount >= 25 && waterCount >= 60f && lastInputTeam != null) {
                     team = lastInputTeam;
+                    state.stats.placedBlockCount.put(SvBlocks.productionAnchor,state.stats.placedBlockCount.get(SvBlocks.productionAnchor,0)+1);
                 }
             }
             if(targetCore != null) {
@@ -149,8 +162,8 @@ public class ProductionAnchor extends Block {
                     }); 
                     items.clear();
                 }
+                fullTime += Time.delta;
             }
-            fullTime += Time.delta;
         }
 
         @Override
@@ -172,7 +185,6 @@ public class ProductionAnchor extends Block {
             Draw.z(Layer.blockOver);
             if(team == Team.derelict) {
                 Draw.color(teamColor.cpy().lerp(Color.white,0.9f));
-                Lines.circle(x,y,size*tilesize/2f);
             } else {
                 SvDraw.applyBloomBasic(() -> {
                     Draw.color(teamColor);
@@ -258,6 +270,9 @@ public class ProductionAnchor extends Block {
                 if (health <= 0f) {
                     health(maxHealth());
                     healthChanged();
+                    if(team == player.team()) {
+                        state.stats.placedBlockCount.put(SvBlocks.productionAnchor,state.stats.placedBlockCount.get(SvBlocks.productionAnchor,0)-1);
+                    }
                     team(cacheTeam);
                     //Call.buildDestroyed(this);
                 }
@@ -268,6 +283,30 @@ public class ProductionAnchor extends Block {
         public void damage(Team source, float damage) {
             cacheTeam = source;
             damage(damage);
+        }
+
+        @Override
+        public void write(Writes write) {
+            write.i(clayCount);
+            write.f(waterCount);
+            if(lastInputTeam != null) write.i(lastInputTeam.id);
+            else write.i(-1);
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            if(revision == 1) {
+                clayCount = read.i();
+                waterCount = read.f();
+                int teamId = read.i();
+                if(teamId == -1) lastInputTeam = null;
+                else lastInputTeam = Team.get(teamId);
+            }
+        }
+
+        @Override
+        public byte version() {
+            return 1;
         }
     }
 }

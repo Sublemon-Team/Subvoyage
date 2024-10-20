@@ -26,9 +26,10 @@ public class CustomRender {
             buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
             buffer.begin(Color.clear);
         });
-        Draw.draw(Layer.light+1,() -> {
+        Draw.draw(Layer.weather+1,() -> {
             buffer.end();
             //buffer.blit(Shaders.screenspace);
+            Draw.z(Layer.weather);
             buffer.blit(SvShaders.underwaterRegion);
         });
         SvVars.effectBuffer = buffer;

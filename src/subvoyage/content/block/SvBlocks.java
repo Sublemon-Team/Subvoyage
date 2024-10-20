@@ -1883,13 +1883,13 @@ public class SvBlocks{
 
         //liquids
         lowTierPump = new Pump("lead-pump") {{
-            requirements(Category.liquid,atl(), with(spaclanium, 8));
+            requirements(Category.liquid,atl(), with(corallite, 8));
 
             squareSprite = false;
             envDisabled |= Env.scorching;
             pumpAmount = 15f / 60f;
 
-            researchCost = with(spaclanium,5);
+            researchCost = with(corallite,5);
         }};
 
         centrifugalPump = new Pump("centrifugal-pump") {{
@@ -1962,12 +1962,12 @@ public class SvBlocks{
         }};
 
         waterDiffuser = new Diffuser("water-diffuser") {{
-            requirements(Category.production, atl(), with(spaclanium, 10));
+            requirements(Category.production, atl(), with(corallite, 10));
             size = 2;
             craftTime = 30f;
             itemCapacity = 50;
 
-            researchCost = with(spaclanium,3,corallite,1);
+            researchCost = with(corallite,5);
 
             squareSprite = false;
 

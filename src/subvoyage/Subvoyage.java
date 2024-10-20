@@ -146,7 +146,7 @@ public class Subvoyage extends Mod {
 
             checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
             checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);
-            checkPref(t,ID+"-sublemon_frog","sv-dont",false,(changed) -> {
+            /*checkPref(t,ID+"-sublemon_frog","sv-dont",false,(changed) -> {
                 if(changed) {
                     ui.showInfoOnHidden("", () -> {
                         Core.app.exit();
@@ -154,7 +154,7 @@ public class Subvoyage extends Mod {
                 } else {
                     ui.showInfo(":p");
                 }
-            });
+            });*/
         });
         SvUnits.loadUwu(settings.getBool("sv-leeft-uwu"));
     }
