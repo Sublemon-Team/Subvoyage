@@ -146,6 +146,7 @@ public class Subvoyage extends Mod {
 
             checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
             checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);
+            checkPref(t,ID+"-phosphide-wall-large-full","sv-wall-tiling",true);
             /*checkPref(t,ID+"-sublemon_frog","sv-dont",false,(changed) -> {
                 if(changed) {
                     ui.showInfoOnHidden("", () -> {

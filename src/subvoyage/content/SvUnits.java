@@ -4,12 +4,16 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.Rect;
+import arc.math.geom.Vec2;
 import mindustry.ai.types.*;
 import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.entities.pattern.ShootAlternate;
+import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -36,7 +40,13 @@ import subvoyage.type.unit.type.*;
 import subvoyage.type.unit.weapons.*;
 
 import static arc.Core.atlas;
+import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Draw.z;
+import static arc.graphics.g2d.Lines.lineAngle;
+import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
+import static subvoyage.BalanceStates.*;
 
 public class SvUnits{
     public static UnitType
@@ -48,7 +58,7 @@ public class SvUnits{
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
     //rovers
-    stunt,
+    stunt, zeal,
     //cargo,payload
     bulker,
     pisun; //shh, don't tell anyone
@@ -401,7 +411,7 @@ public class SvUnits{
             speed = 1.4f;
             rotateSpeed = 4f;
             accel = 0.1f;
-            health = 450f;
+            health = HELIO_T1_HU;
             engineSize = 0;
             hitSize = 20f;
             researchCostMultiplier = 0;
@@ -421,6 +431,8 @@ public class SvUnits{
                 copter.unitY = e.y;
             };
 
+            float BPS = 2f * 0.5f;
+
             parts.add(copter);
             weapons.add(new Weapon(Subvoyage.ID + "-marine-weapon"){{
                 x = 5f;
@@ -432,7 +444,8 @@ public class SvUnits{
                 inaccuracy = 0f;
                 top = false;
                 alternate = false;
-                bullet = new BasicBulletType(3f, 25){{
+
+                bullet = new BasicBulletType(3f, HELIO_T1_DPS/BPS) {{
                     sprite = "missile-large";
                     width = 6f;
                     height = 13f;
@@ -461,7 +474,7 @@ public class SvUnits{
             speed = 1.3f;
             rotateSpeed = 3f;
             accel = 0.25f;
-            health = 1350f;
+            health = HELIO_T2_HU;
 
             researchCostMultiplier = 0;
 
@@ -495,50 +508,70 @@ public class SvUnits{
             };
 
             parts.addAll(copter, tail);
+
+            float BPS = 2f * 1.12f;
+
             weapons.add(new Weapon(Subvoyage.ID + "-missile-launcher"){{
                 x = 7f;
                 y = -2f;
-                reload = 200f;
+                reload = 160f;
                 recoil = 2f;
                 shootSound = Sounds.mediumCannon;
 
                 top = false;
                 alternate = true;
+
+                shoot = new ShootUpsurge();
                 shoot.shots = 6;
                 shoot.shotDelay = 15f;
+
                 bullet = new BasicBulletType(){{
-                    sprite = "missile-large";
-                    width = height = 8f;
+                    sprite = "shell";
+                    width = height = 12f;
                     maxRange = 50f;
                     ignoreRotation = true;
 
                     hitColor = trailColor = SvPal.heatGlow;
                     frontColor = Color.white;
-                    trailWidth = 2f;
+                    trailWidth = 4f;
                     trailLength = 8;
                     hitEffect = despawnEffect = Fx.blastExplosion;
-                    smokeEffect = SvFx.shootLauncher;
+                    smokeEffect = Fx.shootSmokeDisperse;
+
+                    rotationOffset = 90f;
+                    trailRotation = true;
+                    trailEffect = SvFx.skathTrail;
+                    trailChance = 0.44f;
+
+                    weaveMag = 10f;
+                    weaveScale = 60f;
+                    weaveRandom = false;
+
                     hitSound = Sounds.plasmaboom;
 
                     backColor = SvPal.heatGlow;
-                    frontColor = Color.white;
+
+                    mixColorFrom = SvPal.heatGlow;
                     mixColorTo = Color.white;
 
                     ejectEffect = Fx.none;
                     hitSize = 22f;
 
                     collidesAir = true;
-                    lifetime = 87f;
+                    lifetime = 30f;
+
+                    pierce = true;
+                    pierceCap = 1;
 
                     hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
                     keepVelocity = false;
                     weaveMag = 2f;
                     weaveScale = 1f;
-                    speed = 0.8f;
+                    speed = 1.1f;
                     drag = -0.020f;
                     homingPower = 0.05f;
 
-                    splashDamage = 3f;
+                    splashDamage = HELIO_T2_DPS/BPS;
                     splashDamageRadius = 20f;
                 }};
             }});
@@ -551,7 +584,7 @@ public class SvUnits{
             speed = 1.5f;
             rotateSpeed = 2f;
             accel = 0.45f;
-            health = 4220f;
+            health = HELIO_T3_HU;
 
             researchCostMultiplier = 0f;
 
@@ -573,6 +606,11 @@ public class SvUnits{
                 copter.unitY = e.y;
             };
 
+            float BPS = 60f/10f;
+
+            float abilityDamage = HELIO_T3_DPS/BPS*0.05f;
+            float weaponDamage = HELIO_T3_DPS/BPS*0.95f;
+
             parts.add(copter);
             abilities.add(
             new MoveEffectAbility(3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
@@ -581,151 +619,79 @@ public class SvUnits{
 
             new MoveEffectAbility(-3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
                 teamColor = true;
-            }}
+            }},
+
+            new MoveLightningAbility(abilityDamage,8,0.1f,0f,1f,2f, SvPal.heatGlow)
             );
-
-            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
-                top = false;
-                mirror = true;
-                alternate = false;
-
-                x = 4f;
-                y = -9.25f;
-
-                reload = 50f;
-                targetInterval = 10f;
-                targetSwitchInterval = 15f;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    hitEffect = Fx.pointHit;
-                    maxRange = 100f;
-                    damage = 17f;
-                }};
-            }});
 
             weapons.add(new Weapon(Subvoyage.ID + "-rocket-launcher"){{
                 top = false;
                 alternate = false;
                 x = 6f;
                 y = 2f;
-                reload = 120f;
+                reload = 10f;
                 recoil = 2f;
                 shootSound = Sounds.missileLaunch;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    smokeEffect = Fx.shootSmokeTitan;
-                    hitColor = Pal.suppress;
-                    shake = 1f;
-                    speed = 0f;
-                    keepVelocity = false;
-                    collidesAir = true;
-                    spawnUnit = new MissileUnitType("charon-missile"){{
-                        outlineColor = Pal.darkOutline;
-                        trailRotation = true;
-                        targetAir = true;
-                        physics = true;
-                        lowAltitude = true;
+                shoot = new ShootBarrel() {{
+                    barrels = new float[] {
+                            -4f, 1f, -10f,
+                            -2f, 0.5f, 10f,
+                            0f, 0f, 0f,
+                            2f, 0.5f, -10f,
+                            4f, 1f, 10f
+                    };
+                }};
 
-                        hitEffect = despawnEffect = Fx.blastExplosion;
-                        smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmokeSmall;
-                        trailInterval = 3f;
-                        trailWidth = 1f;
-                        trailLength = 6;
+                bullet = new RailBulletType() {{
+                    length = 8*10f;
+                    damage = weaponDamage;
 
-                        speed = 4.6f;
-                        maxRange = 5f;
-                        health = 40;
-                        homingDelay = 5f;
+                    hitColor = SvPal.heatGlow;
+                    hitEffect = endEffect = Fx.hitBulletColor;
+                    pierceDamageFactor = 1.05f;
+                    pointEffectSpace = 60f;
 
-                        engineSize = 3f;
-                        hitColor = engineColor = trailColor = SvPal.heatGlow;
-                        engineLayer = Layer.effect;
-                        deathExplosionEffect = Fx.none;
-                        loopSoundVolume = 0.1f;
-                        parts.add(new ShapePart(){{
-                            layer = Layer.effect;
-                            circle = true;
-                            y = -0.25f;
-                            radius = 1.5f;
-                            color = SvPal.heatGlow;
-                            colorTo = Color.white;
-                            progress = PartProgress.life.curve(Interp.pow5In);
-                        }});
+                    smokeEffect = Fx.colorSpark;
 
-                        parts.add(new RegionPart("-fin"){{
-                            mirror = true;
-                            progress = PartProgress.life.mul(3f).curve(Interp.pow5In);
-                            moveRot = 32f;
-                            rotation = -6f;
-                            moveY = 1.5f;
-                            x = 3f / 4f;
-                            y = -6f / 4f;
-                        }});
+                    endEffect = new Effect(14f, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        Drawf.tri(e.x, e.y, e.fout() * 1.5f, 5f, e.rotation);
+                    });
 
-                        weapons.add(new Weapon(){{
-                            shootCone = 360f;
-                            mirror = false;
-                            reload = 1f;
-                            shootOnDeath = true;
-                            bullet = new ExplosionBulletType(40, 15){{
-                                collidesAir = true;
-                                suppressionRange = 80f;
-                                fragBullets = 5;
-                                fragBullet = new BasicBulletType(4f,10f) {{
-                                    sprite = "missile-large";
-                                    width = height = 8f;
-                                    maxRange = 50f;
-                                    ignoreRotation = true;
+                    shootEffect = new Effect(10, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        float w = 1.2f + 7 * e.fout();
 
-                                    hitColor = trailColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    trailWidth = 2f;
-                                    trailLength = 8;
-                                    hitEffect = despawnEffect = Fx.blastExplosion;
-                                    smokeEffect = SvFx.shootLauncher;
-                                    hitSound = Sounds.plasmaboom;
+                        Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+                        color(e.color);
 
-                                    backColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    mixColorTo = Color.white;
+                        for(int i : Mathf.signs){
+                            Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                        }
 
-                                    ejectEffect = Fx.none;
-                                    hitSize = 22f;
+                        Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+                    });
 
-                                    collidesAir = true;
-                                    lifetime = 87f;
+                    lineEffect = new Effect(20f, e -> {
+                        if(!(e.data instanceof Vec2 v)) return;
+                        z(Layer.bullet);
+                        color(e.color);
+                        stroke(e.fout() * 1.5f + 1f);
 
-                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                    keepVelocity = false;
-                                    weaveMag = 2f;
-                                    weaveScale = 1f;
-                                    speed = 0.8f;
-                                    drag = -0.020f;
-                                    homingPower = 0.01f;
+                        Fx.rand.setSeed(e.id);
+                        for(int i = 0; i < 7; i++){
+                            Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+                            Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+                        }
 
-                                    splashDamage = 10f;
-                                    splashDamageRadius = 10f;
-                                }};
-
-                                shootEffect = new ExplosionEffect(){{
-                                    lifetime = 50f;
-                                    waveStroke = 5f;
-                                    waveLife = 8f;
-                                    waveColor = Color.white;
-                                    sparkColor = smokeColor = SvPal.heatGlow;
-                                    waveRad = 40f;
-                                    smokeSize = 4f;
-                                    smokes = 7;
-                                    smokeSizeBase = 0f;
-                                    sparks = 10;
-                                    sparkRad = 40f;
-                                    sparkLen = 6f;
-                                    sparkStroke = 2f;
-                                }};
-                            }};
-                        }});
-                    }};
+                        e.scaled(14f, b -> {
+                            stroke(b.fout() * 3f);
+                            color(e.color);
+                            Lines.line(e.x, e.y, v.x, v.y);
+                        });
+                    });
                 }};
             }});
         }};
@@ -738,7 +704,7 @@ public class SvUnits{
             rotateSpeed = 4f;
             researchCostMultiplier = 0f;
             accel = 0.45f;
-            health = 8820f;
+            health = HELIO_T4_HU;
 
             engineOffset = -7.5f;
             engineSize = 0;
@@ -877,7 +843,7 @@ public class SvUnits{
             speed = 1.8f;
             rotateSpeed = 3f;
             accel = 0.45f;
-            health = 18820f;
+            health = HELIO_T5_HU;
             researchCostMultiplier = 0f;
 
             engineOffset = -7.5f;
@@ -1183,7 +1149,7 @@ public class SvUnits{
             drag = 0.07f;
             rotateSpeed = 8f;
             armor = 4;
-            health = 610;
+            health = HYDRO_T1_HU;
             hitSize = 15f;
             withStates(
                     HydromechState.GROUND,new UnitStatState() {{
@@ -1252,7 +1218,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
             rotateSpeed = 8f;
-            health = 3220;
+            health = HYDRO_T2_HU;
             hitSize = 20f;
             researchCostMultiplier = 0;
             withStates(
@@ -1367,7 +1333,7 @@ public class SvUnits{
             drag = 0.14f;
             rotateSpeed = 5f;
             researchCostMultiplier = 0f;
-            health = 6220;
+            health = HYDRO_T3_HU;
             hitSize = 20f;
 
             waveTrailX = 8f;
@@ -1658,32 +1624,13 @@ public class SvUnits{
                     };
                 }};
             }});
-
-            weapons.add(new HydromechWeapon(name+"-hydrogun") {{
-                autoTarget = true;
-                controllable = false;
-                rotate = true;
-
-                x = 0f;
-                y = -2f;
-                mirror = false;
-                cooldownTime = 1f;
-                hasHeat = false;
-                rotateSpeed = 5f;
-                alwaysShootWhenMoving = true;
-                recoil = 0.1f;
-
-                shootSound = Sounds.none;
-
-                bullet = new LiquidBulletType(Liquids.water);
-            }});
         }};
 
         squadron = new HydromechUnitType("squadron"){{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 7260;
+            health = HYDRO_T4_HU;
             researchCostMultiplier = 0f;
             hitSize = 32f;
 
@@ -2080,7 +2027,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 20060;
+            health = HYDRO_T5_HU;
             hitSize = 32f;
             researchCostMultiplier = 0f;
 
@@ -2445,7 +2392,7 @@ public class SvUnits{
             constructor = TankUnit::create;
             itemCapacity = 5;
 
-            health = 400;
+            health = ROVER_T1_HU;
             armor = 1f;
             researchCostMultiplier = 0;
             hitSize = 12;
@@ -2544,6 +2491,133 @@ public class SvUnits{
             }});
         }};
 
+        zeal = new RoverUnitType("zeal") {{
+            constructor = TankUnit::create;
+            itemCapacity = 5;
+
+            health = ROVER_T2_HU;
+            armor = 2f;
+            researchCostMultiplier = 0;
+            hitSize = 18;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 3f;
+            }});
+            abilities.add(new EnergyFieldAbility(10f, 65f, 5*8f) {{
+                statusDuration = 60f * 2f;
+                maxTargets = 5;
+                healPercent = 0.05f;
+                sameTypeHealMult = 1.25f;
+                effectRadius = 1f;
+                y = -4f;
+                color = SvPal.spaclanium;
+            }});
+
+            speed = 0.8f;
+
+            treadPullOffset = 3;
+
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 80f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 12f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 0.7f;
+
+                bullet = new EmpBulletType(){{
+                    float rad = 8*3f;
+
+                    scaleLife = true;
+                    lightOpacity = 0.7f;
+                    unitDamageScl = 1.1f;
+                    healPercent = 0.2f;
+                    timeIncrease = 3f;
+                    timeDuration = 60f * 20f;
+                    powerDamageScl = 1.1f;
+                    damage = 20;
+                    hitColor = lightColor = SvPal.spaclanium;
+                    lightRadius = 8*4f;
+                    clipSize = 8*5f;
+                    shootEffect = new Effect(40, e -> {
+                        color(SvPal.phosphide);
+                        stroke(e.fout() * 1.6f);
+
+                        randLenVectors(e.id, 18, e.finpow() * 27f, e.rotation, 360f, (x, y) -> {
+                            float ang = Mathf.angle(x, y);
+                            lineAngle(e.x + x, e.y + y, ang, e.fout() * 6 + 1f);
+                        });
+                    });
+                    smokeEffect = Fx.shootBigSmoke2;
+                    lifetime = 15f;
+                    sprite = "circle-bullet";
+                    backColor = SvPal.phosphide;
+                    frontColor = Color.white;
+                    width = height = 8f;
+                    shrinkY = 0f;
+                    speed = 4f;
+                    trailLength = 20;
+                    trailWidth = 3f;
+                    trailColor = SvPal.phosphide;
+                    trailInterval = 3f;
+                    splashDamage = 20f;
+                    radius = rad;
+                    splashDamageRadius = rad;
+                    hitShake = 4f;
+                    trailRotation = true;
+                    trailInterp = Interp.fastSlow;
+                    status = StatusEffects.electrified;
+                    hitSound = Sounds.plasmaboom;
+
+                    trailEffect = new Effect(16f, e -> {
+                        color(SvPal.phosphide);
+                        for(int s : Mathf.signs){
+                            Drawf.tri(e.x, e.y, 4f, 10f * e.fslope(), e.rotation + 90f*s);
+                        }
+                    });
+
+                    hitEffect = new Effect(50f, 100f, e -> {
+                        e.scaled(7f, b -> {
+                            color(SvPal.phosphide, b.fout());
+                            Fill.circle(e.x, e.y, rad);
+                        });
+
+                        color(SvPal.spaclanium);
+                        stroke(e.fout() * 3f);
+                        Lines.circle(e.x, e.y, rad);
+
+                        int points = 10;
+                        float offset = Mathf.randomSeed(e.id, 360f);
+                        for(int i = 0; i < points; i++){
+                            float angle = i* 360f / points + offset;
+                            //for(int s : Mathf.zeroOne){
+                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, 10f * e.fout(), angle/* + s*180f*/);
+                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, -20f * e.fout(), angle/* + s*180f*/);
+                            //}
+                        }
+
+                        Fill.circle(e.x, e.y, 12f * e.fout());
+                        color();
+                        Fill.circle(e.x, e.y, 6f * e.fout());
+                        Drawf.light(e.x, e.y, rad * 1.6f, SvPal.spaclanium, e.fout());
+                    });
+                }};
+            }});
+
+            treadRects = new Rect[] {
+                    new Rect(13-48f,5-48f,17,88)
+            };
+        }};
+
         //other
         bulker = new AtlacianUnitType("bulker"){{
             controller = u -> new CargoAI();
@@ -2627,7 +2701,7 @@ public class SvUnits{
 
         vanguard.region = atlas.find(vanguard.name+(isUwu ? "-uwu" :""));
         vanguard.drawCell = !isUwu;
-        vanguard.weapons.get(2).layerOffset = isUwu ? -1 : 0;
+        //vanguard.weapons.get(2).layerOffset = isUwu ? -1 : 0;
         ((HydromechUnitType) vanguard).bodyHeat = !isUwu;
 
         squadron.region = atlas.find(squadron.name+(isUwu ? "-uwu" :""));

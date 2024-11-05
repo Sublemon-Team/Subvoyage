@@ -186,14 +186,11 @@ public class AtlacianTechTree {
 
                     });
                 });
-                node(finesandWall,() -> {
-                    node(finesandWallLarge,() -> {
-                        node(clayWall,with(research(ceramicBurner)),() -> {
-                            node(clayWallLarge,() -> {
-                                node(tugSheetWall,with(research(tugRoller)),() -> {
-                                    node(tugSheetWallLarge);
-                                });
-                            });
+
+                node(clayWall,with(research(ceramicBurner)),() -> {
+                    node(clayWallLarge,() -> {
+                        node(tugSheetWall,with(research(tugRoller)),() -> {
+                            node(tugSheetWallLarge);
                         });
                     });
                 });

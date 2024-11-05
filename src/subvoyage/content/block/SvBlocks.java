@@ -53,6 +53,7 @@ import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.*;
+import subvoyage.type.block.wall.PhosphideWall;
 import subvoyage.type.shoot.*;
 import subvoyage.type.shoot.bullet.*;
 import subvoyage.world.*;
@@ -76,8 +77,8 @@ public class SvBlocks{
             //DEFENSE
             whirl,rupture,resonance,burden,cascade,spectrum,upsurge,resistance,
             awe, inspiration, //removed
-            finesandWall, finesandWallLarge,
             clayWall,clayWallLarge,
+            phosphideWall,phosphideWallLarge,
             tugSheetWall, tugSheetWallLarge,
             coreDecoder, coreDecrypter,
             regenerator, regenProjector,
@@ -1684,27 +1685,9 @@ public class SvBlocks{
 
         int wallHealthMultiplier = 800/4;
         int largeWallHealthMultiplier = 800;
-        finesandWall = new Wall("finesand-wall"){{
-            requirements(Category.defense,atl(), with(fineSand, 8));
-
-            researchCost = with(fineSand,10);
-
-            health = 60 * wallHealthMultiplier;
-            envDisabled |= Env.scorching;
-        }};
-
-        finesandWallLarge = new Wall("finesand-wall-large"){{
-            requirements(Category.defense,atl(), mult(finesandWall.requirements, 5));
-
-            researchCost = with(fineSand,80);
-
-            health = 60 * largeWallHealthMultiplier;
-            size = 2;
-            envDisabled |= Env.scorching;
-        }};
 
         clayWall = new Wall("clay-wall"){{
-            requirements(Category.defense,atl(), with(clay, 8));
+            requirements(Category.defense,atl(), with(clay, 6));
 
             researchCost = with(clay,15);
 
@@ -1722,8 +1705,26 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
+        phosphideWallLarge = new PhosphideWall("phosphide-wall-large"){{
+            requirements(Category.defense,atl(), with(phosphide,24));
+
+            researchCost = with(phosphide,100);
+
+            health = (int) (2.5f * largeWallHealthMultiplier);
+            size = 2;
+            envDisabled |= Env.scorching;
+
+            hitGenerationTime = 1.5f;
+            hitPower_pt = 80/10f;
+
+            hasPower = true;
+            outputsPower = true;
+            consumesPower = false;
+            conductivePower = true;
+        }};
+
         tugSheetWall = new ShieldWall("tug-sheet-wall") {{
-            requirements(Category.defense,atl(), with(tugSheet, 8));
+            requirements(Category.defense,atl(), with(tugSheet, 6));
             consumePower(3f / 60f);
 
             researchCost = with(tugSheet,150);

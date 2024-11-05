@@ -46,6 +46,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
     public OffloadCore(String name) {
         super(name);
         configurable = true;
+        sync = true;
     }
 
     @Override
@@ -194,6 +195,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
 
             Draw.z(Layer.shields);
             Draw.color(team.color);
+            Draw.alpha(0.5f);
             int sides = settings.getInt("sv-offload-shield-sides");
             if(sides == 10) Fill.circle(x,y,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
             else Fill.poly(x,y,sides,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);

@@ -63,6 +63,15 @@ public class SvFx{
 
         Drawf.light(e.x, e.y, 60f * e.fout(), SvPal.phosphide, 0.5f);
     }),
+    skathTrail = new Effect(8f, e -> {
+        color(SvPal.heatGlow);
+
+        for(int i : Mathf.signs){
+            Drawf.tri(e.x, e.y, 6f * e.fout(), -12f, e.rotation + 90 + 90f * i);
+        }
+
+        Drawf.light(e.x, e.y, 60f * e.fout(), SvPal.phosphide, 0.5f);
+    }),
     coreBubble = new Effect(20, e -> {
         z(Layer.blockUnder);
         color(Tmp.c1.set(e.color).shiftValue(0.1f));
