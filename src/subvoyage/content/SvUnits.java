@@ -1140,7 +1140,7 @@ public class SvUnits{
                 rotateSpeed = 0.4f;
                 layerOffset = -2f;
                 rotationLimit = 22f;
-                alwaysShooting = true;
+                shootCone = 360f;
 
                 shootSound = Sounds.missileLaunch;
                 parts.add(new RegionPart("-blade"){{
