@@ -27,7 +27,7 @@ public class SvWorldBlocks{
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
-    agaryteBoulder, agaryteBlocks, hauntedTree,
+    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, sodilateBlocks, hauntedTree,
     //editor
     vapor;
 
@@ -193,6 +193,25 @@ public class SvWorldBlocks{
             variants = 2;
             agaryteStone.asFloor().decoration = this;
             forceDark = true;
+        }};
+
+        legartyteBoulder = new Prop("legartyte-boulder"){{
+            variants = 2;
+            legartyteStone.asFloor().decoration = this;
+            forceDark = true;
+        }};
+
+        darkLegaryteBoulder = new Prop("dark-legartyte-boulder"){{
+            variants = 2;
+            darkLegartyteStone.asFloor().decoration = this;
+            forceDark = true;
+        }};
+
+        sodilateBlocks = new TallBlock("sodilate-blocks") {{
+            variants = 2;
+            clipSize = 128f;
+            shadowAlpha = 0.5f;
+            shadowOffset = -2.5f;
         }};
 
         agaryteBlocks = new TallBlock("agaryte-blocks"){{
