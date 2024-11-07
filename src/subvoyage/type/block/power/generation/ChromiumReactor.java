@@ -19,7 +19,7 @@ import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
-import static subvoyage.content.SvItems.chromium;
+import static subvoyage.content.SvItems.chrome;
 
 public class ChromiumReactor extends NuclearReactor{
     public static final Rand rand = new Rand();
@@ -40,7 +40,7 @@ public class ChromiumReactor extends NuclearReactor{
         itemDuration = 320;
         heating = 0.02f;
         coolantPower = 0.25f;
-        fuelItem = chromium;
+        fuelItem = chrome;
 
         explosionShake = 6f;
         explosionShakeDuration = 16f;

@@ -49,6 +49,17 @@ public class SvFx{
         Fill.circle(e.x,e.y,e.fout()*3.5f);
     }),
 
+    burnFlash = new Effect(30f,e -> {
+        color(Pal.slagOrange);
+        Fill.circle(e.x,e.y,e.foutpow()*18f);
+        color(Pal.power);
+        Fill.circle(e.x,e.y,e.foutpow()*12f);
+        color(Pal.powerLight);
+        Fill.circle(e.x,e.y,e.finpow()*6f);
+        stroke(e.foutpowdown(),Color.white);
+        Lines.circle(e.x,e.y,e.finpow()*18f);
+    }),
+
     photosynthFlash = new Effect(30f, e -> {
         stroke(e.fout(Interp.pow2Out), SvPal.photoFlash);
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());

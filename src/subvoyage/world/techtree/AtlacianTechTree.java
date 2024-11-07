@@ -5,10 +5,9 @@ import arc.struct.*;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
-import subvoyage.content.SvLiquids;
 
 import static mindustry.content.Liquids.*;
-import static subvoyage.content.SvLiquids.*;
+import static subvoyage.content.SvItems.hydrogen;
 import static subvoyage.content.SvUnits.*;
 import static subvoyage.content.SvPlanets.*;
 
@@ -29,9 +28,9 @@ public class AtlacianTechTree {
             if(item == spaclanium) cost = 0.6f;
             if(item == corallite) cost = 0.5f;
             if(item == sulfur) cost = 0.5f;
-            if(item == fineSand) cost = 1.1f;
+            if(item == finesand) cost = 1.1f;
             if(item == iridium) cost = 0.65f;
-            if(item == chromium) cost = 0.7f;
+            if(item == chrome) cost = 0.7f;
             if(item == tugSheet) cost = 0.85f;
             if(item == quartzFiber) cost = 1f;
             cost*=0.8f;
@@ -163,7 +162,7 @@ public class AtlacianTechTree {
                 node(chromiumReactor,with(research(crudeSmelter)),() -> {
 
                 });
-                node(regenProjector,with(research(polygen)),() -> {
+                node(regenProjector,with(research(hydrogen)),() -> {
                     node(overdriveProjector,() -> {
 
                     });
@@ -300,7 +299,7 @@ public class AtlacianTechTree {
                     node(iridium,with(produce(iridium),onsector(ridges)),() -> {
 
                     });
-                    node(chromium,with(research(crudeSmelter)),() -> {
+                    node(chrome,with(research(crudeSmelter)),() -> {
                         node(quartzFiber,with(produce(quartzFiber)),() -> {
 
                         });
@@ -312,7 +311,7 @@ public class AtlacianTechTree {
                 node(sulfur,with(produce(sulfur)),() -> {
 
                 });
-                node(fineSand,with(produce(fineSand)),() -> {
+                node(finesand,with(produce(finesand)),() -> {
                     node(clay,with(research(water),produce(clay)),() -> {
 
                     });
@@ -321,7 +320,7 @@ public class AtlacianTechTree {
                     nodeProduce(hardWater,() -> {
 
                     });
-                    node(polygen,with(produce(polygen)),() -> {
+                    node(hydrogen,with(produce(hydrogen)),() -> {
 
                     });
                 });
@@ -332,7 +331,7 @@ public class AtlacianTechTree {
                     nodeProduce(helium,() -> {
 
                     });
-                    nodeProduce(SvLiquids.nitrogen,() -> {
+                    nodeProduce(hydrogen,() -> {
 
                     });
                 });
@@ -365,7 +364,7 @@ public class AtlacianTechTree {
             });
             node(submersibleDrill,Seq.with(/*new Objectives.SectorComplete(crystalShores),*/
                     new Objectives.Research(waterMetallizer),
-                    new Objectives.Produce(polygen)),() -> {
+                    new Objectives.Produce(hydrogen)),() -> {
             });
 
             node(lowTierPump,() -> {

@@ -1,16 +1,12 @@
 package subvoyage.type.block.production;
 
 import arc.Core;
-import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
-import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
-import mindustry.Vars;
 import mindustry.graphics.Drawf;
-import mindustry.type.Item;
 import mindustry.world.blocks.production.AttributeCrafter;
 import subvoyage.content.SvItems;
 import subvoyage.content.other.SvPal;
@@ -56,7 +52,7 @@ public class CircCrusher extends AttributeCrafter{
         public void draw(){
 
             int crudeCount = items.get(SvItems.crude);
-            int sandCount = items.get(SvItems.fineSand);
+            int sandCount = items.get(SvItems.finesand);
             crudePercentage = (float) crudeCount / itemCapacity;
             sandPercentage = (float) sandCount / itemCapacity;
 
@@ -68,7 +64,7 @@ public class CircCrusher extends AttributeCrafter{
 
             Draw.rect(bottom, x, y);
 
-            Draw.color(SvPal.sand.cpy().lerp(SvPal.crude,visualCrude/(visualCrude+visualSand)),visualCrude+visualSand);
+            Draw.color(SvPal.finesand.cpy().lerp(SvPal.crude,visualCrude/(visualCrude+visualSand)),visualCrude+visualSand);
             Draw.rect(sand, x, y);
             Draw.color();
 

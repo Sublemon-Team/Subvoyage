@@ -9,7 +9,6 @@ import mindustry.world.meta.*;
 import subvoyage.content.*;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.environment.decoration.TreeBlock;
-import subvoyage.type.block.environment.vapor.*;
 
 import java.util.HashMap;
 
@@ -27,15 +26,9 @@ public class SvWorldBlocks{
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
-    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, sodilateBlocks, hauntedTree,
-    //editor
-    vapor;
+    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, sodilateBlocks, hauntedTree;
 
     public static void load() {
-        vapor = new VaporFloor("vapor") {{
-            requirements(Category.logic, BuildVisibility.editorOnly, with());
-        }};
-
         hardWater = new Floor("hard-water"){
             public Block parent = Blocks.air;
             {
@@ -43,7 +36,7 @@ public class SvWorldBlocks{
                 variants = 0;
                 status = StatusEffects.wet;
                 statusDuration = 90f;
-                liquidDrop = SvLiquids.hardWater;
+                liquidDrop = SvItems.hardWater;
                 isLiquid = true;
                 cacheLayer = SvShaders.hardWaterLayer;
                 albedo = 0.9f;
@@ -72,7 +65,7 @@ public class SvWorldBlocks{
                 variants = 0;
                 status = StatusEffects.wet;
                 statusDuration = 90f;
-                liquidDrop = SvLiquids.hardWater;
+                liquidDrop = SvItems.hardWater;
                 liquidMultiplier = 0.45f;
                 isLiquid = true;
                 cacheLayer = SvShaders.hardWaterLayer;
@@ -116,7 +109,7 @@ public class SvWorldBlocks{
             oreThreshold = 0.85f;
             oreScale = 12.42614f;
         }};
-        oreChromium = new OreBlock(SvItems.chromium) {{
+        oreChromium = new OreBlock(SvItems.chrome) {{
             oreDefault = false;
             variants = 5;
             oreThreshold = 0.9f;
@@ -135,7 +128,7 @@ public class SvWorldBlocks{
             wallOre = true;
             needsSurface = false;
         }};
-        wallOreChromium = new OreBlock("ore-wall-subvoyage-chromium", SvItems.chromium){{
+        wallOreChromium = new OreBlock("ore-wall-subvoyage-chromium", SvItems.chrome){{
             wallOre = true;
             needsSurface = false;
         }};

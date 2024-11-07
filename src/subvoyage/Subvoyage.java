@@ -2,31 +2,20 @@ package subvoyage;
 
 import arc.*;
 import arc.func.Boolc;
-import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
 import arc.graphics.gl.FrameBuffer;
 import arc.struct.*;
 import arc.util.*;
-import arc.util.serialization.Jval;
 import mindustry.content.*;
-import mindustry.core.GameState;
 import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.*;
-import mindustry.graphics.Layer;
 import mindustry.mod.*;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.*;
-import subvoyage.content.block.*;
-import subvoyage.content.other.*;
-import subvoyage.content.sound.*;
 import subvoyage.core.CustomRender;
 import subvoyage.core.Logic;
 import subvoyage.draw.visual.*;
-import subvoyage.type.block.environment.vapor.*;
-import subvoyage.type.block.production.*;
-import subvoyage.type.unit.ability.LegionfieldAbility;
 import subvoyage.ui.setting.*;
 import subvoyage.utility.*;
 import subvoyage.world.techtree.*;
@@ -40,7 +29,6 @@ import static subvoyage.content.SvPlanets.atlacian;
 public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
 
-    public static VaporControl vaporControl;
     public static VersionControl versionControl = new VersionControl();
     public static String currentTag = "v0.6b";
     public static String repo = "Sublemon-Team/Subvoyage";
@@ -76,31 +64,14 @@ public class Subvoyage extends Mod {
 
     @Override
     public void loadContent(){
-        SvCall.registerPackets();
         Log.info("Poof-poof, Subvoyage loads up!");
-        SvMusic.load();
-        SvSounds.load();
 
-        SvItems.load();
-        SvLiquids.load();
-
-        SvUnits.load();
-
-        SvWorldBlocks.load();
-        SvBlocks.load();
-
-        SvLoadouts.load();
-        SvPlanets.load();
-
-        SvSectorPresets.load();
-
-        SvWeather.load();
+        SvCall.registerPackets();
+        SvContent.load();
 
         EnvRenderer.init();
 
         AtlacianTechTree.loadBalanced();
-        vaporControl = new VaporControl();
-        VaporControl.load();
     }
 
     void loadSettings() {

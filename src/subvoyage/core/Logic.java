@@ -61,7 +61,7 @@ public class Logic {
     public static void update() {
         if(state.isGame()) gameUpdate();
         if(state.isMenu()) menuUpdate();
-        SvVars.underwaterMap.update();
+        SvVars.fumesMap.update();
     }
 
     public static void gameUpdate() {
@@ -80,12 +80,12 @@ public class Logic {
     }
 
     public static void reset() {
-        SvVars.underwaterMap.stop();
+        SvVars.fumesMap.stop();
     }
 
     public static void worldLoad() {
         if(SvBlocks.waterSifter instanceof WaterSifter sifter) sifter.worldReset();
-        SvVars.underwaterMap.recalc();
+        SvVars.fumesMap.recalc();
         SubvoyageCoreBlock.cutscene = false;
         SubvoyageCoreBlock.landTime = 0f;
     }

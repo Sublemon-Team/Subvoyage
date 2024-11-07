@@ -7,7 +7,6 @@ import arc.struct.*;
 import arc.util.*;
 import mindustry.*;
 import mindustry.type.*;
-import mindustry.world.blocks.production.*;
 import subvoyage.content.SvItems;
 import subvoyage.type.block.laser_blocks.LaserCrafter;
 
@@ -89,7 +88,7 @@ public class TugRoller extends LaserCrafter {
                     });
                 }
                 for(int i = 0; i < particles.size; i++){
-                    if(particles.get(i).item != SvItems.sulfur && particles.get(i).item != SvItems.chromium)
+                    if(particles.get(i).item != SvItems.sulfur && particles.get(i).item != SvItems.chrome)
                         particles.get(i).item = null;
                     particles.get(i).aD = curLen1/sinMag-lenOffset/sinMag;
                 }

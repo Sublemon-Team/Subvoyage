@@ -12,7 +12,7 @@ import subvoyage.content.block.SvAttribute;
 import static mindustry.Vars.world;
 
 
-public class UnderwaterMap {
+public class FumesMap {
     private float[] map;
     public int w,h;
     public int blurAmount = 1;

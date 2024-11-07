@@ -59,7 +59,7 @@ public class SvShaders{
                     setUniformi("u_noise", 1);
                 }
                 if(hasUniform("u_distortmap")){
-                    Texture heatTex = SvVars.underwaterMap.toTexture();
+                    Texture heatTex = SvVars.fumesMap.toTexture();
                     if(heatTex == null) return;
 
                     heatTex.bind(2);

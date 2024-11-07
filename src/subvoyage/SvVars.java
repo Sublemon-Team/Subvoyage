@@ -2,11 +2,11 @@ package subvoyage;
 
 import arc.graphics.gl.FrameBuffer;
 import subvoyage.content.SvObjectives;
-import subvoyage.world.UnderwaterMap;
+import subvoyage.world.FumesMap;
 
 public class SvVars {
 
     public static FrameBuffer effectBuffer;
-    public static UnderwaterMap underwaterMap = new UnderwaterMap();
+    public static FumesMap fumesMap = new FumesMap();
     public static SvObjectives objectives = new SvObjectives();
 }
