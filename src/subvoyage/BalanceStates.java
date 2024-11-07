@@ -7,12 +7,25 @@ public class BalanceStates {
 
     TURRET_DMG_U = DU*0.2f,
 
+    WALL_HP_U = DU*0.8f, // for 1x1 wall
+    WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall
+
     OFFENSE_HP_U = HU*1.125f,
     OFFENSE_DMG_U = DU*0.25f,
     DEFENSE_HP_U = HU*1.5f,
     DEFENSE_DMG_U = DU*0.15f,
     SPECIAL_HP_U = HU*1.05f,
     SPECIAL_DMG_U = DU*0.12f,
+
+    //WALLS
+    CLAY_WALL_HP = WALL_HP_U,
+    CLAY_WALL_LARGE_HP = WALL_LARGE_HP_U,
+
+    PHOSPHIDE_WALL_HP = WALL_HP_U*1.875f,
+    PHOSPHIDE_WALL_LARGE_HP = WALL_LARGE_HP_U*1.875f,
+
+    TUGSHEET_WALL_HP = WALL_HP_U*3.625f,
+    TUGSHEET_WALL_LARGE_HP = WALL_LARGE_HP_U*3.625f,
 
     //TURRETS
     WHIRL_DPS = TURRET_DMG_U,

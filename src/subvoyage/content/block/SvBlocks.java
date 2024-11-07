@@ -1656,16 +1656,12 @@ public class SvBlocks{
             consumeItem(tugSheet,2);
         }};
 
-
-        int wallHealthMultiplier = 800/4;
-        int largeWallHealthMultiplier = 800;
-
         clayWall = new Wall("clay-wall"){{
             requirements(Category.defense,atl(), with(clay, 6));
 
             researchCost = with(clay,15);
 
-            health = 1 * wallHealthMultiplier;
+            health = (int) CLAY_WALL_HP;
             envDisabled |= Env.scorching;
         }};
 
@@ -1674,7 +1670,7 @@ public class SvBlocks{
 
             researchCost = with(clay,100);
 
-            health = 1 * largeWallHealthMultiplier;
+            health = (int) CLAY_WALL_LARGE_HP;
             size = 2;
             envDisabled |= Env.scorching;
         }};
@@ -1684,12 +1680,14 @@ public class SvBlocks{
 
             researchCost = with(phosphide,100);
 
-            health = (int) (2.5f * largeWallHealthMultiplier);
+            health = (int) PHOSPHIDE_WALL_LARGE_HP;
             size = 2;
             envDisabled |= Env.scorching;
 
             hitGenerationTime = 1.5f;
             hitPower_pt = 80/10f;
+
+            armor = 4f;
 
             hasPower = true;
             outputsPower = true;
@@ -1712,8 +1710,8 @@ public class SvBlocks{
             consumesPower = true;
             conductivePower = true;
             chanceDeflect = 10f;
-            armor = 15f;
-            health = 4 * wallHealthMultiplier;
+            armor = 7f;
+            health = (int) TUGSHEET_WALL_HP;
             envDisabled |= Env.scorching;
         }};
 
@@ -1732,8 +1730,8 @@ public class SvBlocks{
             consumesPower = true;
             conductivePower = true;
             chanceDeflect = 20f;
-            armor = 15f;
-            health = 4 * largeWallHealthMultiplier;
+            armor = 8f;
+            health = (int) TUGSHEET_WALL_LARGE_HP;
             envDisabled |= Env.scorching;
             size = 2;
         }};
