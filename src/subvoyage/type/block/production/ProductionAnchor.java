@@ -308,5 +308,12 @@ public class ProductionAnchor extends Block {
         public byte version() {
             return 1;
         }
+
+        @Override
+        public void team(Team team) {
+            if(this.team != null && this.team.data().buildingTree != null) this.team.data().buildingTree.remove(this);
+            super.team(team);
+            if(this.team != null && this.team.data().buildingTree != null)this.team.data().buildingTree.insert(this);
+        }
     }
 }

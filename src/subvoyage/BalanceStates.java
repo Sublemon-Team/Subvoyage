@@ -3,7 +3,9 @@ package subvoyage;
 public class BalanceStates {
     public static final float
     HU = 400f, //HEALTH UNIT
-    DU = 200f,
+    DU = 400f,
+
+    TURRET_DMG_U = DU*0.2f,
 
     OFFENSE_HP_U = HU*1.125f,
     OFFENSE_DMG_U = DU*0.25f,
@@ -11,6 +13,15 @@ public class BalanceStates {
     DEFENSE_DMG_U = DU*0.15f,
     SPECIAL_HP_U = HU*1.05f,
     SPECIAL_DMG_U = DU*0.12f,
+
+    //TURRETS
+    WHIRL_DPS = TURRET_DMG_U,
+    RUPTURE_DPS = TURRET_DMG_U*1.4f,
+    RESONANCE_DPS = TURRET_DMG_U*2.4f,
+    CASCADE_DPS = TURRET_DMG_U*3.4f,
+    SPECTRUM_DPS = TURRET_DMG_U*5.5f,
+    UPSURGE_DPS = TURRET_DMG_U*4.3f,
+    RESIST_DPS = TURRET_DMG_U*9.8f,
 
     //UNITS TIER 1
     HELIO_T1_HU = OFFENSE_HP_U * 1f,

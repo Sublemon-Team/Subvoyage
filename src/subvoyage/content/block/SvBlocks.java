@@ -63,6 +63,7 @@ import static mindustry.Vars.content;
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
+import static subvoyage.BalanceStates.*;
 import static subvoyage.content.SvItems.*;
 import static subvoyage.content.SvLiquids.*;
 import static subvoyage.content.SvUnits.*;
@@ -153,6 +154,8 @@ public class SvBlocks{
             requirements(Category.effect, BuildVisibility.editorOnly, with());
             health = 1500;
             size = 3;
+
+            priority = TargetPriority.core-0.2f; // this is pretty good resource source so yes
 
             itemBatches = with(
                     corallite,40,
@@ -666,32 +669,6 @@ public class SvBlocks{
 
             researchCost = with(corallite,10,clay,10);
 
-            ammo(
-            spaclanium,new MissileBulletType(3.7f, 9){{
-                        width = 7f;
-                        height = 12f;
-                        shrinkY = 0f;
-                        lifetime = 60f;
-                        hitEffect = Fx.blastExplosion;
-                        despawnEffect = Fx.blastExplosion;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
-                        hitColor = backColor = trailColor = SvPal.spaclanium;
-                        frontColor = Color.white;
-                        trailWidth = 3f;
-                        trailLength = 5;
-
-                        status = StatusEffects.electrified;
-                        statusDuration = 60f;
-
-                        ammoMultiplier = 4f;
-                        lightningColor = SvPal.spaclanium;
-                        lightningDamage = 2;
-                        lightning = 2;
-                        lightningLength = 10;
-                    }}
-            );
-
             size = 3;
             drawer = new DrawTurretCallbacked("atlacian-"){{
                 DrawTurret draw = (DrawTurret)drawer;
@@ -720,18 +697,50 @@ public class SvBlocks{
 
             shootSound = Sounds.blaster;
             reload = 20f;
-            shootY = 5f;
-            recoil = 1f;
-            rotate = false;
+
             shoot = new ShootWhirl(){{
                 barrels = new float[]{
-                -6, 2.5f, 0,
-                6, 2.5f, 0
+                        -6, 2.5f, 0,
+                        6, 2.5f, 0
                 };
                 shotDelay = 5f;
             }};
 
-            priority = 0;
+            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*shoot.shots;
+
+            float mainDamage = WHIRL_DPS/BPS*0.75f;
+            float subDamage = WHIRL_DPS/BPS*0.25f;
+
+            ammo(
+                    spaclanium,new MissileBulletType(3.7f, mainDamage){{
+                        width = 7f;
+                        height = 12f;
+                        shrinkY = 0f;
+                        lifetime = 60f;
+                        hitEffect = Fx.blastExplosion;
+                        despawnEffect = Fx.blastExplosion;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = SvPal.spaclanium;
+                        frontColor = Color.white;
+                        trailWidth = 3f;
+                        trailLength = 5;
+
+                        //status = StatusEffects.electrified; //TODO: replace with custom effect
+                        statusDuration = 60f;
+
+                        ammoMultiplier = 2f;
+                        lightningColor = SvPal.spaclanium;
+                        lightningDamage = subDamage/2f;
+                        lightning = 2;
+                        lightningLength = 10;
+                    }}
+            );
+
+            shootY = 5f;
+            recoil = 1f;
+            rotate = false;
+
             range = 170f;
             scaledHealth = 900/9f;
 
@@ -757,9 +766,14 @@ public class SvBlocks{
             shoot = new ShootHelix() {{
                 mag = 3;
             }};
+            reload = 80f;
+
+            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots*2f);
+            float mainDamage = RUPTURE_DPS/BPS*0.9f;
+            float subDamage = RUPTURE_DPS/BPS*0.1f/(3+3*3f);
 
             ammo(
-            sulfur, new BasicBulletType(6f, 20){{
+            sulfur, new BasicBulletType(6f, mainDamage){{
                 width = 6f;
                 height = 12f;
                 lifetime = 30f;
@@ -773,20 +787,20 @@ public class SvBlocks{
                 hitEffect = despawnEffect = Fx.hitBulletColor;
                 shoot = new ShootHelix();
                 ammoPerShot = 3;
-                fragBullet = intervalBullet = new BasicBulletType(6f, 2) {{
+                fragBullet = intervalBullet = new BasicBulletType(6f, subDamage) {{
                     width = 9f;
                     hitSize = 5f;
                     height = 15f;
                     pierce = true;
+                    pierceCap = 3;
                     lifetime = 15f;
                     pierceBuilding = true;
                     hitColor = backColor = trailColor = Pal.bulletYellow;
                     frontColor = Color.white;
                     trailWidth = 2.1f;
                     trailLength = 5;
-                    shoot = new ShootHelix();
 
-                    status = StatusEffects.slow;
+                    status = StatusEffects.slow; //TODO: replaceEffect
                     statusDuration = 60f;
                     hitEffect = despawnEffect = new WaveEffect(){{
                         colorFrom = colorTo = Pal.boostFrom;
@@ -857,10 +871,8 @@ public class SvBlocks{
             }};
 
             shootSound = Sounds.railgun;
-            reload = 80f;
             shootY = 12f;
             recoil = 0.5f;
-            priority = 0;
             range = 260f;
             scaledHealth = 200;
 
@@ -949,7 +961,11 @@ public class SvBlocks{
                 sizeTo = range;
             }});
 
-            shootType = new ExplosionBulletType(60f,range) {{
+            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots);
+            float mainDamage = RESONANCE_DPS/BPS*0.6f;
+            float subDamage = RESONANCE_DPS/BPS*0.4f/8f;
+
+            shootType = new ExplosionBulletType(mainDamage,range) {{
                 collidesAir = true;
                 buildingDamageMultiplier = 1.1f;
                 ammoMultiplier = 1f;
@@ -968,7 +984,7 @@ public class SvBlocks{
                 lightningLength = 10;
 
 
-                fragBullet = new BasicBulletType(6f, 6) {{
+                fragBullet = new BasicBulletType(6f, subDamage*0.7f) {{
                     width = 9f;
                     hitSize = 5f;
                     height = 15f;
@@ -984,7 +1000,7 @@ public class SvBlocks{
                     weaveScale = 18f;
 
                     lightningColor = Color.white;
-                    lightningDamage = 3;
+                    lightningDamage = subDamage*0.3f/2f;
                     lightning = 2;
                     lightningLength = 10;
 
@@ -1083,13 +1099,22 @@ public class SvBlocks{
             targetGround = true;
             targetAir = true;
             squareSprite = false;
+
+
+
+            reload = 40f;
             shoot = new ShootSpread(2,30);
+
+            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots);
+            float mainDamage = CASCADE_DPS/BPS*0.6f;
+            float subDamage = CASCADE_DPS/BPS*0.4f/(5f*2f);
+
             ammo(
-            chromium, new BasicBulletType(6f, 20){{
+            chromium, new BasicBulletType(6f, mainDamage){{
                 sprite = "large-orb";
                 inaccuracy = 1f;
-                ammoMultiplier = 10f;
-                ammoPerShot = 3;
+                ammoMultiplier = 3f;
+                ammoPerShot = 2;
 
                 width = 12f;
                 height = 12f;
@@ -1105,7 +1130,7 @@ public class SvBlocks{
                 fragVelocityMax = 1f;
                 bulletInterval = 40f;
                 intervalDelay = 10f;
-                fragBullet = intervalBullet = new LaserBulletType(10){{
+                fragBullet = intervalBullet = new LaserBulletType(subDamage){{
                     colors = new Color[]{SvPal.chromiumLightish.cpy().a(0.4f), SvPal.chromiumLightish, Color.white};
                     chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
 
@@ -1133,65 +1158,7 @@ public class SvBlocks{
                 trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
 
                 hitEffect = despawnEffect = Fx.hitBulletColor;
-            }},
-
-            tugSheet, new BasicBulletType(12f, 200){{
-
-                sprite = "large-orb";
-                inaccuracy = 3f;
-                reloadMultiplier = 1.1f;
-                ammoMultiplier = 1f;
-
-                width = 8f;
-                ammoPerShot = 4;
-                height = 12f;
-                lifetime = 85f;
-                shootEffect = SvFx.pulverize;
-                smokeEffect = Fx.none;
-
-                fragBullets = intervalBullets = 8;
-                fragVelocityMin = 1f;
-                fragVelocityMax = 1f;
-                bulletInterval = 10f;
-                intervalDelay = 5f;
-                fragBullet = intervalBullet = new LaserBulletType(20){{
-                    colors = new Color[]{SvPal.tugSheetLightish.cpy().a(0.4f), SvPal.tugSheetLightish, Color.white};
-                    chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
-
-                    buildingDamageMultiplier = 0.25f;
-                    hitEffect = Fx.hitLancer;
-                    hitSize = 4;
-                    lifetime = 16f;
-                    drawSize = 400f;
-                    collidesAir = false;
-                    length = 5*8f;
-                    ammoMultiplier = 1f;
-                    pierceCap = 4;
-
-                    status = StatusEffects.electrified;
-                }};
-
-                hitColor = backColor = trailColor = SvPal.tugSheetLightish;
-                frontColor = Color.white;
-
-                trailRotation = true;
-                trailEffect = Fx.disperseTrail;
-                trailInterval = 3f;
-                trailWidth = 6f;
-                trailLength = 6;
-                trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
-
-                homingPower = 0.08f;
-                homingRange = 8f;
-
-                hitEffect = Fx.hitBulletColor;
-                despawnEffect = new MultiEffect(Fx.hitBulletColor, new WaveEffect(){{
-                    sizeTo = 16f;
-                    colorFrom = colorTo = SvPal.tugSheetLightish;
-                    lifetime = 12;
-                }});
-            }}
-            );
+            }});
 
             smokeEffect = Fx.shootSmokeSmite;
             drawer = new DrawTurret("atlacian-"){{
@@ -1291,11 +1258,9 @@ public class SvBlocks{
             }};
 
             shootSound = Sounds.railgun;
-            reload = 40f;
             shootY = 8f;
 
             recoil = 0.5f;
-            priority = 0;
             range = 180f;
             scaledHealth = 200;
 
@@ -1318,6 +1283,26 @@ public class SvBlocks{
             shootSound = Sounds.mediumCannon;
             ammoPerShot = 2;
             maxAmmo = ammoPerShot * 3;
+
+            reload = 160f;
+            shoot = new ShootMulti() {{
+                shots = 4;
+                shotDelay = 10f;
+                source = new ShootHelix() {{
+                    mag = 2f;
+                    scl = 10f;
+                }};
+                dest = new ShootPattern[] {
+                        new ShootSpread() {{
+                            spread = -30f;
+                            shots = 2;
+                        }}
+                };
+            }};
+
+            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots);
+            float mainDamage = SPECTRUM_DPS/BPS;
+
             drawer = new DrawTurret("atlacian-") {{
                 parts.addAll(
                         new FlarePart(){{
@@ -1371,30 +1356,15 @@ public class SvBlocks{
                         }}
                 );
             }};
-            reload = 160f;
             moveWhileCharging = false;
             targetAir = false;
             targetGround = true;
             minWarmup = 0.5f;
-            shoot = new ShootMulti() {{
-                shots = 4;
-                shotDelay = 10f;
-                source = new ShootHelix() {{
-                    mag = 2f;
-                    scl = 10f;
-                }};
-                dest = new ShootPattern[] {
-                        new ShootSpread() {{
-                            spread = -30f;
-                            shots = 2;
-                        }}
-                };
-            }};
             inaccuracy = 0f;
             predictTarget = false;
             range = 180f;
             shootY = 4f;
-            ammo(nitride,new ArtilleryBulletType(2.5f, 150, "shell") {{
+            ammo(nitride,new ArtilleryBulletType(2.5f, mainDamage, "shell") {{
                 hitEffect = new MultiEffect(Fx.titanExplosion, Fx.titanSmoke);
                 collidesAir = true;
                 collidesGround = true;
@@ -1406,7 +1376,7 @@ public class SvBlocks{
                 height = 19f;
                 width = 17f;
                 splashDamageRadius = 65f;
-                splashDamage = 350f;
+                splashDamage = mainDamage;
                 scaledSplashDamage = true;
                 backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
                 frontColor = Color.white;
@@ -1474,6 +1444,7 @@ public class SvBlocks{
             targetGround = false;
             minWarmup = 0f;
             shoot = new ShootMulti() {{
+                shots = 40;
                 source = new ShootAlternate(){{
                     spread = 4.7f;
                     shots = 4;
@@ -1484,11 +1455,14 @@ public class SvBlocks{
                     shots = 10;
                 }}};
             }};
+            float BPS = 60f/reload*(4f*10f);
+            float mainDamage = UPSURGE_DPS/BPS;
+
             inaccuracy = 0f;
             predictTarget = false;
             shootY = 4f;
             ammo(phosphide,new BasicBulletType(){{
-                damage = 13.5f;
+                damage = mainDamage;
                 speed = 8.5f;
                 width = height = 16;
                 shrinkY = 0.3f;
@@ -1527,7 +1501,7 @@ public class SvBlocks{
             spacing = 160;
             fogRadiusMultiplier = 0.4F;
 
-            bulletType = new ExplosionBulletType(850f,4*tilesize) {{
+            bulletType = new ExplosionBulletType(RESIST_DPS*0.7f,4*tilesize) {{
                 buildingDamageMultiplier = 0.4f;
                 ammoMultiplier = 1f;
                 speed = 0;
@@ -1541,7 +1515,7 @@ public class SvBlocks{
                 pierceArmor = true;
                 hitSound = despawnSound = SvSounds.flashExplosion;
 
-                fragBullet = new BasicBulletType(6f, 80,"shell") {{
+                fragBullet = new BasicBulletType(6f, RESIST_DPS*0.2f/10f,"shell") {{
                     hitSound = despawnSound = Sounds.bang;
                     width = 9f;
                     hitSize = 5f;
@@ -1578,7 +1552,7 @@ public class SvBlocks{
                 fragVelocityMin = 1f;
 
                 lightningColor = SvPal.teslaCharge;
-                lightningDamage = 30;
+                lightningDamage = RESIST_DPS*0.1f/16f;
                 lightning = 16;
                 lightningLength = 10;
 
@@ -1829,7 +1803,7 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
             destructible = true;
 
-            priority = 0;
+            priority = TargetPriority.wall;
             health = 120;
 
             researchCost = with(spaclanium,8);
@@ -1848,7 +1822,7 @@ public class SvBlocks{
 
             consumeLiquid(polygen,4/60f);
 
-            priority = 0;
+            priority = TargetPriority.wall;
             health = 360;
 
             researchCost = with(chromium,50,clay,50);
