@@ -2280,7 +2280,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(damage2, 100f){{
+                            bullet = new ExplosionBulletType(damage2, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootSound = SvSounds.flashExplosion;
@@ -2307,7 +2307,7 @@ public class SvUnits{
                                         physics = false;
                                         lowAltitude = true;
 
-                                        lifetime = 30f;
+                                        lifetime = 15f;
 
                                         hitEffect = despawnEffect = Fx.blastExplosion;
                                         smokeEffect = SvFx.shootLauncher;
@@ -2358,12 +2358,12 @@ public class SvUnits{
                                             mirror = false;
                                             reload = 1f;
                                             shootOnDeath = true;
-                                            bullet = new ExplosionBulletType(damage2, 100f){{
+                                            bullet = new ExplosionBulletType(damage2, 40f){{
                                                 collidesAir = true;
                                                 suppressionRange = 80f;
                                                 shootSound = SvSounds.flashExplosion;
                                                 shootEffect = new MultiEffect(
-                                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,100f}),
+                                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,40f}),
                                                         new ExplosionEffect(){{
                                                             lifetime = 50f;
                                                             waveStroke = 5f;
@@ -2399,7 +2399,7 @@ public class SvUnits{
                                     };
                                 }};
                                 shootEffect = new MultiEffect(
-                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,100f}),
+                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,50f}),
                                         new ExplosionEffect(){{
                                             lifetime = 50f;
                                             waveStroke = 5f;
