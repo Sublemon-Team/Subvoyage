@@ -110,7 +110,6 @@ public class SvBlocks{
             corePuffer,coreShore,coreReef, vault, largeVault, unloader, liquidContainer, liquidTank;
 
     public static void load() {
-
         //non-user
         offloadCore = new OffloadCore("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
@@ -2416,7 +2415,6 @@ public class SvBlocks{
             consumeLiquid(water,8/60f);
             consumeItem(finesand, 1);
         }};
-
         terracottaBlaster = new GenericCrafter("terracotta-blaster") {{
             requirements(Category.crafting,atl(),with(spaclanium,100,corallite,200, finesand,120,iridium,40));
 

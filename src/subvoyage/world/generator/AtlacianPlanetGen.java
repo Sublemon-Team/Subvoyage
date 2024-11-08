@@ -90,7 +90,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
     @Override
     protected void generate() {
         float spawnDegree = rand.random(360f);
-        float length = width / 2.6f;
+        float length = width / 3f;
         Vec2 trns = Tmp.v1.trns(spawnDegree, length);
         Seq<Block> ores = getOres();
         FloatSeq frequencies = new FloatSeq();
@@ -104,7 +104,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 endX = (int)(-trns.x + width / 2f),
                 endY = (int)(-trns.y + height / 2f);
         float maxd = Mathf.dst(width / 2f, height / 2f);
-
         pass((x,y) -> floor = legartyteStone);
         cells(16);
         terrain(agaryteWall,40f,.5f,.95f);
@@ -115,10 +114,12 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         rnoiseReplace(legartyteStone, Blocks.water,2,.2f,50,.1f,1f);
 
         Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + rand.random(-200,200) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
-        erase(spawnX,spawnY, 15);
+        erase(spawnX,spawnY, 30);
         brush(path, 10);
         brushWithBlock(path, 8, Blocks.water);
         erase(endX, endY, 12);
+
+        inverseFloodFill(tiles.get(spawnX,spawnY));
 
         distort(10f,2f);
         rnoiseReplace(Blocks.water, legartyteStone,2,.2f,100,.2f,1f);
@@ -242,8 +243,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 }
             }
         }
-
-
         decoration(0.017f);
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
