@@ -10,6 +10,7 @@ import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
+import mindustry.maps.planet.ErekirPlanetGenerator;
 import mindustry.type.Sector;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
@@ -82,6 +83,11 @@ public class AtlacianPlanetGen extends PlanetGenerator {
 
 
     @Override
+    protected void genTile(Vec3 position, TileGen tile) {
+        super.genTile(position, tile);
+    }
+
+    @Override
     protected void generate() {
         float spawnDegree = rand.random(360f);
         float length = width / 2.6f;
@@ -99,9 +105,8 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 endY = (int)(-trns.y + height / 2f);
         float maxd = Mathf.dst(width / 2f, height / 2f);
 
-
         pass((x,y) -> floor = legartyteStone);
-        cells(4);
+        cells(16);
         terrain(agaryteWall,40f,.5f,.95f);
         terrain(legartyteWall,31f,1.3f,.8f);
         distort(1.1f,.5f);
@@ -109,19 +114,22 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         noiseReplace(legartyteStone, Blocks.water,2,.2f,60,.6f);
         rnoiseReplace(legartyteStone, Blocks.water,2,.2f,50,.1f,1f);
 
-        Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
+        Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + rand.random(-200,200) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
         erase(spawnX,spawnY, 15);
         brush(path, 10);
         brushWithBlock(path, 8, Blocks.water);
         erase(endX, endY, 12);
 
+        distort(10f,2f);
+        rnoiseReplace(Blocks.water, legartyteStone,2,.2f,100,.2f,1f);
         rnoiseReplace(Blocks.water, Blocks.deepwater,1,.5f,20,0f,1f);
         blend(Blocks.water,Blocks.deepwater,Blocks.darksandWater,4f);
         blend(legartyteStone,darkLegartyteStone,2f);
         pass((x,y) -> {
             float firstNoise = noise(x,y,5,0.6f,80,1f);
+            float secondNoise = noise(x,y,4,0.4f,100,0.95f);
 
-            if(firstNoise < sodilateBiomeWeight) {
+            if(secondNoise < sodilateBiomeWeight) {
                 if(!floor.asFloor().isLiquid) floor = sodilate;
                 else {
                     if(floor == Blocks.water) floor = hardWater;
@@ -173,8 +181,20 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         scatterBlock(Blocks.water,Blocks.yellowCoral,0.001f);
         scatterBlock(legartyteStone, hauntedTree, 0.005f/3f);
         scatterBlock(darkLegartyteStone, hauntedTree, 0.005f/3f);
-        blendRand(agaryteWall,agaryteBoulder,2f,0.3f);
-        blendRand(agaryteBoulder,agaryteBlocks,1f,0.2f);
+        //blendRand(agaryteWall,agaryteBoulder,2f,0.3f);
+        //blendRand(agaryteBoulder,agaryteBlocks,1f,0.2f);
+
+        pass((x,y) -> {
+            if(block == agaryteWall && rand.chance(0.23) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
+                block = agaryteBlocks;
+                ore = Blocks.air;
+            }
+
+            if(block == sodilateWall && rand.chance(0.42) && nearAir(x, y) && !near(x, y, 3, sodilateBlocks)){
+                block = sodilateBlocks;
+                ore = Blocks.air;
+            }
+        });
 
         pass((x, y) -> {
             int offsetX = x - 4, offsetY = y + 23;
@@ -224,6 +244,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         }
 
 
+        decoration(0.017f);
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
         tiles.get(endX,endY).setOverlay(Blocks.spawn);

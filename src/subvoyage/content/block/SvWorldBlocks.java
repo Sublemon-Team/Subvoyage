@@ -2,12 +2,19 @@ package subvoyage.content.block;
 
 import arc.*;
 import mindustry.content.*;
+import mindustry.graphics.Layer;
+import mindustry.maps.planet.ErekirPlanetGenerator;
 import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
+import mindustry.world.draw.DrawMulti;
+import mindustry.world.draw.DrawRegion;
 import mindustry.world.meta.*;
 import subvoyage.content.*;
+import subvoyage.draw.block.Draw3DSprite;
+import subvoyage.draw.block.Draw3DStem;
 import subvoyage.draw.visual.*;
+import subvoyage.type.block.DrawerBlock;
 import subvoyage.type.block.environment.decoration.TreeBlock;
 
 import java.util.HashMap;
@@ -136,6 +143,7 @@ public class SvWorldBlocks{
             attributes.set(Attribute.water, -1f);
             variants = 3;
         }};
+
         darkLegartyteStone = new Floor("dark-legartyte-stone"){{
             attributes.set(Attribute.water, -1f);
             variants = 3;
@@ -201,7 +209,7 @@ public class SvWorldBlocks{
         }};
 
         sodilateBlocks = new TallBlock("sodilate-blocks") {{
-            variants = 2;
+            variants = 3;
             clipSize = 128f;
             shadowAlpha = 0.5f;
             shadowOffset = -2.5f;
@@ -214,9 +222,24 @@ public class SvWorldBlocks{
             shadowOffset = -2.5f;
         }};
 
-        hauntedTree = new TreeBlock("haunted-tree"){{
+        hauntedTree = new DrawerBlock("haunted-tree"){{
             clipSize = 128f;
-            shadowOffset = -2.5f;
+            //shadowOffset = -2.5f;
+            drawer = new DrawMulti(
+                    new Draw3DSprite("-shadow") {{
+                        surfaceTime = 0f;
+                        camOffset = 0.001f;
+                    }},
+                    new DrawRegion("-root"),
+                    new Draw3DStem("-stem") {{
+                        camOffset = 0.15f;
+                        segments = 4;
+                    }},
+                    new Draw3DSprite("-top") {{
+                        surfaceTime = 0f;
+                        camOffset = 0.15f;
+                    }}
+            );
         }};
 
         floorToWallOre.put(oreSpaclanium,wallOreSpaclanium);

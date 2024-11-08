@@ -71,8 +71,8 @@ public class LaserUnitAssemblerModule extends LaserPayloadBlock {
     }
 
     public @Nullable LaserUnitAssembler.LaserUnitAssemblerBuild getLink(Team team, int x, int y, int rotation){
-        var results = Vars.indexer.getFlagged(team, BlockFlag.unitAssembler).<LaserUnitAssembler.LaserUnitAssemblerBuild>as();
-        return results.find(b -> b.moduleFits(this, x * tilesize + offset, y * tilesize + offset, rotation));
+        var results = Vars.indexer.getFlagged(team, BlockFlag.unitAssembler).removeAll(b -> !(b instanceof LaserUnitAssembler.LaserUnitAssemblerBuild)).<LaserUnitAssembler.LaserUnitAssemblerBuild>as();
+        return results.find(b -> b != null && b.moduleFits(this, x * tilesize + offset, y * tilesize + offset, rotation));
     }
 
     public class LaserUnitAssemblerModuleBuild extends LaserPayloadBlockBuild<Payload> {

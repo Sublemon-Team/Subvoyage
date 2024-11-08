@@ -66,6 +66,8 @@ public class Subvoyage extends Mod {
     public void loadContent(){
         Log.info("Poof-poof, Subvoyage loads up!");
 
+        Team.get(255).name = "";
+
         SvCall.registerPackets();
         SvContent.load();
 

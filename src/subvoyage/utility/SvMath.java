@@ -1,5 +1,6 @@
 package subvoyage.utility;
 
+import arc.math.Mathf;
 import mindustry.gen.Building;
 
 public class SvMath {
@@ -18,4 +19,12 @@ public class SvMath {
                 bye = originY+radius;
         return bxs <= x & x <= bxe && bys <= y && y <= bye;
     };
+
+    public static float cospow(float radians, float scl, float mag) {
+        return Mathf.sqr(Mathf.cos(radians / scl)) * Mathf.sign(Mathf.cos(radians / scl)) * mag;
+    }
+
+    public static float sinpow(float radians, float scl, float mag) {
+        return Mathf.sqr(Mathf.sin(radians / scl)) * Mathf.sign(Mathf.sin(radians / scl)) * mag;
+    }
 }

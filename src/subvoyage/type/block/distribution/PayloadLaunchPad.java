@@ -14,6 +14,7 @@ import arc.util.Timer;
 import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
+import mindustry.Vars;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.entities.units.BuildPlan;
@@ -23,6 +24,7 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
+import mindustry.world.blocks.payloads.BuildPayload;
 import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.PayloadMassDriver;
@@ -151,6 +153,8 @@ public class PayloadLaunchPad extends PayloadBlock {
         public boolean inProgress = false;
         public float inProgressSmooth = 0f;
 
+        public Payload cachePayload;
+
         @Override
         public void updateTile() {
             super.updateTile();
@@ -229,20 +233,23 @@ public class PayloadLaunchPad extends PayloadBlock {
 
                             Effect.shake(shake, shake, this);
                             Payload pay = payload;
+                            cachePayload = pay;
                             payload = null;
                             //spawn rocket launching at this
                             Sounds.release.at(x,y,0.5f,0.05f);
                             Fx.launchPod.create(x,y,0,Pal.accent,new Object());
                             SvFx.payloadLaunchPadRocketLaunch.create(x,y,0,Pal.accent,new Object());
 
-                            Timer.schedule(() -> {
+                            Time.run(transportationTime/3f*2f,() -> {
+                                if(!Vars.state.isGame()) return;
                                 //spawn rocket landing at other
                                 loaded = false;
                                 state = idle;
                                 SvFx.payloadLaunchPadRocketLand.create(other.x,other.y,0,Pal.accent,new Object());
-                            },transportationTime/60f/3f*2f);
+                            });
 
-                            Timer.schedule(() -> {
+                            Time.run(transportationTime,() -> {
+                                if(!Vars.state.isGame()) return;
                                 //transfer payload
                                 other.handlePayload(this, pay);
                                 other.lastOther = this;
@@ -259,8 +266,9 @@ public class PayloadLaunchPad extends PayloadBlock {
                                 other.launchWarmup = 0f;
                                 launchWarmup = 0f;
 
+                                cachePayload = null;
                                 //reset state after shooting immediately
-                            },transportationTime/60f);
+                            });
                         }
                     }
                 }
@@ -358,7 +366,7 @@ public class PayloadLaunchPad extends PayloadBlock {
 
         @Override
         public byte version(){
-            return 1;
+            return 2;
         }
 
         @Override
@@ -368,6 +376,8 @@ public class PayloadLaunchPad extends PayloadBlock {
             write.b((byte)state.ordinal());
 
             write.bool(loaded);
+
+            Payload.write(cachePayload,write);
         }
 
         @Override
@@ -378,6 +388,10 @@ public class PayloadLaunchPad extends PayloadBlock {
 
             if(revision >= 1){
                 loaded = read.bool();
+            }
+            if(revision >= 2) {
+                Payload pay = Payload.read(read);
+                if(pay != null) payload = pay;
             }
         }
     }

@@ -114,21 +114,25 @@ public class SvFx{
     }).layer(Layer.groundUnit + 1f),
 
 
-    payloadLaunchPadRocketLaunch = new Effect(60f,e -> {
+    payloadLaunchPadRocketLaunch = new Effect(240f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
         Draw.alpha(e.foutpowdown());
-        Draw.scl(1f+e.finpow(),1f+e.finpow());
-        Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fout() > 0.75f && !state.isPaused()) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fout() > 0.97f && !state.isPaused()) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
+        Draw.scl(1f+e.finpow()*4f,1f+e.finpow()*4f);
+        float x = SvDraw._3D.xHeight(e.x,e.finpow());
+        float y = SvDraw._3D.yHeight(e.y,e.finpow());
+        Draw.rect(launchPad.rocketRegion,x,y,e.fin()*360f);
+        if(e.fout() > 0.75f && !state.isPaused()) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fout() > 0.97f && !state.isPaused()) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
     }),
-    payloadLaunchPadRocketLand = new Effect(60f,e -> {
+    payloadLaunchPadRocketLand = new Effect(240f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
         Draw.alpha(e.finpowdown());
-        Draw.scl(1f+e.foutpowdown(),1f+e.foutpowdown());
-        Drawf.spinSprite(launchPad.rocketRegion,e.x,e.y,e.fin()*360f);
-        if(e.fin() > 0.75f && !state.isPaused()) rocketLandDust.create(e.x,e.y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fin() > 0.97f && !state.isPaused()) Fx.launchPod.create(e.x,e.y,0,Pal.accent,new Object());
+        Draw.scl(1f+e.foutpowdown()*4f,1f+e.foutpowdown()*4f);
+        float x = SvDraw._3D.xHeight(e.x,e.foutpowdown());
+        float y = SvDraw._3D.yHeight(e.y,e.foutpowdown());
+        Draw.rect(launchPad.rocketRegion,x,y,e.fin()*360f);
+        if(e.fin() > 0.75f && !state.isPaused()) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fin() > 0.97f && !state.isPaused()) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
     }),
 
     smokeCloud = new Effect(25, e -> {
