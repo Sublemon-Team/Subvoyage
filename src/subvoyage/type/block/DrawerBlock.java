@@ -61,6 +61,21 @@ public class DrawerBlock extends Block {
         }
 
         @Override
+        public void damage(float damage) {
+
+        }
+
+        @Override
+        public void onDestroyed() {
+
+        }
+
+        @Override
+        public void afterDestroyed() {
+
+        }
+
+        @Override
         public void drawTeam() {
 
         }
@@ -68,6 +83,12 @@ public class DrawerBlock extends Block {
         @Override
         public void updateTile() {
             super.updateTile();
+            if(team == Team.derelict) team = Team.get(255);
+        }
+
+        @Override
+        public void update() {
+            super.update();
             if(team == Team.derelict) team = Team.get(255);
         }
 

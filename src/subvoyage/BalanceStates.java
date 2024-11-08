@@ -3,9 +3,9 @@ package subvoyage;
 public class BalanceStates {
     public static final float
     HU = 400f, //HEALTH UNIT
-    DU = 400f,
+    DU = 200f,
 
-    TURRET_DMG_U = DU*0.2f,
+    TURRET_DMG_U = DU*0.1f,
 
     WALL_HP_U = DU*0.8f, // for 1x1 wall
     WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall

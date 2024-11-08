@@ -1,7 +1,9 @@
 package subvoyage.content.block;
 
 import arc.*;
+import arc.math.Rand;
 import mindustry.content.*;
+import mindustry.gen.Building;
 import mindustry.graphics.Layer;
 import mindustry.maps.planet.ErekirPlanetGenerator;
 import mindustry.type.*;
@@ -229,6 +231,7 @@ public class SvWorldBlocks{
                     new Draw3DSprite("-shadow") {{
                         surfaceTime = 0f;
                         camOffset = 0.001f;
+                        enableZOffset = false;
                     }},
                     new DrawRegion("-root"),
                     new Draw3DStem("-stem") {{

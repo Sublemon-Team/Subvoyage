@@ -22,6 +22,7 @@ public class Draw3DSprite extends DrawBlock {
     public float surfaceTime = 0.95f;
     public float layerFrom = Layer.light + 0.25f;
     public float layerTo = Layer.light + 2.1f;
+    public boolean enableZOffset = true;
 
     public Draw3DSprite(String suffix) {
         this.suffix = suffix;
@@ -37,7 +38,7 @@ public class Draw3DSprite extends DrawBlock {
         Draw.z(layer(build));
 
         float x = x(build), y = y(build), off = off(build);
-        Draw.z(Draw.z() + SvDraw._3D.layerOffset(x, y));
+        Draw.z(Draw.z() + SvDraw._3D.layerOffset(x, y) + (!enableZOffset ? 0f : Mathf.randomSeed((long) (build.x*build.y+build.x+build.y))*0.2f));
 
         Draw.scl(SvDraw._3D.hScale(off));
         Draw.alpha(SvDraw._3D.heightFade(off));
