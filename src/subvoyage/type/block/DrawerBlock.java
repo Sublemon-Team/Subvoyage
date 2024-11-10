@@ -1,15 +1,31 @@
 package subvoyage.type.block;
 
+import arc.Core;
+import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
+import arc.scene.ui.Image;
+import arc.scene.ui.layout.Table;
+import arc.struct.Bits;
 import arc.util.Eachable;
+import arc.util.Scaling;
+import arc.util.Strings;
+import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.entities.TargetPriority;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.Building;
+import mindustry.type.Category;
+import mindustry.type.Item;
+import mindustry.type.Liquid;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.draw.DrawDefault;
+import mindustry.world.meta.StatUnit;
+import mindustry.world.modules.ItemModule;
+
+import java.util.Iterator;
 
 public class DrawerBlock extends Block {
 
@@ -58,6 +74,12 @@ public class DrawerBlock extends Block {
         @Override
         public void draw(){
             drawer.draw(this);
+        }
+
+
+        @Override
+        public void display(Table table) {
+            table.remove();
         }
 
         @Override
