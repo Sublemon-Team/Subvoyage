@@ -169,15 +169,15 @@ public class SvBlocks{
 
         //laser
 
-        laserProjector = new LaserGenerator("laser-projector") {{
+        laserProjector = new subvoyage.type.block.laser_new.LaserGenerator("laser-projector") {{
             requirements(Category.effect, atl(), with(iridium, 300, chrome, 200, spaclanium, 150));
-            outputLaserPower = 10f;
-            range = 4;
+            laserOutput = 10f;
+            outputRange = 5;
+
             maxSuppliers = 0;
+
             size = 3;
             squareSprite = false;
-            outputRange = size+3;
-            setLaserOutputs(0);
             consumePower(1.3f);
         }};
 
@@ -206,19 +206,17 @@ public class SvBlocks{
             setLaserOutputs(0);
         }};
 
-        laserNode = new LaserNode("laser-node") {{
+        laserNode = new subvoyage.type.block.laser_new.LaserNode("laser-node") {{
             requirements(Category.effect, atl(), with(iridium, 30, chrome, 30));
             size = 3;
-            range = 16;
             maxSuppliers = 1;
             squareSprite = false;
-            consumeLaserPower(3f);
-            consumeLaser = false;
-            inputRange = range;
-            outputRange = range;
-            drawInputs = false;
-            setLaserOutputs(0);
-            setLaserInputs(1,2,3);
+
+            inputRange = 8;
+            outputRange = 8;
+
+            outputs = IntSeq.with(0);
+            inputs = IntSeq.with(1,2,3);
         }};
 
         laserSplitter = new LaserSplitter("laser-splitter") {{
