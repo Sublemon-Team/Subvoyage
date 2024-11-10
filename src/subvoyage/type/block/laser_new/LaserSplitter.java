@@ -14,7 +14,7 @@ import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;
 
-public class LaserNode extends Block implements LaserBlock {
+public class LaserSplitter extends Block implements LaserBlock {
 
     public TextureRegion heatRegion;
     public TextureRegion laserRegion;
@@ -29,7 +29,7 @@ public class LaserNode extends Block implements LaserBlock {
 
     public float capacity = 60f;
 
-    public LaserNode(String name) {
+    public LaserSplitter(String name) {
         super(name);
         destructible = true;
         regionRotated1 = 1;
@@ -117,7 +117,7 @@ public class LaserNode extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return graph().broken() ? 0f : inputLaser(this);
+            return graph().broken() ? 0f : inputLaser(this)/2f * efficiency;
         }
 
         @Override

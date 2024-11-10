@@ -7,6 +7,7 @@ import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
+import mindustry.world.Tile;
 import subvoyage.utility.Var;
 
 public interface LaserBuild {
@@ -26,9 +27,11 @@ public interface LaserBuild {
             Draw.color(Pal.remove, 0.8f+Mathf.cos(Time.time,10f,0.2f));
         }
     }
-
     default void updateLaser(Building building) {
         if(graph() != null) graph().update(building);
+        if(building instanceof LaserBuild lb) {
+            lb.graph().powerOut = lb.laser() >= maxPower();
+        }
     }
     default void clearLaser(Building building) {
         if(graph() != null) graph().clearGraph(building);

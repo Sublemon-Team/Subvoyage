@@ -27,7 +27,12 @@ public class LaserGraph {
     public int lastRotation = -2;
 
     public boolean broken = false;
+    public boolean powerOut = false;
 
+
+    public boolean broken() {
+        return broken || powerOut;
+    }
 
     public static List<LaserLink> getLinks(int x, int y, int rotation, Block block) {
         List<LaserLink> links = new ArrayList<>();

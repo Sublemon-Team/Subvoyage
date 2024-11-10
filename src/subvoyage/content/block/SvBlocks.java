@@ -30,6 +30,7 @@ import mindustry.world.consumers.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.*;
+import subvoyage.anno.LoadAnnoProcessor;
 import subvoyage.content.*;
 import subvoyage.content.other.*;
 import subvoyage.content.sound.SvSounds;
@@ -46,6 +47,7 @@ import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser_blocks.*;
 import subvoyage.type.block.laser_blocks.node.*;
 import subvoyage.type.block.laser_blocks.unit.*;
+import subvoyage.type.block.laser_new.LaserAmplifier;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
@@ -219,37 +221,31 @@ public class SvBlocks{
             inputs = IntSeq.with(1,2,3);
         }};
 
-        laserSplitter = new LaserSplitter("laser-splitter") {{
+        laserSplitter = new subvoyage.type.block.laser_new.LaserSplitter("laser-splitter") {{
             requirements(Category.effect, atl(), with(iridium, 50, chrome, 40, spaclanium, 10));
             size = 3;
-            range = 16;
             maxSuppliers = 1;
 
             squareSprite = false;
-            consumeLaserPower(3f);
-            consumeLaser = false;
             inputRange = 8;
-            outputRange = range;
-            setLaserOutputs(1,3);
-            setLaserInputs(2);
+            outputRange = 16;
+            outputs = IntSeq.with(1,3);
+            inputs = IntSeq.with(2);
         }};
 
-        laserAmplificator = new LaserAmplificator("laser-amplifier") {{
+        laserAmplificator = new LaserAmplifier("laser-amplifier") {{
             requirements(Category.effect, atl(), with(iridium, 80, chrome, 80, spaclanium, 10));
             size = 3;
-            range = 16;
             squareSprite = false;
 
             maxSuppliers = 3;
-            supplierPowerEfficiencyBased = true;
 
             consumePower(4f);
-            consumeLaserPower(3f);
-            consumeLaser = false;
-            inputRange = range;
-            outputRange = range;
-            setLaserOutputs(0);
-            setLaserInputs(1,2,3);
+
+            inputRange = 16;
+            outputRange = 16;
+            outputs = IntSeq.with(0);
+            inputs = IntSeq.with(1,2,3);
         }};
 
         laserBlaster = new LaserBlaster("laser-blaster") {{

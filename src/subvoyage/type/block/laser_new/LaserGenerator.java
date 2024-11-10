@@ -6,14 +6,18 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
+import arc.util.Eachable;
 import arc.util.Time;
+import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.meta.BlockGroup;
+import subvoyage.anno.LoadAnno;
 import subvoyage.type.block.laser.LaserUtil;
 
-import static mindustry.Vars.tilesize;
-import static mindustry.Vars.world;
+import static mindustry.Vars.*;
+import static mindustry.Vars.player;
 
 public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;
@@ -30,6 +34,11 @@ public class LaserGenerator extends Block implements LaserBlock {
     public float capacity = 60f;
 
     public float laserOutput = 10f;
+
+    public @LoadAnno("@-top1") TextureRegion top1;
+    public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
+
+    public float itemDuration = 120f;
 
     public LaserGenerator(String name) {
         super(name);
@@ -62,6 +71,28 @@ public class LaserGenerator extends Block implements LaserBlock {
         heatRegion = Core.atlas.find(name+"-heat");
     }
 
+    @Override
+    public void drawDefaultPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
+        TextureRegion reg = getPlanRegion(plan, list);
+        Draw.rect(reg, plan.drawx(), plan.drawy(), 0f);
+
+        if(plan.worldContext && player != null && teamRegion != null && teamRegion.found()){
+            if(teamRegions[player.team().id] == teamRegion) Draw.color(player.team().color);
+            Draw.rect(teamRegions[player.team().id], plan.drawx(), plan.drawy());
+            Draw.color();
+        }
+
+        Draw.rect(plan.rotation > 1 ? top2 : top1, plan.drawx(),plan.drawy(),!rotate || !rotateDraw ? 0 : plan.rotation * 90);
+
+        drawPlanConfig(plan, list);
+    }
+
+    @Override
+    public void drawPlanConfig(BuildPlan plan, Eachable<BuildPlan> list) {
+        super.drawPlanConfig(plan, list);
+        drawLinks(this,plan.x,plan.y,plan.rotation,false,true);
+    }
+
     @Override public short inputRange() {return inputRange;}
     @Override public short outputRange() {return outputRange;}
 
@@ -78,12 +109,18 @@ public class LaserGenerator extends Block implements LaserBlock {
 
     public class LaserGeneratorBuild extends Building implements LaserBuild {
 
-        private LaserGraph graph;
-
+        LaserGraph graph;
+        float generationTime = 0f;
 
         @Override
         public void updateTile() {
             super.updateTile();
+            boolean valid = this.efficiency > 0.0F;
+            if (hasItems && valid && this.generationTime <= 0.0F) {
+                this.consume();
+                generationTime = 1.0F;
+            }
+            generationTime-=delta()/itemDuration;
             updateLaser(this);
         }
 
@@ -91,7 +128,11 @@ public class LaserGenerator extends Block implements LaserBlock {
         @Override
         public void draw() {
             drawStatus(this);
-            super.draw();
+
+            Draw.rect(this.block.region, this.x, this.y, 0f);
+            this.drawTeamTop();
+            Draw.rect(rotation > 1 ? top2 : top1,x,y,drawrot());
+
             if(graph() == null) return;
             float laser = laser();
             float scl = Mathf.clamp(laser);
@@ -119,7 +160,7 @@ public class LaserGenerator extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return graph().broken ? 0f : laserOutput*efficiency;
+            return graph().broken() ? 0f : laserOutput*efficiency;
         }
 
         @Override

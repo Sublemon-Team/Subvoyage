@@ -1,5 +1,7 @@
 package subvoyage.content;
 
+import mindustry.world.Block;
+import subvoyage.anno.LoadAnnoProcessor;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.block.SvWorldBlocks;
 import subvoyage.content.other.SvLoadouts;
@@ -17,6 +19,13 @@ public class SvContent {
 
         SvWorldBlocks.load();
         SvBlocks.load();
+        new Block("anno-loader") { //<- not a real block
+            @Override
+            public void load() {
+                super.load();
+                LoadAnnoProcessor.begin(SvBlocks.class);
+            }
+        };
 
         SvLoadouts.load();
         SvPlanets.load();
