@@ -26,6 +26,8 @@ public class LaserGraph {
     public int lastChange = -2;
     public int lastRotation = -2;
 
+    public boolean broken = false;
+
 
     public static List<LaserLink> getLinks(int x, int y, int rotation, Block block) {
         List<LaserLink> links = new ArrayList<>();
@@ -166,22 +168,26 @@ public class LaserGraph {
     public void update(Building build) {
         if(suppliers.size > ((LaserBlock) build.block).maxSuppliers()) {
             for (Building supplier : suppliers) {
-                Fx.coreLaunchConstruct.create(supplier.x,supplier.y,0, Pal.accent,new Object());
-                Fx.unitEnvKill.create(supplier.x,supplier.y,0,Pal.accent,new Object());
+                if(supplier instanceof LaserBuild lb) lb.graph().broken = true;
             }
-            Fx.coreLaunchConstruct.create(build.x,build.y,0,Pal.accent,new Object());
-            Fx.unitEnvKill.create(build.x,build.y,0,Pal.accent,new Object());
-            Sounds.plasmadrop.play(1f,2f,0f);
+            broken = true;
             removeSuppliers(build);
         }
         if(hasConsumer((LaserBuild) build, (LaserBuild) build)) {
+            broken = true;
+            consumers.each(e -> {
+                if(e instanceof LaserBuild lb) lb.graph().broken = true;
+            });
             removeConsumers(build);
         }
-
-        if(lastChange != world.tileChanges || lastRotation != build.rotation){
-            lastChange = world.tileChanges;
+        if(lastRotation != build.rotation) {
+            world.tileChanges += 1;
             lastRotation = build.rotation;
+        }
+        if(lastChange != world.tileChanges){
+            lastChange = world.tileChanges;
             reloadLinks(build);
+            broken = false;
         }
 
         ArrayList<Building> toRemove = new ArrayList<>();

@@ -6,12 +6,14 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
+import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
 public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;
@@ -85,16 +87,19 @@ public class LaserGenerator extends Block implements LaserBlock {
             updateLaser(this);
         }
 
+        float smthScl = 0f;
         @Override
         public void draw() {
+            drawStatus(this);
             super.draw();
             if(graph() == null) return;
             float laser = laser();
             float scl = Mathf.clamp(laser);
+            smthScl = Mathf.lerp(smthScl, scl, Time.delta/20f);
             Color color = LaserUtil.getLaserColor(laser);
             for (Building consumer : graph().consumers) {
                 Draw.color(color);
-                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,scl);
+                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,smthScl);
             }
         }
 
@@ -114,7 +119,7 @@ public class LaserGenerator extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return laserOutput*efficiency;
+            return graph().broken ? 0f : laserOutput*efficiency;
         }
 
         @Override
