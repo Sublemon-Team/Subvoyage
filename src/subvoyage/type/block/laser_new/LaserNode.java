@@ -9,8 +9,6 @@ import arc.struct.IntSeq;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
-import subvoyage.type.block.laser.LaserGraph;
-import subvoyage.type.block.laser.LaserModule;
 import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;

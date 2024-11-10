@@ -1,7 +1,6 @@
 package subvoyage.type.block.laser_new;
 
 import mindustry.gen.Building;
-import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.utility.Var;
 
 public interface LaserBuild {
@@ -23,12 +22,16 @@ public interface LaserBuild {
     }
 
     default float inputLaser(Building building) {
-        Var<Float> laser = new Var<>(0f);
-        graph().getSuppliers().each((b) -> {
-            if(building instanceof LaserBuild lb) {
-                laser.val += lb.laser();
-            }
-        });
-        return laser.val;
+        try {
+            Var<Float> laser = new Var<>(0f);
+            graph().getSuppliers().each((b) -> {
+                if (b instanceof LaserBuild lb) {
+                    laser.val += lb.laser();
+                }
+            });
+            return laser.val;
+        } catch (StackOverflowError e) {
+            return 0f;
+        }
     };
 }

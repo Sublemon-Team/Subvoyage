@@ -1,7 +1,8 @@
 package subvoyage.type.block.laser_new;
 
-import arc.Core;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Angles;
 import arc.math.Mathf;
@@ -9,14 +10,13 @@ import arc.math.geom.Geometry;
 import arc.math.geom.Point2;
 import arc.struct.IntSeq;
 import arc.struct.Seq;
+import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
-import org.w3c.dom.Text;
 import subvoyage.draw.visual.SvDraw;
-import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.type.block.laser.LaserLink;
 
 import java.util.ArrayList;
@@ -109,19 +109,27 @@ public interface LaserBlock {
     TextureRegion laserStartRegion();
     TextureRegion laserTopRegion();
 
-    float camOffset = 0.1f;
+    float camOffset = 0f;
 
     default void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl){
         float angle1 = Angles.angle(x1, y1, x2, y2),
                 vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
                 len1 = size1 * tilesize / 2f - 2f, len2 = size2 * tilesize / 2f - 2f;
-
-        float layer = Draw.z()+ SvDraw._3D.layerOffset(x1 + vx*len1, y1 + vy*len1);
+                //len1 = 0, len2 = 0;
+        float layer = Draw.z();
         Draw.z(Layer.blockOver);
 
-        Drawf.laser(laserRegion(), laserStartRegion(), SvDraw._3D.xHeight(x1 + vx*len1,camOffset), SvDraw._3D.yHeight(y1 + vy*len1,camOffset), SvDraw._3D.xHeight(x2 - vx*len2,camOffset), SvDraw._3D.yHeight(y2 - vy*len2,camOffset), scl);
+        scl = Math.max(scl,0.2f);
+
+        Fill.circle(x1 + vx*len1,y1 + vy*len1,6f*scl+Mathf.cos(Time.time,10f,0.5f)*(scl-0.2f));
+        Fill.circle(x2 - vx * len2,y2 - vy * len2,6f*scl+Mathf.cos(Time.time,10f,0.5f)*(scl-0.2f));
+        Lines.stroke(8f*scl+Mathf.cos(Time.time,10f,0.5f)*(scl-0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
         Draw.color();
-        Drawf.laser(laserTopRegion(), laserStartRegion(), SvDraw._3D.xHeight(x1 + vx*len1,camOffset), SvDraw._3D.yHeight(y1 + vy*len1,camOffset), SvDraw._3D.xHeight(x2 - vx*len2,camOffset), SvDraw._3D.yHeight(y2 - vy*len2,camOffset), scl);
+        Lines.stroke(4f*scl+Mathf.cos(Time.time,10f,0.5f)*(scl-0.2f));
+        Fill.circle(x1 + vx*len1,y1 + vy*len1,3f*scl+Mathf.cos(Time.time+5,10f,0.5f)*(scl-0.2f));
+        Fill.circle(x2 - vx * len2,y2 - vy * len2,3f*scl+Mathf.cos(Time.time,10f,0.5f)*(scl-0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
         Draw.z(layer);
     }
 }
