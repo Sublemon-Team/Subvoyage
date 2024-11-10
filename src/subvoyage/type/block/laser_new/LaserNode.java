@@ -117,7 +117,7 @@ public class LaserNode extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return inputLaser(this);
+            return graph().broken ? 0f : inputLaser(this);
         }
 
         @Override
