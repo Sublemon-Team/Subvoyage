@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks;
+package subvoyage.type.block.laser_old_blocks;
 
 import arc.Core;
 import arc.graphics.g2d.Draw;
@@ -9,7 +9,6 @@ import arc.struct.EnumSet;
 import arc.struct.Seq;
 import arc.util.Eachable;
 import arc.util.Nullable;
-import arc.util.Strings;
 import arc.util.Time;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -23,15 +22,13 @@ import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
 import mindustry.ui.Bar;
-import mindustry.world.blocks.production.GenericCrafter;
-import mindustry.world.blocks.production.HeatCrafter;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.draw.DrawDefault;
 import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
-import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser_old.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
 
 public class LaserCrafter extends LaserBlock {

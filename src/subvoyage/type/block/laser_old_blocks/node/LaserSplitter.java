@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks.node;
+package subvoyage.type.block.laser_old_blocks.node;
 
 import arc.Core;
 import arc.graphics.Blending;
@@ -16,20 +16,22 @@ import mindustry.gen.Sounds;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
 import mindustry.world.Tile;
+import subvoyage.content.block.SvBlocks;
 import subvoyage.content.other.SvPal;
-import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser_old.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 
-public class LaserNode extends LaserBlock {
+public class LaserSplitter extends LaserBlock {
 
     public TextureRegion topRegion1;
     public TextureRegion topRegion2;
     public int range;
 
 
-    public LaserNode(String name) {
+    public LaserSplitter(String name) {
         super(name);
         rotate = true;
         rotateDraw = true;
@@ -49,6 +51,7 @@ public class LaserNode extends LaserBlock {
         super.load();
         topRegion1 = Core.atlas.find(name+"-top1");
         topRegion2 = Core.atlas.find(name+"-top2",topRegion1);
+        region = SvBlocks.laserNode.region;
     }
 
 
@@ -92,6 +95,7 @@ public class LaserNode extends LaserBlock {
         public void updateTile() {
             super.updateTile();
             if(lasers == null) return;
+            lasers.supplierLaserMultiplier = 0.5f;
             if(lasers.graph.suppliers.size > 1 /*&& false*/) {
                 for (Building supplier : lasers.graph.suppliers) {
                     Fx.coreLaunchConstruct.create(supplier.x,supplier.y,0,Pal.accent,new Object());
@@ -104,10 +108,6 @@ public class LaserNode extends LaserBlock {
             }
         }
 
-        @Override
-        public float efficiency() {
-            return 1f;
-        }
 
         @Override
         public void draw() {

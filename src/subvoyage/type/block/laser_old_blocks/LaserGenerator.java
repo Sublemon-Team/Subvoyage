@@ -1,17 +1,13 @@
-package subvoyage.type.block.laser_blocks;
+package subvoyage.type.block.laser_old_blocks;
 
 import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Mathf;
-import arc.util.Time;
 import mindustry.gen.Building;
-import mindustry.world.blocks.power.ConsumeGenerator;
-import mindustry.world.blocks.power.PowerGenerator;
 import subvoyage.content.other.SvPal;
-import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser_old.LaserBlock;
 import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.tilesize;

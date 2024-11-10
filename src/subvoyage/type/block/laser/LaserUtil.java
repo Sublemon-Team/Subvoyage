@@ -3,7 +3,6 @@ package subvoyage.type.block.laser;
 import arc.graphics.Color;
 import subvoyage.content.other.SvPal;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class LaserUtil {
@@ -16,7 +15,7 @@ public class LaserUtil {
         laserPowerColors.put(30f,SvPal.laserGreen);
         laserPowerColors.put(90f,SvPal.laserBlue);
         laserPowerColors.put(270f,SvPal.laserViolet);
-        laserPowerColors.put(1000f,Color.white);
+        laserPowerColors.put(1000f,Color.valueOf("D8D1FF"));
     }
 
 

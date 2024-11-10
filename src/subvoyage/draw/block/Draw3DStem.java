@@ -34,7 +34,7 @@ public class Draw3DStem extends Draw3DSprite {
         Draw.z(layer(build));
 
         float x = x(build), y = y(build), off = off(build);
-        Draw.z(Draw.z() + SvDraw._3D.layerOffset(x, y) + (!enableZOffset ? 0f : Mathf.randomSeed((long) (build.x*build.y+build.x+build.y))*0.2f));
+        Draw.z(Draw.z() + SvDraw._3D.layerOffset(x, y));
 
         float hWidth = region.height * Draw.scl * region.scl() * 2, hScl = SvDraw._3D.hScale(off);
         float ex = SvDraw._3D.xHeight(x, off), ey = SvDraw._3D.yHeight(y, off);

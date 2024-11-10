@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks;
+package subvoyage.type.block.laser_old_blocks;
 
 import arc.graphics.g2d.TextureRegion;
 import arc.math.geom.Geometry;
@@ -7,13 +7,10 @@ import arc.struct.ObjectMap;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.entities.bullet.BulletType;
-import mindustry.entities.bullet.ContinuousLaserBulletType;
-import mindustry.world.blocks.defense.turrets.LaserTurret;
 import mindustry.world.draw.DrawBlock;
-import mindustry.world.draw.DrawTurret;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatValues;
-import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser_old.LaserBlock;
 
 public class LaserBlaster extends LaserBlock {
     public DrawBlock drawer;

@@ -1,16 +1,13 @@
 package subvoyage.utility;
 
 import mindustry.Vars;
-import mindustry.gen.*;
 import mindustry.net.Net;
 import mindustry.world.Tile;
-import mindustry.world.blocks.units.UnitAssembler;
-import mindustry.world.blocks.units.UnitBlock;
 import subvoyage.network.LaserAssemblerDroneSpawnedCallPacket;
 import subvoyage.network.LaserAssemblerUnitSpawnedCallPacket;
 import subvoyage.network.LaserUnitBlockSpawnCallPacket;
-import subvoyage.type.block.laser_blocks.unit.LaserUnitAssembler;
-import subvoyage.type.block.laser_blocks.unit.LaserUnitBlock;
+import subvoyage.type.block.laser_old_blocks.unit.LaserUnitAssembler;
+import subvoyage.type.block.laser_old_blocks.unit.LaserUnitBlock;
 
 public class SvCall {
     public static void registerPackets() {

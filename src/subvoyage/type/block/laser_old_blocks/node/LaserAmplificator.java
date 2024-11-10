@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks.node;
+package subvoyage.type.block.laser_old_blocks.node;
 
 import mindustry.content.Fx;
 import mindustry.graphics.Pal;

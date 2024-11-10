@@ -1,8 +1,7 @@
 package subvoyage.network;
 
 import mindustry.gen.AssemblerDroneSpawnedCallPacket;
-import mindustry.world.blocks.units.UnitAssembler;
-import subvoyage.type.block.laser_blocks.unit.LaserUnitAssembler;
+import subvoyage.type.block.laser_old_blocks.unit.LaserUnitAssembler;
 
 public class LaserAssemblerDroneSpawnedCallPacket extends AssemblerDroneSpawnedCallPacket {
     @Override

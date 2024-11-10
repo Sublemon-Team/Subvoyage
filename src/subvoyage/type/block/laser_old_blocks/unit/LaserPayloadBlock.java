@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks.unit;
+package subvoyage.type.block.laser_old_blocks.unit;
 
 import arc.Core;
 import arc.graphics.g2d.Draw;
@@ -21,7 +21,7 @@ import mindustry.world.blocks.payloads.UnitPayload;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.Env;
 import subvoyage.Subvoyage;
-import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser_old.LaserBlock;
 
 import static mindustry.Vars.tilesize;
 

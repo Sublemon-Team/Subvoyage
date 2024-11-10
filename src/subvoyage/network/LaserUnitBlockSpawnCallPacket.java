@@ -1,7 +1,7 @@
 package subvoyage.network;
 
 import mindustry.gen.UnitBlockSpawnCallPacket;
-import subvoyage.type.block.laser_blocks.unit.LaserUnitBlock;
+import subvoyage.type.block.laser_old_blocks.unit.LaserUnitBlock;
 
 public class LaserUnitBlockSpawnCallPacket extends UnitBlockSpawnCallPacket {
     @Override

@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser_old;
 
 import mindustry.gen.Building;
 

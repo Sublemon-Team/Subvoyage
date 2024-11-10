@@ -8,7 +8,7 @@ import arc.util.*;
 import mindustry.*;
 import mindustry.type.*;
 import subvoyage.content.SvItems;
-import subvoyage.type.block.laser_blocks.LaserCrafter;
+import subvoyage.type.block.laser_old_blocks.LaserCrafter;
 
 public class TugRoller extends LaserCrafter {
     public float sinMag = 4f, sinScl = 10f, sideOffset = 0f, lenOffset = -1f, horiOffset = 0f, angleOffset = 0f;

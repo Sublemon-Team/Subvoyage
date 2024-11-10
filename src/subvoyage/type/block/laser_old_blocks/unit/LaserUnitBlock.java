@@ -1,13 +1,7 @@
-package subvoyage.type.block.laser_blocks.unit;
+package subvoyage.type.block.laser_old_blocks.unit;
 
-import mindustry.Vars;
-import mindustry.gen.Call;
-import mindustry.gen.UnitBlockSpawnCallPacket;
-import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.UnitPayload;
-import mindustry.world.blocks.units.UnitBlock;
 import mindustry.world.meta.BlockGroup;
-import subvoyage.network.LaserUnitBlockSpawnCallPacket;
 import subvoyage.utility.SvCall;
 
 public class LaserUnitBlock extends LaserPayloadBlock {

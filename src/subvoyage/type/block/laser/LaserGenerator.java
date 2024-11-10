@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_new;
+package subvoyage.type.block.laser;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -13,27 +13,29 @@ import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.anno.LoadAnno;
-import subvoyage.type.block.laser.LaserUtil;
 
+import static mindustry.Vars.*;
 import static mindustry.Vars.player;
-import static mindustry.Vars.tilesize;
 
-public class LaserNode extends Block implements LaserBlock {
-
+public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;
 
-    public IntSeq inputs = IntSeq.range(0,4);
-    public IntSeq outputs = IntSeq.range(0,4);
+    public IntSeq inputs = IntSeq.with();
+    public IntSeq outputs = IntSeq.with(0);
 
-    public short inputRange = 8,outputRange = 8;
+    public short inputRange = 0,outputRange = 8;
     public byte maxSuppliers = 4;
 
     public float capacity = 60f;
 
+    public float laserOutput = 10f;
+
     public @LoadAnno("@-top1") TextureRegion top1;
     public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
-    public LaserNode(String name) {
+    public float itemDuration = 120f;
+
+    public LaserGenerator(String name) {
         super(name);
         destructible = true;
         regionRotated1 = 1;
@@ -48,6 +50,23 @@ public class LaserNode extends Block implements LaserBlock {
         replaceable = true;
         allowDiagonal = false;
         drawArrow = false;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        clipSize = Math.max(clipSize, Math.max(inputRange(),outputRange()) * tilesize);
+        capacity = laserOutput + 5f;
+    }
+    @Override
+    public void load() {
+        super.load();
+        heatRegion = Core.atlas.find(name+"-heat");
+        top1 = Core.atlas.find(name+"-top1");
+    }
+    @Override
+    protected TextureRegion[] icons() {
+        return new TextureRegion[] {region,top1};
     }
 
     @Override
@@ -67,20 +86,9 @@ public class LaserNode extends Block implements LaserBlock {
     }
 
     @Override
-    public void drawPlanConfig(BuildPlan plan, Eachable<BuildPlan> list) {
-        super.drawPlanConfig(plan, list);
-        drawLinks(this,plan.x,plan.y,plan.rotation,false,true);
-    }
-
-    @Override
-    public void init() {
-        super.init();
-        clipSize = Math.max(clipSize, Math.max(inputRange(),outputRange()) * tilesize);
-    }
-    @Override
-    public void load() {
-        super.load();
-        heatRegion = Core.atlas.find(name+"-heat");
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+        if(valid) drawLinks(this,x,y,rotation,true,true);
     }
 
     @Override public short inputRange() {return inputRange;}
@@ -91,14 +99,20 @@ public class LaserNode extends Block implements LaserBlock {
     @Override public IntSeq inputs() {return inputs;}
     @Override public IntSeq outputs() {return outputs;}
 
-    public class LaserNodeBuild extends Building implements LaserBuild {
+    public class LaserGeneratorBuild extends Building implements LaserBuild {
 
-        private LaserGraph graph;
-
+        LaserGraph graph;
+        float generationTime = 0f;
 
         @Override
         public void updateTile() {
             super.updateTile();
+            boolean valid = this.efficiency > 0.0F;
+            if (hasItems && valid && this.generationTime <= 0.0F) {
+                this.consume();
+                generationTime = 1.0F;
+            }
+            generationTime-=delta()/itemDuration;
             updateLaser(this);
         }
 
@@ -118,7 +132,7 @@ public class LaserNode extends Block implements LaserBlock {
             Color color = LaserUtil.getLaserColor(laser);
             for (Building consumer : graph().consumers) {
                 Draw.color(color);
-                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,smthScl);
+                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,smthScl,Mathf.clamp((laser-300f)/700f));
             }
         }
 
@@ -138,11 +152,11 @@ public class LaserNode extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return graph().broken() ? 0f : inputLaser(this);
+            return graph().broken() ? 0f : laserOutput*efficiency;
         }
         @Override
         public float rawLaser() {
-            return inputLaser(this);
+            return laserOutput * efficiency;
         }
 
         @Override
@@ -157,7 +171,7 @@ public class LaserNode extends Block implements LaserBlock {
 
         @Override
         public boolean consumer() {
-            return true;
+            return false;
         }
 
         @Override

@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser_blocks.unit;
+package subvoyage.type.block.laser_old_blocks.unit;
 
 import arc.Core;
 import arc.graphics.Color;

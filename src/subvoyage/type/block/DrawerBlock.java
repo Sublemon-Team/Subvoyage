@@ -79,7 +79,7 @@ public class DrawerBlock extends Block {
 
         @Override
         public void display(Table table) {
-            table.remove();
+            table.clear();
         }
 
         @Override

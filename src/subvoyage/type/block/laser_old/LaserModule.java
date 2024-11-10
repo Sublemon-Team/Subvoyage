@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser_old;
 
 import arc.math.Mathf;
 import arc.struct.IntSeq;
@@ -6,7 +6,6 @@ import arc.util.Time;
 import arc.util.io.Writes;
 import mindustry.gen.Building;
 import mindustry.world.modules.BlockModule;
-import mindustry.world.modules.PowerModule;
 
 public class LaserModule extends BlockModule {
     public LaserGraph graph = new LaserGraph();
