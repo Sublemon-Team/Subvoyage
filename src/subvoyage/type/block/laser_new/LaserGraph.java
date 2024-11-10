@@ -17,6 +17,7 @@ import subvoyage.type.block.laser.LaserLink;
 import java.util.ArrayList;
 import java.util.List;
 
+import static mindustry.Vars.player;
 import static mindustry.Vars.world;
 
 public class LaserGraph {

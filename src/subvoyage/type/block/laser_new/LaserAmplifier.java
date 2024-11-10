@@ -6,20 +6,21 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
+import arc.util.Eachable;
 import arc.util.Time;
+import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
+import subvoyage.anno.LoadAnno;
 import subvoyage.type.block.laser.LaserUtil;
 
+import static mindustry.Vars.player;
 import static mindustry.Vars.tilesize;
 
 public class LaserAmplifier extends Block implements LaserBlock {
 
     public TextureRegion heatRegion;
-    public TextureRegion laserRegion;
-    public TextureRegion laserTopRegion;
-    public TextureRegion laserStartRegion;
 
     public IntSeq inputs = IntSeq.range(0,4);
     public IntSeq outputs = IntSeq.range(0,4);
@@ -28,6 +29,9 @@ public class LaserAmplifier extends Block implements LaserBlock {
     public byte maxSuppliers = 4;
 
     public float capacity = 60f;
+
+    public @LoadAnno("@-top1") TextureRegion top1;
+    public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
     public LaserAmplifier(String name) {
         super(name);
@@ -54,10 +58,29 @@ public class LaserAmplifier extends Block implements LaserBlock {
     @Override
     public void load() {
         super.load();
-        laserRegion = Core.atlas.find(name+"-laser","subvoyage-power-laser");
-        laserTopRegion = Core.atlas.find(name+"-laser-top","subvoyage-power-laser-top");
-        laserStartRegion = Core.atlas.find(name+"-laser-start","subvoyage-power-laser-start");
         heatRegion = Core.atlas.find(name+"-heat");
+    }
+
+    @Override
+    public void drawDefaultPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
+        TextureRegion reg = getPlanRegion(plan, list);
+        Draw.rect(reg, plan.drawx(), plan.drawy(), 0f);
+
+        if(plan.worldContext && player != null && teamRegion != null && teamRegion.found()){
+            if(teamRegions[player.team().id] == teamRegion) Draw.color(player.team().color);
+            Draw.rect(teamRegions[player.team().id], plan.drawx(), plan.drawy());
+            Draw.color();
+        }
+
+        Draw.rect(plan.rotation > 1 ? top2 : top1, plan.drawx(),plan.drawy(),!rotate || !rotateDraw ? 0 : plan.rotation * 90);
+
+        drawPlanConfig(plan, list);
+    }
+
+    @Override
+    public void drawPlanConfig(BuildPlan plan, Eachable<BuildPlan> list) {
+        super.drawPlanConfig(plan, list);
+        drawLinks(this,plan.x,plan.y,plan.rotation,false,true);
     }
 
     @Override public short inputRange() {return inputRange;}
@@ -67,10 +90,6 @@ public class LaserAmplifier extends Block implements LaserBlock {
 
     @Override public IntSeq inputs() {return inputs;}
     @Override public IntSeq outputs() {return outputs;}
-
-    @Override public TextureRegion laserRegion() {return laserRegion;}
-    @Override public TextureRegion laserStartRegion() {return laserStartRegion;}
-    @Override public TextureRegion laserTopRegion() {return laserTopRegion;}
 
 
 
@@ -89,7 +108,11 @@ public class LaserAmplifier extends Block implements LaserBlock {
         @Override
         public void draw() {
             drawStatus(this);
-            super.draw();
+
+            Draw.rect(this.block.region, this.x, this.y, 0f);
+            this.drawTeamTop();
+            Draw.rect(rotation > 1 ? top2 : top1,x,y,drawrot());
+
             if(graph() == null) return;
             float laser = laser();
             float scl = Mathf.clamp(laser);
@@ -118,6 +141,10 @@ public class LaserAmplifier extends Block implements LaserBlock {
         @Override
         public float laser() {
             return graph().broken() ? 0f : inputLaser(this) * efficiency;
+        }
+        @Override
+        public float rawLaser() {
+            return inputLaser(this) * efficiency;
         }
 
         @Override

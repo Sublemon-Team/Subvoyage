@@ -12,6 +12,7 @@ import subvoyage.utility.Var;
 
 public interface LaserBuild {
     float laser();
+    float rawLaser();
     float laserRequirement();
 
     float maxPower();
@@ -30,7 +31,7 @@ public interface LaserBuild {
     default void updateLaser(Building building) {
         if(graph() != null) graph().update(building);
         if(building instanceof LaserBuild lb) {
-            lb.graph().powerOut = lb.laser() >= maxPower();
+            lb.graph().powerOut = lb.rawLaser() >= maxPower();
         }
     }
     default void clearLaser(Building building) {

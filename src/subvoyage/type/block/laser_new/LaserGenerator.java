@@ -21,9 +21,6 @@ import static mindustry.Vars.player;
 
 public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;
-    public TextureRegion laserRegion;
-    public TextureRegion laserTopRegion;
-    public TextureRegion laserStartRegion;
 
     public IntSeq inputs = IntSeq.with();
     public IntSeq outputs = IntSeq.with(0);
@@ -65,9 +62,6 @@ public class LaserGenerator extends Block implements LaserBlock {
     @Override
     public void load() {
         super.load();
-        laserRegion = Core.atlas.find(name+"-laser","subvoyage-power-laser");
-        laserTopRegion = Core.atlas.find(name+"-laser-top","subvoyage-power-laser-top");
-        laserStartRegion = Core.atlas.find(name+"-laser-start","subvoyage-power-laser-start");
         heatRegion = Core.atlas.find(name+"-heat");
     }
 
@@ -100,12 +94,6 @@ public class LaserGenerator extends Block implements LaserBlock {
 
     @Override public IntSeq inputs() {return inputs;}
     @Override public IntSeq outputs() {return outputs;}
-
-    @Override public TextureRegion laserRegion() {return laserRegion;}
-    @Override public TextureRegion laserStartRegion() {return laserStartRegion;}
-    @Override public TextureRegion laserTopRegion() {return laserTopRegion;}
-
-
 
     public class LaserGeneratorBuild extends Building implements LaserBuild {
 
@@ -161,6 +149,10 @@ public class LaserGenerator extends Block implements LaserBlock {
         @Override
         public float laser() {
             return graph().broken() ? 0f : laserOutput*efficiency;
+        }
+        @Override
+        public float rawLaser() {
+            return laserOutput * efficiency;
         }
 
         @Override
