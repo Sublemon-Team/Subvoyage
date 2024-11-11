@@ -10,11 +10,9 @@ import mindustry.ai.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.maps.generators.*;
-import mindustry.maps.planet.ErekirPlanetGenerator;
 import mindustry.type.Sector;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
-import subvoyage.content.block.SvWorldBlocks;
 import subvoyage.content.other.*;
 import subvoyage.world.planets.atlacian.*;
 
@@ -54,7 +52,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         if(getHeight(position) <= oceanLevel) return SvPal.atlacianOcean;
         if(biomeMask > 0.6  && patternMask < 0.6f) return SvPal.agaryte;
         if(biomeMask > 0.5) return SvPal.legartyteLightish;
-        if(biomeMask > 0.4f && patternMask < 0.3f) return sodilate.mapColor;
+        if(biomeMask > 0.4f && patternMask < 0.3f) return sodilateFloor.mapColor;
         if(biomeMask > 0.2) return SvPal.legartyte;
         return Liquids.arkycite.color;
     }
@@ -131,7 +129,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
             float secondNoise = noise(x,y,4,0.4f,100,0.95f);
 
             if(secondNoise < sodilateBiomeWeight) {
-                if(!floor.asFloor().isLiquid) floor = sodilate;
+                if(!floor.asFloor().isLiquid) floor = sodilateFloor;
                 else {
                     if(floor == Blocks.water) floor = hardWater;
                     if(floor == Blocks.deepwater || floor == Blocks.darksandWater) floor = darkHardWater;

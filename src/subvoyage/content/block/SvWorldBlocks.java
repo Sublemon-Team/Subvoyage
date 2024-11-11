@@ -1,12 +1,7 @@
 package subvoyage.content.block;
 
 import arc.*;
-import arc.math.Rand;
 import mindustry.content.*;
-import mindustry.gen.Building;
-import mindustry.graphics.Layer;
-import mindustry.maps.planet.ErekirPlanetGenerator;
-import mindustry.type.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
 import mindustry.world.draw.DrawMulti;
@@ -17,11 +12,8 @@ import subvoyage.draw.block.Draw3DSprite;
 import subvoyage.draw.block.Draw3DStem;
 import subvoyage.draw.visual.*;
 import subvoyage.type.block.DrawerBlock;
-import subvoyage.type.block.environment.decoration.TreeBlock;
 
 import java.util.HashMap;
-
-import static mindustry.type.ItemStack.with;
 
 public class SvWorldBlocks{
     public static HashMap<Block,Block> floorToWallOre = new HashMap<>();
@@ -30,12 +22,12 @@ public class SvWorldBlocks{
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilate, hardWater, darkHardWater,
+    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateFloor, hardWater, darkHardWater,
     crudesQuarry,
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
-    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, sodilateBlocks, hauntedTree;
+    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, archalyteBoulder, sodilateBoulder, sodilateBlocks, hauntedTree;
 
     public static void load() {
         hardWater = new Floor("hard-water"){
@@ -174,13 +166,13 @@ public class SvWorldBlocks{
             agaryteStone.asFloor().wall = this;
             variants = 3;
         }};
-        sodilate = new Floor("sodilate"){{
+        sodilateFloor = new Floor("sodilate"){{
             attributes.set(Attribute.water, -1f);
             attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
         }};
         sodilateWall = new StaticWall("sodilate-wall"){{
-            sodilate.asFloor().wall = this;
+            sodilateFloor.asFloor().wall = this;
             attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
         }};
@@ -210,11 +202,24 @@ public class SvWorldBlocks{
             forceDark = true;
         }};
 
+        archalyteBoulder = new Prop("archalyte-boulder"){{
+            variants = 3;
+            archalyteStone.asFloor().decoration = this;
+            forceDark = true;
+        }};
+
+        sodilateBoulder = new Prop("sodilate-boulder"){{
+            variants = 2;
+            sodilateFloor.asFloor().decoration = this;
+            forceDark = true;
+        }};
+
         sodilateBlocks = new TallBlock("sodilate-blocks") {{
             variants = 3;
             clipSize = 128f;
             shadowAlpha = 0.5f;
             shadowOffset = -2.5f;
+            forceDark = true;
         }};
 
         agaryteBlocks = new TallBlock("agaryte-blocks"){{

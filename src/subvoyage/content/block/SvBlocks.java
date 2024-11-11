@@ -1,5 +1,6 @@
 package subvoyage.content.block;
 
+import arc.Core;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
@@ -57,6 +58,7 @@ import subvoyage.type.shoot.bullet.*;
 import subvoyage.world.*;
 
 import static arc.Core.atlas;
+import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.tilesize;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.*;
@@ -648,7 +650,23 @@ public class SvBlocks{
             fogRadius = 4;
             squareSprite = false;
             consumePower(0.2f);
-        }};
+        }
+
+            @Override
+            public void drawPlace(int x, int y, int rotation, boolean valid) {
+                super.drawPlace(x, y, rotation, valid);
+                int efficiency = (int)((baseEfficiency + Math.min(maxBoost, boostScale * sumAttribute(attribute, x, y))) * 100f);
+                if(efficiency < 100) {
+                    Draw.z(Layer.block+2);
+                    //Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
+                    WorldLabel.drawAt(Core.bundle.get("tectonic-drill.place.message"), (x + size / 4f - 0.75f) * tilesize, (y + size / 4f + size - 0.1f - 1f) * tilesize,
+                            Layer.block + 3, WorldLabel.flagOutline, 0.8f);
+
+                    color(Color.scarlet);
+                    Draw.rect(Icon.cancel.getRegion(), (x+size/4f - 0.75f)*tilesize,(y+size/4f+size-0.1f+0.5f - 1f)*tilesize);
+                }
+            }
+        };
 
         //defense
         whirl = new ItemTurret("whirl"){{
