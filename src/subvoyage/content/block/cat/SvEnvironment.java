@@ -1,4 +1,4 @@
-package subvoyage.content.block;
+package subvoyage.content.block.cat;
 
 import arc.*;
 import mindustry.content.*;
@@ -8,6 +8,7 @@ import mindustry.world.draw.DrawMulti;
 import mindustry.world.draw.DrawRegion;
 import mindustry.world.meta.*;
 import subvoyage.content.*;
+import subvoyage.content.block.SvAttribute;
 import subvoyage.draw.block.Draw3DSprite;
 import subvoyage.draw.block.Draw3DStem;
 import subvoyage.draw.visual.*;
@@ -15,7 +16,7 @@ import subvoyage.type.block.DrawerBlock;
 
 import java.util.HashMap;
 
-public class SvWorldBlocks{
+public class SvEnvironment {
     public static HashMap<Block,Block> floorToWallOre = new HashMap<>();
     public static Block
     //ores

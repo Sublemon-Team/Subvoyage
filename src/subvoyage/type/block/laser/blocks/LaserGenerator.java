@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser.blocks;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -13,26 +13,33 @@ import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.anno.LoadAnno;
+import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser.LaserBuild;
+import subvoyage.type.block.laser.LaserGraph;
+import subvoyage.type.block.laser.LaserUtil;
 
+import static mindustry.Vars.*;
 import static mindustry.Vars.player;
-import static mindustry.Vars.tilesize;
 
-public class LaserAmplifier extends Block implements LaserBlock {
-
+public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;
 
-    public IntSeq inputs = IntSeq.range(0,4);
-    public IntSeq outputs = IntSeq.range(0,4);
+    public IntSeq inputs = IntSeq.with();
+    public IntSeq outputs = IntSeq.with(0);
 
-    public short inputRange = 8,outputRange = 8;
+    public short inputRange = 0,outputRange = 8;
     public byte maxSuppliers = 4;
 
     public float capacity = 60f;
 
+    public float laserOutput = 10f;
+
     public @LoadAnno("@-top1") TextureRegion top1;
     public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
-    public LaserAmplifier(String name) {
+    public float itemDuration = 120f;
+
+    public LaserGenerator(String name) {
         super(name);
         destructible = true;
         regionRotated1 = 1;
@@ -53,6 +60,7 @@ public class LaserAmplifier extends Block implements LaserBlock {
     public void init() {
         super.init();
         clipSize = Math.max(clipSize, Math.max(inputRange(),outputRange()) * tilesize);
+        capacity = laserOutput + 5f;
     }
     @Override
     public void load() {
@@ -60,7 +68,6 @@ public class LaserAmplifier extends Block implements LaserBlock {
         heatRegion = Core.atlas.find(name+"-heat");
         top1 = Core.atlas.find(name+"-top1");
     }
-
     @Override
     protected TextureRegion[] icons() {
         return new TextureRegion[] {region,top1};
@@ -96,16 +103,20 @@ public class LaserAmplifier extends Block implements LaserBlock {
     @Override public IntSeq inputs() {return inputs;}
     @Override public IntSeq outputs() {return outputs;}
 
+    public class LaserGeneratorBuild extends Building implements LaserBuild {
 
-
-    public class LaserNodeBuild extends Building implements LaserBuild {
-
-        private LaserGraph graph;
-
+        LaserGraph graph;
+        float generationTime = 0f;
 
         @Override
         public void updateTile() {
             super.updateTile();
+            boolean valid = this.efficiency > 0.0F;
+            if (hasItems && valid && this.generationTime <= 0.0F) {
+                this.consume();
+                generationTime = 1.0F;
+            }
+            generationTime-=delta()/itemDuration;
             updateLaser(this);
         }
 
@@ -141,15 +152,13 @@ public class LaserAmplifier extends Block implements LaserBlock {
             graph = new LaserGraph();
         }
 
-
-
         @Override
         public float laser() {
-            return graph().broken() ? 0f : inputLaser(this) * efficiency;
+            return graph().broken() ? 0f : laserOutput*efficiency;
         }
         @Override
         public float rawLaser() {
-            return inputLaser(this) * efficiency;
+            return laserOutput * efficiency;
         }
 
         @Override
@@ -164,7 +173,7 @@ public class LaserAmplifier extends Block implements LaserBlock {
 
         @Override
         public boolean consumer() {
-            return true;
+            return false;
         }
 
         @Override

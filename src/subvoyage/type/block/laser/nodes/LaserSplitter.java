@@ -1,4 +1,4 @@
-package subvoyage.type.block.laser;
+package subvoyage.type.block.laser.nodes;
 
 import arc.Core;
 import arc.graphics.Color;
@@ -13,11 +13,15 @@ import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.anno.LoadAnno;
+import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser.LaserBuild;
+import subvoyage.type.block.laser.LaserGraph;
+import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.player;
 import static mindustry.Vars.tilesize;
 
-public class LaserNode extends Block implements LaserBlock {
+public class LaserSplitter extends Block implements LaserBlock {
 
     public TextureRegion heatRegion;
 
@@ -32,7 +36,7 @@ public class LaserNode extends Block implements LaserBlock {
     public @LoadAnno("@-top1") TextureRegion top1;
     public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
-    public LaserNode(String name) {
+    public LaserSplitter(String name) {
         super(name);
         destructible = true;
         regionRotated1 = 1;
@@ -68,7 +72,7 @@ public class LaserNode extends Block implements LaserBlock {
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {
         super.drawPlace(x, y, rotation, valid);
-        if(valid) drawLinks(this,x,y,rotation,false,true);
+        if(valid) drawLinks(this,x,y,rotation,true,true);
     }
 
     @Override
@@ -82,10 +86,6 @@ public class LaserNode extends Block implements LaserBlock {
         heatRegion = Core.atlas.find(name+"-heat");
         top1 = Core.atlas.find(name+"-top1");
     }
-    @Override
-    protected TextureRegion[] icons() {
-        return new TextureRegion[] {region,top1};
-    }
 
     @Override public short inputRange() {return inputRange;}
     @Override public short outputRange() {return outputRange;}
@@ -94,6 +94,11 @@ public class LaserNode extends Block implements LaserBlock {
 
     @Override public IntSeq inputs() {return inputs;}
     @Override public IntSeq outputs() {return outputs;}
+
+    @Override
+    protected TextureRegion[] icons() {
+        return new TextureRegion[] {region,top1};
+    }
 
     public class LaserNodeBuild extends Building implements LaserBuild {
 
@@ -142,11 +147,11 @@ public class LaserNode extends Block implements LaserBlock {
 
         @Override
         public float laser() {
-            return graph().broken() ? 0f : inputLaser(this);
+            return graph().broken() ? 0f : inputLaser(this)/2f * efficiency;
         }
         @Override
         public float rawLaser() {
-            return inputLaser(this);
+            return inputLaser(this)/2f * efficiency;
         }
 
         @Override

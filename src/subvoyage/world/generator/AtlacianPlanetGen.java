@@ -17,7 +17,7 @@ import subvoyage.content.other.*;
 import subvoyage.world.planets.atlacian.*;
 
 import static mindustry.Vars.state;
-import static subvoyage.content.block.SvWorldBlocks.*;
+import static subvoyage.content.block.cat.SvEnvironment.*;
 
 public class AtlacianPlanetGen extends PlanetGenerator {
     /*      GENERATION PARAMETERS       */

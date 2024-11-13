@@ -44,10 +44,12 @@ import subvoyage.type.block.defense.PowerRingTurret;
 import subvoyage.type.block.distribution.*;
 import subvoyage.type.block.effect.OverdriveSquareProjector;
 import subvoyage.type.block.fog.*;
-import subvoyage.type.block.laser.LaserGenerator;
+import subvoyage.type.block.laser.blocks.LaserGenerator;
+import subvoyage.type.block.laser.nodes.LaserNode;
+import subvoyage.type.block.laser.nodes.LaserSplitter;
 import subvoyage.type.block.laser_old_blocks.*;
 import subvoyage.type.block.laser_old_blocks.unit.*;
-import subvoyage.type.block.laser.LaserAmplifier;
+import subvoyage.type.block.laser.nodes.LaserAmplifier;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
@@ -172,7 +174,7 @@ public class SvBlocks{
 
         //laser
 
-        laserProjector = new subvoyage.type.block.laser.LaserGenerator("laser-projector") {{
+        laserProjector = new LaserGenerator("laser-projector") {{
             requirements(Category.effect, atl(), with(iridium, 300, chrome, 200, spaclanium, 150));
             laserOutput = 10f;
             outputRange = 5;
@@ -186,7 +188,7 @@ public class SvBlocks{
             consumePower(1.3f);
         }};
 
-        luminescentProjector = new subvoyage.type.block.laser.LaserGenerator("luminescent-projector") {{
+        luminescentProjector = new LaserGenerator("luminescent-projector") {{
             requirements(Category.effect, atl(), with(iridium, 300, chrome, 200, spaclanium, 150)); //TODO:reqs
             laserOutput = 60f;
             maxSuppliers = 0;
@@ -199,7 +201,7 @@ public class SvBlocks{
             consumePower(1.3f);
         }};
 
-        laserSource = new subvoyage.type.block.laser.LaserGenerator("laser-source") {{
+        laserSource = new LaserGenerator("laser-source") {{
             requirements(Category.effect, atl(BuildVisibility.sandboxOnly), with());
             laserOutput = 1000f;
             maxSuppliers = 0;
@@ -209,7 +211,7 @@ public class SvBlocks{
             outputs = IntSeq.with(0);
         }};
 
-        laserNode = new subvoyage.type.block.laser.LaserNode("laser-node") {{
+        laserNode = new LaserNode("laser-node") {{
             requirements(Category.effect, atl(), with(iridium, 30, chrome, 30));
             size = 3;
             maxSuppliers = 1;
@@ -224,7 +226,7 @@ public class SvBlocks{
             inputs = IntSeq.with(1,2,3);
         }};
 
-        laserSplitter = new subvoyage.type.block.laser.LaserSplitter("laser-splitter") {{
+        laserSplitter = new LaserSplitter("laser-splitter") {{
             requirements(Category.effect, atl(), with(iridium, 50, chrome, 40, spaclanium, 10));
             size = 3;
             maxSuppliers = 1;
@@ -2826,7 +2828,7 @@ public class SvBlocks{
         return new BuildVisibility(() -> Vars.state == null || Vars.state.isMenu() || (v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any || Vars.state.rules.planet == Planets.sun));
     }
 
-    static BuildVisibility atl(){
+    public static BuildVisibility atl(){
         return atl(BuildVisibility.shown);
     }
 }
