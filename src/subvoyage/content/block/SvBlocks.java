@@ -32,6 +32,10 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.*;
 import subvoyage.content.*;
+import subvoyage.content.block.cat.SvCrafting;
+import subvoyage.content.block.cat.SvDistribution;
+import subvoyage.content.block.cat.SvEnvironment;
+import subvoyage.content.block.cat.SvProduction;
 import subvoyage.content.other.*;
 import subvoyage.content.sound.SvSounds;
 import subvoyage.draw.block.*;
@@ -113,6 +117,13 @@ public class SvBlocks{
             buoy,tower,beacon,
             //STORAGE
             corePuffer,coreShore,coreReef, vault, largeVault, unloader, liquidContainer, liquidTank;
+
+    public static void loadCat() {
+        SvEnvironment.load();
+        SvProduction.load();
+        SvCrafting.load();
+        SvDistribution.load();
+    }
 
     public static void load() {
         //non-user

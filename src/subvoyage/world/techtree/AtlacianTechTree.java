@@ -38,7 +38,7 @@ public class AtlacianTechTree {
         }
 
 
-        atlacian.techTree = nodeRoot("atlacian",corePuffer,true, () -> {
+        /*atlacian.techTree = nodeRoot("atlacian",corePuffer,true, () -> {
             context().researchCostMultipliers = costMultipliers;
 
             node(duct, () -> {
@@ -337,7 +337,7 @@ public class AtlacianTechTree {
                 });
             });
 
-        });
+        });*/
     }
 
     public static void load() {

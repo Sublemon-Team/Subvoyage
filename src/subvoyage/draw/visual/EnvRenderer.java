@@ -14,7 +14,7 @@ import static mindustry.Vars.*;
 
 public class EnvRenderer extends EnvRenderers {
     public static void init(){
-        Color waterColor = Color.valueOf("154755");
+        Color waterColor = Color.valueOf("274D89");
         Rand rand = new Rand();
         Core.assets.load("sprites/rays.png", Texture.class).loaded = t -> t.setFilter(Texture.TextureFilter.linear);
         Core.assets.load("sprites/distortAlpha.png", Texture.class);
@@ -28,6 +28,13 @@ public class EnvRenderer extends EnvRenderers {
             }
 
             Draw.z(state.rules.fog ? Layer.fogOfWar + 1 : Layer.weather - 1);
+
+            Draw.z(Layer.light + 0.5f);
+            Draw.blend(Blending.additive);
+            Draw.color(waterColor.cpy().a(0.3f));
+            Draw.rect();
+            Draw.blend();
+
             Weather.drawNoiseLayers(tex, waterColor, 1000f, 0.34f, 0.4f, 1f, 1f, 0f, 3, -1.1f, 0.45f, 0.38f, 0.4f);
             Draw.reset();
 

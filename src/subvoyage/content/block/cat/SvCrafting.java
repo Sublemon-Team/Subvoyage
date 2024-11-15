@@ -59,6 +59,8 @@ public class SvCrafting {
             requirements(Category.crafting, atl(),with(corallite,200,spaclanium,50,iridium,200,clay,80));
             researchCost = with(corallite,350,spaclanium,400,iridium,150,clay,40);
 
+            hasLiquids = true;
+
             drawer = new DrawMulti(
                     new DrawDefault(),
                     new DrawLiquidRegion(argon),

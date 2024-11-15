@@ -18,15 +18,14 @@ import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.BurstDrill;
+import mindustry.world.blocks.production.Pump;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.consumers.ConsumeLiquidBase;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.block.SvAttribute;
-import subvoyage.type.block.production.AttributeCrafterBoostable;
-import subvoyage.type.block.production.Diffuser;
-import subvoyage.type.block.production.ProductionAnchor;
-import subvoyage.type.block.production.WaterSifter;
+import subvoyage.content.other.SvPal;
+import subvoyage.type.block.production.*;
 
 import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.tilesize;
@@ -40,7 +39,9 @@ public class SvProduction {
     public static Block
         diffuser, sifter,                 // water-based harvesting
         featherDrill, crudeDrill,      // drill harvesting
-        productionAnchor
+        productionAnchor,
+
+        centrifugalPump
         ;
 
 
@@ -97,7 +98,7 @@ public class SvProduction {
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.redLight, 40f));
             researchCost = with(corallite,200,spaclanium,100);
 
-            consumeLiquid(water, 30/60f);
+            consumeLiquid(water, 15/60f);
             consumeLiquid(hydrogen,8f/60f).boost();
         }
             @Override
@@ -188,6 +189,23 @@ public class SvProduction {
                     corallite,40,
                     corallite,40
             );
+        }};
+
+        centrifugalPump = new Pump("centrifugal-pump") {{
+            requirements(Category.liquid,atl(), with(corallite, 20));
+
+            researchCost = with(corallite,5);
+
+            size = 2;
+            squareSprite = false;
+            envDisabled |= Env.scorching;
+
+            pumpAmount = 32f/4f;
+            //impactTime = 3f*60f;
+
+            //impactEffect = new MultiEffect(Fx.mineImpact.wrap(Color.white.cpy().a(0.3f)), Fx.mineImpactWave.wrap(SvPal.spaclanium.cpy().a(0.3f), 40f));
+
+            consumeLiquid(hydrogen,4f/60f).boost();
         }};
     }
 }

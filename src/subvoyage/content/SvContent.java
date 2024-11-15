@@ -17,15 +17,15 @@ public class SvContent {
         SvItems.load();
         SvUnits.load();
 
-        SvEnvironment.load();
-        SvBlocks.load();
-        new Block("anno-loader") { //<- not a real block
+        //SvEnvironment.load();
+        SvBlocks.loadCat();
+        /*new Block("anno-loader") { //<- not a real block
             @Override
             public void load() {
                 super.load();
                 LoadAnnoProcessor.begin(SvBlocks.class);
             }
-        };
+        };*/
 
         SvLoadouts.load();
         SvPlanets.load();
