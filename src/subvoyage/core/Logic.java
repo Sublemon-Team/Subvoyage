@@ -6,14 +6,19 @@ import arc.math.geom.Vec2;
 import arc.util.Log;
 import arc.util.Time;
 import arc.util.Timer;
+import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.content.Planets;
 import mindustry.core.GameState;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
+import mindustry.gen.Groups;
 import mindustry.gen.Musics;
+import mindustry.gen.Teamc;
 import mindustry.world.Tile;
 import subvoyage.SvVars;
+import subvoyage.content.SvPlanets;
+import subvoyage.content.SvTeam;
 import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.sound.SvMusic;
@@ -65,6 +70,17 @@ public class Logic {
     }
 
     public static void gameUpdate() {
+        if(player.team() == Team.sharded && state.rules.planet == atlacian) {
+            player.team(SvTeam.melius);
+        } else if(state.rules.planet == atlacian) {
+            /*Groups.all.each((b) -> {
+                if(b instanceof Teamc t) {
+                    if(t.team() == Team.sharded) {
+                        t.team(SvTeam.melius);
+                    }
+                }
+            });*/
+        }
         if(SvMusic.theAtlacian.isPlaying()) {
             SvMusic.theAtlacian.pause(false);
             control.sound.stop();

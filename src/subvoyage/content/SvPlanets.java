@@ -47,6 +47,7 @@ public class SvPlanets{
             prebuildBase = true;
             ruleSetter = r -> {
                 r.waveTeam = Team.malis;
+                r.defaultTeam = SvTeam.melius;
                 r.placeRangeCheck = false;
                 r.enemyCoreBuildRadius = 300f;
                 r.showSpawns = true;

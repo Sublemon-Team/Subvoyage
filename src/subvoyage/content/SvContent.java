@@ -11,6 +11,8 @@ import subvoyage.content.sound.SvSounds;
 public class SvContent {
 
     public static void load() {
+        SvTeam.load();
+
         SvMusic.load();
         SvSounds.load();
 

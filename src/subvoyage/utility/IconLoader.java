@@ -9,12 +9,16 @@ import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Scaling;
 import mindustry.Vars;
+import mindustry.game.Team;
 import mindustry.ui.Fonts;
 import subvoyage.Subvoyage;
+import subvoyage.content.SvTeam;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class IconLoader {
+    public static HashMap<String,Character> icons = new HashMap<>();
     public static void loadIcons() {
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
         Texture uitex = Core.atlas.find("logo").texture;
@@ -56,8 +60,12 @@ public class IconLoader {
                 glyph.kerning = null;
                 glyph.fixedWidth = true;
                 glyph.page = 0;
+                icons.put(nametex[0],(char) ch);
                 Log.info("Loaded subvoyage glyph: "+ch+" - "+texture);
                 fonts.each(f -> f.getData().setGlyph(ch, glyph));
+            }
+            for (Team team : SvTeam.all) {
+                team.emoji = "[#"+team.color.toString()+"]"+icons.get(team.name)+"[]";
             }
         }
     }
