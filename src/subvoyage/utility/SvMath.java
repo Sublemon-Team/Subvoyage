@@ -1,9 +1,39 @@
 package subvoyage.utility;
 
+import arc.func.Intc2;
 import arc.math.Mathf;
 import mindustry.gen.Building;
 
 public class SvMath {
+
+    public static void rectangle(int x1, int y1, int x2, int y2, Intc2 cons) {
+        if(x1 < x2) {
+            for(int x = x1; x <= x2; x++) {
+                if(y1 < y2) {
+                    for (int y = y1; y <= y2; y++) {
+                        cons.get(x, y);
+                    }
+                } else {
+                    for (int y = y1; y >= y2; y--) {
+                        cons.get(x, y);
+                    }
+                }
+            }
+        } else {
+            for(int x = x1; x >= x2; x--) {
+                if(y1 < y2) {
+                    for (int y = y1; y <= y2; y++) {
+                        cons.get(x, y);
+                    }
+                } else {
+                    for (int y = y1; y >= y2; y--) {
+                        cons.get(x, y);
+                    }
+                }
+            }
+        }
+    };
+
     public static boolean withinSquare(Building building, Building origin, float radius) {
         return withinSquare(origin.x,origin.y,building.x,building.y,radius);
     };

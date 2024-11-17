@@ -121,6 +121,7 @@ public class SvBlocks{
         SvProduction.load();
         SvCrafting.load();
         SvDistribution.load();
+        SvPower.load();
     }
 
     public static void load() {

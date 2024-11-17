@@ -35,7 +35,7 @@ public class EnergyDock extends PowerBlock {
     public boolean autolink = true, drawRange = true;
     public float laserScale = 0.25f;
     public Color laserColor1 = Color.white;
-    public Color laserColor2 = SvPal.energyLaser;
+    public Color laserColor2 = SvPal.powerLaser;
     public TextureRegion laser, laserEnd, shadowRegion, outlineRegion;
     public DrawBlock drawer = new DrawDefault();
     protected final static ObjectSet<PowerGraph> graphs = new ObjectSet<>();

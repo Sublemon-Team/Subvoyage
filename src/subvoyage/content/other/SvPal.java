@@ -33,7 +33,7 @@ public class SvPal {
     argonMidSmelt = Color.valueOf("ff8c99"),
     quartzWeave = Color.valueOf("fde8e2"),
     toxicExplosion = Color.valueOf("e7e789"),
-    energyLaser = Color.valueOf("D9F2FF"),
+    powerLaser = Color.valueOf("B2D4FF"),
     polygen = Color.valueOf("A5A3FF"),
     hardWater = Color.valueOf("5a78b3"),
     argon = Color.valueOf("FF8C99"),
