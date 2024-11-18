@@ -15,7 +15,6 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.Block;
-import subvoyage.type.block.laser_old.LaserLink;
 
 import java.util.ArrayList;
 import java.util.List;

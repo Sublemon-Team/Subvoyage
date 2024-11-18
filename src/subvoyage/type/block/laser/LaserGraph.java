@@ -9,7 +9,7 @@ import mindustry.content.Blocks;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.Tile;
-import subvoyage.type.block.laser_old.LaserLink;
+
 
 import java.util.ArrayList;
 import java.util.List;

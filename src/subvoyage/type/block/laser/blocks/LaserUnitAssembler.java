@@ -28,10 +28,10 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
     public IntSeq inputs = IntSeq.with(0,1,2,3);
     public IntSeq outputs = IntSeq.with();
 
-    public short inputRange = 0,outputRange = 8;
-    public byte maxSuppliers = 4;
+    public short inputRange = 8,outputRange = 0;
+    public byte maxSuppliers = 1;
 
-    public float capacity = 60f;
+    public float capacity = 300f;
 
     public float laserMaxEfficiency = 1f;
     public float laserOverpowerScale = 1f;
@@ -173,12 +173,12 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
 
         @Override
         public boolean consumer() {
-            return false;
+            return true;
         }
 
         @Override
         public boolean supplier() {
-            return true;
+            return false;
         }
 
         @Override
@@ -189,6 +189,17 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
         public float getNeededLaser() {
             if(currentTier == 1) return consumeLaserTier1;
             return consumeLaserTier0;
+        }
+
+        @Override
+        public void draw() {
+            drawStatus(this);
+            super.draw();
+        }
+        @Override
+        public void updateTile() {
+            super.updateTile();
+            updateLaser(this);
         }
     }
 }

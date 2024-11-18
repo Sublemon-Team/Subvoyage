@@ -48,8 +48,6 @@ import subvoyage.type.block.fog.*;
 import subvoyage.type.block.laser.blocks.LaserGenerator;
 import subvoyage.type.block.laser.nodes.LaserNode;
 import subvoyage.type.block.laser.nodes.LaserSplitter;
-import subvoyage.type.block.laser_old_blocks.*;
-import subvoyage.type.block.laser_old_blocks.unit.*;
 import subvoyage.type.block.laser.nodes.LaserAmplifier;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
@@ -268,7 +266,7 @@ public class SvBlocks{
             inputs = IntSeq.with(1,2,3);
         }};
 
-        laserBlaster = new LaserBlaster("laser-blaster") {{
+        /*laserBlaster = new LaserBlaster("laser-blaster") {{
             requirements(Category.effect, atl(), with(iridium, 200, chrome, 200, spaclanium, 200, corallite, 100));
             consumeLaserPower(300);
             minLaserEfficiency = 0.3f;
@@ -307,7 +305,7 @@ public class SvBlocks{
                 incendAmount = 1;
                 ammoMultiplier = 1f;
             }};
-        }};
+        }};*/
 
         //payload
         helicopterFabricator = new UnitFactory("helicopter-factory"){
@@ -403,7 +401,7 @@ public class SvBlocks{
                 inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
-
+/*
         laserRefabricator = new LaserReconstructor("laser-refabricator") {{
             requirements(Category.units, atl(), with(iridium,500, chrome,400,corallite,300,spaclanium,300));
             regionSuffix = "-fortified";
@@ -500,7 +498,7 @@ public class SvBlocks{
                 outRegion = atlas.find(name + "-out", Subvoyage.ID +"factory-out-" + size + regionSuffix);
                 inRegion = atlas.find(name + "-in", Subvoyage.ID +"factory-in-" + size + regionSuffix);
             }
-        };
+        };*/
 
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chrome, 10));
@@ -2643,7 +2641,7 @@ public class SvBlocks{
             outputLiquid = new LiquidStack(helium,1.35f);
             hasLiquids = true;
         }};
-
+/*
         phosphidePhotosynthesizer = new LaserCrafter("phosphide-photosynthesizer") {{
             requirements(Category.crafting,atl(),with(spaclanium,100,iridium,50,clay,30)); //TODO: reqs
             //TODO: reserach cost
@@ -2792,7 +2790,7 @@ public class SvBlocks{
             hasItems = true;
             hasLiquids = true;
             hasPower = true;
-        }};
+        }};*/
     }
 
     public static BuildVisibility atl(BuildVisibility v){

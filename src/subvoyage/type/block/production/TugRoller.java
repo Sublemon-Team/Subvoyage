@@ -7,10 +7,11 @@ import arc.struct.*;
 import arc.util.*;
 import mindustry.*;
 import mindustry.type.*;
+import mindustry.world.blocks.production.GenericCrafter;
 import subvoyage.content.SvItems;
-import subvoyage.type.block.laser_old_blocks.LaserCrafter;
 
-public class TugRoller extends LaserCrafter {
+
+public class TugRoller extends GenericCrafter {
     public float sinMag = 4f, sinScl = 10f, sideOffset = 0f, lenOffset = -1f, horiOffset = 0f, angleOffset = 0f;
     public TextureRegion region1, region2, bottom, pistons;
 
@@ -32,7 +33,7 @@ public class TugRoller extends LaserCrafter {
         return new TextureRegion[] {bottom,pistons,region};
     }
 
-    public class TugRollerBuild extends LaserCrafterBuild{
+    public class TugRollerBuild extends GenericCrafterBuild {
         Seq<ItemParticle> particles = new Seq<>();
 
         @Override
