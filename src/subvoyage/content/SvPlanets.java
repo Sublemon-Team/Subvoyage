@@ -1,7 +1,6 @@
 package subvoyage.content;
 
 import arc.graphics.*;
-import arc.struct.*;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.*;

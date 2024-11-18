@@ -4,7 +4,6 @@ import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.Image;
 import arc.scene.ui.layout.Cell;
 import arc.util.Align;
-import arc.util.Scaling;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 
 import static arc.Core.atlas;
@@ -27,6 +26,7 @@ public class IconPref extends SettingsMenuDialog.SettingsTable.Setting {
         if(width > 0){
             ci.margin(0);
             ci.width(width);
+            //noinspection SuspiciousNameCombination
             ci.height(width);
         }else{
             ci.grow();

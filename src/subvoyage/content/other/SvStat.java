@@ -1,7 +1,5 @@
 package subvoyage.content.other;
 
-import arc.Core;
-import mindustry.gen.Iconc;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatCat;
 import mindustry.world.meta.StatUnit;

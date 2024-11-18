@@ -19,7 +19,6 @@ import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.type.block.laser.LaserUtil;
 
 import static mindustry.Vars.*;
-import static mindustry.Vars.player;
 
 public class LaserGenerator extends Block implements LaserBlock {
     public TextureRegion heatRegion;

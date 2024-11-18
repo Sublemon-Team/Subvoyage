@@ -1,6 +1,5 @@
 package subvoyage.draw.block;
 
-import mindustry.graphics.Layer;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.util.*;

@@ -8,14 +8,11 @@ import arc.util.Time;
 import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
-import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
-import mindustry.logic.Ranged;
 import mindustry.world.blocks.defense.OverdriveProjector;
 import subvoyage.utility.SvMath;
 
 import static mindustry.Vars.*;
-import static mindustry.Vars.tilesize;
 
 public class OverdriveSquareProjector extends OverdriveProjector {
     public OverdriveSquareProjector(String name) {

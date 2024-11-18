@@ -12,7 +12,6 @@ import static mindustry.type.ItemStack.mult;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.BalanceStates.*;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.SvItems.tugSheet;
 import static subvoyage.content.block.SvBlocks.atl;
 
 public class SvDefense {

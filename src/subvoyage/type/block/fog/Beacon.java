@@ -9,7 +9,6 @@ import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.*;
 import mindustry.*;
-import mindustry.content.*;
 import mindustry.entities.Units;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -74,7 +73,7 @@ public class Beacon extends RepairTurret {
 
         @Override
         public void updateConsumption() {
-            discover.update(this);;
+            discover.update(this);
         }
 
         @Override

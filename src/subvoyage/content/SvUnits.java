@@ -12,9 +12,7 @@ import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
-import mindustry.entities.pattern.ShootAlternate;
 import mindustry.entities.pattern.ShootBarrel;
-import mindustry.entities.pattern.ShootSpread;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -1616,7 +1614,6 @@ public class SvUnits{
                 cooldownTime = reload;
 
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -1767,7 +1764,6 @@ public class SvUnits{
                     layerOffset = 0.015f;
 
                     bullet = new BulletType(){{
-                        shootEffect = Fx.sparkShoot;
                         smokeEffect = Fx.shootSmokeTitan;
 
                         hitColor = Pal.suppress;
@@ -1937,7 +1933,6 @@ public class SvUnits{
                 layerOffset = 0.015f;
 
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -2190,7 +2185,6 @@ public class SvUnits{
             }});
             weapons.add(new HydromechWeapon(name+"-weapon") {{
                 layerOffset = -0.001f;
-                top = false;
                 x = 58/4f;
                 y = 8/4f;
                 rotate = true;
@@ -2207,7 +2201,6 @@ public class SvUnits{
 
                 heatColor = Color.red;
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -2287,7 +2280,6 @@ public class SvUnits{
                                 fragSpread = 90f;
                                 fragVelocityMin = fragVelocityMax = 1f;
                                 fragBullet = new BulletType() {{
-                                    shootEffect = Fx.sparkShoot;
                                     smokeEffect = Fx.shootSmokeTitan;
 
                                     hitColor = Pal.suppress;
@@ -2750,7 +2742,7 @@ public class SvUnits{
             setEnginesMirror(
                     new UnitEngine(24 / 4f, -24 / 4f, 2.3f, 315f)
             );
-        }};;
+        }};
 
         pisun = new AtlacianUnitType("assembler-drone"){{
             controller = u -> new AssemblerAI();

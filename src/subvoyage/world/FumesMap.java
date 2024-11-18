@@ -24,11 +24,6 @@ public class FumesMap {
     public transient Interval timer = new Interval(1);
 
     public float getWater(Tile tile) {
-        /*float v = tile.floor().attributes.get(hot) + state.rules.planet.defaultAttributes.get(hot)/2f;
-        v = Math.max(v,tile.floor().attributes.get()+ state.rules.planet.defaultAttributes.get(heat))/2f;
-        if(!tile.block().isAir()) v = Math.max(tile.block().attributes.get(hot)+state.rules.planet.defaultAttributes.get(hot)/2f,v);
-        if(!tile.block().isAir()) v = Math.max(tile.block().attributes.get(heat)+state.rules.planet.defaultAttributes.get(heat)/2f,v);
-        return v;*/
         float v = tile.floor().attributes.get(SvAttribute.sodilate);
         if(!tile.block().isAir()) v = 0;
         return v;
@@ -118,7 +113,7 @@ public class FumesMap {
         }
 
         map = result;
-    };
+    }
 
     public void stop(){
         map = null;
@@ -133,7 +128,7 @@ public class FumesMap {
         if(map == null) return 0f;
         if(map.length < y*w+x || y*w*x < 0) return 0f;
         return map[y*w+x];
-    };
+    }
 
     public Texture toTexture() {
         if(textureMap != null) return textureMap;
@@ -148,5 +143,5 @@ public class FumesMap {
         }
         textureMap = new Texture(Pixmaps.scale(pixmap,pixmap.width*8,pixmap.height*8,true));
         return textureMap;
-    };
+    }
 }

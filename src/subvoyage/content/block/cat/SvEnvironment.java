@@ -32,7 +32,7 @@ public class SvEnvironment {
 
     public static void load() {
         hardWater = new Floor("hard-water"){
-            public Block parent = Blocks.air;
+            public Block parent;
             {
                 speedMultiplier = 0.9f;
                 variants = 0;
@@ -61,7 +61,7 @@ public class SvEnvironment {
             }
         };
         darkHardWater = new Floor("dark-hard-water"){
-            public Block parent = Blocks.air;
+            public Block parent;
             {
                 speedMultiplier = 0.9f;
                 variants = 0;

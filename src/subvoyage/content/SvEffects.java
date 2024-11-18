@@ -1,8 +1,6 @@
 package subvoyage.content;
 
 import mindustry.content.Fx;
-import mindustry.content.StatusEffects;
-import mindustry.graphics.Pal;
 import mindustry.type.StatusEffect;
 import subvoyage.content.other.SvPal;
 

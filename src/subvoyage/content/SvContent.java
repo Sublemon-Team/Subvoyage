@@ -1,9 +1,6 @@
 package subvoyage.content;
 
-import mindustry.world.Block;
-import subvoyage.anno.LoadAnnoProcessor;
 import subvoyage.content.block.SvBlocks;
-import subvoyage.content.block.cat.SvEnvironment;
 import subvoyage.content.other.SvLoadouts;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.content.sound.SvSounds;

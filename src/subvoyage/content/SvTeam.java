@@ -2,11 +2,7 @@ package subvoyage.content;
 
 import arc.graphics.Color;
 import arc.struct.Seq;
-import arc.util.Reflect;
-import arc.util.Structs;
 import mindustry.game.Team;
-
-import java.lang.reflect.Field;
 
 public class SvTeam {
     public static Seq<Team> all = Seq.with();

@@ -21,7 +21,7 @@ public class VersionControl {
             Integer reV = releaseVersion[i];
             if(orV == null) orV = 0;
             if(reV == null) reV = 0;
-            if(reV > orV) {okay = false; break;};
+            if(reV > orV) {okay = false; break;}
         }
         return okay;
     }
@@ -39,7 +39,7 @@ public class VersionControl {
         String[] rawAttributes = Structs.remove(tag.split("-"),0);
         Arrays.stream(rawAttributes).map(e -> Objects.equals(e, "b") ? "beta" : (Objects.equals(e, "f") ? "fix" : e));
         return Arrays.stream(rawAttributes).map(e -> Attribute.valueOf(e.toUpperCase())).toArray(Attribute[]::new);
-    };
+    }
 
     public boolean isUpToDate(String originTag, String releaseTag) {
         originTag = originTag.replace("b","-beta"); originTag = originTag.replace("f","-fix");
@@ -51,5 +51,5 @@ public class VersionControl {
         boolean attributeUptd = areAttributeUpToDate(originTag,releaseTag);
         if(!attributeUptd) return false;
         return true;
-    };
+    }
 }

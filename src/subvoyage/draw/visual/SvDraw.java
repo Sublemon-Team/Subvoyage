@@ -9,7 +9,6 @@ import arc.graphics.gl.FrameBuffer;
 import arc.graphics.gl.Shader;
 import mindustry.graphics.CacheLayer;
 import mindustry.graphics.Layer;
-import mindustry.graphics.Shaders;
 import arc.math.*;
 import mindustry.*;
 
@@ -47,7 +46,7 @@ public class SvDraw {
         int h = Core.graphics.getHeight();
         Draw.flush();
         renderer.bloom.resize(w,h);
-        renderer.bloom.capture();;
+        renderer.bloom.capture();
         renderer.bloom.setBloomIntensity(intensity);
         draw.run();
         renderer.bloom.render();
@@ -59,7 +58,7 @@ public class SvDraw {
         Draw.z(z);
     }
 
-    private static float[] vertices = new float[24];
+    private static final float[] vertices = new float[24];
     /** {@link Fill#quad} with region and colors. */
     public static void quad(TextureRegion region, float x1, float y1, float c1, float x2, float y2, float c2, float x3, float y3, float c3, float x4, float y4, float c4){
         float u = region.u, v = region.v, u2 = region.u2, v2 = region.v2, mcolor = Draw.getMixColor().toFloatBits();

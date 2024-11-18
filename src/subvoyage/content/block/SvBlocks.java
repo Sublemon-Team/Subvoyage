@@ -1775,23 +1775,6 @@ public class SvBlocks{
             envDisabled |= Env.scorching;
         }};
 
-        /*coreDecrypter = new CoreDecoder("core-decrypter") {{
-            requirements(Category.effect,atl(),with(iridium,400,chromium,300,quartzFiber,250));
-
-            researchCost = with(iridium,1600,chromium,1000,quartzFiber,820);
-
-            health = 2560;
-            priority = TargetPriority.core;
-            fogRadius = 16;
-            size = 3;
-            consumePower(18f);
-            destructible = true;
-            envDisabled |= Env.scorching;
-            minAttempts = 50;
-            frequency = 80;
-            hackChance = 0.02f;
-        }};*/
-
         regenProjector = new MendProjector("regen-projector"){{
             requirements(Category.effect,atl(), with(spaclanium, 60, clay, 80, iridium, 10));
             researchCost = with(spaclanium,500,clay,280,iridium,100);
@@ -2165,7 +2148,7 @@ public class SvBlocks{
             protected TextureRegion[] icons(){
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
-        };;
+        };
 
         liquidContainer = new LiquidRouter("liquid-container"){{
             requirements(Category.liquid,atl(), with(corallite, 30, clay, 35));
@@ -2367,33 +2350,6 @@ public class SvBlocks{
             buildCostMultiplier = 0.8f;
             consumePower(3f/60f);
         }};
-
-        /*
-        unitCargoLoader = new UnitCargoLoader("unit-cargo-loader"){{
-            requirements(Category.distribution, with(Items.silicon, 80, Items.surgeAlloy, 50, Items.oxide, 20));
-
-            size = 3;
-            buildTime = 60f * 8f;
-
-            consumePower(8f / 60f);
-
-            //intentionally set absurdly high to make this block not overpowered
-            consumeLiquid(Liquids.nitrogen, 10f / 60f);
-
-            itemCapacity = 200;
-            researchCost = with(Items.silicon, 2500, Items.surgeAlloy, 20, Items.oxide, 30);
-        }};
-
-        unitCargoUnloadPoint = new UnitCargoUnloadPoint("unit-cargo-unload-point"){{
-            requirements(Category.distribution, with(Items.silicon, 60, Items.tungsten, 60));
-
-            size = 2;
-
-            itemCapacity = 100;
-
-            researchCost = with(Items.silicon, 3000, Items.oxide, 20);
-        }};
-         */
 
         shipCargoStation = new UnitCargoLoader("ship-cargo-station"){{
             requirements(Category.distribution,atl(),with(iridium,100,clay,200));

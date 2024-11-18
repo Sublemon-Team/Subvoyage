@@ -29,7 +29,7 @@ public class LegionfieldAbility extends Ability {
 
     public LegionfieldAbility() {
 
-    };
+    }
 
     @Override
     public void addStats(Table t) {
@@ -127,10 +127,11 @@ public class LegionfieldAbility extends Ability {
     @Override
     public void draw(Unit unit) {
         if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team))) {
+            float z = Draw.z();
             Draw.z(Layer.shields);
             Lines.stroke(3f, unit.team.color);
             Lines.circle(point(unit.team).x, point(unit.team).y, 8f + 8f * lastRadius(unit.team));
-            Draw.z();
+            Draw.z(z);
             Draw.reset();
         }
     }

@@ -77,7 +77,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         }
 
         return ores;
-    };
+    }
 
 
     @Override
@@ -144,7 +144,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 }
                 return;
             }
-            return;
         });
         blend(archalyteStone,darkArchalyteStone,2f);
 
@@ -179,8 +178,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
         scatterBlock(Blocks.water,Blocks.yellowCoral,0.001f);
         scatterBlock(legartyteStone, hauntedTree, 0.005f/3f);
         scatterBlock(darkLegartyteStone, hauntedTree, 0.005f/3f);
-        //blendRand(agaryteWall,agaryteBoulder,2f,0.3f);
-        //blendRand(agaryteBoulder,agaryteBlocks,1f,0.2f);
 
         pass((x,y) -> {
             if(block == agaryteWall && rand.chance(0.23) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
@@ -222,7 +219,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                    ore = floorToWallOre.getOrDefault(entry,entry);
                    break;
                }
-           };
+           }
         });
 
         outer:

@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DrawColorWeave extends DrawBlock{
     public TextureRegion weave;
-    public Color color = SvPal.quartzWeave;
+    public Color color;
     public HashMap<Building,Float> degrees = new HashMap<>();
 
     public DrawColorWeave(Color color){

@@ -3,7 +3,6 @@ package subvoyage.content.block.cat;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
-import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.entities.TargetPriority;
@@ -24,7 +23,6 @@ import mindustry.world.consumers.ConsumeLiquidBase;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.block.SvAttribute;
-import subvoyage.content.other.SvPal;
 import subvoyage.type.block.production.*;
 
 import static arc.graphics.g2d.Draw.color;
@@ -32,7 +30,6 @@ import static mindustry.Vars.tilesize;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.SvItems.finesand;
 import static subvoyage.content.block.SvBlocks.atl;
 
 public class SvProduction {
@@ -201,9 +198,6 @@ public class SvProduction {
             envDisabled |= Env.scorching;
 
             pumpAmount = 32f/60f/4f;
-            //impactTime = 3f*60f;
-
-            //impactEffect = new MultiEffect(Fx.mineImpact.wrap(Color.white.cpy().a(0.3f)), Fx.mineImpactWave.wrap(SvPal.spaclanium.cpy().a(0.3f), 40f));
 
             consumeLiquid(hydrogen,4f/60f).boost();
         }};

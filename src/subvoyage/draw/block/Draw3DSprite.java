@@ -10,7 +10,6 @@ import mindustry.graphics.*;
 import mindustry.world.*;
 import mindustry.world.draw.*;
 import subvoyage.draw.visual.SvDraw;
-import subvoyage.utility.SvMath;
 
 // author: MEEPofFaith
 // link: https://github.com/MEEPofFaith/tantros-but-java

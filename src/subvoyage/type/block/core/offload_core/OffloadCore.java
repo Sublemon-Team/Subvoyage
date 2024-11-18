@@ -270,7 +270,7 @@ public class OffloadCore extends CoreBlock implements IOffload {
         public float calculateDamage(float damage) {
             float delta = (float) shieldLayers /minShieldLayers;
             return damage * (1f-(delta))/2f;
-        };
+        }
 
         public void recalculateStats() {
             shieldLayers = Mathf.clamp(shieldLayers,minShieldLayers,maxShieldLayers);

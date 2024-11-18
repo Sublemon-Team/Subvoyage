@@ -97,7 +97,7 @@ public class WaterSifter extends Block {
             case 3 -> tile.nearby(0,-1) != null && tile.nearby(0,-1).block() == this;
             default -> throw new IllegalStateException("Unexpected value: " + dir);
         };
-    };
+    }
 
     public Item getPopulatedOreItem(Tile tile) {
         List<Item> candidates = new ArrayList<>();
@@ -125,7 +125,7 @@ public class WaterSifter extends Block {
             }
         }
         return frequentItem;
-    };
+    }
 
     @Nullable
     public Item getPopulatedOreItemCached(int x, int y) {
@@ -134,7 +134,7 @@ public class WaterSifter extends Block {
         if(!populatedOres.containsKey(pos)) populatedOres.put(pos,getPopulatedOreItem(world.tile(x,y)));
         item = populatedOres.get(pos);
         return item;
-    };
+    }
 
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {

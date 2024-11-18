@@ -254,7 +254,7 @@ public class SvFx{
         float intensity = 2f;
         color(b.color, 0.7f);
         for(int i = 0; i < 4; i++){
-            rand.setSeed(b.id * 2 + i);
+            rand.setSeed(b.id * 2L + i);
             float lenScl = rand.random(0.5f, 1f);
             int fi = i;
             b.scaled(b.lifetime * lenScl, e -> {
@@ -274,7 +274,7 @@ public class SvFx{
         float intensity = 2f;
         color(b.color, 0.5f);
         for(int i = 0; i < 4; i++){
-            rand.setSeed(b.id*2 + i);
+            rand.setSeed(b.id* 2L + i);
             float lenScl = rand.random(0.5f, 1f);
             int fi = i;
             b.scaled(b.lifetime * lenScl, e -> randLenVectors(e.id + fi - 1, e.fin(Interp.pow10Out), (int)(1.25f * intensity), 3 * intensity, (x, y, in, out) -> {

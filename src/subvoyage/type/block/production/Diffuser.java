@@ -1,7 +1,6 @@
 package subvoyage.type.block.production;
 
 import arc.Core;
-import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
 import arc.struct.Seq;

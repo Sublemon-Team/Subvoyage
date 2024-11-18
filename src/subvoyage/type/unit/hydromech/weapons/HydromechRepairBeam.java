@@ -22,7 +22,6 @@ import subvoyage.type.unit.hydromech.HydromechUnitEntity;
 import subvoyage.type.unit.hydromech.custom.HydromechState;
 
 import static mindustry.Vars.*;
-import static mindustry.Vars.tilesize;
 
 public class HydromechRepairBeam extends RepairBeamWeapon {
 
@@ -207,9 +206,6 @@ public class HydromechRepairBeam extends RepairBeamWeapon {
                     }
                     return false;
                 });
-            }
-            if(targetUnits){
-
             }
         }
 

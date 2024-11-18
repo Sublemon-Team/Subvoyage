@@ -2,12 +2,8 @@ package subvoyage.content;
 
 import arc.Core;
 import arc.func.Prov;
-import arc.math.geom.Point2;
-import mindustry.content.Blocks;
 import mindustry.editor.MapObjectivesDialog;
 import mindustry.game.MapObjectives;
-import mindustry.game.Team;
-import mindustry.world.Block;
 import subvoyage.content.block.SvBlocks;
 
 import static mindustry.Vars.*;

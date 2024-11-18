@@ -2,11 +2,7 @@ package subvoyage;
 
 import arc.Core;
 import arc.func.Boolc;
-import arc.struct.Seq;
-import arc.util.Log;
 import mindustry.content.TechTree;
-import mindustry.ctype.UnlockableContent;
-import mindustry.game.Saves;
 import mindustry.gen.Icon;
 import mindustry.type.Planet;
 import mindustry.ui.dialogs.SettingsMenuDialog;

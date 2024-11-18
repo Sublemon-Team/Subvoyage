@@ -6,7 +6,6 @@ import arc.graphics.g2d.TextureRegion;
 import arc.struct.Seq;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
 import mindustry.world.Block;
 import mindustry.world.draw.DrawRegion;
 

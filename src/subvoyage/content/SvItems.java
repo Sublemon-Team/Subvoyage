@@ -37,7 +37,7 @@ public class SvItems{
         propane = gas("propane",SvPal.propane,0.4f,0.6f);
         helium = gas("helium",SvPal.helium,0f,0.35f);
         hydrogen = coolantGas("hydrogen",SvPal.hydrogen,0.55f,0.25f);
-    };
+    }
 
     public static Liquid coolantGas(String id, Color col, float cap, float temp) {
         return new Liquid(id,col) {{
@@ -63,7 +63,7 @@ public class SvItems{
 
     public static Item item(String id, Color col) {
         return item(id,col,1f);
-    };
+    }
 
     public static Item item(String id, Color col, float costArg) {
         Item item = new Item(id,col) {{
@@ -71,5 +71,5 @@ public class SvItems{
         }};
         atlacianItems.add(item);
         return item;
-    };
+    }
 }

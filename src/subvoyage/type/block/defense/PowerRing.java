@@ -6,7 +6,6 @@ import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
-import subvoyage.content.block.SvBlocks;
 import subvoyage.draw.visual.SvFx;
 
 import static mindustry.Vars.tilesize;

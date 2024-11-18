@@ -98,7 +98,7 @@ public class SvStorage {
             protected TextureRegion[] icons(){
                 return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
             }
-        };;
+        };
 
         liquidContainer = new LiquidRouter("liquid-container"){{
             requirements(Category.liquid,atl(), with(corallite, 30, clay, 35));

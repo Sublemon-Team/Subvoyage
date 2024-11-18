@@ -17,7 +17,6 @@ import mindustry.type.*;
 import mindustry.world.Tile;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.other.SvPal;
-import subvoyage.content.sound.SvMusic;
 import subvoyage.draw.visual.SvDraw;
 import subvoyage.draw.visual.SvShaders;
 
@@ -52,7 +51,7 @@ public class SubvoyageCoreBlock extends CoreBlock {
         camera.position.set(x,y);
     }
 
-    private static Vec2 vector = new Vec2();
+    private static final Vec2 vector = new Vec2();
     public static void dashCircleWavy(float x, float y, float radius) {
         float scaleFactor = 0.6F;
         int sides = 10 + (int)(radius * scaleFactor);

@@ -17,7 +17,6 @@ import subvoyage.type.block.fog.Buoy;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.SvItems.argon;
 import static subvoyage.content.SvUnits.*;
 import static subvoyage.content.block.SvBlocks.atl;
 
@@ -144,5 +143,5 @@ public class SvSpecial {
             destructible = true;
             envDisabled |= Env.scorching;
         }};
-    };
+    }
 }

@@ -2,7 +2,6 @@ package subvoyage.content;
 
 import arc.util.Time;
 import mindustry.content.StatusEffects;
-import mindustry.content.Weathers;
 import mindustry.gen.Groups;
 import mindustry.gen.Sounds;
 import mindustry.gen.Unit;

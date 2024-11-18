@@ -383,7 +383,7 @@ public class HydromechUnitEntity extends LegsUnit {
                         break label416;
                     }
 
-                    StatusEntry entry = (StatusEntry)this.statuses.get(index++);
+                    StatusEntry entry = this.statuses.get(index++);
                     entry.time = Math.max(entry.time - Time.delta, 0.0F);
                     if (entry.effect != null && (!(entry.time <= 0.0F) || entry.effect.permanent)) {
                         this.applied.set(entry.effect.id);

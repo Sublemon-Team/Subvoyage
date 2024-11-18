@@ -22,8 +22,6 @@ public class SvSounds {
                 throw new RuntimeException(e);
             }
         }
-        //flashExplosion = loadSound("flashExplosion");
-        //poweredMissileShoot = loadSound("poweredMissileShoot");
     }
 
     private static Sound loadSound(String soundName){
@@ -42,4 +40,4 @@ public class SvSounds {
             return new Sound();
         }
     }
-};
+}

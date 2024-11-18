@@ -1,5 +1,6 @@
 package subvoyage.content.block.cat;
 
+import arc.struct.IntSeq;
 import arc.struct.Seq;
 import mindustry.type.Category;
 import mindustry.type.PayloadStack;
@@ -11,18 +12,16 @@ import mindustry.world.blocks.payloads.PayloadRouter;
 import mindustry.world.blocks.payloads.PayloadUnloader;
 import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.blocks.units.UnitAssembler;
+import mindustry.world.blocks.units.UnitAssemblerModule;
 import mindustry.world.blocks.units.UnitFactory;
 import subvoyage.Subvoyage;
 import subvoyage.type.block.distribution.PayloadLaunchPad;
-import subvoyage.type.block.laser_old_blocks.unit.LaserReconstructor;
-import subvoyage.type.block.laser_old_blocks.unit.LaserUnitAssembler;
-import subvoyage.type.block.laser_old_blocks.unit.LaserUnitAssemblerModule;
+import subvoyage.type.block.laser.blocks.*;
 
 import static arc.Core.atlas;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
 import static subvoyage.content.SvUnits.*;
-import static subvoyage.content.SvUnits.vanguard;
 import static subvoyage.content.block.SvBlocks.atl;
 
 public class SvPayload {
@@ -136,10 +135,12 @@ public class SvPayload {
             researchCost = with(iridium,3000, chrome,3000,corallite,4000,spaclanium,3500);
             constructTime = 60f * 40f;
             size = 5;
+
             inputRange = 16;
             maxSuppliers = 1;
-            minLaserEfficiency = 0.95f;
-            setLaserInputs(1,2,3);
+            laserMaxEfficiency = 1.5f;
+            inputs = IntSeq.with(1,2,3);
+            laserRequirement = 10f;
 
             upgrades.addAll(
                     new UnitType[]{flagshi, vanguard},
@@ -149,7 +150,6 @@ public class SvPayload {
             hasLiquids = true;
             liquidCapacity = 5*60f*2f;
 
-            consumeLaserPower(10f);
             consumePower(5f);
             consumeLiquid(helium, 5f / 60f);
             consumeLiquid(argon, 5f / 60f);
@@ -172,13 +172,12 @@ public class SvPayload {
             consumeItem(iridium, 20);
             consumeItem(clay,20);
 
-            setLaserInputs(1,2,3);
+            inputRange = 16;
             maxSuppliers = 1;
-            inputRange = 8;
-
+            laserMaxEfficiency = 1.25f;
+            inputs = IntSeq.with(1,2,3);
             consumeLaserTier0 = 40f;
             consumeLaserTier1 = 140f;
-            minLaserEfficiency = 0.95f;
 
             dronesCreated = 4;
             droneType = pisun;
@@ -196,11 +195,11 @@ public class SvPayload {
 
             consumeLaserTier0 = 40f;
             consumeLaserTier1 = 140f;
-            minLaserEfficiency = 0.95f;
 
-            setLaserInputs(1,2,3);
+            inputRange = 16;
             maxSuppliers = 1;
-            inputRange = 8;
+            laserMaxEfficiency = 1.25f;
+            inputs = IntSeq.with(1,2,3);
 
             consumePower(3.5f);
             consumeLiquid(helium, 12f / 60f);
@@ -210,7 +209,7 @@ public class SvPayload {
             dronesCreated = ((LaserUnitAssembler) helicopterAssembler).dronesCreated;
         }};
 
-        assemblyModule = new LaserUnitAssemblerModule("assembly-module") {{
+        assemblyModule = new UnitAssemblerModule("assembly-module") {{
             requirements(Category.units, atl(), with(iridium,1200,quartzFiber,1200,spaclanium,1200, chrome,1200));
             consumePower(4f);
             regionSuffix = "-fortified";
@@ -296,5 +295,5 @@ public class SvPayload {
             squareSprite = false;
             consumePower(0.5f);
         }};
-    };
+    }
 }

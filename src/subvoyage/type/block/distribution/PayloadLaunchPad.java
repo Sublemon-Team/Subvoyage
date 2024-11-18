@@ -10,7 +10,6 @@ import arc.math.geom.Point2;
 import arc.struct.Queue;
 import arc.util.Eachable;
 import arc.util.Time;
-import arc.util.Timer;
 import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
@@ -24,7 +23,6 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
-import mindustry.world.blocks.payloads.BuildPayload;
 import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.PayloadBlock;
 import mindustry.world.blocks.payloads.PayloadMassDriver;
@@ -196,7 +194,6 @@ public class PayloadLaunchPad extends PayloadBlock {
             if(state == accepting) {
                 if(currentShooter() == null || payload != null){
                     state = idle;
-                    return;
                 }
             } else if (state == shooting) {
                 //if there's nothing to shoot at OR someone wants to shoot at this thing, bail

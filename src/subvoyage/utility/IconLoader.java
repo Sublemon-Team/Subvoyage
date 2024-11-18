@@ -39,9 +39,6 @@ public class IconLoader {
                     continue;
                 }
 
-                //unicodeIcons.put(nametex[0], ch);
-                //stringIcons.put(nametex[0], ((char)ch) + "");
-
                 Vec2 out = Scaling.fit.apply(region.width, region.height, size, size);
 
                 Font.Glyph glyph = new Font.Glyph();

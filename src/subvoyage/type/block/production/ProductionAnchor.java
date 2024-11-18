@@ -5,12 +5,10 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
 import arc.math.geom.Rect;
-import arc.math.geom.Vec2;
 import arc.scene.ui.layout.Scl;
 import arc.util.Align;
 import arc.util.Nullable;
@@ -19,20 +17,17 @@ import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
-import mindustry.content.Fx;
 import mindustry.game.Team;
 import mindustry.gen.Building;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
-import mindustry.type.UnitType;
 import mindustry.ui.Fonts;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.SvItems;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.draw.visual.SvDraw;
 import subvoyage.draw.visual.SvFx;
@@ -158,7 +153,7 @@ public class ProductionAnchor extends Block {
                     deposit = true;
                     sent = false;
                     items.each((i,c) -> {
-                        targetCore.handleStack(i,c,this);;
+                        targetCore.handleStack(i,c,this);
                     }); 
                     items.clear();
                 }
@@ -168,7 +163,7 @@ public class ProductionAnchor extends Block {
 
         @Override
         public boolean allowUpdate() {
-            return this.block.supportsEnv(Vars.state.rules.env) && (!Vars.state.rules.limitMapArea || !Vars.state.rules.disableOutsideArea || Rect.contains((float)Vars.state.rules.limitX, (float)Vars.state.rules.limitY, (float)Vars.state.rules.limitWidth, (float)Vars.state.rules.limitHeight, (float)this.tile.x, (float)this.tile.y));
+            return this.block.supportsEnv(Vars.state.rules.env) && (!Vars.state.rules.limitMapArea || !Vars.state.rules.disableOutsideArea || Rect.contains((float)Vars.state.rules.limitX, (float)Vars.state.rules.limitY, (float)Vars.state.rules.limitWidth, (float)Vars.state.rules.limitHeight, this.tile.x, this.tile.y));
         }
 
         float teamProgress = 0f;

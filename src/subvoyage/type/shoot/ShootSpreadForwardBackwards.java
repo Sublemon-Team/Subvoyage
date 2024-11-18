@@ -1,6 +1,5 @@
 package subvoyage.type.shoot;
 
-import arc.math.Mathf;
 import arc.util.Nullable;
 import arc.util.Time;
 import mindustry.entities.pattern.ShootPattern;

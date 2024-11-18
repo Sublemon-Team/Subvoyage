@@ -1,10 +1,6 @@
 package subvoyage.type.shoot;
 
-import arc.math.Mathf;
 import mindustry.entities.pattern.ShootPattern;
-import mindustry.entities.pattern.ShootSpread;
-
-import static mindustry.Vars.tilesize;
 
 public class ShootUpsurge extends ShootPattern {
     @Override

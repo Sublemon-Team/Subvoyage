@@ -32,19 +32,9 @@ public class CrudeSmelter extends GenericCrafter {
     public void setStats() {
         //stats.timePeriod = craftTime;
         super.setStats();
-        /*if((hasItems && itemCapacity > 0) || outputItems != null){
-            stats.add(Stat.productionTime, craftTime / 60f, StatUnit.seconds);
-        }*/
         for (CrudeSmelterRecipe v : recipes.values()) {
             stats.add(Stat.output,StatValues.items(v.craftTime,v.outputItem));
         }
-        /*if(outputItems != null){
-            stats.add(Stat.output, StatValues.items(craftTime, outputItems));
-        }
-
-        if(outputLiquids != null){
-            stats.add(Stat.output, StatValues.liquids(1f, outputLiquids));
-        }*/
     }
 
     @Override

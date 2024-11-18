@@ -16,18 +16,14 @@ import arc.util.Tmp;
 import mindustry.entities.UnitSorts;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
-import mindustry.entities.part.DrawPart;
 import mindustry.game.Team;
 import mindustry.gen.Posc;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.BaseTurret;
-import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.consumers.ConsumeLiquidBase;
 import mindustry.world.draw.DrawBlock;
-import mindustry.world.draw.DrawTurret;
-import mindustry.world.meta.BlockFlag;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatValues;
 
@@ -35,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static mindustry.Vars.*;
-import static subvoyage.draw.visual.SvFx.rand;
 
 public class PowerRingTurret extends BaseTurret {
     public final int timerTarget = timers++;
@@ -205,10 +200,6 @@ public class PowerRingTurret extends BaseTurret {
                     Tmp.v1.trns(ring.angle,ringMovementSpeed*delta());
                     ring.x += Tmp.v1.x;
                     ring.y += Tmp.v1.y;
-                    /*ring.x = Mathf.approachDelta(ring.x,ring.targetX,ringMovementSpeed*8f);
-                    ring.targetX += Mathf.sinDeg((Time.time)%360)*(1f-ringAccuracy)*Time.delta * 1f;
-                    ring.y = Mathf.approachDelta(ring.y,ring.targetY,ringMovementSpeed*8f);
-                    ring.targetY += Mathf.cosDeg((Time.time)%360)*(1f-ringAccuracy)*Time.delta * 1f;*/
                     if(Mathf.within(ring.x,ring.y,ring.targetX,ring.targetY,rr)) {
                         ring.charge += delta()/ringChargeTime;
                     } else {
@@ -283,7 +274,7 @@ public class PowerRingTurret extends BaseTurret {
         public float warmup() {
             int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
             int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
-            return (float) smoothWarmup;
+            return smoothWarmup;
         }
 
         public float boost() {

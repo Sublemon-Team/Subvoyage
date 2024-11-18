@@ -47,5 +47,5 @@ public interface LaserBuild {
         } catch (StackOverflowError e) {
             return 0f;
         }
-    };
+    }
 }

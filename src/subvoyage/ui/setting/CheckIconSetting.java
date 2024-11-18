@@ -3,14 +3,10 @@ package subvoyage.ui.setting;
 import arc.Core;
 import arc.func.Boolc;
 import arc.scene.Element;
-import arc.scene.event.Touchable;
 import arc.scene.style.TextureRegionDrawable;
 import arc.scene.ui.CheckBox;
 import arc.scene.ui.Image;
-import arc.scene.ui.layout.Cell;
 import arc.scene.ui.layout.Table;
-import arc.util.Align;
-import mindustry.ui.Styles;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 
 import static arc.Core.atlas;

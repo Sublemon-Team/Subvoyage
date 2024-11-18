@@ -107,7 +107,7 @@ public class TugRoller extends LaserCrafter {
 
             for(int i = 0; i < 2; i++){
                 float len = Mathf.absin(progress*90 + sideOffset * i, sinScl, sinMag) + lenOffset;
-                float thisLen = 0f;
+                float thisLen;
                 if(i == 0) {
                     curLen1 = Mathf.lerp(curLen1,len,Time.delta/5);
                     thisLen = curLen1;

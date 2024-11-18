@@ -33,7 +33,8 @@ public class TreeBlock extends Block{
     public void drawBase(Tile tile){
         rand.setSeed(tile.pos());
         float offset = rand.random(180f);
-        int lobes = rand.random(lobesMin, lobesMax);
+        rand.random(lobesMin, lobesMax);
+        int lobes;
         lobes = 1;
         for(int i = 0; i < lobes; i++){
             float ba = i / (float)lobes * 360f + offset + rand.range(spread), angle = ba + Mathf.sin(Time.time + rand.random(0, timeRange), rand.random(sclMin, sclMax), rand.random(magMin, magMax));

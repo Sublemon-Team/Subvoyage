@@ -6,7 +6,6 @@ import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
-import arc.math.geom.Geometry;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
 import arc.struct.Seq;
@@ -32,8 +31,6 @@ import mindustry.world.blocks.power.PowerBlock;
 import subvoyage.content.other.SvPal;
 import subvoyage.utility.SvMath;
 import subvoyage.utility.Var;
-
-import java.util.Objects;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
@@ -288,9 +285,8 @@ public class PowerBubbleNode extends PowerBlock {
             }
 
             if (this.block.configurations.containsKey(type)) {
-                ((Cons2)this.block.configurations.get(type)).get(this, value);
-            } else if (value instanceof Building) {
-                Building build = (Building)value;
+                this.block.configurations.get(type).get(this, value);
+            } else if (value instanceof Building build) {
                 Object conf = build.config();
                 if (conf != null && !(conf instanceof Building)) {
                     this.configured(builder, conf);

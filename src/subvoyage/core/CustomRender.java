@@ -4,7 +4,6 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.gl.FrameBuffer;
-import mindustry.ai.types.HugAI;
 import mindustry.graphics.Layer;
 import subvoyage.SvVars;
 import subvoyage.draw.visual.SvShaders;
@@ -12,7 +11,6 @@ import subvoyage.type.block.core.SubvoyageCoreBlock;
 
 import static arc.Core.camera;
 import static mindustry.Vars.player;
-import static mindustry.Vars.renderer;
 
 public class CustomRender {
     public static FrameBuffer buffer;

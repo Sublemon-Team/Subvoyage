@@ -1,30 +1,18 @@
 package subvoyage;
 
 import arc.*;
-import arc.func.Boolc;
-import arc.graphics.gl.FrameBuffer;
-import arc.struct.*;
 import arc.util.*;
-import mindustry.content.*;
-import mindustry.ctype.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
-import mindustry.gen.*;
 import mindustry.mod.*;
-import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.*;
 import subvoyage.core.CustomRender;
 import subvoyage.core.Logic;
 import subvoyage.draw.visual.*;
-import subvoyage.ui.setting.*;
 import subvoyage.utility.*;
 import subvoyage.world.techtree.*;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import static arc.Core.*;
-import static mindustry.Vars.*;
-import static subvoyage.content.SvPlanets.atlacian;
 
 public class Subvoyage extends Mod {
     public static String ID = "subvoyage";

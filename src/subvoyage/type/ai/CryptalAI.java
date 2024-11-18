@@ -40,7 +40,7 @@ public class CryptalAI extends FlyingAI {
                             SvFx.point.create(unit.x,unit.y,0,Pal.redLight,new Object());
                             SvFx.point.create(of.x,of.y,0,Pal.redLight,new Object());
                             SvFx.beam.create(of.x,of.y,0,Pal.redLight,new float[] {unit.x,unit.y,of.x,of.y});
-                        };
+                        }
                         unit.kill();
                         mount.warmup = 0f;
                     }
@@ -68,6 +68,7 @@ public class CryptalAI extends FlyingAI {
         return core;
     }
 
+    @SuppressWarnings("deprecation")
     public Teamc targetFlag(float x, float y, BlockFlag flag, boolean enemy, boolean offload) {
         if (unit.team == Team.derelict) return null;
         Seq<Building>   found = enemy ? indexer.getEnemy(unit.team, flag) : indexer.getFlagged(unit.team, flag);

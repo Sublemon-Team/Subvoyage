@@ -1,13 +1,11 @@
 package subvoyage.type.block.wall;
 
 import arc.Core;
-import arc.files.Fi;
 import arc.graphics.Blending;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
-import arc.math.geom.Vec2;
 import arc.util.Strings;
 import arc.util.Time;
 import arc.util.Tmp;
@@ -15,10 +13,8 @@ import mindustry.gen.Building;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.blocks.defense.Wall;
-import mindustry.world.blocks.power.PowerGenerator;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import mindustry.world.meta.StatValue;
 
 import static arc.Core.atlas;
 import static arc.Core.settings;
@@ -161,7 +157,8 @@ public class PhosphideWall extends Wall {
             Building b1 = world.build(x1,y1);
             Building b2 = world.build(x2,y2);
             return b2 instanceof PhosphideWallBuild && (b1 == b2);
-        };
+        }
+
         public boolean nearbyCornerWall(int rotation) {
             Tmp.v1.trns(rotation*90f,12f,12f).add(x,y);
 
@@ -171,8 +168,7 @@ public class PhosphideWall extends Wall {
             Building b1 = world.build(x1,y1);
 
             return b1 instanceof PhosphideWallBuild;
-        };
-
+        }
 
 
         @Override

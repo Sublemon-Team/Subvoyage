@@ -85,25 +85,6 @@ public class HelicopterUnitEntity extends UnitEntity {
         this.vel.add(tmp2.times(new Vec2(localAcceleration,localAcceleration)));
     }
 
-    /*@Override
-    public void move(float cx, float cy) {
-        EntityCollisions.SolidPred check = this.solidity();
-
-        if(cx*cy > 0.1f) localAcceleration += (Time.delta/60)*(localAcceleration+0.1f);
-        if(cx*cy > 0.1f) isAccelerating = true;
-        localAcceleration = Mathf.clamp(localAcceleration,0,1);
-
-        cx*=localAcceleration;
-        cy*=localAcceleration;
-
-        if (check != null) {
-            Vars.collisions.move(this, cx, cy, check);
-        } else {
-            this.x += cx;
-            this.y += cy;
-        }
-    }*/
-
     @Override
     public void movePref(Vec2 movement) {
         if (this.type.omniMovement) {

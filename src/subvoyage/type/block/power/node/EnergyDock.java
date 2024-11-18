@@ -101,8 +101,8 @@ public class EnergyDock extends PowerBlock {
                 newGraph.reflow(entity);
                 if(valid && other.power.graph != newGraph){
                     //create new graph for other end
-                    PowerGraph og = new EnergyDockPowerGraph();
-                    ((EnergyDockPowerGraph) og).transferTime = transferTime;
+                    EnergyDockPowerGraph og = new EnergyDockPowerGraph();
+                    og.transferTime = transferTime;
                     //reflow from other end
                     og.reflow(other);
                 }
@@ -466,8 +466,7 @@ public class EnergyDock extends PowerBlock {
 
                 //Log.warn("["+ new Date() +"] Created new energy dock graph for block at "+x+", "+y);
             }
-            if(!(power.graph instanceof EnergyDockPowerGraph)) return;
-            EnergyDockPowerGraph graph = (EnergyDockPowerGraph) power.graph;
+            if(!(power.graph instanceof EnergyDockPowerGraph graph)) return;
             float progress = graph.timePassed/graph.transferTime;
             boolean isInProgress = graph.isInProgress;
             for(int i = 0; i < power.links.size; i++){
