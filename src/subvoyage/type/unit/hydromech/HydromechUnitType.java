@@ -120,7 +120,6 @@ public class HydromechUnitType extends AtlacianUnitType {
             drawShield(unit);
         }
 
-        //TODO how/where do I draw under?
         if(parts.size > 0){
             for(int i = 0; i < parts.size; i++){
                 var part = parts.get(i);

@@ -39,9 +39,9 @@ public class SvProduction {
     public static Block
         diffuser, sifter,                 // water-based harvesting
         featherDrill, crudeDrill,      // drill harvesting
-        productionAnchor,
+        productionAnchor,   //special harvesting
 
-        centrifugalPump
+        centrifugalPump //liquids
         ;
 
 
@@ -200,7 +200,7 @@ public class SvProduction {
             squareSprite = false;
             envDisabled |= Env.scorching;
 
-            pumpAmount = 32f/4f;
+            pumpAmount = 32f/60f/4f;
             //impactTime = 3f*60f;
 
             //impactEffect = new MultiEffect(Fx.mineImpact.wrap(Color.white.cpy().a(0.3f)), Fx.mineImpactWave.wrap(SvPal.spaclanium.cpy().a(0.3f), 40f));

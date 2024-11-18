@@ -88,7 +88,7 @@ public class LaserPayloadBlock extends LaserBlock {
 
     public class LaserPayloadBlockBuild<T extends Payload> extends LaserBlockBuilding {
         public @Nullable T payload;
-        //TODO redundant; already stored in payload?
+
         public Vec2 payVector = new Vec2();
         public float payRotation;
         public boolean carried;

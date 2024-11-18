@@ -1880,7 +1880,6 @@ public class SvUnits{
                     }};
 
                     parts.add(new RegionPart("-blade"){{
-                        //todo barrel rotating
                         outlineLayerOffset = -0.001f;
                         layerOffset = 0.01f;
                         outline = true;
@@ -2050,7 +2049,6 @@ public class SvUnits{
                     };
                 }};
                 parts.add(new RegionPart("-blade"){{
-                    //todo barrel rotating
                     outlineLayerOffset = -0.001f;
                     layerOffset = 0.01f;
                     outline = true;

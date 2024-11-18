@@ -209,7 +209,7 @@ public class HydromechRepairBeam extends RepairBeamWeapon {
                 });
             }
             if(targetUnits){
-                //TODO does not support healing units manually yet
+
             }
         }
 

@@ -13,6 +13,8 @@ import arc.struct.Seq;
 import arc.util.Nullable;
 import arc.util.Time;
 import arc.util.Tmp;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.core.Renderer;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
@@ -306,6 +308,25 @@ public class PowerBubbleNode extends PowerBlock {
             link = value;
             hasLink = world.build(link) instanceof PowerBubbleNodeBuild;
             valid = checkRectangle();
+        }
+
+        @Override
+        public void write(Writes write) {
+            super.write(write);
+            write.i(link);
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            super.read(read, revision);
+            if(revision >= 1) {
+                setLink(read.i());
+            }
+        }
+
+        @Override
+        public byte version() {
+            return 1;
         }
     }
 }

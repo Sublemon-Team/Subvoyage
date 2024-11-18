@@ -141,7 +141,6 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 if(!floor.asFloor().isLiquid) floor = archalyteStone;
                 if(block.solid) {
                     block = archalyteWall;
-                    //todo: wall ores
                 }
                 return;
             }
@@ -191,6 +190,11 @@ public class AtlacianPlanetGen extends PlanetGenerator {
 
             if(block == sodilateWall && rand.chance(0.42) && nearAir(x, y) && !near(x, y, 3, sodilateBlocks)){
                 block = sodilateBlocks;
+                ore = Blocks.air;
+            }
+
+            if(block == archalyteWall && rand.chance(0.33) && nearAir(x, y)){
+                block = archalyteSpikes;
                 ore = Blocks.air;
             }
         });

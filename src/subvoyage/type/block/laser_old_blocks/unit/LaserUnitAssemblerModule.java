@@ -116,7 +116,7 @@ public class LaserUnitAssemblerModule extends LaserPayloadBlock {
 
         @Override
         public void drawSelect(){
-            //TODO draw area?
+
             if(link != null){
                 Drawf.selected(link, Pal.accent);
             }

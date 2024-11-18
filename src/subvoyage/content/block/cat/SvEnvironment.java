@@ -28,7 +28,7 @@ public class SvEnvironment {
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
-    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, archalyteBoulder, sodilateBoulder, sodilateBlocks, hauntedTree;
+    agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, archalyteBoulder, sodilateBoulder, sodilateBlocks, archalyteSpikes, hauntedTree;
 
     public static void load() {
         hardWater = new Floor("hard-water"){
@@ -217,6 +217,13 @@ public class SvEnvironment {
 
         sodilateBlocks = new TallBlock("sodilate-blocks") {{
             variants = 3;
+            clipSize = 128f;
+            shadowAlpha = 0.5f;
+            shadowOffset = -2.5f;
+            forceDark = true;
+        }};
+        archalyteSpikes = new TallBlock("archalyte-spikes") {{
+            variants = 2;
             clipSize = 128f;
             shadowAlpha = 0.5f;
             shadowOffset = -2.5f;

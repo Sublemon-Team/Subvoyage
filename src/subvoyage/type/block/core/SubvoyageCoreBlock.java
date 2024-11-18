@@ -1,38 +1,29 @@
 package subvoyage.type.block.core;
 
-import arc.Core;
 import arc.func.Boolp;
-import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
-import arc.graphics.gl.FrameBuffer;
 import arc.math.Interp;
 import arc.math.Mathf;
-import arc.math.geom.Circle;
 import arc.math.geom.Vec2;
 import arc.scene.ui.layout.Scl;
 import arc.struct.*;
 import arc.util.Reflect;
 import arc.util.Time;
-import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.Tile;
-import mindustry.world.blocks.campaign.LaunchPad;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.other.SvPal;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.draw.visual.SvDraw;
-import subvoyage.draw.visual.SvFx;
 import subvoyage.draw.visual.SvShaders;
 
 import static arc.Core.*;
 import static arc.graphics.g2d.Lines.line;
 import static mindustry.Vars.*;
-import static mindustry.logic.LAccess.progress;
 import static subvoyage.draw.visual.SvFx.rand;
 
 public class SubvoyageCoreBlock extends CoreBlock {
@@ -115,7 +106,6 @@ public class SubvoyageCoreBlock extends CoreBlock {
         public void update() {
             super.update();
             items.remove(Items.copper,1000);
-            SvMusic.theAtlacian.setVolume(settings.getInt("musicvol") / 150f);
         }
 
         @Override

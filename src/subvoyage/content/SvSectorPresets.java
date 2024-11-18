@@ -11,8 +11,6 @@ public class SvSectorPresets {
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-
-        //TODO UNCOMMENT WHEN SECTORS ARE RESTORED
         dive = new SectorPreset("divingPoint",atlacian,13) {{
             alwaysUnlocked = true;
 

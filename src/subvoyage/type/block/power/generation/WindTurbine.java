@@ -23,7 +23,6 @@ import java.util.*;
 
 import static mindustry.Vars.*;
 
-// TODO: rework rotations
 public class WindTurbine extends SolarGenerator {
     public TextureRegion rotator;
     public TextureRegion bottom;

@@ -294,7 +294,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                 if(mod.tier() == max || mod.tier() == max + 1){
                     max = mod.tier();
                 }else{
-                    //tier gap, TODO warning?
+
                     break;
                 }
             }
@@ -340,7 +340,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                 for(int i = 0; i < modules.size; i++){
                     var mod = modules.get(i);
                     if(prev == mod.block) continue;
-                    //TODO crosses for missing reqs?
+
                     t.image(mod.block.uiIcon).size(iconMed).padRight(4);
 
                     prev = mod.block;
@@ -418,7 +418,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                     unit.rotation = 90f;
                     unit.add();
                     units.add(unit);
-                    //TODO: Call.assemblerDroneSpawned(tile, unit.id);
+
                     SvCall.assemblerDroneSpawned(tile,unit.id);
                 }
             }
@@ -457,7 +457,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
                 warmup = Mathf.lerpDelta(warmup, efficiency, 0.1f);
 
                 if((progress += laserEfficiency() * delta() * state.rules.unitBuildSpeed(team) * eff / plan.time) >= 1f){
-                    //TODO: Call.assemblerUnitSpawned(tile);
+
                     SvCall.assemblerUnitSpawned(tile);
                 }
             }else{
@@ -530,7 +530,7 @@ public class LaserUnitAssembler extends LaserPayloadBlock {
             var plan = plan();
 
             //draw the unit construction as outline
-            //TODO flashes when no gallium
+
             Draw.draw(Layer.blockBuilding, () -> {
                 Draw.color(Pal.accent, warmup);
 

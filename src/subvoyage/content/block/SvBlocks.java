@@ -121,7 +121,12 @@ public class SvBlocks{
         SvProduction.load();
         SvCrafting.load();
         SvDistribution.load();
+        SvPayload.load();
+        SvSpecial.load();
+        SvTurret.load();
+        SvDefense.load();
         SvPower.load();
+        SvLaser.load();
     }
 
     public static void load() {
@@ -2834,7 +2839,7 @@ public class SvBlocks{
         }};
     }
 
-    static BuildVisibility atl(BuildVisibility v){
+    public static BuildVisibility atl(BuildVisibility v){
         return new BuildVisibility(() -> Vars.state == null || Vars.state.isMenu() || (v.visible() && Vars.state.rules.planet == SvPlanets.atlacian || Vars.state.rules.env == Environment.any || Vars.state.rules.planet == Planets.sun));
     }
 

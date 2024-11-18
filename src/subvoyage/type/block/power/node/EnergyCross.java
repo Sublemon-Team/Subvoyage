@@ -137,7 +137,6 @@ public class EnergyCross extends PowerBlock {
 
         @Override
         public void updateTile(){
-            //TODO this block technically does not need to update every frame, perhaps put it in a special list.
             if(lastChange != world.tileChanges){
                 lastChange = world.tileChanges;
                 updateDirections();
