@@ -54,6 +54,12 @@ public class LaserSplitter extends Block implements LaserBlock {
     }
 
     @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser_power",bar());
+    }
+
+    @Override
     public void drawDefaultPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
         TextureRegion reg = getPlanRegion(plan, list);
         Draw.rect(reg, plan.drawx(), plan.drawy(), 0f);

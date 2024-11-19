@@ -1,5 +1,7 @@
 package subvoyage.type.block.laser;
 
+import arc.Core;
+import arc.func.Func;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -9,11 +11,13 @@ import arc.math.geom.Geometry;
 import arc.math.geom.Point2;
 import arc.struct.IntSeq;
 import arc.struct.Seq;
+import arc.util.Strings;
 import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 
 import java.util.ArrayList;
@@ -100,6 +104,18 @@ public interface LaserBlock {
             }
         }
     }
+
+    default <T extends Building> Func<T, Bar> bar() {
+        return build -> {
+            if(build instanceof LaserBuild lb) {
+                return new Bar(
+                        () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(lb.rawLaser(), 1)),
+                        () -> LaserUtil.getLaserColor(lb.laser()),
+                        () -> Mathf.clamp(lb.rawLaser())
+                );
+            } else return new Bar();
+        };
+    };
 
     default void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity){
         float angle1 = Angles.angle(x1, y1, x2, y2),

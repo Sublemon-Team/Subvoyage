@@ -19,7 +19,7 @@ public class SvLaser {
 
     public static void load() {
         laserProjector = new LaserGenerator("laser-projector") {{
-            requirements(Category.production, atl(), with(iridium, 300, chrome, 200, spaclanium, 150));
+            requirements(Category.crafting, atl(), with(iridium, 300, chrome, 200, spaclanium, 150));
             laserOutput = 10f;
             outputRange = 5;
 
@@ -33,7 +33,7 @@ public class SvLaser {
         }};
 
         luminescentProjector = new LaserGenerator("luminescent-projector") {{
-            requirements(Category.production, atl(), with(iridium, 300, phosphide, 200, chrome, 50));
+            requirements(Category.crafting, atl(), with(iridium, 300, phosphide, 200, chrome, 50));
             laserOutput = 60f;
             maxSuppliers = 0;
             size = 3;
@@ -46,7 +46,7 @@ public class SvLaser {
         }};
 
         laserSource = new LaserGenerator("laser-source") {{
-            requirements(Category.production, atl(BuildVisibility.sandboxOnly), with());
+            requirements(Category.crafting, atl(BuildVisibility.sandboxOnly), with());
             laserOutput = 1000f;
             maxSuppliers = 0;
             size = 3;
@@ -56,7 +56,7 @@ public class SvLaser {
         }};
 
         laserNode = new LaserNode("laser-node") {{
-            requirements(Category.production, atl(), with(iridium, 30, chrome, 30));
+            requirements(Category.crafting, atl(), with(iridium, 30, chrome, 30));
             size = 3;
             maxSuppliers = 1;
             squareSprite = false;
@@ -71,7 +71,7 @@ public class SvLaser {
         }};
 
         laserAmplificator = new LaserAmplifier("laser-amplifier") {{
-            requirements(Category.production, atl(), with(iridium, 80, chrome, 80, spaclanium, 10));
+            requirements(Category.crafting, atl(), with(iridium, 80, chrome, 80, spaclanium, 10));
             size = 3;
             squareSprite = false;
 
@@ -86,7 +86,7 @@ public class SvLaser {
         }};
 
         laserSplitter = new LaserSplitter("laser-splitter") {{
-            requirements(Category.production, atl(), with(iridium, 50, chrome, 40, spaclanium, 10));
+            requirements(Category.crafting, atl(), with(iridium, 50, chrome, 40, spaclanium, 10));
             size = 3;
             maxSuppliers = 1;
 

@@ -1,10 +1,14 @@
 package subvoyage.type.block.laser;
 
+import arc.Core;
+import arc.func.Func;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
+import arc.util.Strings;
 import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import subvoyage.utility.Var;
 
 public interface LaserBuild {
@@ -18,7 +22,6 @@ public interface LaserBuild {
     boolean supplier();
 
     LaserGraph graph();
-
 
     default void drawStatus(Building building) {
         if(graph().broken()) {

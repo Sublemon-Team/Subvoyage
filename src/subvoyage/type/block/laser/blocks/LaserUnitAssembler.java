@@ -9,6 +9,7 @@ import arc.util.Strings;
 import mindustry.gen.Icon;
 import mindustry.graphics.Pal;
 import mindustry.type.PayloadStack;
+import mindustry.ui.Bar;
 import mindustry.ui.ItemImage;
 import mindustry.ui.Styles;
 import mindustry.world.blocks.production.GenericCrafter;
@@ -20,6 +21,7 @@ import subvoyage.content.other.SvStat;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
+import subvoyage.type.block.laser.LaserUtil;
 
 public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
     public float consumeLaserTier0 = 0f;
@@ -41,6 +43,19 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
 
     public LaserUnitAssembler(String name) {
         super(name);
+    }
+
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser", (entity) -> {
+            if(entity instanceof LaserBuild lb)
+                return new Bar(
+                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(entity.efficiencyScale() * 100.0F + 0.01F)),
+                        () -> LaserUtil.getLaserColor(lb.rawLaser()),
+                        () -> lb.laser() / lb.laserRequirement());
+            return new Bar();
+        });
     }
 
 

@@ -10,6 +10,7 @@ import arc.util.Eachable;
 import arc.util.Time;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.anno.LoadAnno;
@@ -60,6 +61,19 @@ public class LaserGenerator extends Block implements LaserBlock {
         super.init();
         clipSize = Math.max(clipSize, Math.max(inputRange(),outputRange()) * tilesize);
         capacity = laserOutput + 5f;
+    }
+
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser", (entity) -> {
+            if(entity instanceof LaserBuild lb)
+                return new Bar(
+                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(entity.efficiency() * 100.0F + 0.01F)),
+                        () -> LaserUtil.getLaserColor(lb.rawLaser()),
+                        () -> lb.laser() / laserOutput);
+            return new Bar();
+        });
     }
     @Override
     public void load() {

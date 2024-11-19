@@ -53,6 +53,12 @@ public class LaserAmplifier extends Block implements LaserBlock {
         drawArrow = false;
     }
 
+
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser_power",bar());
+    }
     @Override
     public void init() {
         super.init();

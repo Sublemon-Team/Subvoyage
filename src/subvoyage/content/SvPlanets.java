@@ -19,11 +19,10 @@ public class SvPlanets{
     public static Planet atlacian;
 
     public static void load() {
-
-        serpulo.orbitSpacing = 3f;
-        atlacian = new AtlacianPlanetType("atlacian", serpulo, 0.6f, 2) {{
+        atlacian = new AtlacianPlanetType("atlacian", sun, 0.6f, 2) {{
             generator = new AtlacianPlanetGen();
             meshLoader = () -> new HexMesh(this, 6);
+
             cloudMeshLoader = () -> new MultiMesh(
                     new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.15f), 2, 0.45f, 0.9f, 0.38f),
                     new HexSkyMesh(this, 1, 0.9f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.1f), 2, 0.45f, 1f, 0.41f),

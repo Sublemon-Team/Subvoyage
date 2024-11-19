@@ -1,11 +1,14 @@
 package subvoyage.type.block.laser.blocks;
 
+import arc.Core;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
+import mindustry.ui.Bar;
 import mindustry.world.blocks.units.Reconstructor;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
+import subvoyage.type.block.laser.LaserUtil;
 
 public class LaserReconstructor extends Reconstructor implements LaserBlock {
     public float laserRequirement = 0f;
@@ -28,6 +31,18 @@ public class LaserReconstructor extends Reconstructor implements LaserBlock {
         super(name);
     }
 
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser", (entity) -> {
+            if(entity instanceof LaserBuild lb)
+                return new Bar(
+                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(entity.efficiencyScale() * 100.0F + 0.01F)),
+                        () -> LaserUtil.getLaserColor(lb.rawLaser()),
+                        () -> lb.laser() / lb.laserRequirement());
+            return new Bar();
+        });
+    }
 
     @Override public short inputRange() {return inputRange;}
     @Override public short outputRange() {return outputRange;}
