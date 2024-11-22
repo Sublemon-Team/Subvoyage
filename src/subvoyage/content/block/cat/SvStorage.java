@@ -14,6 +14,7 @@ import subvoyage.type.block.core.SubvoyageCoreBlock;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
+import static subvoyage.content.SvUnits.commute;
 import static subvoyage.content.SvUnits.shift;
 import static subvoyage.content.block.SvBlocks.atl;
 
@@ -30,7 +31,7 @@ public class SvStorage {
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
-            unitType = shift;
+            unitType = commute;
             health = 4000;
             itemCapacity = 3000;
             size = 4;

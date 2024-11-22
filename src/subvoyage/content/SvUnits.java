@@ -2752,6 +2752,12 @@ public class SvUnits{
             engineSize = 8f;
             engineOffset = 40f/4f;
 
+            setEnginesMirror(new UnitEngine() {{
+                radius = 8f;
+                x = 0;
+                y = 40f/4f;
+            }});
+
             float BPS = 0.5f*4f;
             float damageMain = ROVER_T3_DPS/BPS;
             weapons.add(new Weapon(name+"-weapon") {{
@@ -2787,7 +2793,9 @@ public class SvUnits{
 
                     width = height = 16f;
                     trailLength = 8;
-                    trailWidth = 7f;
+                    trailWidth = 6f;
+
+                    hitEffect = Fx.none;
 
                     backColor = trailColor = hitColor = SvPal.phosphide;
                     frontColor = Color.white;
