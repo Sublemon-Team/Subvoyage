@@ -1,5 +1,6 @@
 package subvoyage.type.block.power.node;
 
+import arc.Core;
 import arc.func.Cons2;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
@@ -8,6 +9,7 @@ import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Intersector;
 import arc.math.geom.Point2;
+import arc.struct.IntSeq;
 import arc.struct.Seq;
 import arc.util.Nullable;
 import arc.util.Time;
@@ -15,6 +17,7 @@ import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.core.Renderer;
+import mindustry.core.UI;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.gen.Unit;
@@ -25,15 +28,18 @@ import mindustry.input.Placement;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
 import mindustry.type.UnitType;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
+import mindustry.world.blocks.power.PowerGraph;
 import subvoyage.content.other.SvPal;
 import subvoyage.utility.SvMath;
 import subvoyage.utility.Var;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
 
 public class PowerBubbleNode extends PowerBlock {
 
@@ -61,6 +67,21 @@ public class PowerBubbleNode extends PowerBlock {
                 }
             });
         });
+    }
+
+    @Override
+    public void setBars(){
+        super.setBars();
+        addBar("power",entity -> {
+            PowerGraph g = entity.power().graph;
+            return new Bar(() ->
+                    Core.bundle.format("bar.powerbalance",
+                            ((g.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalance() * 60)))),
+                    () -> Pal.powerBar,
+                    () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
+            );
+        });
+        addBar("batteries", makeBatteryBalance());
     }
 
     @Override
@@ -164,8 +185,54 @@ public class PowerBubbleNode extends PowerBlock {
                 worldChanges = world.tileChanges;
                 if(hasLink && link() instanceof PowerBubbleNodeBuild pb) pb.setLink(pos());
                 valid = checkRectangle();
+                if(valid) updateLinks();
             }
         }
+
+        public void updateLinks() {
+            Seq<Building> builds = Seq.with();
+            if(!(hasLink && link() instanceof PowerBubbleNodeBuild pb)) return;
+            SvMath.rectangle(pb.tileX(),pb.tileY(),tileX(),tileY(),(x,y) -> {
+                Tile tile = world.tile(x,y);
+                if(tile.build == null || !tile.build.block.hasPower) return;
+                builds.add(tile.build);
+            });
+            IntSeq seq = builds.mapInt(Building::pos);
+            power.links.each(i -> {
+                Building prev = world.build(i);
+                //disconnected
+                if(!builds.contains(prev)) {
+                    prev.power.links.removeValue(pos());
+                    prev.power.links.removeValue(pb.pos());
+                    power.links.removeValue(prev.pos());
+                    pb.power.links.removeValue(prev.pos());
+
+                    PowerGraph newgraph = new PowerGraph();
+                    newgraph.reflow(this);
+                    newgraph.reflow(pb);
+
+                    if(prev.power.graph != newgraph) {
+                        PowerGraph og = new PowerGraph();
+                        og.reflow(prev);
+                    }
+                }
+            });
+            seq.each(i -> {
+                Building next = world.build(i);
+                //connected
+                if(!power.links.contains(i)) {
+                    power.links.addUnique(next.pos());
+                    pb.power.links.addUnique(next.pos());
+                    next.power.links.addUnique(pos());
+                    next.power.links.addUnique(pb.pos());
+
+                    power.graph.addGraph(next.power.graph);
+                    pb.power.graph.addGraph(next.power.graph);
+                }
+            });
+
+        }
+
 
         public boolean checkRectangle() {
             if(!(hasLink && link() instanceof PowerBubbleNodeBuild pb)) return false;

@@ -56,17 +56,10 @@ public class EnergyCross extends PowerBlock {
     public void setBars(){
         super.setBars();
         addBar("power",entity -> {
-            if(!(entity.power.graph instanceof EnergyDockPowerGraph g)) {
-                return new Bar(() ->
-                        Core.bundle.format("bar.powerbalance",
-                                ((entity.power.graph.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long) (entity.power.graph.getPowerBalance() * 60)))),
-                        () -> Pal.powerBar,
-                        () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
-                );
-            }
-            else return new Bar(() ->
+            PowerGraph g = entity.power().graph;
+            return new Bar(() ->
                     Core.bundle.format("bar.powerbalance",
-                            ((g.getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalanceVisual() * 60)))),
+                            ((g.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalance() * 60)))),
                     () -> Pal.powerBar,
                     () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
             );
@@ -201,7 +194,7 @@ public class EnergyCross extends PowerBlock {
                     }
 
                     //power nodes do NOT play nice with beam nodes, do not touch them as that forcefully modifies their links
-                    if(other != null && !(other.block instanceof EnergyCross) && other.block.hasPower && other.block.connectedPower && other.team == team){
+                    if(other != null && !(other.block instanceof EnergyCross) && other.block instanceof PowerBubbleNode && other.block.hasPower && other.block.connectedPower && other.team == team){
                         links[i] = other;
                         dests[i] = world.tile(tile.x + j * dir.x, tile.y + j * dir.y);
                         break;
