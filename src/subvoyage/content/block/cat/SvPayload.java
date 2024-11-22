@@ -1,6 +1,9 @@
 package subvoyage.content.block.cat;
 
+import arc.graphics.Color;
+import arc.math.Mathf;
 import arc.struct.IntSeq;
+import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import mindustry.type.Category;
 import mindustry.type.PayloadStack;

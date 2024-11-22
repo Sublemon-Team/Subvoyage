@@ -8,6 +8,7 @@ public class ShootSpreadForwardBackwards extends ShootPattern {
 
     /** spread between bullets, in degrees. */
     public float spread = 5f;
+    public float rotIntensity = 1.5f;
 
     public ShootSpreadForwardBackwards(int shots, float spread){
         this.shots = shots;
@@ -23,7 +24,7 @@ public class ShootSpreadForwardBackwards extends ShootPattern {
             float angleOffset = i * spread - (shots - 1) * spread / 2f;
             int sign = i % 2 == 0 ? 1 : -1;
             handler.shoot(0, 0, angleOffset, firstShotDelay + shotDelay * i,(b) -> {
-                b.rotation(b.rotation() - Time.delta * sign * 1.5f);
+                b.rotation(b.rotation() - Time.delta * sign * rotIntensity);
             });
         }
     }

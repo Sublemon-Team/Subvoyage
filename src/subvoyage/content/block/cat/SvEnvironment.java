@@ -23,7 +23,7 @@ public class SvEnvironment {
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateFloor, hardWater, darkHardWater,
+    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateFloor, darkSodilateFloor, hardWater, darkHardWater,
     crudesQuarry,
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
@@ -172,6 +172,11 @@ public class SvEnvironment {
             attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
         }};
+        darkSodilateFloor = new Floor("dark-sodilate") {{
+            attributes.set(Attribute.water, -1f);
+            attributes.set(SvAttribute.sodilate, 1f);
+            variants = 3;
+        }};
         sodilateWall = new StaticWall("sodilate-wall"){{
             sodilateFloor.asFloor().wall = this;
             attributes.set(SvAttribute.sodilate, 1f);
@@ -206,12 +211,14 @@ public class SvEnvironment {
         archalyteBoulder = new Prop("archalyte-boulder"){{
             variants = 3;
             archalyteStone.asFloor().decoration = this;
+            darkArchalyteStone.asFloor().decoration = this;
             forceDark = true;
         }};
 
         sodilateBoulder = new Prop("sodilate-boulder"){{
             variants = 2;
             sodilateFloor.asFloor().decoration = this;
+            darkSodilateFloor.asFloor().decoration = this;
             forceDark = true;
         }};
 

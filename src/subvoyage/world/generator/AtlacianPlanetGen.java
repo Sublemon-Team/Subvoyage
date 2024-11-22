@@ -128,8 +128,12 @@ public class AtlacianPlanetGen extends PlanetGenerator {
             float firstNoise = noise(x,y,5,0.6f,80,1f);
             float secondNoise = noise(x,y,4,0.4f,100,0.95f);
 
+            float darkNoise = rnoise(x,y,1,39,0.5f,1f);
+
             if(secondNoise < sodilateBiomeWeight) {
-                if(!floor.asFloor().isLiquid) floor = sodilateFloor;
+                if(!floor.asFloor().isLiquid) {
+                    floor = darkNoise > 0 ? darkSodilateFloor : sodilateFloor;
+                }
                 else {
                     if(floor == Blocks.water) floor = hardWater;
                     if(floor == Blocks.deepwater || floor == Blocks.darksandWater) floor = darkHardWater;
@@ -138,7 +142,9 @@ public class AtlacianPlanetGen extends PlanetGenerator {
                 return;
             }
             if(firstNoise < archalyteBiomeWeight) {
-                if(!floor.asFloor().isLiquid) floor = archalyteStone;
+                if(!floor.asFloor().isLiquid) {
+                    floor = darkNoise > 0 ? darkArchalyteStone : archalyteStone;
+                }
                 if(block.solid) {
                     block = archalyteWall;
                 }
@@ -146,6 +152,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
             }
         });
         blend(archalyteStone,darkArchalyteStone,2f);
+        blend(archalyteStone,darkSodilateFloor,2f);
 
         for (Tile tile : tiles) {
             if(rand.chance(0.0001f)) {

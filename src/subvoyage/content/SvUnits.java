@@ -13,6 +13,7 @@ import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootHelix;
 import mindustry.entities.units.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
@@ -22,6 +23,7 @@ import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
 import subvoyage.*;
+import subvoyage.content.block.SvBlocks;
 import subvoyage.content.other.*;
 import subvoyage.content.sound.*;
 import subvoyage.draw.part.*;
@@ -57,7 +59,7 @@ public class SvUnits{
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
     //rovers
-    stunt, zeal,
+    stunt, zeal, gambit,
     //cargo,payload
     bulker,
     pisun; //shh, don't tell anyone
@@ -2502,8 +2504,8 @@ public class SvUnits{
             };
 
             float BPS = 1f*1.5f;
-            float damageMain = ROVER_T1_DPS/BPS*0.8f;
-            float damageSub = ROVER_T1_DPS/BPS*0.2f;
+            float damageMain = ROVER_T1_DPS/BPS*1f;
+            float damageSub = ROVER_T1_DPS/BPS*0f;
 
             weapons.add(new Weapon(name+"-weapon") {{
                 reload = 120f;
@@ -2526,25 +2528,22 @@ public class SvUnits{
                 range = 60;
 
                 bullet = new BasicBulletType(4f,damageSub) {{
-                    sprite = "shell";
-                    width = 9f;
-                    height = 9f;
+                    width = 12f;
+                    height = 12f;
                     lifetime = 30f;
-                    hitSize = 9f;
+                    hitSize = 12f;
 
-                    hitColor = backColor = trailColor = Pal.sap.cpy().a(0.5f);
+                    hitColor = backColor = trailColor = SvPal.phosphide;
                     frontColor = SvPal.spaclanium;
-                    trailWidth = 3f;
-                    trailLength = 2;
-                    trailInterp = Interp.circleIn;
+                    trailWidth = 5f;
+                    trailLength = 8;
+
                     hitEffect = despawnEffect = Fx.trailFade;
                     smokeEffect = SvFx.shootLauncher;
-                    splashDamageRadius = 10f;
-                    splashDamage = damageSub;
 
-                    pierce = true;
-                    pierceCap = 3;
-                    pierceBuilding = true;
+                    hittable = false;
+                    collides = false;
+                    damage = 0;
 
                     fragOnHit = true;
                     fragOnAbsorb = false;
@@ -2557,13 +2556,27 @@ public class SvUnits{
 
                     shootSound = Sounds.shootAlt;
 
-                    fragBullet = new BombBulletType(damageMain,13f) {{
-                        width = 10f;
-                        height = 14f;
-                        hitEffect = new WaveEffect() {{
-                            sizeTo = 12f;
-                            colorTo = SvPal.spaclanium;
-                        }};
+                    fragBullet = new BombBulletType(damageMain,20f) {{
+                        width = 12f;
+                        height = 12f;
+                        sprite = "large-bomb";
+                        despawnEffect = new Effect(40f, 100f, e -> {
+                            color(SvPal.phosphide);
+                            stroke(e.fout() * 2f);
+                            float circleRad = 4f + e.finpow() * 15f;
+                            Lines.circle(e.x, e.y, circleRad);
+                            color(SvPal.phosphide);
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 6f, 20f * e.fout(), i*90+e.rotation);
+                            }
+
+                            color();
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 3f, 10f * e.fout(), i*90+e.rotation);
+                            }
+
+                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                        });;
                         shootEffect = Fx.none;
                         smokeEffect = Fx.none;
 
@@ -2576,6 +2589,7 @@ public class SvUnits{
 
                         status = StatusEffects.blasted;
                         statusDuration = 60f;
+                        shrinkY = shrinkX = 0.5f;
                     }};
 
                     trailEffect = SvFx.missileTrailSmokeSmall;
@@ -2711,6 +2725,143 @@ public class SvUnits{
 
             treadRects = new Rect[] {
                     new Rect(13-48f,5-48f,17,88)
+            };
+        }};
+
+        gambit = new RoverUnitType("gambit") {{
+            constructor = TankUnit::create;
+            itemCapacity = 10;
+
+            health = ROVER_T3_HU;
+            armor = 4f;
+            researchCostMultiplier = 0;
+            hitSize = 26;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 4f;
+            }});
+
+            speed = 0.7f;
+            rotateSpeed = 1.8f;
+
+            treadPullOffset = 3;
+
+            canBoost = true;
+            boostMultiplier = 0.7f;
+
+            engineSize = 8f;
+            engineOffset = 40f/4f;
+
+            float BPS = 0.5f*4f;
+            float damageMain = ROVER_T3_DPS/BPS;
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 120f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 12f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 0.5f;
+
+                inaccuracy = 5f;
+
+                bullet = new BasicBulletType(4f,0f) {{
+                    collides = false;
+                    hittable = false;
+
+                    lifetime = 30f;
+                    fragBullets = 4;
+                    fragVelocityMin = fragVelocityMax = 1f;
+                    fragSpread = 360f/4f;
+                    fragRandomSpread = 0f;
+
+                    scaleLife = true;
+
+                    width = height = 16f;
+                    trailLength = 8;
+                    trailWidth = 7f;
+
+                    backColor = trailColor = hitColor = SvPal.phosphide;
+                    frontColor = Color.white;
+
+                    despawnEffect = new Effect(90f, 100f, e -> {
+                        color(SvPal.phosphide);
+                        stroke(e.fout() * 2f);
+                        float circleRad = 4f + e.finpow() * 30f;
+
+
+                        color(SvPal.phosphide);
+                        for(int i = 0; i < 4; i++){
+                            Drawf.tri(e.x, e.y, 8f, 60f * Mathf.lerp(e.fin(),0,e.time > 80 ? (e.time-80)/10f : 0), i*90+e.rotation);
+                        }
+
+                        Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                    });
+
+                    fragBullet = new BasicBulletType(){{
+                        width = height = 0f;
+
+                        maxRange = 30f;
+
+                        backColor = trailColor = hitColor = SvPal.phosphide;
+                        frontColor = Color.white;
+
+                        hitSound = Sounds.plasmaboom;
+
+                        shootCone = 180f;
+                        ejectEffect = Fx.none;
+                        hitShake = 4f;
+
+                        collidesAir = false;
+
+                        lifetime = 80f;
+
+                        despawnEffect = new Effect(40f, 100f, e -> {
+                            color(SvPal.phosphide);
+                            stroke(e.fout() * 2f);
+                            float circleRad = 4f + e.finpow() * 30f;
+                            Lines.circle(e.x, e.y, circleRad);
+                            color(SvPal.phosphide);
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 6f, 40f * e.fout(), i*90+e.rotation);
+                            }
+
+                            color();
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 3f, 20f * e.fout(), i*90+e.rotation);
+                            }
+
+                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                        });
+                        hitEffect = Fx.massiveExplosion;
+                        keepVelocity = false;
+
+                        shrinkX = 0.7f;
+                        shrinkInterp = Interp.pow3Out;
+
+                        speed = 0.5f;
+                        collides = false;
+
+                        splashDamage = damageMain;
+                        splashDamageRadius = 40f;
+                    }};
+                }};
+
+                ejectEffect = Fx.none;
+                recoil = 2.5f;
+                shootSound = Sounds.spark;
+            }});
+
+            treadRects = new Rect[] {
+                    new Rect(24-64f,7-64f,20,112)
             };
         }};
 

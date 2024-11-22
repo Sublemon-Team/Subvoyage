@@ -1,5 +1,8 @@
 package subvoyage.type.unit.rover;
 
+import mindustry.gen.TankUnit;
+import mindustry.gen.Tankc;
+import mindustry.gen.Unit;
 import mindustry.world.meta.Env;
 import subvoyage.type.unit.type.AtlacianUnitType;
 
@@ -12,5 +15,16 @@ public class RoverUnitType extends AtlacianUnitType {
         rotateSpeed = 2f;
         envDisabled = Env.none;
         speed = 1.1f;
+    }
+
+    @Override
+    public void draw(Unit unit) {
+        super.draw(unit);
+    }
+
+    @Override
+    public <T extends Unit & Tankc> void drawTank(T unit) {
+        if(unit.elevation() > 0.5f) return;
+        super.drawTank(unit);
     }
 }
