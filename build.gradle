@@ -17,7 +17,11 @@ version '1.0'
 
 sourceSets.main.java.srcDirs = ["src"]
 
-
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17) // Replace 17 with your desired Java version
+    }
+}
 /** MINDUSTRY RUN CLIENT
    * by Skoow (and thanks to IriDark for some code)
    * change or add "mindustry_run_version" to gradle.properties to start

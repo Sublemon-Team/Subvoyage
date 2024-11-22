@@ -6,6 +6,7 @@ import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.*;
 import arc.struct.*;
+import arc.util.Time;
 import mindustry.*;
 import mindustry.core.*;
 import mindustry.entities.*;
@@ -122,6 +123,27 @@ public class EnergyCross extends PowerBlock {
         }
     }
 
+    private void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity){
+        float angle1 = Angles.angle(x1, y1, x2, y2),
+                vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
+                len1 = size1 * tilesize / 2f, len2 = size2 * tilesize / 2f;
+        //len1 = 0, len2 = 0;
+        float layer = Draw.z();
+
+        scl = Math.max(scl+bloomIntensity/2f,0.2f);
+        Draw.z(Layer.blockOver);
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.stroke(8f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+        Draw.color();
+        Lines.stroke(3f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 2f * scl + Mathf.cos(Time.time + 5, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 2f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+        Draw.z(layer);
+    }
+
     public class BeamNodeBuild extends Building{
         //current links in cardinal directions
         public Building[] links = new Building[4];
@@ -160,10 +182,9 @@ public class EnergyCross extends PowerBlock {
 
                     int dst = Math.max(Math.abs(dests[i].x - tile.x),  Math.abs(dests[i].y - tile.y));
                     //don't draw lasers for adjacent blocks
-                    if(dst > 1 + size/2){
-                        var point = Geometry.d4[i];
-                        float poff = tilesize/2f;
-                        Drawf.laser(laser, laserEnd, x + poff*size*point.x, y + poff*size*point.y, dests[i].worldx() - poff*point.x, dests[i].worldy() - poff*point.y, w);
+                    if(dst > 1 + size/2 && dests[i] != null && dests[i].build != null){
+                        Draw.color(SvPal.powerLaser, Renderer.laserOpacity);
+                        drawLaser(x,y,dests[i].worldx(),dests[i].worldy(),size,dests[i].build.block.size,0.5f,0f);
                     }
                 }
             }
@@ -226,6 +247,7 @@ public class EnergyCross extends PowerBlock {
                         next.power.links.addUnique(pos());
 
                         power.graph.addGraph(next.power.graph);
+                        next.power.graph.addGraph(power.graph);
                     }
                 }
             }

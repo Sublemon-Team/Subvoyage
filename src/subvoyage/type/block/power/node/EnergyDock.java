@@ -87,27 +87,28 @@ public class EnergyDock extends PowerBlock {
             PowerModule power = entity.power;
             Building other = world.build(value);
             boolean contains = power.links.contains(value), valid = other != null && other.power != null;
+            System.out.println("--");
+            System.out.println(valid);
+            System.out.println(contains);
+            System.out.println(linkValid(entity, other));
             if(other == null) return;
-            if(!(other.block() instanceof EnergyDock)) return;
+            if(!(other.block() instanceof PowerBubbleNode)) return;
             if(contains){
                 //unlink
                 power.links.removeValue(value);
                 if(valid) other.power.links.removeValue(entity.pos());
 
-                EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
-                newGraph.transferTime = transferTime;
+                PowerGraph newGraph = new PowerGraph();
 
                 //reflow from this point, covering all tiles on this side
                 newGraph.reflow(entity);
                 if(valid && other.power.graph != newGraph){
                     //create new graph for other end
-                    EnergyDockPowerGraph og = new EnergyDockPowerGraph();
-                    og.transferTime = transferTime;
+                    PowerGraph og = new PowerGraph();
                     //reflow from other end
                     og.reflow(other);
                 }
             }else if(linkValid(entity, other) && valid && power.links.size < maxNodes){
-
                 power.links.addUnique(other.pos());
 
                 if(other.team == entity.team){
@@ -142,17 +143,10 @@ public class EnergyDock extends PowerBlock {
     public void setBars() {
         super.setBars();
         addBar("power",entity -> {
-            if(!(entity.power.graph instanceof EnergyDockPowerGraph g)) {
-                return new Bar(() ->
-                        Core.bundle.format("bar.powerbalance",
-                                ((entity.power.graph.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long) (entity.power.graph.getPowerBalance() * 60)))),
-                        () -> Pal.powerBar,
-                        () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
-                );
-            }
-            else return new Bar(() ->
+            PowerGraph g = entity.power.graph;
+            return new Bar(() ->
                 Core.bundle.format("bar.powerbalance",
-                        ((g.getPowerBalanceVisual() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalanceVisual() * 60)))),
+                        ((g.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalance() * 60)))),
                 () -> Pal.powerBar,
                 () -> Mathf.clamp(entity.power.graph.getLastPowerProduced() / entity.power.graph.getLastPowerNeeded())
             );
@@ -227,11 +221,10 @@ public class EnergyDock extends PowerBlock {
         if(!autolink) return;
 
         Boolf<Building> valid = other -> other != null && other.tile() != tile && other.block.connectedPower && other.power != null &&
-                (other.block instanceof EnergyDock) &&
+                (other.block instanceof PowerBubbleNode) &&
                 overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile(), range * tilesize) && other.team == team &&
                 !graphs.contains(other.power.graph) &&
                 !EnergyDock.insulated(tile, other.tile) &&
-                !(other instanceof EnergyDockBuild obuild && obuild.power.links.size >= maxNodes) &&
                 !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
                     var t = world.tile(tile.x + p.x, tile.y + p.y);
                     return t != null && t.build == other;
@@ -263,7 +256,7 @@ public class EnergyDock extends PowerBlock {
         }
 
         tempBuilds.sort((a, b) -> {
-            int type = -Boolean.compare(a.block instanceof EnergyDock, b.block instanceof EnergyDock);
+            int type = -Boolean.compare(a.block instanceof PowerBubbleNode, b.block instanceof PowerBubbleNode);
             if(type != 0) return type;
             return Float.compare(a.dst2(tile), b.dst2(tile));
         });
@@ -283,12 +276,8 @@ public class EnergyDock extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null || !(link.block instanceof EnergyDock) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
-
-        if(overlaps(tile, link, range * tilesize) || (link.block instanceof EnergyDock node && overlaps(link, tile, node.range * tilesize))){
-            if(checkMaxNodes && link.block instanceof EnergyDock node){
-                return link.power.links.size < maxNodes || link.power.links.contains(tile.pos());
-            }
+        if(tile == link || link == null || !(link.block instanceof PowerBubbleNode) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
+        if(overlaps(tile, link, range * tilesize) || (link.block instanceof PowerBubbleNode node)){
             return true;
         }
         return false;
@@ -307,6 +296,27 @@ public class EnergyDock extends PowerBlock {
             Building tile = world.build(wx, wy);
             return tile != null && tile.isInsulated();
         });
+    }
+
+    private void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity){
+        float angle1 = Angles.angle(x1, y1, x2, y2),
+                vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
+                len1 = size1 * tilesize / 2f, len2 = size2 * tilesize / 2f;
+        //len1 = 0, len2 = 0;
+        float layer = Draw.z();
+
+        scl = Math.max(scl+bloomIntensity/2f,0.2f);
+        Draw.z(Layer.blockOver);
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.stroke(8f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+        Draw.color();
+        Lines.stroke(3f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 2f * scl + Mathf.cos(Time.time + 5, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 2f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+        Draw.z(layer);
     }
 
     protected static boolean overlaps(float srcx, float srcy, Tile other, Block otherBlock, float range){
@@ -338,10 +348,6 @@ public class EnergyDock extends PowerBlock {
         public void created(){ // Called when one is placed/loaded in the world
             if(autolink && range > maxRange) maxRange = range;
 
-            EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
-            newGraph.transferTime = transferTime;
-            newGraph.reflow(this);
-            power.graph = newGraph;
 
             nodeCount = 0;
             world.tiles.eachTile(e -> {
@@ -453,28 +459,13 @@ public class EnergyDock extends PowerBlock {
 
             Draw.z(Layer.power);
             setupColor(power.graph.getSatisfaction());
-            if(!(power.graph instanceof EnergyDockPowerGraph)) {
-                EnergyDockPowerGraph newGraph = new EnergyDockPowerGraph();
-                newGraph.transferTime = transferTime;
-                newGraph.reflow(this);
-                power.graph = newGraph;
-                getNodeLinks(tile, tile.block(), team, other -> {
-                    if(!power.links.contains(other.pos())){
-                        configureAny(other.pos());
-                    }
-                });
 
-                //Log.warn("["+ new Date() +"] Created new energy dock graph for block at "+x+", "+y);
-            }
-            if(!(power.graph instanceof EnergyDockPowerGraph graph)) return;
-            float progress = graph.timePassed/graph.transferTime;
-            boolean isInProgress = graph.isInProgress;
             for(int i = 0; i < power.links.size; i++){
                 Building link = world.build(power.links.get(i));
                 if(!linkValid(this, link)) continue;
-                if(link.block instanceof EnergyDock && link.id >= id) continue;
                 setupColor(power.graph.getSatisfaction());
-                drawLaser(x, y, link.x, link.y, size, link.block.size);
+                Draw.color(SvPal.powerLaser);
+                drawLaser(x,y,link.x,link.y,size,link.block.size,0.5f,0f);
             }
 
             Draw.reset();

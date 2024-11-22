@@ -52,10 +52,8 @@ import subvoyage.type.block.laser.nodes.LaserAmplifier;
 import subvoyage.type.block.power.generation.*;
 import subvoyage.type.block.power.node.*;
 import subvoyage.type.block.production.*;
-import subvoyage.type.block.production.crude_smelter.*;
 import subvoyage.type.block.wall.PhosphideWall;
 import subvoyage.type.shoot.*;
-import subvoyage.type.shoot.bullet.*;
 import subvoyage.world.*;
 
 import static arc.Core.atlas;

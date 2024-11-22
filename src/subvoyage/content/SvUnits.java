@@ -224,12 +224,12 @@ public class SvUnits{
             mineWalls = true;
             mineFloor = true;
 
-            itemCapacity = 90;
-            mineSpeed = 10f;
+            itemCapacity = 30;
+            mineSpeed = 5f;
             mineTier = 2;
-            buildSpeed = 3f;
+            buildSpeed = 1f;
             drag = 0.05f;
-            speed = 6f;
+            speed = 5f;
             rotateSpeed = 20f;
             accel = 0.1f;
             fogRadius = 0f;
@@ -248,7 +248,7 @@ public class SvUnits{
             weapons.add(new RepairBeamWeapon(){{
                 widthSinMag = 0.11f;
                 reload = 20f;
-                x = 2f;
+                x = 0f;
                 y = 6.5f;
                 rotate = false;
                 shootY = 0f;
@@ -257,7 +257,7 @@ public class SvUnits{
                 fractionRepairSpeed = 0.06f;
                 aimDst = 0f;
                 shootCone = 15f;
-                mirror = true;
+                mirror = false;
 
                 targetUnits = true;
                 targetBuildings = true;

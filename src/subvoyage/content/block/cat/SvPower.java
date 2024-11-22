@@ -13,6 +13,7 @@ import mindustry.world.draw.DrawWarmupRegion;
 import mindustry.world.meta.Env;
 import subvoyage.type.block.power.generation.WindTurbine;
 import subvoyage.type.block.power.node.EnergyCross;
+import subvoyage.type.block.power.node.EnergyDock;
 import subvoyage.type.block.power.node.PowerBubbleNode;
 
 import static mindustry.content.Liquids.water;
@@ -29,14 +30,17 @@ public class SvPower {
         powerBubbleNode = new PowerBubbleNode("power-bubble-node") {{
             requirements(Category.power,atl(),with(iridium,20,corallite,4));
             size = 1;
-            consumePowerBuffered(100f);
-            consumesPower = outputsPower = false;
+            outputsPower = false;
+            consumesPower = true;
+            squareSprite = false;
         }};
-        powerBubbleMerger = new EnergyCross("power-bubble-merger") {{
+        powerBubbleMerger = new EnergyDock("power-bubble-merger") {{
             requirements(Category.power,atl(),with(iridium,20,corallite,20));
             size = 1;
-            consumePowerBuffered(100f);
-            consumesPower = outputsPower = false;
+            range = 4f;
+            consumePowerBuffered(400f);
+            consumesPower = outputsPower = true;
+            squareSprite = false;
         }};
         windTurbine = new WindTurbine("wind-turbine") {{
             requirements(Category.power,atl(),with(corallite,60,clay,15,iridium,30));

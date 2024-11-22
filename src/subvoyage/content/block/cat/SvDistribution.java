@@ -1,5 +1,7 @@
 package subvoyage.content.block.cat;
 
+import mindustry.Vars;
+import mindustry.io.SaveVersion;
 import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.distribution.*;
@@ -9,6 +11,7 @@ import mindustry.world.blocks.liquid.LiquidRouter;
 import mindustry.world.blocks.production.Incinerator;
 import mindustry.world.blocks.units.UnitCargoLoader;
 import mindustry.world.blocks.units.UnitCargoUnloadPoint;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.content.other.SvPal;
 
@@ -95,12 +98,13 @@ public class SvDistribution {
         }};
 
         ductDistributor = new Router("duct-distributor"){{
-            requirements(Category.distribution,atl(), with(corallite, 4, spaclanium, 4));
+            requirements(Category.distribution,atl(BuildVisibility.hidden), with(corallite, 4, spaclanium, 4));
             researchCost = with(corallite,320,spaclanium,70);
             buildCostMultiplier = 3f;
             size = 2;
             squareSprite = false;
         }};
+        SaveVersion.modContentNameMap.put(ductDistributor.name,ductRouter.name);
 
         ductOverflow = new OverflowGate("duct-overflow-gate"){{
             requirements(Category.distribution,atl(), with(corallite, 2, spaclanium, 4));
