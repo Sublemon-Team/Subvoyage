@@ -104,6 +104,7 @@ public class AuroraMesh extends PlanetMesh{
     public float relRot(){
         return Time.globalTime * speed / 40f;
     }
+
     @Override
     public void render(PlanetParams params, Mat3D projection, Mat3D transform){
         //don't waste performance rendering 0-alpha
@@ -121,13 +122,15 @@ public class AuroraMesh extends PlanetMesh{
         shader.bind();
         shader.setUniformMatrix4("u_proj", projection.val);
         shader.setUniformMatrix4("u_trans", mat.setToTranslation(planet.position).rotate(Vec3.Y, planet.getRotation() + relRot()).val);
-        shader.setUniformf("u_color", color);
+        shader.setUniformf("u_color", color.hue(Time.globalTime/40f % 1f));
         setPlanetInfo("u_sun_info", planet.solarSystem);
         setPlanetInfo("u_planet_info", planet);
         texture.bind(0);
         shader.setUniformi("u_texture", 0);
         shader.apply();
+        Gl.disable(Gl.cullFace);
         mesh.render(shader, Gl.triangles);
+        Gl.enable(Gl.cullFace);
 
         Blending.normal.apply();
     }

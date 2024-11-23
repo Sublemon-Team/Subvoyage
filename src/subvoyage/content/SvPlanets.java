@@ -26,13 +26,15 @@ public class SvPlanets{
             generator = new AtlacianPlanetGen();
             Vec3 ringPos = new Vec3(0,-1f,0).rotate(Vec3.X, 5);
             meshLoader = () -> new MultiMesh(
-                    new HexMesh(this, 6),
+                    new HexMesh(this, 6)
                     //new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (200/0.6f), 2.6f/0.6f, -0.2f, 5f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.6f), 1.9f/0.6f, 0.2f, -3f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.6f), 1.2f/0.6f, 1f, 1f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.6f), -1.9f/0.6f, 0.2f, -5f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.6f), -1.2f/0.6f, 1f, 3f, ringPos)
                     //new AuroraMesh(atlas.find("subvoyage-aurora2"), this, 20, 2.2f, 0.4f, ringPos)
+            );
+            additional = () -> new MultiMesh(
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f), 1.9f/0.6f, 0.2f, -3f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f), 1.2f/0.6f, 1f, 1f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f), -1.9f/0.6f, 0.2f, -5f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f), -1.2f/0.6f, 1f, 3f, ringPos)
             );
 
             cloudMeshLoader = () -> new MultiMesh(
@@ -40,7 +42,6 @@ public class SvPlanets{
                     new HexSkyMesh(this, 1, 0.9f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.1f), 2, 0.45f, 1f, 0.41f),
                     new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.15f), 4, 0.6f, 2f, 0.41f)
             );
-
 
             defaultCore = SvBlocks.corePuffer;
             unlockedOnLand.add(SvBlocks.corePuffer);
