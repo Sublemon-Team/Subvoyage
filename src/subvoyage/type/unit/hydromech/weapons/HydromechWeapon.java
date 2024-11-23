@@ -1,9 +1,12 @@
 package subvoyage.type.unit.hydromech.weapons;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.scene.ui.layout.Table;
+import arc.util.Strings;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.audio.SoundLoop;
@@ -13,10 +16,15 @@ import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Bullet;
 import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
+import mindustry.type.UnitType;
 import mindustry.type.Weapon;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 import subvoyage.type.unit.hydromech.HydromechUnitEntity;
 import subvoyage.type.unit.weapons.WeaponStatState;
 import subvoyage.type.unit.hydromech.custom.HydromechState;
+
+import java.util.Locale;
 
 import static mindustry.Vars.headless;
 import static mindustry.Vars.state;
@@ -37,6 +45,13 @@ public class HydromechWeapon extends Weapon {
 
     public HydromechWeapon() {
         super();
+    }
+
+    @Override
+    public void addStats(UnitType u, Table t) {
+        super.addStats(u, t);
+        t.row();
+        t.add("[lightgray]" + Core.bundle.get("stat.sv-active-state") + ": " + "[white]" + (activationState == HydromechState.ANY ? Core.bundle.get("stat.sv-active-state.any") : activationState == HydromechState.WATER ? Core.bundle.get("stat.sv-active-state.water") : Core.bundle.get("stat.sv-active-state.ground")));
     }
 
     @Override

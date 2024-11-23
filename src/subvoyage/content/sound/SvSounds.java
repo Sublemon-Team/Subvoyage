@@ -11,6 +11,8 @@ import java.lang.reflect.Field;
 public class SvSounds {
     public static Sound flashExplosion = new Sound();
     public static Sound poweredMissileShoot = new Sound();
+    public static Sound gambitBombCharge = new Sound();
+    public static Sound rifleShoot = new Sound();
 
 
     public static void load(){

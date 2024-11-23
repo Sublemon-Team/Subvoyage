@@ -632,7 +632,7 @@ public class SvUnits{
                 y = 2f;
                 reload = 10f;
                 recoil = 2f;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.bolt;
                 shoot = new ShootBarrel() {{
                     barrels = new float[] {
                             -4f, 1f, -10f,
@@ -769,7 +769,7 @@ public class SvUnits{
                 layerOffset = -2f;
                 rotationLimit = 22f;
 
-                shootSound = Sounds.missileLaunch;
+                shootSound = SvSounds.poweredMissileShoot;
                 parts.add(new RegionPart("-blade"){{
                     heatProgress = PartProgress.warmup;
                     progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
@@ -907,7 +907,7 @@ public class SvUnits{
                 rotateSpeed = 3.5f;
                 reload = 4*60f;
                 recoil = 1f;
-                shootSound = Sounds.beam;
+                shootSound = SvSounds.poweredMissileShoot;
 
                 bullet = new BasicBulletType(5f,mainWeaponDamage*0.1f) {{
                     sprite = "circle-bullet";
@@ -1084,7 +1084,7 @@ public class SvUnits{
                                     trailRotation = true;
                                     trailInterp = Interp.fastSlow;
                                     status = StatusEffects.electrified;
-                                    hitSound = Sounds.plasmaboom;
+                                    hitSound = SvSounds.flashExplosion;
 
                                     trailEffect = new Effect(16f, e -> {
                                         color(SvPal.heatGlow);
@@ -1142,7 +1142,7 @@ public class SvUnits{
                 rotationLimit = 22f;
                 shootCone = 360f;
 
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.bolt;
                 parts.add(new RegionPart("-blade"){{
                     heatProgress = PartProgress.warmup;
                     progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
@@ -2644,6 +2644,8 @@ public class SvUnits{
                 rotate = true;
                 rotateSpeed = 0.7f;
 
+                shootSound = SvSounds.rifleShoot;
+
                 bullet = new EmpBulletType(){{
                     float rad = 8*3f;
 
@@ -2686,7 +2688,7 @@ public class SvUnits{
                     trailRotation = true;
                     trailInterp = Interp.fastSlow;
                     status = StatusEffects.electrified;
-                    hitSound = Sounds.plasmaboom;
+                    hitSound = SvSounds.flashExplosion;
 
                     trailEffect = new Effect(16f, e -> {
                         color(SvPal.phosphide);
@@ -2767,7 +2769,7 @@ public class SvUnits{
                 linearWarmup = false;
                 minWarmup = 0.3f;
 
-                shootY = 12f;
+                shootY = 16f;
 
                 top = true;
 
@@ -2775,7 +2777,7 @@ public class SvUnits{
                 y = 0f;
 
                 rotate = true;
-                rotateSpeed = 0.5f;
+                rotateSpeed = 0.8f;
 
                 inaccuracy = 5f;
 
@@ -2813,6 +2815,7 @@ public class SvUnits{
 
                         Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
                     });
+                    despawnSound = SvSounds.gambitBombCharge;
 
                     fragBullet = new BasicBulletType(){{
                         width = height = 0f;
@@ -2832,19 +2835,21 @@ public class SvUnits{
 
                         lifetime = 80f;
 
+                        despawnSound = SvSounds.flashExplosion;
+
                         despawnEffect = new Effect(40f, 100f, e -> {
                             color(SvPal.phosphide);
                             stroke(e.fout() * 2f);
-                            float circleRad = 4f + e.finpow() * 30f;
+                            float circleRad = 4f + e.finpow() * 40f;
                             Lines.circle(e.x, e.y, circleRad);
                             color(SvPal.phosphide);
                             for(int i = 0; i < 4; i++){
-                                Drawf.tri(e.x, e.y, 6f, 40f * e.fout(), i*90+e.rotation);
+                                Drawf.tri(e.x, e.y, 6f, 50f * e.fout(), i*90+e.rotation);
                             }
 
                             color();
                             for(int i = 0; i < 4; i++){
-                                Drawf.tri(e.x, e.y, 3f, 20f * e.fout(), i*90+e.rotation);
+                                Drawf.tri(e.x, e.y, 3f, 30f * e.fout(), i*90+e.rotation);
                             }
 
                             Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
@@ -2859,13 +2864,13 @@ public class SvUnits{
                         collides = false;
 
                         splashDamage = damageMain;
-                        splashDamageRadius = 40f;
+                        splashDamageRadius = 50f;
                     }};
                 }};
 
                 ejectEffect = Fx.none;
                 recoil = 2.5f;
-                shootSound = Sounds.spark;
+                shootSound = SvSounds.rifleShoot;
             }});
 
             treadRects = new Rect[] {
@@ -2973,5 +2978,42 @@ public class SvUnits{
         if(lapetus.parts.first() instanceof RotatorRegionPart part) {
             part.xScl = isUwu ? 0 : 1;
         }
+        skath.region = atlas.find(skath.name+(isUwu ? "-uwu" : ""));
+        skath.drawCell = !isUwu;
+        for (DrawPart part : skath.parts) {
+            if(part instanceof RotatorRegionPart p) {
+                p.xScl = isUwu ? 0 : 1;
+            }
+        }
+        charon.region = atlas.find(charon.name+(isUwu ? "-uwu" : ""));
+        charon.drawCell = !isUwu;
+        for (DrawPart part : charon.parts) {
+            if(part instanceof RotatorRegionPart p) {
+                p.xScl = isUwu ? 0 : 1;
+            }
+        }
+        callees.region = atlas.find(callees.name+(isUwu ? "-uwu" : ""));
+        callees.drawCell = !isUwu;
+        for (DrawPart part : callees.parts) {
+            if(part instanceof RotatorRegionPart p) {
+                p.xScl = isUwu ? 0 : 1;
+            }
+        }
+        ganymede.region = atlas.find(ganymede.name+(isUwu ? "-uwu" : ""));
+        ganymede.drawCell = !isUwu;
+        for (DrawPart part : ganymede.parts) {
+            if(part instanceof RotatorRegionPart p) {
+                p.xScl = isUwu ? 0 : 1;
+            }
+        }
+        stunt.region = atlas.find(stunt.name+(isUwu ? "-uwu" : ""));
+        stunt.drawCell = !isUwu;
+        stunt.weapons.first().layerOffset = isUwu ? -1 : 0;
+        zeal.region = atlas.find(zeal.name+(isUwu ? "-uwu" : ""));
+        zeal.drawCell = !isUwu;
+        zeal.weapons.first().layerOffset = isUwu ? -1 : 0;
+        gambit.region = atlas.find(gambit.name+(isUwu ? "-uwu" : ""));
+        gambit.drawCell = !isUwu;
+        gambit.weapons.first().layerOffset = isUwu ? -1 : 0;
     }
 }

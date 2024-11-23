@@ -22,7 +22,7 @@ import static subvoyage.content.block.SvBlocks.atl;
 
 public class SvSpecial {
     public static Block
-        buoy,tower,beacon, //fog
+        buoy,tower, //fog
         regenProjector, //projectors
 
         offloadCore, coreDecoder
@@ -59,35 +59,6 @@ public class SvSpecial {
             health = 360;
 
             researchCost = with(chrome,50,clay,50);
-        }};
-
-        //todo: remove if unneccesary, otherwise change requirements
-        beacon = new Beacon("beacon") {{
-            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(spaclanium,300,clay, 50,sulfur,200,iridium,300));
-            fogRadius = 75;
-            size = 3;
-            envDisabled |= Env.scorching;
-            destructible = true;
-            squareSprite = false;
-
-            super.length = 6f;
-            super.repairSpeed = 1f;
-            super.repairRadius = 160f;
-            super.powerUse = 5f;
-            super.beamWidth = 1.5f;
-            super.pulseRadius = 10f;
-            super.coolantUse = 0.16f;
-            super.coolantMultiplier = 2f;
-
-            researchCost = with(spaclanium,500,clay,100,sulfur,300);
-
-            placeEffect = Fx.healWaveDynamic;
-            health = 450;
-
-
-            acceptCoolant = false;
-            heal = consumePower(0.15f);
-            discover = consumeLiquid(argon,32/60f);
         }};
 
         // projectors

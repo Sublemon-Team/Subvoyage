@@ -1,9 +1,11 @@
 package subvoyage.type.unit.hydromech.weapons;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.scene.ui.layout.Table;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.Vars;
@@ -16,6 +18,7 @@ import mindustry.gen.Building;
 import mindustry.gen.Healthc;
 import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
+import mindustry.type.UnitType;
 import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.world.blocks.units.RepairTurret;
 import subvoyage.type.unit.hydromech.HydromechUnitEntity;
@@ -31,7 +34,12 @@ public class HydromechRepairBeam extends RepairBeamWeapon {
         super(id);
     }
 
-
+    @Override
+    public void addStats(UnitType u, Table t) {
+        super.addStats(u, t);
+        t.row();
+        t.add("[lightgray]" + Core.bundle.get("stat.sv-active-state") + ": " + "[white]" + (activationState == HydromechState.ANY ? Core.bundle.get("stat.sv-active-state.any") : activationState == HydromechState.WATER ? Core.bundle.get("stat.sv-active-state.water") : Core.bundle.get("stat.sv-active-state.ground")));
+    }
     @Override
     public void update(Unit unit, WeaponMount mount) {
 

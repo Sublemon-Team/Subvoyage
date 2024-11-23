@@ -1,5 +1,6 @@
 package subvoyage.core;
 
+import arc.Core;
 import arc.util.Log;
 import arc.util.Time;
 import mindustry.game.Team;
@@ -12,6 +13,7 @@ import subvoyage.content.sound.SvMusic;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
 import subvoyage.type.block.production.WaterSifter;
 import subvoyage.type.unit.ability.LegionfieldAbility;
+import subvoyage.utility.Var;
 
 import static arc.Core.bundle;
 import static arc.Core.settings;
@@ -23,6 +25,7 @@ public class Logic {
     /*Client Load*/
     public static void clientLoad() {
         checkUpdates();
+        checkChanges();
         control.input.addLock(SubvoyageCoreBlock.lock);
         bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
     }
@@ -99,4 +102,23 @@ public class Logic {
         Log.info("[Subvoyage] Autoupdate: "+(autoUpdate ? "Enabled" : "Disabled"));
         if(autoUpdate) AutoUpdater.begin();
     }
+
+    static int currentVersion = 1;
+    public static void checkChanges() {
+        int previousVersion = settings.getInt("subvoyage-chver",0);
+        Log.info("[Subvoyage] Previous ID: "+previousVersion);
+        Log.info("[Subvoyage] Current ID: "+currentVersion);
+        settings.put("subvoyage-chver",currentVersion);
+
+        if(previousVersion == currentVersion) return;
+        Var<Integer> prev = new Var<>(previousVersion);
+        ui.showInfoOnHidden("@settings.sv-update-id.confirm", () -> {
+            if(prev.val == 0) {
+                SubvoyageSettings.resetSaves(atlacian);
+                SubvoyageSettings.resetTree(atlacian.techTree);
+                prev.val = 1;
+            }
+            Core.app.exit();
+        });
+    };
 }
