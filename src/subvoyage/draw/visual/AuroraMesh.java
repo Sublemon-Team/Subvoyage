@@ -15,15 +15,15 @@ public class AuroraMesh extends PlanetMesh{
     public TextureRegion region;
     public Texture texture;
     public Color color = Color.white.cpy();
-
-    public AuroraMesh(TextureRegion region, Planet planet, int sides, float radiusIn, float off, Vec3 axis){
+    float speed;
+    public AuroraMesh(TextureRegion region, Planet planet, int sides, float radiusIn, float off, float speed, Vec3 axis){
         this.planet = planet;
         this.region = region;
 
         MeshUtils.begin(sides * 6/*points amount*/ * (3/*pos*/ + 3/*normal*/ + 2/*texCords*/) * 2/*top and bottom normal*/);
 
         Tmp.v33.setZero();
-
+        this.speed = speed;
         class MeshPoint{
             final Vec3 position;
             final Vec2 textureCords;
@@ -57,7 +57,7 @@ public class AuroraMesh extends PlanetMesh{
             float len = 0.12f;
             float lenMult = 1.2f;
             float offsetY = (1f+Mathf.sin((float) i/sides*Mathf.pi,1f,0.05f)+Mathf.random(0.0f,0.01f))+off;
-            float offXZ = 1f+Mathf.sin((float) i/sides*Mathf.pi*5f * 20f,Mathf.randomSeed(sides,5,10),0.05f);
+            float offXZ = 1f+Mathf.sin((float) i/sides*Mathf.pi*5f * 20f,Mathf.randomSeed(sides,5,10),0.15f);
             meshPoints[0].position
                     .set(plane)
                     .rotate(axis, i * 1f / sides * 360)
@@ -70,14 +70,16 @@ public class AuroraMesh extends PlanetMesh{
                     .rotate(axis, i * 1f / sides * 360)
                     .setLength2(len*lenMult)
                     .scl(radiusIn)
-                    .scl(1/lenMult,0f,1/lenMult);
+                    //.scl(1/lenMult,0f,1/lenMult)
+            ;
 
             meshPoints[2].position
                     .set(plane)
                     .rotate(axis, (i + 1f) / sides * 360)
                     .setLength2(len*lenMult)
                     .scl(radiusIn)
-                    .scl(1/lenMult,0f,1/lenMult);
+                    //.scl(1/lenMult,0f,1/lenMult)
+            ;
 
             meshPoints[3].position
                     .set(plane)
@@ -98,11 +100,14 @@ public class AuroraMesh extends PlanetMesh{
 
         mesh = MeshUtils.end();
     }
-
+    static Mat3D mat = new Mat3D();
+    public float relRot(){
+        return Time.globalTime * speed / 40f;
+    }
     @Override
     public void render(PlanetParams params, Mat3D projection, Mat3D transform){
         //don't waste performance rendering 0-alpha
-        if(params.planet == planet && Mathf.zero(1f - params.uiAlpha, 0.01f)) return;
+        //if(params.planet == planet && Mathf.zero(1f - params.uiAlpha, 0.01f)) return;
 
         preRender(params);
         if(texture == null){
@@ -115,7 +120,7 @@ public class AuroraMesh extends PlanetMesh{
         Shader shader = shader();
         shader.bind();
         shader.setUniformMatrix4("u_proj", projection.val);
-        shader.setUniformMatrix4("u_trans", transform.val);
+        shader.setUniformMatrix4("u_trans", mat.setToTranslation(planet.position).rotate(Vec3.Y, planet.getRotation() + relRot()).val);
         shader.setUniformf("u_color", color);
         setPlanetInfo("u_sun_info", planet.solarSystem);
         setPlanetInfo("u_planet_info", planet);
@@ -138,7 +143,7 @@ public class AuroraMesh extends PlanetMesh{
         SvShaders.planetTextureShader.ambientColor
                 .set(planet.solarSystem.lightColor);
         //TODO: better disappearing
-        SvShaders.planetTextureShader.alpha = params.planet == planet ? 1f - params.uiAlpha : 1f;
+        //SvShaders.planetTextureShader.alpha = params.planet == planet ? 1f - params.uiAlpha : 1f;
     }
 
     private void setPlanetInfo(String name, Planet planet){

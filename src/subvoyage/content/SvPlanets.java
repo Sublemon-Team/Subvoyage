@@ -27,9 +27,11 @@ public class SvPlanets{
             Vec3 ringPos = new Vec3(0,-1f,0).rotate(Vec3.X, 5);
             meshLoader = () -> new MultiMesh(
                     new HexMesh(this, 6),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (200/0.6f), 2.6f/0.6f, -0.2f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.6f), 1.9f/0.6f, 0.2f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.6f), 1.2f/0.6f, 1f, ringPos)
+                    //new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (200/0.6f), 2.6f/0.6f, -0.2f, 5f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.6f), 1.9f/0.6f, 0.2f, -3f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.6f), 1.2f/0.6f, 1f, 1f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.6f), -1.9f/0.6f, 0.2f, -5f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.6f), -1.2f/0.6f, 1f, 3f, ringPos)
                     //new AuroraMesh(atlas.find("subvoyage-aurora2"), this, 20, 2.2f, 0.4f, ringPos)
             );
 
@@ -82,5 +84,6 @@ public class SvPlanets{
 
         serpulo.hiddenItems.addAll(SvItems.atlacianItems);
         erekir.hiddenItems.addAll(SvItems.atlacianItems);
+        System.out.println("sectors: "+atlacian.sectors.size);
     }
 }
