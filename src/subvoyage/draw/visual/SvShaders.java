@@ -4,9 +4,12 @@ import arc.*;
 import arc.files.*;
 import arc.graphics.*;
 import arc.graphics.Texture.*;
+import arc.graphics.g2d.Draw;
 import arc.graphics.gl.*;
+import arc.math.geom.Vec3;
 import arc.util.*;
 import mindustry.graphics.*;
+import mindustry.type.Planet;
 import subvoyage.SvVars;
 
 import static mindustry.Vars.*;
@@ -22,6 +25,7 @@ public class SvShaders{
 
     public static CacheLayer.ShaderLayer hardWaterLayer;
     public static CacheLayer.ShaderLayer bloomLayer;
+    public static PlanetTextureShader planetTextureShader;
 
     public static Fi file(String name){
         return tree.get("shaders/" + name);
@@ -29,6 +33,7 @@ public class SvShaders{
 
     public static void init(){
         hardWater = new SurfaceShader("hard-water");
+        planetTextureShader = new PlanetTextureShader();
         underwaterRegion = new SurfaceShader("underwater-region") {
 
             @Override
@@ -80,6 +85,57 @@ public class SvShaders{
     public static void dispose(){
         if(!headless){
             hardWater.dispose();
+        }
+    }
+
+    public static class PlanetTextureShader extends SvLoadShader {
+        public Vec3 lightDir = new Vec3(1, 1, 1).nor();
+        public Color ambientColor = Color.white.cpy();
+        public Vec3 camDir = new Vec3();
+        public float alpha = 1f;
+        public Planet planet;
+
+        public PlanetTextureShader(){
+            super("circle-mesh", "circle-mesh");
+        }
+
+        @Override
+        public void apply(){
+            camDir.set(renderer.planets.cam.direction).rotate(Vec3.Y, planet.getRotation());
+
+            setUniformf("u_alpha", alpha);
+            setUniformf("u_lightdir", lightDir);
+            setUniformf("u_ambientColor", ambientColor.r, ambientColor.g, ambientColor.b);
+            setPlanetInfo("u_sun_info", planet.solarSystem);
+            setPlanetInfo("u_planet_info", planet);
+            setUniformf("u_camdir", camDir);
+            setUniformf("u_campos", renderer.planets.cam.position);
+        }
+
+        private void setPlanetInfo(String name, Planet planet){
+            Vec3 position = planet.position;
+            Shader shader = this;
+            shader.setUniformf(name, position.x, position.y, position.z, planet.radius);
+        }
+    }
+    public static class SvLoadShader extends Shader{
+
+        public SvLoadShader(String fragment, String vertex){
+            super(
+                    file(vertex + ".vert"),
+                    file(fragment + ".frag")
+            );
+        }
+
+        public void set(){
+            Draw.shader(this);
+        }
+
+        @Override
+        public void apply(){
+            super.apply();
+
+            setUniformf("u_time_millis", System.currentTimeMillis() / 1000f * 60f);
         }
     }
 

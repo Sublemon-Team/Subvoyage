@@ -45,9 +45,9 @@ public class SubvoyageSettings {
             checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
             checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);
             checkPref(t,ID+"-phosphide-wall-large-full","sv-wall-tiling",true);
-        });
 
-        SvUnits.loadUwu(unitUwu());
+            SvUnits.loadUwu(unitUwu());
+        });
     }
 
     public static boolean wallTiling() {
@@ -62,7 +62,7 @@ public class SubvoyageSettings {
     }
 
     public static boolean bool(String key) {
-        return settings.getBool(ID+"-"+key);
+        return settings.getBool("sv"+"-"+key);
     }
 
     public static void resetSaves(Planet planet) {

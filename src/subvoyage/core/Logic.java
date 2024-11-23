@@ -8,6 +8,7 @@ import mindustry.gen.Musics;
 import subvoyage.SubvoyageSettings;
 import subvoyage.SvVars;
 import subvoyage.content.SvTeam;
+import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
@@ -28,6 +29,8 @@ public class Logic {
         checkChanges();
         control.input.addLock(SubvoyageCoreBlock.lock);
         bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
+
+        SvUnits.loadUwu(SubvoyageSettings.unitUwu());
     }
 
     /*New game start*/
@@ -106,11 +109,11 @@ public class Logic {
     static int currentVersion = 1;
     public static void checkChanges() {
         int previousVersion = settings.getInt("subvoyage-chver",0);
-        Log.info("[Subvoyage] Previous ID: "+previousVersion);
-        Log.info("[Subvoyage] Current ID: "+currentVersion);
+        Log.info("[Subvoyage] Previous revision: "+previousVersion);
+        Log.info("[Subvoyage] Current revision: "+currentVersion);
         settings.put("subvoyage-chver",currentVersion);
 
-        if(previousVersion == currentVersion) return;
+        if(previousVersion >= currentVersion) return;
         Var<Integer> prev = new Var<>(previousVersion);
         ui.showInfoOnHidden("@settings.sv-update-id.confirm", () -> {
             if(prev.val == 0) {

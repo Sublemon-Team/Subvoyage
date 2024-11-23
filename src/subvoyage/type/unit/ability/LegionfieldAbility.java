@@ -1,5 +1,6 @@
 package subvoyage.type.unit.ability;
 
+import arc.Core;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Mathf;
@@ -39,7 +40,7 @@ public class LegionfieldAbility extends Ability {
 
     @Override
     public void displayBars(Unit unit, Table bars) {
-        bars.add(new Bar("stat.fieldpower", Pal.accent, () -> {
+        bars.add(new Bar(Core.bundle.get("stat.fieldpower"), Pal.accent, () -> {
             float mult = Mathf.clamp(radius(unit.team)/(radius),0f,3f);
             if(!Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team)))
                 mult = 0;
