@@ -10,6 +10,7 @@ import subvoyage.SvVars;
 import subvoyage.content.SvTeam;
 import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.block.cat.SvProduction;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.draw.visual.SvIcons;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
@@ -85,7 +86,7 @@ public class Logic {
 
     /*World Loading*/
     public static void worldLoad() {
-        if(SvBlocks.waterSifter instanceof WaterSifter sifter) sifter.worldReset();
+        if(SvProduction.sifter instanceof WaterSifter sifter) sifter.worldReset();
         SvVars.fumesMap.recalc();
         SubvoyageCoreBlock.cutscene = false;
         SubvoyageCoreBlock.landTime = 0f;

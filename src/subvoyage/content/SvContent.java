@@ -4,7 +4,7 @@ import mindustry.world.Block;
 import subvoyage.anno.LoadAnnoProcessor;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.block.cat.*;
-import subvoyage.content.other.SvLoadouts;
+import subvoyage.content.other.SvSchematics;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.content.sound.SvSounds;
 
@@ -39,10 +39,9 @@ public class SvContent {
             }
         };
 
-        SvLoadouts.load();
         SvPlanets.load();
-
         SvSectorPresets.load();
+        SvSchematics.load();
 
         SvWeather.load();
     }

@@ -1,69 +1,12 @@
 package subvoyage.content.block;
 
-import arc.Core;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.struct.*;
 import mindustry.*;
 import mindustry.content.*;
-import mindustry.entities.*;
-import mindustry.entities.bullet.*;
-import mindustry.entities.effect.*;
-import mindustry.entities.part.DrawPart.*;
-import mindustry.entities.part.*;
-import mindustry.entities.pattern.*;
-import mindustry.game.*;
-import mindustry.gen.*;
-import mindustry.graphics.*;
-import mindustry.type.*;
 import mindustry.world.*;
-import mindustry.world.blocks.defense.*;
-import mindustry.world.blocks.defense.turrets.*;
-import mindustry.world.blocks.distribution.*;
-import mindustry.world.blocks.liquid.*;
-import mindustry.world.blocks.payloads.*;
-import mindustry.world.blocks.power.*;
-import mindustry.world.blocks.production.*;
-import mindustry.world.blocks.storage.*;
-import mindustry.world.blocks.units.*;
-import mindustry.world.consumers.*;
-import mindustry.world.draw.*;
 import mindustry.world.meta.*;
-import subvoyage.*;
 import subvoyage.content.*;
 import subvoyage.content.block.cat.*;
-import subvoyage.content.other.*;
-import subvoyage.content.sound.SvSounds;
-import subvoyage.draw.block.*;
-import subvoyage.draw.part.*;
-import subvoyage.draw.visual.*;
-import subvoyage.type.block.core.*;
-import subvoyage.type.block.core.offload_core.*;
-import subvoyage.type.block.defense.DrawRingTurret;
-import subvoyage.type.block.defense.PowerRingTurret;
-import subvoyage.type.block.distribution.*;
-import subvoyage.type.block.effect.OverdriveSquareProjector;
-import subvoyage.type.block.fog.*;
-import subvoyage.type.block.laser.blocks.LaserGenerator;
-import subvoyage.type.block.laser.nodes.LaserNode;
-import subvoyage.type.block.laser.nodes.LaserSplitter;
-import subvoyage.type.block.laser.nodes.LaserAmplifier;
-import subvoyage.type.block.power.generation.*;
-import subvoyage.type.block.power.node.*;
-import subvoyage.type.block.production.*;
-import subvoyage.type.block.wall.PhosphideWall;
-import subvoyage.type.shoot.*;
 import subvoyage.world.*;
-
-import static arc.Core.atlas;
-import static arc.graphics.g2d.Draw.color;
-import static mindustry.Vars.tilesize;
-import static mindustry.content.Liquids.water;
-import static mindustry.type.ItemStack.*;
-import static subvoyage.BalanceStates.*;
-import static subvoyage.content.SvItems.*;
-import static subvoyage.content.SvUnits.*;
 
 public class SvBlocks{
     
@@ -123,10 +66,11 @@ public class SvBlocks{
         SvDefense.load();
         SvPower.load();
         SvLaser.load();
-        corePuffer = SvStorage.corePuffer;
+        //corePuffer = SvStorage.corePuffer;
     }
 
     public static void load() {
+        /*
         //non-user
         offloadCore = new OffloadCore("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
@@ -264,7 +208,7 @@ public class SvBlocks{
             outputs = IntSeq.with(0);
             inputs = IntSeq.with(1,2,3);
         }};
-
+        */
         /*laserBlaster = new LaserBlaster("laser-blaster") {{
             requirements(Category.effect, atl(), with(iridium, 200, chrome, 200, spaclanium, 200, corallite, 100));
             consumeLaserPower(300);
@@ -307,7 +251,7 @@ public class SvBlocks{
         }};*/
 
         //payload
-        helicopterFabricator = new UnitFactory("helicopter-factory"){
+        /*helicopterFabricator = new UnitFactory("helicopter-factory"){
             {
                 requirements(Category.units, atl(), with(iridium, 60, clay, 70));
 
@@ -399,7 +343,7 @@ public class SvBlocks{
                 outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
                 inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
-        };
+        };*/
 /*
         laserRefabricator = new LaserReconstructor("laser-refabricator") {{
             requirements(Category.units, atl(), with(iridium,500, chrome,400,corallite,300,spaclanium,300));
@@ -498,7 +442,7 @@ public class SvBlocks{
                 inRegion = atlas.find(name + "-in", Subvoyage.ID +"factory-in-" + size + regionSuffix);
             }
         };*/
-
+/*
         fortifiedPayloadConveyor = new PayloadConveyor("fortified-payload-conveyor"){{
             requirements(Category.units, atl(), with(iridium, 5, chrome, 10));
             moveTime = 32f;
@@ -651,7 +595,7 @@ public class SvBlocks{
 
             boostScale = 1f / 9f;
             /*consumeCoolant()
-            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));*/
+            coolant = consume(new ConsumeLiquid(nitrogen, 20f / 60f));*//*
 
             craftEffect = new MultiEffect(Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.orangeSpark, 20f));
             drawer = new DrawMulti(

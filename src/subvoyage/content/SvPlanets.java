@@ -9,6 +9,7 @@ import mindustry.graphics.g3d.*;
 import mindustry.type.*;
 import mindustry.world.meta.*;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.block.cat.SvStorage;
 import subvoyage.content.other.SvPal;
 import subvoyage.draw.visual.AuroraMesh;
 import subvoyage.world.*;
@@ -44,8 +45,8 @@ public class SvPlanets{
                     new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.15f), 4, 0.6f, 2f, 0.41f)
             );
 
-            defaultCore = SvBlocks.corePuffer;
-            unlockedOnLand.add(SvBlocks.corePuffer);
+            defaultCore = SvStorage.corePuffer;
+            unlockedOnLand.add(SvStorage.corePuffer);
 
             sectorSeed = 6;
 

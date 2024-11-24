@@ -3,6 +3,7 @@ package subvoyage.content;
 import arc.struct.Seq;
 import mindustry.type.*;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.block.cat.SvPayload;
 
 import static subvoyage.content.SvPlanets.atlacian;
 
@@ -11,7 +12,7 @@ public class SvSectorPresets {
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-        dive = new SectorPreset("divingPoint",atlacian,13) {{
+        /*dive = new SectorPreset("dive",atlacian,13) {{
             alwaysUnlocked = true;
 
             overrideLaunchDefaults = true;
@@ -68,11 +69,11 @@ public class SvSectorPresets {
             rules = (r) -> {
                 r.attackMode = true;
                 r.enemyCoreBuildRadius = 480f;
-                r.bannedBlocks.addAll(SvBlocks.helicopterFabricator,SvBlocks.helicopterRefabricator);
+                r.bannedBlocks.addAll(SvPayload.helicopterFabricator,SvPayload.helicopterRefabricator);
             };
-        }};
+        }};*/
 
 
-        all.addAll(dive, ridges, tarn, hedge, encounter);
+        //all.addAll(dive, ridges, tarn, hedge, encounter);
     }
 }

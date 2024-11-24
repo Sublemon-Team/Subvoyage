@@ -11,6 +11,7 @@ import mindustry.content.Fx;
 import mindustry.entities.*;
 import mindustry.graphics.*;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.block.cat.SvPayload;
 import subvoyage.content.other.SvPal;
 import subvoyage.type.block.distribution.PayloadLaunchPad;
 
@@ -111,7 +112,7 @@ public class SvFx{
 
 
     payloadLaunchPadRocketLaunch = new Effect(240f,e -> {
-        PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
+        PayloadLaunchPad launchPad = (PayloadLaunchPad) SvPayload.payloadLaunchPad;
         Draw.alpha(e.foutpowdown());
         Draw.scl(1f+e.finpow()*4f,1f+e.finpow()*4f);
         float x = SvDraw._3D.xHeight(e.x,e.finpow());
@@ -121,7 +122,7 @@ public class SvFx{
         if(e.fout() > 0.97f && !state.isPaused()) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
     }),
     payloadLaunchPadRocketLand = new Effect(240f,e -> {
-        PayloadLaunchPad launchPad = (PayloadLaunchPad) SvBlocks.payloadLaunchPad;
+        PayloadLaunchPad launchPad = (PayloadLaunchPad) SvPayload.payloadLaunchPad;
         Draw.alpha(e.finpowdown());
         Draw.scl(1f+e.foutpowdown()*4f,1f+e.foutpowdown()*4f);
         float x = SvDraw._3D.xHeight(e.x,e.foutpowdown());

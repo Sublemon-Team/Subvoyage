@@ -5,9 +5,9 @@ public class BalanceStates {
     HU = 400f, //HEALTH UNIT
     DU = 200f,
 
-    TURRET_DMG_U = DU*0.1f,
+    TURRET_DMG_U = DU*0.4f,
 
-    WALL_HP_U = DU*0.8f, // for 1x1 wall
+    WALL_HP_U = DU*2f, // for 1x1 wall
     WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall
 
     OFFENSE_HP_U = HU*1.125f,

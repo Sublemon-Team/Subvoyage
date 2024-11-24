@@ -26,7 +26,7 @@ public class AtlacianPlanetGen extends PlanetGenerator {
     /**/float archalyteBiomeWeight = 0.4f;
 
     {
-        defaultLoadout = SvLoadouts.basicPuffer;
+        defaultLoadout = SvSchematics.corePuffer;
         baseSeed = 1;
     }
 

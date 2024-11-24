@@ -29,6 +29,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.content.block.SvBlocks;
+import subvoyage.content.block.cat.SvProduction;
 import subvoyage.draw.visual.SvDraw;
 import subvoyage.draw.visual.SvFx;
 
@@ -135,7 +136,7 @@ public class ProductionAnchor extends Block {
 
                 if(clayCount >= 25 && waterCount >= 60f && lastInputTeam != null) {
                     team = lastInputTeam;
-                    state.stats.placedBlockCount.put(SvBlocks.productionAnchor,state.stats.placedBlockCount.get(SvBlocks.productionAnchor,0)+1);
+                    state.stats.placedBlockCount.put(SvProduction.productionAnchor,state.stats.placedBlockCount.get(SvProduction.productionAnchor,0)+1);
                 }
             }
             if(targetCore != null) {
@@ -266,7 +267,7 @@ public class ProductionAnchor extends Block {
                     health(maxHealth());
                     healthChanged();
                     if(team == player.team()) {
-                        state.stats.placedBlockCount.put(SvBlocks.productionAnchor,state.stats.placedBlockCount.get(SvBlocks.productionAnchor,0)-1);
+                        state.stats.placedBlockCount.put(SvProduction.productionAnchor,state.stats.placedBlockCount.get(SvProduction.productionAnchor,0)-1);
                     }
                     team(cacheTeam);
                     //Call.buildDestroyed(this);
