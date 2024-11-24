@@ -9,6 +9,7 @@ public class SvTeam {
     public static Team melius;
     public static void load() {
         melius = newTeam(181,"melius", Color.valueOf("7ede8a"));
+        melius.hasPalette = true;
 
         Team.baseTeams[5] = melius;
     }

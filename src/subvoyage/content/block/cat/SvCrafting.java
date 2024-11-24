@@ -1,6 +1,7 @@
 package subvoyage.content.block.cat;
 
 import arc.graphics.g2d.TextureRegion;
+import arc.struct.IntSeq;
 import mindustry.content.Fx;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
@@ -11,6 +12,7 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Env;
 import subvoyage.content.other.SvPal;
 import subvoyage.draw.block.DrawBurner;
+import subvoyage.draw.block.DrawColorWeave;
 import subvoyage.draw.block.DrawHeatGlow;
 import subvoyage.draw.block.DrawMixer;
 import subvoyage.draw.visual.SvFx;
@@ -18,6 +20,7 @@ import subvoyage.type.block.laser.blocks.*;
 import subvoyage.type.block.production.*;
 import subvoyage.type.block.production.crude_smelter.CrudeSmelter;
 
+import static mindustry.content.Liquids.nitrogen;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
@@ -243,5 +246,36 @@ public class SvCrafting {
                 return new TextureRegion[] {fullIcon};
             }
         };
+        quartzScutcher = new LaserCrafter("quartz-scutcher") {{
+            requirements(Category.crafting,atl(),with(phosphide,350,iridium,600,spaclanium,300,chrome,150));
+
+            researchCost = with(phosphide,2350,iridium,2400,spaclanium,2400,chrome,1500);
+
+            itemCapacity = 30;
+            size = 3;
+            craftEffect = SvFx.scutchFlash;
+            craftTime = 100f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(spaclanium,3);
+            consumeLiquid(nitrogen,38/60f);
+            consumeLiquid(argon,38/60f);
+            consumePower(400/60f);
+            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(SvPal.quartzWeave), new DrawDefault());
+            outputItem = new ItemStack(quartzFiber,2);
+
+            laserRequirement = 120f;
+            laserOverpowerScale = 0.8f;
+            laserMaxEfficiency = 2f;
+            inputs = IntSeq.range(0,3);
+
+            maxSuppliers = 1;
+            inputRange = 8;
+            drawInputs = false;
+
+            hasItems = true;
+            hasLiquids = true;
+            hasPower = true;
+        }};
     }
 }

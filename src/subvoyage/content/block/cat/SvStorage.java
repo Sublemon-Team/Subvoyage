@@ -10,6 +10,7 @@ import mindustry.world.blocks.storage.Unloader;
 import mindustry.world.meta.BlockGroup;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
+import subvoyage.content.SvTeam;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
 
 import static mindustry.type.ItemStack.with;
@@ -48,7 +49,7 @@ public class SvStorage {
 
             @Override
             protected TextureRegion[] icons(){
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
 
@@ -67,7 +68,7 @@ public class SvStorage {
 
             @Override
             protected TextureRegion[] icons() {
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
         largeVault = new StorageBlock("large-vault"){
@@ -82,7 +83,7 @@ public class SvStorage {
 
             @Override
             protected TextureRegion[] icons() {
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
 
@@ -97,7 +98,7 @@ public class SvStorage {
         }
             @Override
             protected TextureRegion[] icons(){
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
 

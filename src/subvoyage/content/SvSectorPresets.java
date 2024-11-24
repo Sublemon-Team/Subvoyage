@@ -29,6 +29,8 @@ public class SvSectorPresets {
                 r.loadout = Seq.with();
                 //r.infiniteResources = true;
             };
+
+            atlacian.startSector = 13;
         }};
 
 

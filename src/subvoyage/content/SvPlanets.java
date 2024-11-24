@@ -79,6 +79,8 @@ public class SvPlanets{
             startSector = 13;
             defaultEnv = Environment.legarytic | Env.terrestrial;
 
+            clearSectorOnLose = true;
+
             alwaysUnlocked = true;
             landCloudColor = SvPal.atlacianLandCloud;
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)

@@ -123,6 +123,7 @@ public class SvBlocks{
         SvDefense.load();
         SvPower.load();
         SvLaser.load();
+        corePuffer = SvStorage.corePuffer;
     }
 
     public static void load() {

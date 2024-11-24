@@ -10,6 +10,7 @@ import mindustry.world.Block;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
+import subvoyage.content.SvTeam;
 import subvoyage.type.block.core.offload_core.CoreDecoder;
 import subvoyage.type.block.core.offload_core.OffloadCore;
 import subvoyage.type.block.fog.Beacon;
@@ -96,7 +97,7 @@ public class SvSpecial {
 
             @Override
             protected TextureRegion[] icons(){
-                return new TextureRegion[]{region, teamRegions[Team.sharded.id]};
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
 

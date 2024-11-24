@@ -40,17 +40,17 @@ public class Logic {
         var core = player.bestCore();
         if(core == null) return;
         if(!settings.getBool("skipcoreanimation") && !state.rules.pvp && state.rules.planet == atlacian){
-            beginLandMusic();
+            //beginLandMusic();
             beginLandCutscene();
         }
     }
 
     /*Landing*/
     public static void beginLandMusic() {
-        SvMusic.atlacianLand.stop();
+        SvMusic.theAtlacian.stop();
         if(settings.getInt("musicvol") > 0){
             Musics.land.stop();
-            SvMusic.atlacianLand.play();
+            SvMusic.theAtlacian.play();
         }
     }
 
@@ -65,26 +65,17 @@ public class Logic {
         if(state.isGame()) gameUpdate();
         if(state.isMenu()) menuUpdate();
         SvVars.fumesMap.update();
-
-        SvMusic.atlacianLand.setVolume(settings.getInt("musicvol") / 100f);
     }
 
     public static void gameUpdate() {
         if(player.team() == Team.sharded && state.rules.planet == atlacian)
             player.team(SvTeam.melius);
 
-        if(SvMusic.atlacianLand.isPlaying()) {
-            SvMusic.atlacianLand.pause(false);
-
-            control.sound.stop();
-        }
         LegionfieldAbility.update();
         if(!state.isPaused() && SubvoyageCoreBlock.cutscene) SubvoyageCoreBlock.landTime-=Time.delta;
     }
     public static void menuUpdate() {
-        if(SvMusic.atlacianLand.isPlaying()) {
-            SvMusic.atlacianLand.pause(true);
-        }
+
     }
 
     /*Reset*/
