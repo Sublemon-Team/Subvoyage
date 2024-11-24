@@ -2976,34 +2976,34 @@ public class SvUnits{
         lapetus.region = atlas.find(lapetus.name+(isUwu ? "-uwu" : ""));
         lapetus.drawCell = !isUwu;
         if(lapetus.parts.first() instanceof RotatorRegionPart part) {
-            part.xScl = isUwu ? 0 : 1;
+            part.draw = !isUwu;
         }
         skath.region = atlas.find(skath.name+(isUwu ? "-uwu" : ""));
         skath.drawCell = !isUwu;
         for (DrawPart part : skath.parts) {
             if(part instanceof RotatorRegionPart p) {
-                p.xScl = isUwu ? 0 : 1;
+                p.draw = !isUwu;
             }
         }
         charon.region = atlas.find(charon.name+(isUwu ? "-uwu" : ""));
         charon.drawCell = !isUwu;
         for (DrawPart part : charon.parts) {
             if(part instanceof RotatorRegionPart p) {
-                p.xScl = isUwu ? 0 : 1;
+                p.draw = !isUwu;
             }
         }
         callees.region = atlas.find(callees.name+(isUwu ? "-uwu" : ""));
         callees.drawCell = !isUwu;
         for (DrawPart part : callees.parts) {
             if(part instanceof RotatorRegionPart p) {
-                p.xScl = isUwu ? 0 : 1;
+                p.draw = !isUwu;
             }
         }
         ganymede.region = atlas.find(ganymede.name+(isUwu ? "-uwu" : ""));
         ganymede.drawCell = !isUwu;
         for (DrawPart part : ganymede.parts) {
             if(part instanceof RotatorRegionPart p) {
-                p.xScl = isUwu ? 0 : 1;
+                p.draw = !isUwu;
             }
         }
         stunt.region = atlas.find(stunt.name+(isUwu ? "-uwu" : ""));

@@ -20,6 +20,7 @@ public class RotatorRegionPart extends DrawPart{
     public String suffix = Subvoyage.ID + "-base-rotator";
     public boolean outline = false;
     public boolean blur = true;
+    public boolean draw = true;
 
     public RotatorRegionPart(String suffix){
         this.suffix = suffix;
@@ -30,6 +31,7 @@ public class RotatorRegionPart extends DrawPart{
 
     @Override
     public void draw(PartParams params){
+        if(!draw) return;
         if(rotator.found()){
             float layer = this.layer+ 3;
             Vec2 vec = Tmp.v2.set(x,y).rotate(unitRot - 90);
