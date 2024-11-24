@@ -400,7 +400,6 @@ public class PowerBubbleNode extends PowerBlock {
         }
 
         public float getPowerConsumption() {
-            System.out.println(powerUsage);
             return powerUsage;
         }
     }

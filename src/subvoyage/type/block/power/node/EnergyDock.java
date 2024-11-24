@@ -87,10 +87,6 @@ public class EnergyDock extends PowerBlock {
             PowerModule power = entity.power;
             Building other = world.build(value);
             boolean contains = power.links.contains(value), valid = other != null && other.power != null;
-            System.out.println("--");
-            System.out.println(valid);
-            System.out.println(contains);
-            System.out.println(linkValid(entity, other));
             if(other == null) return;
             if(!(other.block() instanceof PowerBubbleNode)) return;
             if(contains){

@@ -23,6 +23,7 @@ public class SvPlanets{
 
     public static void load() {
         atlacian = new AtlacianPlanetType("atlacian", sun, 1f, 2) {{
+            icon = "atlacian";
             generator = new AtlacianPlanetGen();
             Vec3 ringPos = new Vec3(0,-1f,0).rotate(Vec3.X, 5);
             meshLoader = () -> new MultiMesh(
@@ -66,7 +67,8 @@ public class SvPlanets{
                 r.staticFog = true;
             };
 
-            iconColor = SvPal.atlacianIcon.cpy().lerp(SvPal.legartyte,0.5f);
+            iconColor = Color.white;
+
             lightColor = SvPal.tugSheetLightish.cpy().a(0.01f);
             atmosphereColor = SvPal.atlacianAtmosphere.cpy().a(0.02f);
             atmosphereRadIn = 0.03f;
@@ -85,6 +87,5 @@ public class SvPlanets{
 
         serpulo.hiddenItems.addAll(SvItems.atlacianItems);
         erekir.hiddenItems.addAll(SvItems.atlacianItems);
-        System.out.println("sectors: "+atlacian.sectors.size);
     }
 }

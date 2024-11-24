@@ -11,6 +11,7 @@ import subvoyage.content.SvTeam;
 import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvBlocks;
 import subvoyage.content.sound.SvMusic;
+import subvoyage.draw.visual.SvIcons;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
 import subvoyage.type.block.production.WaterSifter;
 import subvoyage.type.unit.ability.LegionfieldAbility;
@@ -30,6 +31,7 @@ public class Logic {
         control.input.addLock(SubvoyageCoreBlock.lock);
         bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
 
+        SvIcons.load();
         SvUnits.loadUwu(SubvoyageSettings.unitUwu());
     }
 
