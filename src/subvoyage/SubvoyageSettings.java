@@ -7,6 +7,7 @@ import mindustry.gen.Icon;
 import mindustry.type.Planet;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.SvUnits;
+import subvoyage.ui.advancements.Advancement;
 import subvoyage.ui.setting.BannerPref;
 import subvoyage.ui.setting.ButtonPref;
 import subvoyage.ui.setting.CheckIconSetting;
@@ -33,6 +34,9 @@ public class SubvoyageSettings {
             }));
             t.pref(new ButtonPref(Core.bundle.get("sv-clear-tech-tree"),Icon.trash,() -> {
                 ui.showConfirm("@confirm", "@settings.sv-clear-tech-tree.confirm", () -> resetTree(atlacian.techTree));
+            }));
+            t.pref(new ButtonPref(Core.bundle.get("sv-clear-advancements"),Icon.trash,() -> {
+                ui.showConfirm("@confirm", "@settings.sv-clear-advancements.confirm", SubvoyageSettings::resetAdvancements);
             }));
 
             sliderPref(t,ID+"-offload-core-ico","sv-offload-shield-sides",
@@ -64,6 +68,9 @@ public class SubvoyageSettings {
     public static boolean bool(String key) {
         return settings.getBool("sv"+"-"+key);
     }
+    public static void bool(String key,boolean bool) {
+        settings.put("sv"+"-"+key,bool);
+    }
 
     public static void resetSaves(Planet planet) {
         planet.sectors.each(sector -> {
@@ -74,6 +81,9 @@ public class SubvoyageSettings {
         root.reset();
         root.content.clearUnlock();
         root.children.each(SubvoyageSettings::resetTree);
+    }
+    public static void resetAdvancements() {
+        Advancement.all.each(Advancement::lock);
     }
 
     static void sliderPref(SettingsMenuDialog.SettingsTable t, String ico, String name, int def, int min, int max, SettingsMenuDialog.StringProcessor p) {

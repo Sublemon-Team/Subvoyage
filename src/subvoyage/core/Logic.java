@@ -9,13 +9,14 @@ import subvoyage.SubvoyageSettings;
 import subvoyage.SvVars;
 import subvoyage.content.SvTeam;
 import subvoyage.content.SvUnits;
-import subvoyage.content.block.SvBlocks;
 import subvoyage.content.block.cat.SvProduction;
 import subvoyage.content.sound.SvMusic;
 import subvoyage.draw.visual.SvIcons;
 import subvoyage.type.block.core.SubvoyageCoreBlock;
 import subvoyage.type.block.production.WaterSifter;
 import subvoyage.type.unit.ability.LegionfieldAbility;
+import subvoyage.ui.SvUI;
+import subvoyage.ui.advancements.Advancement;
 import subvoyage.utility.Var;
 
 import static arc.Core.bundle;
@@ -34,6 +35,8 @@ public class Logic {
 
         SvIcons.load();
         SvUnits.loadUwu(SubvoyageSettings.unitUwu());
+
+        SvUI.load();
     }
 
     /*New game start*/
@@ -74,6 +77,8 @@ public class Logic {
 
         LegionfieldAbility.update();
         if(!state.isPaused() && SubvoyageCoreBlock.cutscene) SubvoyageCoreBlock.landTime-=Time.delta;
+
+        if(state.rules.planet == atlacian) Advancement.unlock(Advancement.welcome);
     }
     public static void menuUpdate() {
 
