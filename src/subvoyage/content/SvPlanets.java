@@ -23,7 +23,7 @@ public class SvPlanets{
     public static Planet atlacian;
 
     public static void load() {
-        atlacian = new AtlacianPlanetType("atlacian", sun, 1f, 2) {{
+        atlacian = new AtlacianPlanetType("atlacian", sun, 1f, 3) {{
             icon = "atlacian";
             generator = new AtlacianPlanetGen();
             Vec3 ringPos = new Vec3(0,-1f,0).rotate(Vec3.X, 5);
