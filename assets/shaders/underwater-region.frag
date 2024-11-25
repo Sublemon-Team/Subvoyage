@@ -53,7 +53,7 @@ void main() {
     gl_FragColor = orig; // in case something breaks
     float stime = u_time / 5.0;
     float distortAmount = clamp(texture2D(u_distortmap, vec2(worldc.x / u_ww+4.0/u_ww, worldc.y / u_wh+4.0/u_wh)).r,0.0,1.0);
-    if(!(0 <= worldc.x && worldc.x < u_ww && 0 <= worldc.y && worldc.y < u_wh)) distortAmount = 0;
+    if(!(0.0 <= worldc.x && worldc.x < u_ww && 0.0 <= worldc.y && worldc.y < u_wh)) distortAmount = 0.0;
     vec2 distortOffset = vec2(sin(stime/3.0+coords.y/8.0)*v.x*0.25, sin(stime/2.5+coords.x/8.0)*v.y*0.5);
     vec2 distortOffset2 = vec2(sin(stime/3.0+coords.y/8.0+distortAmount*1.5)*v.x*0.25, sin(stime/2.5+coords.x/8.0+distortAmount*1.5)*v.y*0.5);
     distortOffset *= noise;
@@ -64,7 +64,7 @@ void main() {
     float noise2 = (texture2D(u_noise, (coords) / DSCALE/4 + vec2(atime) * vec2(-0.9, 0.8)).r + texture2D(u_noise, (coords) / DSCALE/4 + vec2(atime * 1.1) * vec2(0.8, -1.0)).r) / 2.0;
     noise2 = abs(noise2 - 0.5) * 7.0 + 0.23;
     distortAmount *= noise2;
-    if(distortAmount<0.2 && distortAmount > 0) {
+    if(distortAmount<0.2 && distortAmount > 0.0) {
         float dist = 1-abs(distortAmount-0.1)/0.1;
         float eff = dist*0.5;
         gl_FragColor = lerp(gl_FragColor,vec4(0.5,0.7,1.0,1.0),eff*u_opacity);
