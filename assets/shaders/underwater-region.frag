@@ -34,6 +34,10 @@ void heatmap() {
     gl_FragColor = vec4(heatAmount*noise,min(1.0-heatAmount,1.0-coolAmount)*noise,coolAmount*noise,1.0);
 }
 
+vec4 lerp(vec4 a, vec4 b, float t) {
+    return a + t * (b - a);
+}
+
 void main() {
     vec2 c = v_texCoords;
     vec2 v = vec2(1.0/u_resolution.x, 1.0/u_resolution.y);
@@ -79,8 +83,4 @@ void main() {
     if(distortAmount>0.2) {
         gl_FragColor = lerp(gl_FragColor,vec4(0.5,0.7,1.0,1.0),distortAmount/4*u_opacity);
     }
-}
-
-vec4 lerp(vec4 a, vec4 b, float t) {
-    return a + t * (b - a);
 }
