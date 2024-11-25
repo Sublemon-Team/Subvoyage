@@ -38,9 +38,9 @@ public class SubvoyageSettings {
             sliderPref(t,ID+"-offload-core-ico","sv-offload-shield-sides",
                     6,3,10,
                     s -> s == 10 ? bundle.get("circle") : s+"");
-            sliderPref(t,ID+"-liquid-hard-water","sv-metal-fuming-opacity",
+            /*sliderPref(t,ID+"-liquid-hard-water","sv-metal-fuming-opacity",
                     75,0,100,
-                    s -> s == 0 ? bundle.get("off") : s+"%");
+                    s -> s == 0 ? bundle.get("off") : s+"%");*/
 
             checkPref(t,ID+"-energy-dock-ship","sv-autoupdate",true);
             checkPref(t,ID+"-leeft-uwu","sv-leeft-uwu",false, SvUnits::loadUwu);

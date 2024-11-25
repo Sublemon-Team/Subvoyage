@@ -19,7 +19,7 @@ public class CustomRender {
         if(SubvoyageCoreBlock.cutscene) {
             camera.position.set(player.bestCore().x,player.bestCore().y);
         }
-        Draw.draw(Layer.min,() -> {
+        /*Draw.draw(Layer.min,() -> {
             if(buffer == null) buffer = new FrameBuffer();
             buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
             buffer.begin(Color.clear);
@@ -29,7 +29,7 @@ public class CustomRender {
             //buffer.blit(Shaders.screenspace);
             Draw.z(Layer.weather);
             buffer.blit(SvShaders.underwaterRegion);
-        });
+        });*/
         SvVars.effectBuffer = buffer;
     }
 }
