@@ -5,8 +5,10 @@ import arc.util.Log;
 import arc.util.Time;
 import mindustry.game.Team;
 import mindustry.gen.Musics;
+import mindustry.type.SectorPreset;
 import subvoyage.SubvoyageSettings;
 import subvoyage.SvVars;
+import subvoyage.content.SvSectorPresets;
 import subvoyage.content.SvTeam;
 import subvoyage.content.SvUnits;
 import subvoyage.content.block.cat.SvProduction;
@@ -79,6 +81,12 @@ public class Logic {
         if(!state.isPaused() && SubvoyageCoreBlock.cutscene) SubvoyageCoreBlock.landTime-=Time.delta;
 
         if(state.rules.planet == atlacian) Advancement.unlock(Advancement.welcome);
+
+        for (SectorPreset sect : SvSectorPresets.all) {
+            if(sect.sector.isCaptured() && Advancement.get("sector_"+sect.name.replace("subvoyage-","")) != null) {
+                Advancement.unlock(Advancement.get("sector_"+sect.name.replace("subvoyage-","")));
+            }
+        }
     }
     public static void menuUpdate() {
 

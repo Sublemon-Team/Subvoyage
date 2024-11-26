@@ -4,13 +4,18 @@ import arc.Core;
 import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Reflect;
+import arc.util.Structs;
 import subvoyage.SubvoyageSettings;
+import subvoyage.ui.SvUI;
+
+import java.sql.Ref;
 
 public class Advancement {
     public static Seq<Advancement> all = Seq.with();
 
     public static Advancement
-            welcome
+            welcome,
+            sector_dive
             ;
 
     public String id;
@@ -22,7 +27,8 @@ public class Advancement {
 
     public static void load() {
         add(
-            "welcome","sublemon-frog" // Launching Subvoyage
+                "welcome","sublemon_frog", // Launching Subvoyage
+                "sector_dive","ceramic-burner" // Capturing Dive
         );
     }
 
@@ -41,6 +47,7 @@ public class Advancement {
     };
     public static void toast(Advancement adv) {
         Log.info("Advancement toast: "+adv.title);
+        SvUI.advancementFrag.queue.addUnique(adv);
     }
 
     public static void add(String... all) {
@@ -57,9 +64,9 @@ public class Advancement {
             this.id = title_;
             this.title = Core.bundle.get("sv_advancement."+title_+".name");
             this.description = Core.bundle.get("sv_advancement."+title_+".description");
-            this.icon = icon_;
+            this.icon = "subvoyage-"+icon_;
         }};
-        Reflect.set(Advancement.class,title_,adv);
+        if(Structs.contains(Advancement.class.getFields(),(t) -> t.getName().equals(title_))) Reflect.set(Advancement.class,title_,adv);
         return adv;
     }
 

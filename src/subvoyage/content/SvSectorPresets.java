@@ -8,10 +8,24 @@ import subvoyage.content.block.cat.SvPayload;
 import static subvoyage.content.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset dive, ridges, tarn, encounter, hedge;
+    public static SectorPreset dive;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
+        dive = new SectorPreset("dive",atlacian,24) {{
+            alwaysUnlocked = true;
+
+            overrideLaunchDefaults = true;
+
+            addStartingItems = false;
+            difficulty = 0;
+
+            rules = (r) -> {
+                r.loadout = Seq.with();
+            };
+            atlacian.startSector = 24;
+        }};
+        all.addAll(dive);
         /*dive = new SectorPreset("dive",atlacian,13) {{
             alwaysUnlocked = true;
 
