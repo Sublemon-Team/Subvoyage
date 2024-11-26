@@ -24,20 +24,20 @@ public class AdvancementsDialog extends BaseDialog {
 
     public void rebuild() {
         cont.clear();
-        Table all = cont.table().grow().pad(20f).margin(20f).get();
+        Table all = cont.table().grow().pad(20f).margin(10f).get();
 
         all.add(new Bar(bundle.get("stat.progress") + ": " + Mathf.floor(getProgress()*1000f)/10f + "%",
                         Pal.accent,
                         this::getProgress))
-                .padTop(16f).align(Align.bottom).height(18f).pad(4).top().minWidth(320).maxWidth(640f).grow();
-        all.row();
+                .align(Align.top).height(18f).pad(4f).top().minWidth(320).maxWidth(640f).growX();
         all.row();
         all.pane((t) -> {
+            t.top();
             for (Advancement adv : Advancement.all) {
-                t.add(advancement(adv)).growX().pad(5f);
+                t.add(advancement(adv)).growX().pad(5f).top();
                 t.row();
             }
-        }).minWidth(320).maxWidth(640f).grow();
+        }).top().minWidth(320).maxWidth(640f).grow();
 
         all.align(Align.topLeft);
     }
@@ -59,7 +59,7 @@ public class AdvancementsDialog extends BaseDialog {
             u.label(() -> title(adv)).marginLeft(50f).top().left();
             u.row();
             u.label(() -> description(adv)).marginTop(8f).top().left().fontScale(0.8f).growX().wrap().color(Pal.lightishGray);
-        }).marginLeft(5f).top().left().growY().growX();
+        }).marginLeft(5f).top().growY().growX();
         return t;
     }
 
