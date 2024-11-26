@@ -14,8 +14,11 @@ public class Advancement {
     public static Seq<Advancement> all = Seq.with();
 
     public static Advancement
-            welcome,
-            sector_dive
+            welcome,beta,
+            sector_dive,
+            unit_helio, unit_hydro, unit_rover,
+            overstress,
+            uwu
             ;
 
     public String id;
@@ -28,7 +31,17 @@ public class Advancement {
     public static void load() {
         add(
                 "welcome","sublemon_frog", // Launching Subvoyage
-                "sector_dive","ceramic-burner" // Capturing Dive
+                "beta","sodilate-boulder1", // Launching Subvoyage
+
+                "sector_dive","ceramic-burner", // Capturing Dive
+
+                "unit_helio","lapetus-full", // Unit - Lapetus
+                "unit_hydro","leeft-full", // Unit - Leeft
+                "unit_rover","stunt-full", //Unit - Stunt
+
+                "overstress","water-diffuser", //Overstressing Diffuser
+
+                "uwu","leeft-uwu" //UwU Mode
         );
     }
 
@@ -68,6 +81,10 @@ public class Advancement {
         }};
         if(Structs.contains(Advancement.class.getFields(),(t) -> t.getName().equals(title_))) Reflect.set(Advancement.class,title_,adv);
         return adv;
+    }
+
+    public void unlock() {
+        Advancement.unlock(this);
     }
 
 }

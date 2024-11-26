@@ -51,8 +51,8 @@ public class AdvancementToastFragment extends Table {
         gr.table(t -> {
             t.label(this::title).marginLeft(50f).top().left();
             t.row();
-            t.label(this::description).marginTop(8f).top().left().fontScale(0.8f).width(320f-50f-10f*2f).wrap().color(Pal.lightishGray);
-        }).marginLeft(5f).top().left().growY();
+            t.label(this::description).marginTop(8f).top().left().fontScale(0.8f).growX().wrap().color(Pal.lightishGray);
+        }).marginLeft(5f).top().growX().growY();
 
         gr.update(() -> {
             if(current == null && queue.firstOpt() != null) {
@@ -90,7 +90,7 @@ public class AdvancementToastFragment extends Table {
         return current == null ? "oh" :  clamp(current.title,20);
     }
     public String description() {
-        return current == null ? "no" : clamp(current.description,50);
+        return current == null ? "no" : clamp(current.description,70);
     }
 
     public static String clamp(String str, int maxLength) {

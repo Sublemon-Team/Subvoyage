@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class VersionControl {
 
-    enum Attribute {
+    public enum Attribute {
         FIX,
         BETA
     }

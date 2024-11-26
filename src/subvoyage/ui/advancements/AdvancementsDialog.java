@@ -67,10 +67,10 @@ public class AdvancementsDialog extends BaseDialog {
         return !Advancement.unlocked(adv) ? findCache("subvoyage-advancement-locked") : findCache(adv.icon);
     }
     public String title(Advancement adv) {
-        return !Advancement.unlocked(adv) ? Core.bundle.get("sv_advancement.locked.name") : clamp(adv.title,20);
+        return !Advancement.unlocked(adv) ? Core.bundle.get("sv_advancement.locked.name") : clamp(adv.title,40);
     }
     public String description(Advancement adv) {
-        return !Advancement.unlocked(adv) ? Core.bundle.get("sv_advancement.locked.description") : clamp(adv.description,50);
+        return !Advancement.unlocked(adv) ? Core.bundle.get("sv_advancement.locked.description") : clamp(adv.description,100);
     }
 
     public static String clamp(String str, int maxLength) {

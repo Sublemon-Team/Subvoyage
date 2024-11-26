@@ -39,6 +39,7 @@ import subvoyage.type.unit.hydromech.weapons.*;
 import subvoyage.type.unit.rover.RoverUnitType;
 import subvoyage.type.unit.type.*;
 import subvoyage.type.unit.weapons.*;
+import subvoyage.ui.advancements.Advancement;
 
 import static arc.Core.atlas;
 import static arc.graphics.g2d.Draw.color;
@@ -2951,6 +2952,7 @@ public class SvUnits{
 
 
     public static void loadUwu(boolean isUwu) {
+        if(isUwu && Advancement.uwu != null) Advancement.uwu.unlock();
         leeft.region = atlas.find(leeft.name+(isUwu ? "-uwu" :""));
         leeft.weapons.first().layerOffset = isUwu ? -1 : 0;
         leeft.drawCell = !isUwu;

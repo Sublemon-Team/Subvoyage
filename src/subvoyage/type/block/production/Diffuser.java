@@ -21,6 +21,7 @@ import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
+import subvoyage.ui.advancements.Advancement;
 
 import static mindustry.Vars.world;
 
@@ -132,6 +133,8 @@ public class Diffuser extends Block {
                     builds.addUnique(db);
                 diffuserK = builds.size;
             }
+            if(decrease(1f,diffuserK) < 0.35f)
+                Advancement.overstress.unlock();
             
             totalProgress += warmup * delta();
 
@@ -157,6 +160,7 @@ public class Diffuser extends Block {
             if(timer(timerDump, dumpTime)){
                 dump();
             }
+
         }
 
         @Override

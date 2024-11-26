@@ -9,6 +9,7 @@ import subvoyage.content.*;
 import subvoyage.core.CustomRender;
 import subvoyage.core.Logic;
 import subvoyage.draw.visual.*;
+import subvoyage.ui.advancements.Advancement;
 import subvoyage.utility.*;
 import subvoyage.world.techtree.*;
 
@@ -28,6 +29,14 @@ public class Subvoyage extends Mod {
         Events.on(EventType.ResetEvent.class, e -> Logic.reset());
         Events.run(Trigger.newGame,Logic::newGame);
         Events.run(EventType.Trigger.draw, CustomRender::draw);
+
+        Events.on(UnitCreateEvent.class,e -> {
+            if(e.unit.team == SvTeam.melius) {
+                if(e.unit.type == SvUnits.lapetus) Advancement.unit_helio.unlock();
+                if(e.unit.type == SvUnits.leeft) Advancement.unit_hydro.unlock();
+                if(e.unit.type == SvUnits.stunt) Advancement.unit_rover.unlock();
+            }
+        });
 
         Events.on(EventType.FileTreeInitEvent.class, e -> app.post(SvShaders::init));
         Events.on(EventType.DisposeEvent.class, e -> SvShaders.dispose());
