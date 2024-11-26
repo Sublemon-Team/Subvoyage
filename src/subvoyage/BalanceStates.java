@@ -5,7 +5,7 @@ public class BalanceStates {
     HU = 400f, //HEALTH UNIT
     DU = 200f,
 
-    TURRET_DMG_U = DU*0.4f,
+    TURRET_DMG_U = DU*0.8f,
 
     WALL_HP_U = DU*2f, // for 1x1 wall
     WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall
@@ -38,13 +38,13 @@ public class BalanceStates {
 
     //UNITS TIER 1
     HELIO_T1_HU = OFFENSE_HP_U * 1f,
-    HELIO_T1_DPS = OFFENSE_DMG_U * 1f,
+    HELIO_T1_DPS = OFFENSE_DMG_U * 1.8f,
 
     HYDRO_T1_HU = DEFENSE_HP_U * 1f,
-    HYDRO_T1_DPS = DEFENSE_DMG_U * 1f,
+    HYDRO_T1_DPS = DEFENSE_DMG_U * 1.8f,
 
     ROVER_T1_HU = SPECIAL_HP_U * 1f,
-    ROVER_T1_DPS = SPECIAL_DMG_U * 1f,
+    ROVER_T1_DPS = SPECIAL_DMG_U * 1.8f,
 
     //UNITS TIER2
     HELIO_T2_HU = OFFENSE_HP_U * 2.8f,
