@@ -6,7 +6,6 @@ import subvoyage.content.world.SvPlanets;
 import subvoyage.content.world.SvSectorPresets;
 import subvoyage.core.anno.LoadAnnoProcessor;
 import subvoyage.content.other.SvTeam;
-import subvoyage.content.block.SvUnits;
 import subvoyage.content.world.SvWeather;
 import subvoyage.content.other.SvSchematics;
 import subvoyage.content.ost.SvMusic;

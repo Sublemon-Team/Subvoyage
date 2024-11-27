@@ -16,7 +16,7 @@ import subvoyage.type.block.fog.Buoy;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.block.SvUnits.*;
+import static subvoyage.content.SvUnits.*;
 import static subvoyage.content.SvBlocks.atl;
 
 public class SvSpecial {
@@ -105,7 +105,7 @@ public class SvSpecial {
             researchCost = with(iridium,400,chrome,120);
 
             configurable = false;
-            plans.add(new UnitPlan(cryptal, 60f*30f, with()));
+            plans.add(new UnitPlan(demolish, 60f*30f, with()));
             update = true;
             ambientSound = Sounds.electricHum;
 

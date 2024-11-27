@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 import static mindustry.Vars.*;
 
-public class CryptalAI extends FlyingAI {
+public class OffloadDemolisherAI extends FlyingAI {
     public HashMap<Unit,Float> timePassed = new HashMap<>();
     @Override
     public void updateMovement() {

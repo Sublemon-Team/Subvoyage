@@ -12,7 +12,7 @@ import mindustry.entities.units.StatusEntry;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
-import subvoyage.content.block.SvUnits;
+import subvoyage.content.SvUnits;
 import subvoyage.type.unit.type.HelicopterUnitType;
 
 import java.util.Iterator;

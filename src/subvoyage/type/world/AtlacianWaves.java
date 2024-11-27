@@ -10,7 +10,7 @@ import mindustry.game.SpawnGroup;
 import mindustry.type.UnitType;
 
 import static mindustry.content.UnitTypes.*;
-import static subvoyage.content.block.SvUnits.*;
+import static subvoyage.content.SvUnits.*;
 
 public class AtlacianWaves {
 

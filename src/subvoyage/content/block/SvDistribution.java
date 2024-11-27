@@ -16,13 +16,13 @@ import subvoyage.core.draw.SvPal;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.block.SvUnits.bulker;
+import static subvoyage.content.SvUnits.bulker;
 import static subvoyage.content.SvBlocks.atl;
 
 public class SvDistribution {
     public static Block
         duct,isolatedDuct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
-        shipCargoStation, shipUnloadPoint,
+        //shipCargoStation, shipUnloadPoint,
 
         fortifiedConduit, isolatedConduit, highPressureConduit, conduitRouter, conduitBridge
     ;
@@ -126,7 +126,7 @@ public class SvDistribution {
             consumePower(3f/60f);
         }};
 
-        shipCargoStation = new UnitCargoLoader("ship-cargo-station"){{
+        /*shipCargoStation = new UnitCargoLoader("ship-cargo-station"){{
             requirements(Category.distribution,atl(),with(iridium,100,clay,200));
 
             researchCost = with(iridium,1000,clay,700);
@@ -149,7 +149,7 @@ public class SvDistribution {
 
             size = 2;
             itemCapacity = 50;
-        }};
+        }};*/
 
 
         fortifiedConduit = new Conduit("clay-conduit") {{

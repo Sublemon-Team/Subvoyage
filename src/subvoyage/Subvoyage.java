@@ -7,7 +7,7 @@ import mindustry.game.EventType.*;
 import mindustry.mod.*;
 import subvoyage.content.world.SvTechTree;
 import subvoyage.content.SvContent;
-import subvoyage.content.block.SvUnits;
+import subvoyage.content.SvUnits;
 import subvoyage.content.other.SvTeam;
 import subvoyage.core.UpdateManager;
 import subvoyage.core.draw.shader.SvShaders;

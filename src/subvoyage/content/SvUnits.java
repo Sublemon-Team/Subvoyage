@@ -1,10 +1,12 @@
-package subvoyage.content.block;
+package subvoyage.content;
 
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
 import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
+import arc.struct.ObjectMap;
+import arc.util.Time;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -35,7 +37,7 @@ import subvoyage.type.shoot.ShootLeeft;
 import subvoyage.type.shoot.ShootSpreadForwardBackwards;
 import subvoyage.type.shoot.ShootStunt;
 import subvoyage.type.shoot.ShootUpsurge;
-import subvoyage.type.unit.ai.CryptalAI;
+import subvoyage.type.unit.ai.OffloadDemolisherAI;
 import subvoyage.type.unit.ai.StraightMissileAI;
 import subvoyage.type.unit.custom.HydromechState;
 import subvoyage.type.unit.custom.HydromechStateStats;
@@ -60,13 +62,13 @@ public class SvUnits{
     public static UnitType
     // core
     shift,distort,commute,
-    cryptal,
+            demolish,
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
     //rovers
-    stunt, zeal, gambit,
+    stunt, zeal, gambit, covenant,
     //cargo,payload
     bulker,
     pisun; //shh, don't tell anyone
@@ -279,13 +281,13 @@ public class SvUnits{
             }});
         }};
 
-        cryptal = new AtlacianUnitType("cryptal") {{
+        demolish = new AtlacianUnitType("demolish") {{
             constructor = UnitEntity::create;
             playerControllable = false;
             logicControllable = false;
-            controller = (e) -> new CryptalAI();
+            controller = (e) -> new OffloadDemolisherAI();
 
-            health = 750;
+            health = (HELIO_T2_HU + HELIO_T1_HU)/2f;
 
             //aiController = CryptalAI::new;
             circleTarget = true;
@@ -293,11 +295,16 @@ public class SvUnits{
             speed = 2f;
             rotateSpeed = 5f;
             omniMovement = false;
+            faceTarget = true;
+            rotateMoveFirst = true;
             lowAltitude = true;
             flying = true;
-            engineSize = 0f;
+            engineSize = 2f;
+            engineOffset = 6f;
 
-            float haloY = 3.2f;
+            hitSize =  20f;
+
+            float haloY = 8f;
             parts.addAll(
                     new ShapePart() {{
                         circle = true;
@@ -383,22 +390,38 @@ public class SvUnits{
                 mirror = false;
 
                 rotate = true;
-                shootWarmupSpeed = 0.01f;
+                shootWarmupSpeed = 0.005f;
                 minWarmup = 0.8f;
 
+                parentizeEffects = true;
+
                 bullet = new LaserBoltBulletType(1f,0f) {
+                    {
+                        shootEffect = smokeEffect = Fx.none;
+                    }
                     @Override
                     public void draw(Bullet b) {
-                        super.draw(b);
+
                     }
 
                     @Override
                     public void update(Bullet b) {
                         b.remove();
-                        super.update(b);
                     }
                 };
             }
+                ObjectMap<Unit,Float> time = ObjectMap.of();
+                @Override
+                public void update(Unit unit, WeaponMount mount) {
+                    super.update(unit, mount);
+                    float t = time.get(unit,0f);
+                    if(mount.warmup > 0.1f && t >= 30f) {
+                        SvFx.shootShockwave.at(unit.x,unit.y,unit.rotation, Pal.accent, bullet.keepVelocity || parentizeEffects ? unit : null);
+                        t %= 30f;
+                    }
+                    t += Time.delta;
+                    time.put(unit,t);
+                }
 
                 @Override
                 protected void handleBullet(Unit unit, WeaponMount mount, Bullet bullet) {
@@ -2882,6 +2905,142 @@ public class SvUnits{
 
             treadRects = new Rect[] {
                     new Rect(24-64f,7-64f,20,112)
+            };
+        }};
+
+        covenant = new RoverUnitType("covenant") {{
+            constructor = TankUnit::create;
+            itemCapacity = 10;
+
+            health = ROVER_T4_HU;
+            armor = 4f;
+            researchCostMultiplier = 0;
+            hitSize = 32f;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 6f;
+            }});
+
+            speed = 0.6f;
+            rotateSpeed = 1.6f;
+
+            treadPullOffset = 3;
+
+            float BPS = 0.5f*4f;
+            float damageMain = ROVER_T4_DPS/BPS;
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 120f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 16f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 0.8f;
+
+                inaccuracy = 5f;
+
+                bullet = new BasicBulletType(4f,0f) {{
+                    collides = false;
+                    hittable = false;
+
+                    lifetime = 30f;
+                    fragBullets = 4;
+                    fragVelocityMin = fragVelocityMax = 1f;
+                    fragSpread = 360f/4f;
+                    fragRandomSpread = 0f;
+
+                    scaleLife = true;
+
+                    width = height = 16f;
+                    trailLength = 8;
+                    trailWidth = 6f;
+
+                    hitEffect = Fx.none;
+
+                    backColor = trailColor = hitColor = SvPal.phosphide;
+                    frontColor = Color.white;
+
+                    despawnEffect = new Effect(90f, 100f, e -> {
+                        color(SvPal.phosphide);
+                        stroke(e.fout() * 2f);
+                        float circleRad = 4f + e.finpow() * 30f;
+
+
+                        color(SvPal.phosphide);
+                        for(int i = 0; i < 4; i++){
+                            Drawf.tri(e.x, e.y, 8f, 60f * Mathf.lerp(e.fin(),0,e.time > 80 ? (e.time-80)/10f : 0), i*90+e.rotation);
+                        }
+
+                        Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                    });
+                    despawnSound = SvSounds.gambitBombCharge;
+
+                    fragBullet = new BasicBulletType(){{
+                        width = height = 0f;
+
+                        maxRange = 30f;
+
+                        backColor = trailColor = hitColor = SvPal.phosphide;
+                        frontColor = Color.white;
+
+                        hitSound = Sounds.plasmaboom;
+
+                        shootCone = 180f;
+                        ejectEffect = Fx.none;
+                        hitShake = 4f;
+
+                        collidesAir = false;
+
+                        lifetime = 80f;
+
+                        despawnSound = SvSounds.flashExplosion;
+
+                        despawnEffect = new Effect(40f, 100f, e -> {
+                            color(SvPal.phosphide);
+                            stroke(e.fout() * 2f);
+                            float circleRad = 4f + e.finpow() * 40f;
+                            Lines.circle(e.x, e.y, circleRad);
+                            color(SvPal.phosphide);
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 6f, 50f * e.fout(), i*90+e.rotation);
+                            }
+
+                            color();
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 3f, 30f * e.fout(), i*90+e.rotation);
+                            }
+
+                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                        });
+                        hitEffect = Fx.massiveExplosion;
+                        keepVelocity = false;
+
+                        shrinkX = 0.7f;
+                        shrinkInterp = Interp.pow3Out;
+
+                        speed = 0.5f;
+                        collides = false;
+
+                        splashDamage = damageMain;
+                        splashDamageRadius = 50f;
+                    }};
+                }};
+
+                ejectEffect = Fx.none;
+                recoil = 2.5f;
+                shootSound = SvSounds.rifleShoot;
+            }});
+
+            treadRects = new Rect[] {
+                    new Rect(21-80f,7-80f,27,152)
             };
         }};
 

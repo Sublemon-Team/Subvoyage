@@ -13,6 +13,9 @@ import mindustry.gen.Building;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
+import subvoyage.content.other.SvStat;
 import subvoyage.core.anno.LoadAnno;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
@@ -61,6 +64,14 @@ public class LaserGenerator extends Block implements LaserBlock {
         super.init();
         clipSize = Math.max(clipSize, Math.max(inputRange(),outputRange()) * tilesize);
         capacity = laserOutput + 5f;
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        if(laserOutput != 0) stats.add(SvStat.laserOutput,laserOutput,SvStat.laserPower);
+        //if(laserRequirement > 0) stats.add(SvStat.laserUse,laserRequirement,SvStat.laserPower);
+        //if(laserMaxEfficiency > 0) stats.add(Stat.maxEfficiency,laserMaxEfficiency, StatUnit.percent);
     }
 
     @Override

@@ -14,7 +14,7 @@ import subvoyage.core.SvSettings;
 import subvoyage.core.SvVars;
 import subvoyage.content.world.SvSectorPresets;
 import subvoyage.content.other.SvTeam;
-import subvoyage.content.block.SvUnits;
+import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvProduction;
 import subvoyage.content.ost.SvMusic;
 import subvoyage.core.ui.SvIcons;

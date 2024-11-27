@@ -14,7 +14,7 @@ import subvoyage.type.block.storage.core.AtlacianCore;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.block.SvUnits.commute;
+import static subvoyage.content.SvUnits.commute;
 import static subvoyage.content.SvBlocks.atl;
 
 public class SvStorage {

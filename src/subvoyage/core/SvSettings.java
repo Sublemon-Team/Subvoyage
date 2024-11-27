@@ -6,7 +6,7 @@ import mindustry.content.TechTree;
 import mindustry.gen.Icon;
 import mindustry.type.Planet;
 import mindustry.ui.dialogs.SettingsMenuDialog;
-import subvoyage.content.block.SvUnits;
+import subvoyage.content.SvUnits;
 import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.core.ui.settings.BannerPref;
 import subvoyage.core.ui.settings.ButtonPref;

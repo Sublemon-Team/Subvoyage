@@ -142,6 +142,7 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
                 tier++;
             }
         });
+        if(laserMaxEfficiency > 0) stats.add(Stat.maxEfficiency,laserMaxEfficiency*100f, StatUnit.percent);
     }
 
 

@@ -21,7 +21,7 @@ import subvoyage.type.block.payload.unit.Refabricator;
 import static arc.Core.atlas;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
-import static subvoyage.content.block.SvUnits.*;
+import static subvoyage.content.SvUnits.*;
 import static subvoyage.content.SvBlocks.atl;
 
 public class SvPayload {

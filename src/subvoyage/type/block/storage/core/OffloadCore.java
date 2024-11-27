@@ -28,9 +28,8 @@ import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.core.SvSettings;
 import subvoyage.core.draw.SvFx;
 
-import static arc.Core.settings;
 import static mindustry.Vars.*;
-import static subvoyage.content.block.SvUnits.*;
+import static subvoyage.content.SvUnits.*;
 
 public class OffloadCore extends CoreBlock {
     public int minShieldLayers = 3;

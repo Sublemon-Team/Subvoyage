@@ -5,6 +5,9 @@ import arc.math.Mathf;
 import arc.struct.IntSeq;
 import mindustry.ui.Bar;
 import mindustry.world.blocks.production.GenericCrafter;
+import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
+import subvoyage.content.other.SvStat;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
@@ -43,6 +46,15 @@ public class LaserCrafter extends GenericCrafter implements LaserBlock {
             return new Bar();
         });
     }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        if(laserOutput != 0) stats.add(SvStat.laserOutput,laserOutput,SvStat.laserPower);
+        if(laserRequirement > 0) stats.add(SvStat.laserUse,laserRequirement,SvStat.laserPower);
+        if(laserMaxEfficiency > 0) stats.add(Stat.maxEfficiency,laserMaxEfficiency*100f, StatUnit.percent);
+    }
+
 
     @Override
     public void drawPlace(int x, int y, int rotation, boolean valid) {

@@ -20,7 +20,7 @@ import mindustry.input.InputHandler;
 import mindustry.type.Item;
 import mindustry.world.Tile;
 import mindustry.world.blocks.environment.*;
-import subvoyage.content.block.SvUnits;
+import subvoyage.content.SvUnits;
 import subvoyage.type.unit.type.HydromechUnitType;
 import subvoyage.type.unit.custom.HydromechState;
 import subvoyage.type.unit.custom.HydromechStateStats;

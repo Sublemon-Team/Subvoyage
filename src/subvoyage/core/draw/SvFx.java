@@ -22,6 +22,7 @@ import static mindustry.Vars.tilesize;
 public class SvFx{
     public static final Rand rand = new Rand();
     public static final Vec2 v = new Vec2();
+    public static final Vec2 vec = new Vec2(), vec2 = new Vec2();
 
     public static TextureRegion laser;
     public static TextureRegion laserEnd;
@@ -47,6 +48,29 @@ public class SvFx{
         Lines.circle(e.x,e.y,e.fout()*5.5f);
         Fill.circle(e.x,e.y,e.fout()*3.5f);
     }),
+
+    shootShockwave = new Effect(60f, e -> {
+        Draw.color(e.color);
+
+        float
+                fin = Interp.circleOut.apply(e.fout()),
+                fin2 = new Interp.ExpOut(10, 10).apply(e.fin()),
+                fout = new Interp.ExpOut(10, 10).apply(e.fout());
+
+        float progress = e.fin();
+
+        float cover = 280f * fin2 - 40f * Mathf.slope(Interp.circleOut.apply(e.fin()));
+
+        vec.trns(e.rotation, 8f - 18f * fin).add(e.x, e.y);
+
+        EFill.donutEllipse(
+                vec.x, vec.y,
+                8f * progress * fout, 28f * fout,
+                4f * progress * fout, 24f * fout,
+                cover/360f,
+                -cover/2f, e.rotation
+        );
+    }).followParent(true).rotWithParent(true),
 
     burnFlash = new Effect(30f,e -> {
         color(Pal.powerLight);
