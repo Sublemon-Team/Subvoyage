@@ -18,7 +18,7 @@ import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import subvoyage.content.SvEffects;
+import subvoyage.content.other.SvEffects;
 
 import java.util.ArrayList;
 import java.util.Arrays;

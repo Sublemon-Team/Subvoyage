@@ -1,12 +1,16 @@
 package subvoyage.content;
 
 import mindustry.world.Block;
-import subvoyage.anno.LoadAnnoProcessor;
-import subvoyage.content.block.SvBlocks;
-import subvoyage.content.block.cat.*;
+import subvoyage.content.block.*;
+import subvoyage.content.world.SvPlanets;
+import subvoyage.content.world.SvSectorPresets;
+import subvoyage.core.anno.LoadAnnoProcessor;
+import subvoyage.content.other.SvTeam;
+import subvoyage.content.block.SvUnits;
+import subvoyage.content.world.SvWeather;
 import subvoyage.content.other.SvSchematics;
-import subvoyage.content.sound.SvMusic;
-import subvoyage.content.sound.SvSounds;
+import subvoyage.content.ost.SvMusic;
+import subvoyage.content.ost.SvSounds;
 
 public class SvContent {
 

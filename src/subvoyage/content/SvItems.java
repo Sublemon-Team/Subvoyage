@@ -3,7 +3,7 @@ package subvoyage.content;
 import arc.graphics.Color;
 import arc.struct.*;
 import mindustry.type.*;
-import subvoyage.content.other.SvPal;
+import subvoyage.core.draw.SvPal;
 
 public class SvItems{
     public static final Seq<Item> atlacianItems = new Seq<>();

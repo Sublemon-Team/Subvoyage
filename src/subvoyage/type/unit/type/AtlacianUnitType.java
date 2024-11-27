@@ -9,9 +9,9 @@ import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.world.meta.*;
-import subvoyage.content.*;
-import subvoyage.content.other.SvPal;
-import subvoyage.type.unit.hydromech.weapons.HydromechWeapon;
+import subvoyage.content.SvItems;
+import subvoyage.core.draw.SvPal;
+import subvoyage.type.unit.weapon.HydromechWeapon;
 
 public class AtlacianUnitType extends UnitType{
     public float bodyScale = 1f;

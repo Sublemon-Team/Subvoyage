@@ -28,10 +28,9 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.block.SvBlocks;
-import subvoyage.content.block.cat.SvProduction;
-import subvoyage.draw.visual.SvDraw;
-import subvoyage.draw.visual.SvFx;
+import subvoyage.content.block.SvProduction;
+import subvoyage.core.draw.SvDraw;
+import subvoyage.core.draw.SvFx;
 
 import static mindustry.Vars.*;
 import static mindustry.content.Liquids.water;

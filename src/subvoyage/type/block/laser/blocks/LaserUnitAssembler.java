@@ -12,7 +12,6 @@ import mindustry.type.PayloadStack;
 import mindustry.ui.Bar;
 import mindustry.ui.ItemImage;
 import mindustry.ui.Styles;
-import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.blocks.units.UnitAssembler;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;

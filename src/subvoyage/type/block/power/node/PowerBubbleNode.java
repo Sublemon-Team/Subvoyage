@@ -1,7 +1,6 @@
 package subvoyage.type.block.power.node;
 
 import arc.Core;
-import arc.func.Cons2;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -19,7 +18,6 @@ import arc.util.io.Writes;
 import mindustry.Vars;
 import mindustry.core.Renderer;
 import mindustry.core.UI;
-import mindustry.entities.abilities.Ability;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.gen.Unit;
@@ -35,10 +33,9 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
-import mindustry.world.consumers.ConsumePower;
-import subvoyage.content.other.SvPal;
-import subvoyage.utility.SvMath;
-import subvoyage.utility.Var;
+import subvoyage.core.draw.SvPal;
+import subvoyage.util.SvMath;
+import subvoyage.util.Var;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
@@ -222,7 +219,7 @@ public class PowerBubbleNode extends PowerBlock {
             power.links.each(i -> {
                 Building prev = world.build(i);
                 //disconnected
-                if(!builds.contains(prev) && !(prev instanceof EnergyDock.EnergyDockBuild)) {
+                if(!builds.contains(prev) && !(prev instanceof PowerBubbleMerger.EnergyDockBuild)) {
                     prev.power.links.removeValue(pos());
                     power.links.removeValue(prev.pos());
 
@@ -259,8 +256,8 @@ public class PowerBubbleNode extends PowerBlock {
             float area = w*h;
             if(area > maxArea) return false;
 
-            Var<Boolean> hasEnv = new Var<>(false);
-            Var<Boolean> rectOverlap = new Var<>(false);
+            Var<Boolean> hasEnv = Var.bool();
+            Var<Boolean> rectOverlap = Var.bool();
             SvMath.rectangle(pb.tileX(),pb.tileY(),tileX(),tileY(),(x,y) -> {
                 Tile tile = world.tile(x,y);
                 if(tile.block() != null && tile.block().isStatic())

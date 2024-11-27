@@ -21,7 +21,7 @@ import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
-import subvoyage.ui.advancements.Advancement;
+import subvoyage.core.ui.advancements.Advancement;
 
 import static mindustry.Vars.world;
 

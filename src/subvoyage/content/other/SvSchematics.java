@@ -4,8 +4,8 @@ import arc.Events;
 import mindustry.Vars;
 import mindustry.game.*;
 import mindustry.world.blocks.storage.CoreBlock;
-import subvoyage.content.SvPlanets;
-import subvoyage.content.block.cat.SvStorage;
+import subvoyage.content.world.SvPlanets;
+import subvoyage.content.block.SvStorage;
 
 public class SvSchematics {
     public static Schematic

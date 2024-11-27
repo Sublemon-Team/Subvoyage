@@ -1,15 +1,11 @@
 package subvoyage.type.block.laser;
 
-import arc.Core;
-import arc.func.Func;
 import arc.graphics.g2d.Draw;
 import arc.math.Mathf;
-import arc.util.Strings;
 import arc.util.Time;
 import mindustry.gen.Building;
 import mindustry.graphics.Pal;
-import mindustry.ui.Bar;
-import subvoyage.utility.Var;
+import subvoyage.util.Var;
 
 public interface LaserBuild {
     float laser();
@@ -40,7 +36,7 @@ public interface LaserBuild {
 
     default float inputLaser(Building building) {
         try {
-            Var<Float> laser = new Var<>(0f);
+            Var<Float> laser = Var.f();
             graph().getSuppliers().each((b) -> {
                 if (b instanceof LaserBuild lb) {
                     laser.val += lb.laser();

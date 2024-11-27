@@ -5,30 +5,35 @@ import arc.util.*;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.mod.*;
-import subvoyage.content.*;
-import subvoyage.core.CustomRender;
-import subvoyage.core.Logic;
-import subvoyage.draw.visual.*;
-import subvoyage.ui.advancements.Advancement;
-import subvoyage.utility.*;
-import subvoyage.world.techtree.*;
+import subvoyage.content.world.SvTechTree;
+import subvoyage.content.SvContent;
+import subvoyage.content.block.SvUnits;
+import subvoyage.content.other.SvTeam;
+import subvoyage.core.UpdateManager;
+import subvoyage.core.draw.shader.SvShaders;
+import subvoyage.core.draw.SvRender;
+import subvoyage.core.logic.SvCall;
+import subvoyage.core.logic.SvLogic;
+import subvoyage.core.ui.FontIconGenerator;
+import subvoyage.core.ui.advancements.Advancement;
+import subvoyage.core.SvSettings;
 
 import static arc.Core.*;
 
 public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
 
-    public static VersionControl versionControl = new VersionControl();
+    public static UpdateManager.VersionControl versionControl = new UpdateManager.VersionControl();
     public static String currentTag = "v0.6b";
     public static String repo = "Sublemon-Team/Subvoyage";
 
     public Subvoyage(){
-        Events.run(Trigger.update,Logic::update);
-        Events.on(ClientLoadEvent.class, e -> Logic.clientLoad());
-        Events.on(WorldLoadEvent.class, e -> Logic.worldLoad());
-        Events.on(EventType.ResetEvent.class, e -> Logic.reset());
-        Events.run(Trigger.newGame,Logic::newGame);
-        Events.run(EventType.Trigger.draw, CustomRender::draw);
+        Events.run(Trigger.update, SvLogic::update);
+        Events.on(ClientLoadEvent.class, e -> SvLogic.clientLoad());
+        Events.on(WorldLoadEvent.class, e -> SvLogic.worldLoad());
+        Events.on(EventType.ResetEvent.class, e -> SvLogic.reset());
+        Events.run(Trigger.newGame, SvLogic::newGame);
+        Events.run(EventType.Trigger.draw, SvRender::draw);
 
         Events.on(UnitCreateEvent.class,e -> {
             if(e.unit.team == SvTeam.melius) {
@@ -45,8 +50,8 @@ public class Subvoyage extends Mod {
     @Override
     public void init() {
         super.init();
-        SubvoyageSettings.load();
-        IconLoader.loadIcons();
+        SvSettings.load();
+        FontIconGenerator.loadIcons();
     }
 
     @Override
@@ -56,9 +61,9 @@ public class Subvoyage extends Mod {
         SvCall.registerPackets();
         SvContent.load();
 
-        EnvRenderer.init();
+        SvRender.initEnv();
 
-        AtlacianTechTree.loadBalanced();
+        SvTechTree.load();
     }
 
 }

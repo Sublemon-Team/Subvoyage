@@ -1,7 +1,7 @@
 package subvoyage.type.block.laser;
 
 import arc.graphics.Color;
-import subvoyage.content.other.SvPal;
+import subvoyage.core.draw.SvPal;
 
 import java.util.LinkedHashMap;
 
