@@ -28,7 +28,9 @@ import subvoyage.core.draw.SvFx;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.part.SpinningBlurRegionPart;
 import subvoyage.Subvoyage;
+import subvoyage.type.bullet.BallisticBulletType;
 import subvoyage.type.unit.ability.LegionfieldAbility;
+import subvoyage.type.unit.ai.DefenderDroneAI;
 import subvoyage.type.unit.type.AtlacianUnitType;
 import subvoyage.type.unit.type.RoverUnitType;
 import subvoyage.core.ui.advancements.Advancement;
@@ -45,6 +47,7 @@ import subvoyage.type.unit.entity.HelicopterUnitEntity;
 import subvoyage.type.unit.entity.HydromechUnitEntity;
 import subvoyage.type.unit.type.HelicopterUnitType;
 import subvoyage.type.unit.type.HydromechUnitType;
+import subvoyage.type.unit.weapon.DroneWeapon;
 import subvoyage.type.unit.weapon.HydromechRepairBeam;
 import subvoyage.type.unit.weapon.HydromechWeapon;
 import subvoyage.type.unit.custom.HydromechWeaponStateStats;
@@ -2926,118 +2929,179 @@ public class SvUnits{
 
             treadPullOffset = 3;
 
-            float BPS = 0.5f*4f;
-            float damageMain = ROVER_T4_DPS/BPS;
-            weapons.add(new Weapon(name+"-weapon") {{
-                reload = 120f;
+            float BPS = 3f;
+            float BPS2 = 4f*0.83f;
+            float damageMain = (ROVER_T4_DPS*0.7f)/BPS;
+            float damageSub = (ROVER_T4_DPS*0.3f)/BPS2;
+            weapons.add(new DroneWeapon(name+"-weapon") {{
+                reload = 10f*60f;
                 alternate = false;
                 mirror = false;
                 linearWarmup = false;
                 minWarmup = 0.3f;
 
-                shootY = 16f;
+                shootY = 8f;
 
                 top = true;
 
                 x = 0f;
                 y = 0f;
 
+                layerOffset = 0.01f;
+
+                parts.add(new RegionPart("-blade") {{
+                     x = 0; y = 0;
+                     mirror = true;
+                     outlineLayerOffset = -0.005f;
+
+                     moveRot = -20f;
+                     progress = PartProgress.reload;
+                }});
+
                 rotate = true;
-                rotateSpeed = 0.8f;
+                rotateSpeed = 0.5f;
 
                 inaccuracy = 5f;
+                drone = new AtlacianUnitType("covenant-weapon-drone"){{
+                    constructor = UnitEntity::create;
 
-                bullet = new BasicBulletType(4f,0f) {{
-                    collides = false;
-                    hittable = false;
+                    hidden = true;
+                    playerControllable = logicControllable = false;
 
-                    lifetime = 30f;
-                    fragBullets = 4;
-                    fragVelocityMin = fragVelocityMax = 1f;
-                    fragSpread = 360f/4f;
-                    fragRandomSpread = 0f;
+                    controller = (u) -> new DefenderDroneAI() {{
+                        filter = (u) -> u.type == covenant;
+                        aliveTime = 30f * 60f;
+                    }};
+
+                    speed = 2.7f;
+                    accel = 0.08f;
+                    drag = 0.04f;
+                    flying = true;
+                    health = ROVER_T1_HU*0.8f;
+                    engineOffset = 5.75f;
+
+                    targetFlags = BlockFlag.all;
+
+                    hitSize = 9;
+                    itemCapacity = 10;
+
+                    weapons.add(new Weapon(){{
+                        y = 0f;
+                        x = 0f;
+                        mirror = false;
+                        reload = 20f;
+
+                        bullet = new BasicBulletType(3f, damageMain){{
+                            width = 12f;
+                            height = 12f;
+
+                            lifetime = 30f;
+
+                            hitSize = 12f;
+
+                            hitColor = backColor = trailColor = SvPal.phosphide;
+                            frontColor = SvPal.spaclanium;
+                            trailWidth = 5f;
+                            trailLength = 8;
+
+                            hitEffect = despawnEffect = Fx.trailFade;
+                            smokeEffect = SvFx.shootLauncher;
+                        }};
+                        shootSound = SvSounds.rifleShoot;
+                    }});
+                }};
+
+                bullet = new BallisticBulletType(1f,0f) {{
+                    lifetime = 120f;
 
                     scaleLife = true;
 
-                    width = height = 16f;
-                    trailLength = 8;
-                    trailWidth = 6f;
+                    width = 16f; height = 16f;
+                    trailWidth = 2.5f; trailLength = 8;
 
-                    hitEffect = Fx.none;
-
-                    backColor = trailColor = hitColor = SvPal.phosphide;
+                    trailColor = hitColor = backColor = SvPal.phosphide;
                     frontColor = Color.white;
 
-                    despawnEffect = new Effect(90f, 100f, e -> {
-                        color(SvPal.phosphide);
-                        stroke(e.fout() * 2f);
-                        float circleRad = 4f + e.finpow() * 30f;
+                    collides = false;
 
+                    parts.add(new FlarePart(){{
+                        progress = PartProgress.life.slope().curve(Interp.pow2In);
+                        radius = 0f;
+                        radiusTo = 35f;
+                        stroke = 3f;
+                        rotation = 45f;
+                        y = -5f;
+                        followRotation = true;
+                    }});
 
-                        color(SvPal.phosphide);
-                        for(int i = 0; i < 4; i++){
-                            Drawf.tri(e.x, e.y, 8f, 60f * Mathf.lerp(e.fin(),0,e.time > 80 ? (e.time-80)/10f : 0), i*90+e.rotation);
-                        }
+                    shootEffect = new MultiEffect(Fx.shootBigColor, new Effect(9, e -> {
+                        color(Color.white, e.color, e.fin());
+                        stroke(0.7f + e.fout());
+                        Lines.square(e.x, e.y, e.fin() * 5f, e.rotation + 45f);
 
-                        Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
-                    });
-                    despawnSound = SvSounds.gambitBombCharge;
+                        Drawf.light(e.x, e.y, 23f, e.color, e.fout() * 0.7f);
+                    }), new WaveEffect(){{
+                        colorFrom = colorTo = SvPal.phosphide;
+                        sizeTo = 15f;
+                        lifetime = 12f;
+                        strokeFrom = 3f;
+                    }});
 
-                    fragBullet = new BasicBulletType(){{
-                        width = height = 0f;
+                    despawnEffect = new MultiEffect(Fx.massiveExplosion, new WrapEffect(Fx.dynamicSpikes, SvPal.phosphide, 24f), new WaveEffect(){{
+                        colorFrom = colorTo = SvPal.phosphide;
+                        sizeTo = 40f;
+                        lifetime = 12f;
+                        strokeFrom = 4f;
+                    }});
+                }
 
-                        maxRange = 30f;
-
-                        backColor = trailColor = hitColor = SvPal.phosphide;
-                        frontColor = Color.white;
-
-                        hitSound = Sounds.plasmaboom;
-
-                        shootCone = 180f;
-                        ejectEffect = Fx.none;
-                        hitShake = 4f;
-
-                        collidesAir = false;
-
-                        lifetime = 80f;
-
-                        despawnSound = SvSounds.flashExplosion;
-
-                        despawnEffect = new Effect(40f, 100f, e -> {
-                            color(SvPal.phosphide);
-                            stroke(e.fout() * 2f);
-                            float circleRad = 4f + e.finpow() * 40f;
-                            Lines.circle(e.x, e.y, circleRad);
-                            color(SvPal.phosphide);
-                            for(int i = 0; i < 4; i++){
-                                Drawf.tri(e.x, e.y, 6f, 50f * e.fout(), i*90+e.rotation);
-                            }
-
-                            color();
-                            for(int i = 0; i < 4; i++){
-                                Drawf.tri(e.x, e.y, 3f, 30f * e.fout(), i*90+e.rotation);
-                            }
-
-                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
-                        });
-                        hitEffect = Fx.massiveExplosion;
-                        keepVelocity = false;
-
-                        shrinkX = 0.7f;
-                        shrinkInterp = Interp.pow3Out;
-
-                        speed = 0.5f;
-                        collides = false;
-
-                        splashDamage = damageMain;
-                        splashDamageRadius = 50f;
-                    }};
-                }};
+                    @Override
+                    public void despawned(Bullet b) {
+                        super.despawned(b);
+                        spawnDrone(b);
+                    }
+                };
 
                 ejectEffect = Fx.none;
                 recoil = 2.5f;
                 shootSound = SvSounds.rifleShoot;
             }});
+
+            for (int sign : Mathf.signs) {
+                weapons.add(new Weapon(name+"-weapon-small") {{
+                    reload = 0.6f * 60f;
+                    alternate = true;
+                    mirror = true;
+                    linearWarmup = false;
+                    minWarmup = 0.3f;
+                    x = 8f;
+                    y = -2f + sign * 8f;
+
+                    rotate = true;
+                    rotateSpeed = 60f/60f;
+
+                    inaccuracy = 5f;
+
+                    bullet = new BasicBulletType(3f, damageSub){{
+                        width = 12f;
+                        height = 12f;
+
+                        lifetime = 30f;
+
+                        hitSize = 12f;
+
+                        hitColor = backColor = trailColor = SvPal.phosphide;
+                        frontColor = SvPal.spaclanium;
+                        trailWidth = 5f;
+                        trailLength = 8;
+
+                        hitEffect = despawnEffect = Fx.trailFade;
+                        smokeEffect = SvFx.shootLauncher;
+                    }};
+                    shootSound = SvSounds.rifleShoot;
+                }});
+            }
+
 
             treadRects = new Rect[] {
                     new Rect(21-80f,7-80f,27,152)
