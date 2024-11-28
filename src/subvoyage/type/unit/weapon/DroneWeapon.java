@@ -9,6 +9,7 @@ import arc.struct.OrderedMap;
 import arc.struct.Seq;
 import arc.util.*;
 import mindustry.audio.SoundLoop;
+import mindustry.content.Fx;
 import mindustry.content.UnitTypes;
 import mindustry.entities.Mover;
 import mindustry.entities.Predict;
@@ -102,6 +103,9 @@ public class DroneWeapon extends Weapon {
                 if(mount instanceof DroneMount m) {
                     Unit unit = drone.spawn(b.team, b.x,b.y);
 
+                    unit.elevation = 0f;
+                    Fx.unitSpawn.at(b.x,b.y);
+
                     m.activeDrone = unit;
                     break;
                 }
@@ -117,8 +121,12 @@ public class DroneWeapon extends Weapon {
     public void update(Unit unit, WeaponMount mount) {
         boolean can = unit.canShoot();
         float lastReload = mount.reload;
-        if(mount instanceof DroneMount d) mount.reload = droneAlive(d) ? mount.reload : Math.max(mount.reload - Time.delta * unit.reloadMultiplier, 0);
-        else mount.reload = Math.max(mount.reload - Time.delta * unit.reloadMultiplier, 0);
+        if(mount instanceof DroneMount m && m.activeDrone != null)
+            m.activeDrone.elevation = Mathf.lerp(m.activeDrone.elevation,1f,Time.delta/60f);
+        if(mount instanceof DroneMount d)
+            mount.reload = droneAlive(d) ? mount.reload : Math.max(mount.reload - Time.delta * unit.reloadMultiplier, 0);
+        else
+            mount.reload = Math.max(mount.reload - Time.delta * unit.reloadMultiplier, 0);
         mount.recoil = Mathf.approachDelta(mount.recoil, 0, unit.reloadMultiplier / recoilTime);
         if(recoils > 0){
             if(mount.recoils == null) mount.recoils = new float[recoils];
