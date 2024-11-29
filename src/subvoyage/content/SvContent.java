@@ -7,7 +7,7 @@ import subvoyage.content.world.SvSectorPresets;
 import subvoyage.core.anno.LoadAnnoProcessor;
 import subvoyage.content.other.SvTeam;
 import subvoyage.content.world.SvWeather;
-import subvoyage.content.other.SvSchematics;
+import subvoyage.content.other.SvLoadouts;
 import subvoyage.content.ost.SvMusic;
 import subvoyage.content.ost.SvSounds;
 
@@ -44,7 +44,7 @@ public class SvContent {
 
         SvPlanets.load();
         SvSectorPresets.load();
-        SvSchematics.load();
+        SvLoadouts.load();
 
         SvWeather.load();
     }

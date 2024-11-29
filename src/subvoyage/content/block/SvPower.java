@@ -36,7 +36,7 @@ public class SvPower {
         powerBubbleMerger = new PowerBubbleMerger("power-bubble-merger") {{
             requirements(Category.power,atl(),with(iridium,20,corallite,20));
             size = 1;
-            range = 4f;
+            range = 12f;
             consumePowerBuffered(400f);
             consumesPower = outputsPower = true;
             squareSprite = false;

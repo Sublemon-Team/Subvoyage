@@ -1,5 +1,6 @@
 package subvoyage.content.world;
 
+import arc.files.Fi;
 import arc.graphics.*;
 import arc.math.geom.Vec3;
 import mindustry.content.*;
@@ -13,9 +14,7 @@ import subvoyage.content.SvItems;
 import subvoyage.content.other.SvTeam;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.mesh.AuroraMesh;
-import subvoyage.type.world.AtlacianPlanetGenerator;
-import subvoyage.type.world.AtlacianPlanetType;
-import subvoyage.type.world.SvEnvironment;
+import subvoyage.type.world.*;
 
 import static arc.Core.atlas;
 import static mindustry.content.Planets.*;
@@ -41,9 +40,8 @@ public class SvPlanets{
             );
 
             cloudMeshLoader = () -> new MultiMesh(
-                    new HexSkyMesh(this, 11, 0.15f, 0.13f, 5, new Color().set(Pal.spore).mul(0.9f).a(0.15f), 2, 0.45f, 0.9f, 0.38f),
-                    new HexSkyMesh(this, 1, 0.9f, 0.16f, 5, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.1f), 2, 0.45f, 1f, 0.41f),
-                    new HexSkyMesh(this, 13, 0.3f, 0.18f, 4, Color.white.cpy().lerp(Pal.spore, 0.55f).a(0.15f), 4, 0.6f, 2f, 0.41f)
+                    new HexSkyMesh(this, 2, 0.9f, 0.25f, 5, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.3f).a(0.1f), 3, 0.42f, 0.8f, 0.43f),
+                    new HexSkyMesh(this, 3, 0.5f, 0.27f, 5, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.5f).a(0.2f), 3, 0.42f, 1.2f, 0.45f)
             );
 
             defaultCore = SvStorage.corePuffer;
@@ -72,9 +70,9 @@ public class SvPlanets{
             iconColor = Color.white;
 
             lightColor = SvPal.tugSheetLightish.cpy().a(0.01f);
-            atmosphereColor = SvPal.atlacianAtmosphere.cpy().a(0.02f);
-            atmosphereRadIn = 0.03f;
-            atmosphereRadOut = 0.1f;
+            atmosphereColor = SvPal.atlacianAtmosphere.cpy().value(0.5f);
+            atmosphereRadIn = 0.02f;
+            atmosphereRadOut = 0.3f;
 
             minZoom = 0.2f;
             camRadius = 0.5f;

@@ -197,7 +197,7 @@ public class PowerBubbleNode extends PowerBlock {
                     if(link() instanceof PowerBubbleNodeBuild pb) {
                         float w = Math.abs(pb.x - x);
                         float h = Math.abs(pb.y - y);
-                        powerUsage = Mathf.clamp(w*h/40f,0f,90f)/60f;
+                        powerUsage = Mathf.clamp(w*h/80f,0f,60f)/60f/2f;
                     }
                     updateLinks();
                 }

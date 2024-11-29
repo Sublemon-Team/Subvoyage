@@ -1,34 +1,58 @@
 package subvoyage.type.world;
 
-import arc.graphics.*;
-import arc.math.*;
-import arc.math.geom.*;
-import arc.struct.*;
-import arc.util.*;
-import arc.util.noise.*;
-import mindustry.ai.*;
-import mindustry.content.*;
-import mindustry.game.*;
-import mindustry.maps.generators.*;
+import arc.graphics.Color;
+import arc.math.Mathf;
+import arc.math.geom.Vec2;
+import arc.math.geom.Vec3;
+import arc.util.Tmp;
+import arc.util.noise.Ridged;
+import arc.util.noise.Simplex;
+import mindustry.ai.Astar;
+import mindustry.content.Blocks;
+import mindustry.game.Schematics;
+import mindustry.maps.generators.PlanetGenerator;
 import mindustry.type.Sector;
-import mindustry.world.*;
-import mindustry.world.blocks.environment.*;
+import mindustry.world.Block;
+import mindustry.world.Tile;
+import mindustry.world.TileGen;
+import mindustry.world.blocks.environment.SteamVent;
+import mindustry.world.blocks.environment.TallBlock;
+import subvoyage.content.SvBlocks;
+import subvoyage.content.other.SvLoadouts;
 import subvoyage.core.draw.SvPal;
-import subvoyage.content.other.SvSchematics;
 
-import static mindustry.Vars.state;
 import static subvoyage.content.block.SvEnvironment.*;
 
 public class AtlacianPlanetGenerator extends PlanetGenerator {
-    /*      GENERATION PARAMETERS       */
-    /**/float oceanLevel = 0.4f;
-    /**/float sodilateBiomeWeight = 0.3f;
-    /**/float archalyteBiomeWeight = 0.4f;
+
+    //height
+    public static float
+            heightOct = 6,
+            heightPers = 0.6f,
+            heightScl = 1.3f,
+
+            heightPow = 1.2f,
+            heightVal = 1.5f
+                    ;
+
+    //block
+    public static float
+            airThresh = 0.5f, airScl = 1.2f,
+
+            oceanLevel = 0.65f
+            ;
+
+    //liquid
+    public static float liqThresh = 0.64f, liqScl = 87f;
 
     {
-        defaultLoadout = SvSchematics.corePuffer;
-        baseSeed = 1;
+        baseSeed = 10;
+        defaultLoadout = SvLoadouts.corePuffer;
     }
+
+    Block[] terrain = {Blocks.water,Blocks.water,Blocks.water,Blocks.water,Blocks.water,darkLegartyteStone,darkLegartyteStone,darkLegartyteStone,legartyteStone,legartyteStone,legartyteStone,legartyteStone,agaryteStone,agaryteStone,archalyteStone,sodilateStone};
+
+
 
     @Override
     public void generateSector(Sector sector) {
@@ -37,343 +61,239 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
     @Override
     public float getHeight(Vec3 position) {
-        float noise = Simplex.noise3d(seed+10,4,0.9,1f,position.z/10f,position.y,position.x/2f);
-        float puddleNoise = Simplex.noise3d(seed+12,2,0.9,1f,position.x/12f,position.y/12f,position.z/12f);
-        float waveNoise = Ridged.noise3d(seed+10,position.y/2f+noise*4,0,0,1/4f);
-        float actualNoise = noise*1.2f;
-        if(waveNoise > 0.7f || puddleNoise > 0.7f) return oceanLevel;
-        return Math.max(actualNoise, oceanLevel);
+        if(Mathf.pow(rawHeight(position),heightPow) * heightVal <= oceanLevel) return oceanLevel;
+        return Math.min(Mathf.pow(rawHeight(position),heightPow) * heightVal + 0.1f,1.2f);
     }
+
     @Override
     public Color getColor(Vec3 position) {
-        float biomeMask = Simplex.noise3d(seed,3,0.4,1f,position.z,position.y,position.x);
-        float patternMask = Simplex.noise3d(seed,1,0.6,2f,position.z,position.y,position.x);
-
-        if(getHeight(position) <= oceanLevel) return SvPal.atlacianOcean;
-        if(biomeMask > 0.6  && patternMask < 0.6f) return SvPal.agaryte;
-        if(biomeMask > 0.5) return SvPal.legartyteLightish;
-        if(biomeMask > 0.4f && patternMask < 0.3f) return sodilateFloor.mapColor;
-        if(biomeMask > 0.2) return SvPal.legartyte;
-        return Liquids.arkycite.color;
+        Block block = getBlock(position);
+        if(block == legartyteStone) return SvPal.legartyte.value(0.4f);
+        if(block == agaryteStone) return SvPal.agaryte.cpy().value(0.2f);
+        if(block == archalyteStone) return SvPal.corallite.cpy().value(0.3f);
+        if(block == sodilateStone) Tmp.c1.set(block.mapColor).a(1f - block.albedo).value(0.5f);
+        return Tmp.c1.set(block.mapColor).a(1f - block.albedo);
     }
-
-    private Seq<Block> getOres() {
-        Seq<Block> ores = Seq.with(oreSpaclanium,oreCorallite);
-        float poles = Math.abs(sector.tile.v.y);
-        float nmag = 0.5f;
-        float scl = 1f;
-        float addscl = 1.3f;
-
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.25f*addscl){
-            ores.add(oreSulfur);
-        }
-
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.35f*addscl){
-            ores.add(oreIridium);
-        }
-
-        if(Simplex.noise3d(seed, 2, 0.5, scl, sector.tile.v.x + 1, sector.tile.v.y, sector.tile.v.z)*nmag + poles > 0.45f*addscl){
-            ores.add(oreChromium);
-        }
-
-        return ores;
-    }
-
 
     @Override
-    protected void genTile(Vec3 position, TileGen tile) {
-        super.genTile(position, tile);
+    public float getSizeScl() {
+        return 2000 * 1.07f * 6f / 5f;
+    }
+
+    float rawHeight(Vec3 position){
+        return Simplex.noise3d(seed, heightOct, heightPers, 1f/heightScl, 10f + position.x, 10f + position.y, 10f + position.z);
+    }
+    float rawWeight(Vec3 position) {
+        return position.dst(0, 0, 1)*2.2f - Simplex.noise3d(seed, 6, 0.35, 1.6f, 12f + position.x, 18f + position.y, 15f + position.z) * 2.9f;
+    }
+
+    Block getBlock(Vec3 position){
+        float wgh = rawWeight(position);
+        Tmp.v32.set(position);
+        float height = rawHeight(position);
+        Tmp.v31.set(position);
+
+        height *= 1.5f;
+        height = Mathf.clamp(height);
+
+        Block result = terrain[Mathf.clamp((int)(height * terrain.length), 0, terrain.length - 1)];
+
+        if(height <= oceanLevel-0.15f) {
+            return Blocks.deepwater;
+        } else if (height <= oceanLevel-0.05f) {
+            return Blocks.water;
+        } else if(height <= oceanLevel) {
+            return Blocks.darksandWater;
+        }
+
+        /*if(height <= oceanLevel || wgh < 0.3 + Math.abs(Ridged.noise3d(seed + (int) waterSeed, position.x + 4f, position.y + 8f, position.z + 1f, (int) waterOct, waterScl)) * waterMag) {
+            boolean sod = wgh < archalyteThresh - waterThresh && Ridged.noise3d(seed + (int) sodilateSeed, position.x + 2f, position.y + 8f, position.z + 1f, (int) sodilateOct, sodilateScl) > sodilateThresh;
+            return sod ? (wgh > 0.15f ? hardWater : darkHardWater) : Blocks.water;
+        }
+
+        if(wgh < 0.6){
+            if(result == legartyteStone || result == darkLegartyteStone || result == archalyteStone){
+                return agaryteStone;
+            }
+        }
+        */
+        position = Tmp.v32;
+        /*
+        if(wgh < archalyteThresh - waterThresh && Ridged.noise3d(seed + (int) sodilateSeed, position.x + 2f, position.y + 8f, position.z + 1f, (int) sodilateOct, sodilateScl) > sodilateThresh){
+            result = sodilateStone;
+        }
+
+        if(wgh > archalyteThresh){
+            result = archalyteStone;
+        }else if(wgh > archalyteThresh - 0.4f){
+            result = darkArchalyteStone;
+        }*/
+
+        return result;
+    }
+
+    @Override
+    public void genTile(Vec3 position, TileGen tile){
+        tile.floor = getBlock(position.scl(8f));
+
+        tile.block = tile.floor.asFloor().wall;
+        if(tile.block == Blocks.sandWall)
+            tile.block = legartyteWall;
+        if(tile.block == Blocks.duneWall)
+            tile.block = archalyteWall;
+
+        if(Ridged.noise3d(seed + 1, position.x, position.y, position.z, 2, airScl) > airThresh || Simplex.noise3d(seed + 1, heightOct, heightPers, airScl, position.x, position.y, position.z) > airThresh){
+            tile.block = Blocks.air;
+        }
+
+        if(Ridged.noise3d(seed + 2, position.x, position.y + 4f, position.z, 3, 0.2f) > 0.6){
+            tile.floor = Blocks.water;
+        }
     }
 
     @Override
     protected void generate() {
-        float spawnDegree = rand.random(360f);
-        float length = width / 3f;
-        Vec2 trns = Tmp.v1.trns(spawnDegree, length);
-        Seq<Block> ores = getOres();
-        FloatSeq frequencies = new FloatSeq();
-        float poles = Math.abs(sector.tile.v.y);
-        for(int i = 0; i < ores.size; i++){
-            frequencies.add(rand.random(-0.1f, 0.01f) + i * 0.01f + poles * 0.04f);
-        }
+
+        cells(4);
+
+        float length = width/2.6f;
+        Vec2 trns = Tmp.v1.trns(rand.random(360f), length);
         int
-                spawnX = (int)(trns.x + width / 2f),
-                spawnY = (int)(trns.y + height / 2f),
-                endX = (int)(-trns.x + width / 2f),
-                endY = (int)(-trns.y + height / 2f);
-        float maxd = Mathf.dst(width / 2f, height / 2f);
-        pass((x,y) -> floor = legartyteStone);
-        cells(16);
-        terrain(agaryteWall,40f,.5f,.95f);
-        terrain(legartyteWall,31f,1.3f,.8f);
-        distort(1.1f,.5f);
-        terrain(agaryteWall,40f,1.3f,.9f);
-        noiseReplace(legartyteStone, Blocks.water,2,.2f,60,.6f);
-        rnoiseReplace(legartyteStone, Blocks.water,2,.2f,50,.1f,1f);
+                spawnX = (int)(trns.x + width/2f), spawnY = (int)(trns.y + height/2f),
+                endX = (int)(-trns.x + width/2f), endY = (int)(-trns.y + height/2f);
+        float maxd = Mathf.dst(width/2f, height/2f);
 
-        Seq<Tile> path = pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + rand.random(-200,200) + maxd - tile.dst(width / 2f, height / 2f) / 10f, Astar.manhattan);
-        erase(spawnX,spawnY, 30);
-        brush(path, 10);
-        brushWithBlock(path, 8, Blocks.water);
-        erase(endX, endY, 12);
+        erase(spawnX, spawnY, 15);
+        brush(pathfind(spawnX, spawnY, endX, endY, tile -> (tile.solid() ? 300f : 0f) + maxd - tile.dst(width/2f, height/2f)/10f, Astar.manhattan), 9);
+        erase(endX, endY, 15);
 
-        inverseFloodFill(tiles.get(spawnX,spawnY));
+        pass((x, y) -> {
+            if(floor != sodilateStone) return;
 
-        distort(10f,2f);
-        rnoiseReplace(Blocks.water, legartyteStone,2,.2f,100,.2f,1f);
-        rnoiseReplace(Blocks.water, Blocks.deepwater,1,.5f,20,0f,1f);
-        blend(Blocks.water,Blocks.deepwater,Blocks.darksandWater,4f);
-        blend(legartyteStone,darkLegartyteStone,2f);
-        pass((x,y) -> {
-            float firstNoise = noise(x,y,5,0.6f,80,1f);
-            float secondNoise = noise(x,y,4,0.4f,100,0.95f);
+            if(nearWall(x, y)) return;
 
-            float darkNoise = rnoise(x,y,1,39,0.5f,1f);
+            float noise = noise(x + 300, y - x*1.6f + 100, 4, 0.8f, liqScl, 1f);
 
-            if(secondNoise < sodilateBiomeWeight) {
-                if(!floor.asFloor().isLiquid) {
-                    floor = darkNoise > 0 ? darkSodilateFloor : sodilateFloor;
-                }
-                else {
-                    if(floor == Blocks.water) floor = hardWater;
-                    if(floor == Blocks.deepwater || floor == Blocks.darksandWater) floor = darkHardWater;
-                }
-                if(block.solid) block = sodilateWall;
-                return;
-            }
-            if(firstNoise < archalyteBiomeWeight) {
-                if(!floor.asFloor().isLiquid) {
-                    floor = darkNoise > 0 ? darkArchalyteStone : archalyteStone;
-                }
-                if(block.solid) {
-                    block = archalyteWall;
-                }
-                return;
+            if(noise > liqThresh){
+                floor = darkHardWater;
             }
         });
-        blend(archalyteStone,darkArchalyteStone,2f);
-        blend(archalyteStone,darkSodilateFloor,2f);
 
-        for (Tile tile : tiles) {
-            if(rand.chance(0.0001f)) {
-                int rad = rand.random(7,16);
-                Geometry.circle(tile.x,tile.y,rad,(x,y) -> {
-                    Tile puddleTile = tiles.get(x,y);
-                    if(puddleTile == null) return;
-                    if(!(puddleTile.floor() == Blocks.water && !puddleTile.block().solid))
-                        puddleTile.setFloor((Floor) Blocks.darksandWater);
-                    puddleTile.setBlock(Blocks.air);
-                });
-                Geometry.circle(tile.x,tile.y,rad-2,(x,y) -> {
-                    Tile puddleTile = tiles.get(x,y);
-                    if(puddleTile == null) return;
-                    puddleTile.setFloor((Floor) Blocks.water);
-                    puddleTile.setBlock(Blocks.air);
-                });
-                if(rad > 10) Geometry.circle(tile.x,tile.y,rad-5,(x,y) -> {
-                    Tile puddleTile = tiles.get(x,y);
-                    if(puddleTile == null) return;
-                    puddleTile.setFloor((Floor) Blocks.deepwater);
-                    puddleTile.setBlock(Blocks.air);
-                });
+        median(2, 0.6, sodilateStone);
+        median(2, 0.6, darkHardWater);
+
+        blend(darkHardWater, hardWater, 4);
+        blend(sodilateStone, darkSodilateFloor, 4);
+
+        distort(10f, 12f);
+        distort(5f, 7f);
+
+        median(2, 0.6, archalyteStone);
+
+        inverseFloodFill(tiles.getn(spawnX, spawnY));
+
+        blend(archalyteStone, darkArchalyteStone, 4);
+        blend(legartyteStone, darkLegartyteStone, 4);
+
+
+        erase(endX, endY, 6);
+        tiles.getn(endX, endY).setOverlay(Blocks.spawn);
+
+        pass((x, y) -> {
+            if(block != Blocks.air) {
+                if (nearAir(x, y)) {
+                    if (block == sodilateWall && noise(x + 78, y, 4, 0.7f, 33f, 1f) > 0.52f) {
+                        ore = wallOreSpaclanium;
+                    } else if (block != sodilateWall && noise(x + 782, y, 4, 0.8f, 38f, 1f) > 0.665f) {
+                        ore = wallOreCorallite;
+                    }
+
+                }
             }
-        }
+            else if(!nearWall(x, y)){
 
-        distort(10f,1f);
-        median(4,0.7f);
+                if (noise(x + 78, y, 4, 0.7f, 15f, 1f) > 0.72f) {
+                    ore = oreSpaclanium;
+                }
 
-        scatterBlock(Blocks.water,Blocks.yellowCoral,0.001f);
-        scatterBlock(legartyteStone, hauntedTree, 0.005f/3f);
-        scatterBlock(darkLegartyteStone, hauntedTree, 0.005f/3f);
+                if (noise(x + 782, y, 4, 0.8f, 20f, 1f) > 0.665f) {
+                    ore = oreCorallite;
+                }
 
-        pass((x,y) -> {
-            if(block == agaryteWall && rand.chance(0.23) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
-                block = agaryteBlocks;
+                if(noise(x + 150, y + x*2 + 100, 4, 0.8f, 55f, 1f) > 0.76f){
+                    ore = oreIridium;
+                }
+
+                if(noise(x + 999, y + 600 - x, 4, 0.63f, 45f, 1f) < 0.27f && floor == agaryteStone){
+                    ore = oreChromium;
+                }
+
+            }
+
+            if(block == Blocks.air && (floor == archalyteStone || floor == darkArchalyteStone) && rand.chance(0.09) && nearWall(x, y)
+                    && !near(x, y, 4, archalyteSpikes)){
+                block = archalyteSpikes;
                 ore = Blocks.air;
             }
 
-            if(block == sodilateWall && rand.chance(0.42) && nearAir(x, y) && !near(x, y, 3, sodilateBlocks)){
+            if(block == sodilateWall && rand.chance(0.23) && nearAir(x, y) && !near(x, y, 3,sodilateBlocks)){
                 block = sodilateBlocks;
                 ore = Blocks.air;
             }
 
-            if(block == archalyteWall && rand.chance(0.33) && nearAir(x, y)){
-                block = archalyteSpikes;
+            if(block == agaryteWall && rand.chance(0.3) && nearAir(x, y) && !near(x, y, 3, agaryteBlocks)){
+                block = agaryteBlocks;
                 ore = Blocks.air;
             }
         });
 
         pass((x, y) -> {
-            int offsetX = x - 4, offsetY = y + 23;
-            for(int i = ores.size - 1; i >= 0; i--){
-                Block entry = ores.get(i);
-                float freq = frequencies.get(i);
-                if(block == Blocks.air && Math.abs(0.5f - noise(offsetX, offsetY + i * 888, 2, 0.7f, (10 + i * 2),1f)) > 0.24f + i * 0.01 &&
-                        Math.abs(0.5f - noise(offsetX, offsetY - i * 888, 1, 1, (15 + i * 4),1f)) > 0.37f + freq){
-                    ore = entry;
-                    break;
-                }
+            if(ore.asFloor().wallOre || block.itemDrop != null || (block == Blocks.air && ore != Blocks.air)){
+                removeWall(x, y, 3, b -> b instanceof TallBlock);
             }
         });
 
-        pass((x,y) -> {
-           if(block == sodilateWall) {
-               if(!nearAir(x,y)) return;
-               for(int i = 0; i < ores.size; i++){
-                   Block entry = ores.get(i);
-                   if(!floorToWallOre.containsKey(entry)) continue;
-                   if(noise(x/10f,y/10f,2,0.3f,1f,1f) > 0.5f+0.1f*i) continue;
-                   ore = floorToWallOre.getOrDefault(entry,entry);
-                   break;
-               }
-           }
-        });
+        trimDark();
 
+        int minVents = rand.random(6, 9);
+        int ventCount = 0;
         outer:
-        for (Tile tile : tiles) {
+        for(Tile tile : tiles){
             var floor = tile.floor();
-
-            if(floor == legartyteStone && rand.chance(0.005f)) {
+            if((floor == legartyteStone || floor == darkLegartyteStone) && rand.chance(0.002)){
                 int radius = 2;
                 for(int x = -radius; x <= radius; x++){
                     for(int y = -radius; y <= radius; y++){
                         Tile other = tiles.get(x + tile.x, y + tile.y);
-                        if(other == null || (other.floor() != legartyteStone) || other.block().solid){
+                        if(other == null || (other.floor() != legartyteStone && other.floor() != darkLegartyteStone) || other.block().solid){
                             continue outer;
                         }
                     }
                 }
+
+                ventCount ++;
                 for(var pos : SteamVent.offsets){
                     Tile other = tiles.get(pos.x + tile.x + 1, pos.y + tile.y + 1);
                     other.setFloor(crudesQuarry.asFloor());
                 }
             }
         }
+
+        for(Tile tile : tiles){
+            if(tile.overlay().needsSurface && !tile.floor().hasSurface()){
+                tile.setOverlay(Blocks.air);
+            }
+        }
+
+        pass((x,y) -> {
+            if(block == Blocks.sandWall)
+                block = legartyteWall;
+            if(block == Blocks.duneWall)
+                block = archalyteWall;
+        });
+
         decoration(0.017f);
 
         Schematics.placeLaunchLoadout(spawnX, spawnY);
-        tiles.get(endX,endY).setOverlay(Blocks.spawn);
-        Geometry.circle(spawnX,spawnY,6,(x,y) -> {
-            if(tiles.get(x,y) != tiles.get(spawnX,spawnY) && rand.chance(0.3f)) tiles.get(x,y).setOverlay(oreSpaclanium);
-        });
-
-        Seq<SpawnGroup> spawns = AtlacianWaves.generate(sector.threat * 1.3f, new Rand(sector.id), state.rules.attackMode, rand.chance(0.3f));
-        state.rules.spawns = spawns;
-        state.rules.waves = true;
-        state.rules.winWave = sector.info.winWave = 10 + 5 * (int)Math.max(sector.threat * 10, 1);
-        state.rules.waveSpacing = Mathf.lerp(60 * 65 * 2, 60f * 60f * 0.8f, Math.max(sector.threat, 0f));
-        sector.generateEnemyBase = false;
-        state.rules.attackMode = false;
-    }
-
-    public void brushWithBlock(Seq<Tile> path, int rad, Block block){
-        path.each(tile -> eraseWithBlock(tile.x, tile.y, rad,block));
-    }
-
-    public void eraseWithBlock(int cx, int cy, int rad, Block block){
-        for(int x = -rad; x <= rad; x++){
-            for(int y = -rad; y <= rad; y++){
-                int wx = cx + x, wy = cy + y;
-                if(Structs.inBounds(wx, wy, width, height) && Mathf.within(x, y, rad)){
-                    Tile other = tiles.getn(wx, wy);
-                    if(block == Blocks.water || block.isFloor()) other.setFloor(block.asFloor());
-                    else other.setBlock(block);
-                }
-            }
-        }
-    }
-
-    public void scatterBlock(Block target, Block dst, float chance){
-        pass((x, y) -> {
-            if(!Mathf.chance(chance)) return;
-            if(floor == target && !block.solid){
-                block = dst;
-            }
-        });
-    }
-
-    public void blendRand(Block floor, Block around, float radius, float chance){
-        float r2 = radius*radius;
-        int cap = Mathf.ceil(radius);
-        int max = tiles.width * tiles.height;
-        Block dest = around;
-
-        for(int i = 0; i < max; i++){
-            Tile tile = tiles.geti(i);
-            if(tile.floor() == floor || tile.block() == floor){
-                for(int cx = -cap; cx <= cap; cx++){
-                    for(int cy = -cap; cy <= cap; cy++){
-                        if(cx*cx + cy*cy <= r2){
-                            Tile other = tiles.get(tile.x + cx, tile.y + cy);
-
-                            if(other != null && other.block() != floor && noise(tile.x,tile.y,2,0.5f,10f,1f) < chance){
-                                other.setBlock(dest);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void blend(Block floor, Block secondaryFloor, Block around, float radius){
-        float r2 = radius*radius;
-        int cap = Mathf.ceil(radius);
-        int max = tiles.width * tiles.height;
-        Floor dest = around.asFloor();
-
-        for(int i = 0; i < max; i++){
-            Tile tile = tiles.geti(i);
-            if(tile.floor() == floor || tile.block() == floor || tile.floor() == secondaryFloor || tile.block() == secondaryFloor){
-                for(int cx = -cap; cx <= cap; cx++){
-                    for(int cy = -cap; cy <= cap; cy++){
-                        if(cx*cx + cy*cy <= r2){
-                            Tile other = tiles.get(tile.x + cx, tile.y + cy);
-
-                            if(other != null && other.floor() != floor && other.floor() != secondaryFloor){
-                                other.setFloor(dest);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected float rnoise(float x, float y, int octaves, float scl, float falloff, float mag){
-        return Ridged.noise2d(seed + 18, (int)(x), (int)(y), octaves, falloff, 1f / scl) * mag;
-    }
-
-    @Override
-    protected float noise(float x, float y, double octaves, double falloff, double scl, double mag) {
-        Vec3 v = sector.rect.project(x, y);
-        return Simplex.noise3d(seed+16, octaves, falloff, 1f / scl, x/3f, y/3f, v.z/2f) * (float)mag;
-    }
-
-    public void rnoiseReplace(Block target, Block block, int octaves, float falloff, float scl, float threshold, float mag){
-        pass((x, y) -> {
-            if(rnoise(x, y, octaves, scl, falloff, mag) > threshold){
-                Tile tile = tiles.getn(x, y);
-                boolean is = target.isFloor() && tile.floor() == target.asFloor();
-                if(!target.isFloor() && tile.block() == target) is = true;
-                if(is) {
-                    if(block.isFloor()) this.floor = block;
-                    else this.block = block;
-                }
-            }
-        });
-    }
-    public void noiseReplace(Block target, Block block, int octaves, float falloff, float scl, float threshold){
-        pass((x, y) -> {
-            if(noise(x, y, octaves, falloff, scl) > threshold){
-                Tile tile = tiles.getn(x, y);
-                boolean is = target.isFloor() && tile.floor() == target.asFloor();
-                if(!target.isFloor() && tile.block() == target) is = true;
-                if(is) {
-                    if(block.isFloor()) this.floor = block;
-                    else this.block = block;
-                }
-            }
-        });
     }
 }

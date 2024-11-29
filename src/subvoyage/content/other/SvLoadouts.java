@@ -7,7 +7,7 @@ import mindustry.world.blocks.storage.CoreBlock;
 import subvoyage.content.world.SvPlanets;
 import subvoyage.content.block.SvStorage;
 
-public class SvSchematics {
+public class SvLoadouts {
     public static Schematic
             corePuffer;
 

@@ -137,7 +137,7 @@ public class AtlacianCore extends CoreBlock {
                 Draw.rect(region,x,y,s,s);
                 if (this.block.teamRegion.found()) {
                     renderer.bloom.capture();
-                    renderer.bloom.setBloomIntensity(fin2*2f);
+                    renderer.bloom.setBloomIntensity(fin2*4f);
                     if (this.block.teamRegions[this.team.id] == this.block.teamRegion) {
                         Draw.color(this.team.color);
                     }
