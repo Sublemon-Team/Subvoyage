@@ -7,9 +7,11 @@ import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
 import arc.util.Eachable;
+import arc.util.Strings;
 import arc.util.Time;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
+import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.core.anno.LoadAnno;
@@ -56,12 +58,20 @@ public class LaserNode extends Block implements LaserBlock {
     @Override
     public void setBars() {
         super.setBars();
-        addBar("laser_power",bar());
+        addBar("laser_power",build -> {
+            if(build instanceof LaserBuild lb) {
+                return new Bar(
+                        () -> Core.bundle.format("bar.sv_laser_power", Strings.fixed(lb.rawLaser(), 1))+" / "+capacity,
+                        () -> LaserUtil.getLaserColor(lb.laser()),
+                        () -> Mathf.clamp(lb.rawLaser()/capacity)
+                );
+            } else return new Bar();
+        });
     }
 
     @Override
     public void drawDefaultPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
-        TextureRegion reg = getPlanRegion(plan, list);
+        TextureRegion reg = region;
         Draw.rect(reg, plan.drawx(), plan.drawy(), 0f);
 
         if(plan.worldContext && player != null && teamRegion != null && teamRegion.found()){

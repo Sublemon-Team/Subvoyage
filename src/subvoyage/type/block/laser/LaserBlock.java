@@ -19,6 +19,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
+import subvoyage.core.draw.SvFx;
 
 import java.util.ArrayList;
 import java.util.List;

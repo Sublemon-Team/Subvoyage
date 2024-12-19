@@ -51,6 +51,7 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
     }
 
     Block[] terrain = {Blocks.water,Blocks.water,Blocks.water,Blocks.water,Blocks.water,darkLegartyteStone,darkLegartyteStone,darkLegartyteStone,legartyteStone,legartyteStone,legartyteStone,legartyteStone,agaryteStone,agaryteStone,archalyteStone,sodilateStone};
+    Block[] visualTerrain = {Blocks.water,Blocks.water,Blocks.water,Blocks.water,Blocks.water,legartyteStone,legartyteStone,legartyteStone,agaryteStone,archalyteStone,sodilateStone};
 
 
 
@@ -67,8 +68,8 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
 
     @Override
     public Color getColor(Vec3 position) {
-        Block block = getBlock(position);
-        if(block == legartyteStone) return SvPal.legartyte.value(0.4f);
+        Block block = getVisualBlock(position);
+        if(block == legartyteStone) return SvPal.legartyte.value(0.2f).saturation(0.5f);
         if(block == agaryteStone) return SvPal.agaryte.cpy().value(0.2f);
         if(block == archalyteStone) return SvPal.corallite.cpy().value(0.3f);
         if(block == sodilateStone) Tmp.c1.set(block.mapColor).a(1f - block.albedo).value(0.5f);
@@ -97,6 +98,51 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         height = Mathf.clamp(height);
 
         Block result = terrain[Mathf.clamp((int)(height * terrain.length), 0, terrain.length - 1)];
+
+        if(height <= oceanLevel-0.15f) {
+            return Blocks.deepwater;
+        } else if (height <= oceanLevel-0.05f) {
+            return Blocks.water;
+        } else if(height <= oceanLevel) {
+            return Blocks.darksandWater;
+        }
+
+        /*if(height <= oceanLevel || wgh < 0.3 + Math.abs(Ridged.noise3d(seed + (int) waterSeed, position.x + 4f, position.y + 8f, position.z + 1f, (int) waterOct, waterScl)) * waterMag) {
+            boolean sod = wgh < archalyteThresh - waterThresh && Ridged.noise3d(seed + (int) sodilateSeed, position.x + 2f, position.y + 8f, position.z + 1f, (int) sodilateOct, sodilateScl) > sodilateThresh;
+            return sod ? (wgh > 0.15f ? hardWater : darkHardWater) : Blocks.water;
+        }
+
+        if(wgh < 0.6){
+            if(result == legartyteStone || result == darkLegartyteStone || result == archalyteStone){
+                return agaryteStone;
+            }
+        }
+        */
+        position = Tmp.v32;
+        /*
+        if(wgh < archalyteThresh - waterThresh && Ridged.noise3d(seed + (int) sodilateSeed, position.x + 2f, position.y + 8f, position.z + 1f, (int) sodilateOct, sodilateScl) > sodilateThresh){
+            result = sodilateStone;
+        }
+
+        if(wgh > archalyteThresh){
+            result = archalyteStone;
+        }else if(wgh > archalyteThresh - 0.4f){
+            result = darkArchalyteStone;
+        }*/
+
+        return result;
+    }
+
+    Block getVisualBlock(Vec3 position){
+        float wgh = rawWeight(position);
+        Tmp.v32.set(position);
+        float height = rawHeight(position);
+        Tmp.v31.set(position);
+
+        height *= 1.5f;
+        height = Mathf.clamp(height);
+
+        Block result = visualTerrain[Mathf.clamp((int)(height * visualTerrain.length), 0, visualTerrain.length - 1)];
 
         if(height <= oceanLevel-0.15f) {
             return Blocks.deepwater;

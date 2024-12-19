@@ -239,7 +239,7 @@ public class SvUnits{
             itemCapacity = 30;
             mineSpeed = 5f;
             mineTier = 2;
-            buildSpeed = 1f;
+            buildSpeed = 0.6f;
             drag = 0.05f;
             speed = 5f;
             rotateSpeed = 20f;

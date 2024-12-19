@@ -99,7 +99,7 @@ public class LaserGenerator extends Block implements LaserBlock {
 
     @Override
     public void drawDefaultPlanRegion(BuildPlan plan, Eachable<BuildPlan> list) {
-        TextureRegion reg = getPlanRegion(plan, list);
+        TextureRegion reg = region;
         Draw.rect(reg, plan.drawx(), plan.drawy(), 0f);
 
         if(plan.worldContext && player != null && teamRegion != null && teamRegion.found()){

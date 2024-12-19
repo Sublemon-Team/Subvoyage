@@ -2,7 +2,13 @@ package subvoyage.content.world;
 
 import arc.files.Fi;
 import arc.graphics.*;
+import arc.math.Interp;
+import arc.math.Mathf;
 import arc.math.geom.Vec3;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
+import arc.util.serialization.Json;
+import arc.util.serialization.JsonReader;
 import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
@@ -12,6 +18,7 @@ import mindustry.world.meta.*;
 import subvoyage.content.block.SvStorage;
 import subvoyage.content.SvItems;
 import subvoyage.content.other.SvTeam;
+import subvoyage.core.SvSettings;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.mesh.AuroraMesh;
 import subvoyage.type.world.*;
@@ -27,21 +34,23 @@ public class SvPlanets{
             icon = "atlacian";
             generator = new AtlacianPlanetGenerator();
             Vec3 ringPos = new Vec3(0,-1f,0).rotate(Vec3.X, 5);
+            int divisions = Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8);
             meshLoader = () -> new MultiMesh(
-                    new HexMesh(this, 6)
+                    new HexMesh(this, divisions)
                     //new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (200/0.6f), 2.6f/0.6f, -0.2f, 5f, ringPos),
                     //new AuroraMesh(atlas.find("subvoyage-aurora2"), this, 20, 2.2f, 0.4f, ringPos)
             );
+
             atmosphereMesh = () -> new MultiMesh(
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f), 1.9f/0.6f, 0.2f, -3f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f), 1.2f/0.6f, 1f, 1f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f), -1.9f/0.6f, 0.2f, -5f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f), -1.2f/0.6f, 1f, 3f, ringPos)
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f*((divisions-5)/3f*0.8f+0.2f)), 1.9f/0.6f, 0.2f, -3f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f*((divisions-5)/3f*0.8f+0.2f)), 1.2f/0.6f, 1f, 1f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f*((divisions-5)/3f*0.8f+0.2f)), -1.9f/0.6f, 0.2f, -5f, ringPos),
+                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f*((divisions-5)/3f*0.8f+0.2f)), -1.2f/0.6f, 1f, 3f, ringPos)
             );
 
             cloudMeshLoader = () -> new MultiMesh(
-                    new HexSkyMesh(this, 2, 0.9f, 0.25f, 5, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.3f).a(0.1f), 3, 0.42f, 0.8f, 0.43f),
-                    new HexSkyMesh(this, 3, 0.5f, 0.27f, 5, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.5f).a(0.2f), 3, 0.42f, 1.2f, 0.45f)
+                    new HexSkyMesh(this, 2, 0.9f, 0.25f, divisions, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.3f).a(0.1f), 3, 0.42f, 0.8f, 0.43f),
+                    new HexSkyMesh(this, 3, 0.5f, 0.27f, divisions, SvPal.atlacianAtmosphere.cpy().lerp(Color.white,0.5f).a(0.2f), 3, 0.42f, 1.2f, 0.45f)
             );
 
             defaultCore = SvStorage.corePuffer;
@@ -76,7 +85,7 @@ public class SvPlanets{
 
             minZoom = 0.2f;
             camRadius = 0.5f;
-            startSector = 13;
+            startSector = 221;
             defaultEnv = SvEnvironment.legarytic | Env.terrestrial;
 
             clearSectorOnLose = true;

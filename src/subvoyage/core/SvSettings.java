@@ -42,6 +42,9 @@ public class SvSettings {
             sliderPref(t,ID+"-offload-core-ico","subvoyage-offload-shield-sides",
                     6,3,10,
                     s -> s == 10 ? bundle.get("circle") : s+"");
+            sliderPref(t,ID+"-atlacian","subvoyage-planet-divisions",
+                    6,5,8,
+                    String::valueOf);
             /*sliderPref(t,ID+"-liquid-hard-water","sv-metal-fuming-opacity",
                     75,0,100,
                     s -> s == 0 ? bundle.get("off") : s+"%");*/

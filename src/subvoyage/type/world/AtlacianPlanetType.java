@@ -2,16 +2,22 @@ package subvoyage.type.world;
 
 import arc.func.Prov;
 import arc.graphics.Blending;
+import arc.graphics.Color;
 import arc.graphics.Gl;
 import arc.graphics.Mesh;
 import arc.graphics.g3d.Camera3D;
+import arc.graphics.g3d.VertexBatch3D;
 import arc.math.Mathf;
 import arc.math.geom.Mat3D;
+import arc.util.Tmp;
 import mindustry.graphics.Shaders;
 import mindustry.graphics.g3d.GenericMesh;
+import mindustry.graphics.g3d.PlanetGrid;
 import mindustry.graphics.g3d.PlanetParams;
 import mindustry.type.Planet;
 import mindustry.type.Sector;
+
+import static mindustry.graphics.g3d.PlanetRenderer.outlineRad;
 
 public class AtlacianPlanetType extends Planet {
     public Prov<GenericMesh> atmosphereMesh;
@@ -73,5 +79,14 @@ public class AtlacianPlanetType extends Planet {
         Blending.normal.apply();
 
         Gl.depthMask(true);
+    }
+
+    @Override
+    public void fill(VertexBatch3D batch, Sector sector, Color color, float offset) {
+        float rr = outlineRad * radius + offset;
+        for(int i = 0; i < sector.tile.corners.length; i++){
+            PlanetGrid.Corner c = sector.tile.corners[i], next = sector.tile.corners[(i+1) % sector.tile.corners.length];
+            batch.tri(Tmp.v31.set(c.v).setLength(rr), Tmp.v32.set(next.v).setLength(rr), Tmp.v33.set(sector.tile.v).setLength(rr), color.cpy().a(0.2f));
+        }
     }
 }

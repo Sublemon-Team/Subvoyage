@@ -1,6 +1,8 @@
 package subvoyage.core.ui;
 
 import arc.scene.ui.layout.WidgetGroup;
+import mindustry.Vars;
+import mindustry.ui.dialogs.PlanetDialog;
 import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.core.ui.advancements.AdvancementToastFragment;
 import subvoyage.core.ui.advancements.AdvancementsDialog;
@@ -21,5 +23,7 @@ public class SvUI {
 
         advancementFrag = new AdvancementToastFragment();
         advancementFrag.build(overGroup);
+
+        PlanetDialog.debugSelect = true;
     }
 }

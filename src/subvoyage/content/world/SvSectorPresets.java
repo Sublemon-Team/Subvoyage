@@ -11,7 +11,7 @@ public class SvSectorPresets {
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-        dive = new SvSectorPreset("dive",atlacian,24,(state) -> {
+        dive = new SvSectorPreset("dive",atlacian,221,(state) -> {
 
         }) {{
             alwaysUnlocked = true;

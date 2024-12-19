@@ -102,7 +102,7 @@ public class ProductionAnchor extends Block {
         @Override
         public void updateTile() {
             if(team != Team.derelict) {
-                if(targetCore == null || targetCore.team != team) targetCore = team.cores().sort((b) -> Mathf.dst(x,y,b.x,b.y)).first();
+                if(!team.cores().isEmpty() && (targetCore == null || targetCore.team != team)) targetCore = team.cores().sort((b) -> Mathf.dst(x,y,b.x,b.y)).first();
             } else {
 
                 for (int i = 0; i < 3; i++) {
@@ -234,7 +234,7 @@ public class ProductionAnchor extends Block {
                 }
             }
             if(team != Team.derelict) {
-                if(targetCore == null) targetCore = team.cores().sort((b) -> Mathf.dst(x,y,b.x,b.y)).first();
+                if(!team.cores().isEmpty() && targetCore == null) targetCore = team.cores().sort((b) -> Mathf.dst(x,y,b.x,b.y)).first();
             }
             Draw.z(Layer.block);
         }
