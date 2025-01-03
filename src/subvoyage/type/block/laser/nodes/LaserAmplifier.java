@@ -17,6 +17,7 @@ import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.type.block.laser.LaserUtil;
+import subvoyage.type.block.power.node.PowerBubbleNode;
 
 import static mindustry.Vars.player;
 import static mindustry.Vars.tilesize;
@@ -31,7 +32,7 @@ public class LaserAmplifier extends Block implements LaserBlock {
     public short inputRange = 8,outputRange = 8;
     public byte maxSuppliers = 4;
 
-    public float capacity = 60f;
+    public float capacity = 1000f;
 
     public @LoadAnno("@-top1") TextureRegion top1;
     public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
@@ -51,6 +52,11 @@ public class LaserAmplifier extends Block implements LaserBlock {
         replaceable = true;
         allowDiagonal = false;
         drawArrow = false;
+
+        consumePowerDynamic((t) -> {
+            if(t instanceof LaserAmplifier.LaserNodeBuild pb) return pb.getPowerConsumption();
+            return 0f;
+        });
     }
 
 
@@ -117,7 +123,6 @@ public class LaserAmplifier extends Block implements LaserBlock {
         public void updateTile() {
             super.updateTile();
             updateLaser(this);
-            if(graph.suppliers.size == 1) graph.broken = true;
         }
 
         float smthScl = 0f;
@@ -186,6 +191,10 @@ public class LaserAmplifier extends Block implements LaserBlock {
         @Override
         public LaserGraph graph() {
             return graph;
+        }
+
+        public float getPowerConsumption() {
+            return graph().broken() ? 0f : inputLaser(this)/4f/60f;
         }
     }
 }

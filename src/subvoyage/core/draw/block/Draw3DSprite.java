@@ -18,10 +18,13 @@ public class Draw3DSprite extends DrawBlock {
     public String suffix = "";
     public float camOffset = 3f;
     public float driftScl = 30, driftMag = 2;
+    public float animScl = 30, animMag = 2;
     public float surfaceTime = 0.95f;
     public float layerFrom = Layer.light + 0.25f;
     public float layerTo = Layer.light + 2.1f;
     public boolean enableZOffset = true;
+
+    public boolean anim = false;
 
     public Draw3DSprite(String suffix) {
         this.suffix = suffix;
@@ -59,7 +62,7 @@ public class Draw3DSprite extends DrawBlock {
     }
 
     public float off(Building build) {
-        return camOffset;
+        return anim ? Math.abs(Mathf.cos(Time.time, animScl, animMag)) * camOffset : camOffset;
     }
 
     @Override

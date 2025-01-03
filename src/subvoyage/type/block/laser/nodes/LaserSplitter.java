@@ -31,7 +31,7 @@ public class LaserSplitter extends Block implements LaserBlock {
     public short inputRange = 8,outputRange = 8;
     public byte maxSuppliers = 4;
 
-    public float capacity = 60f;
+    public float capacity = 1000f;
 
     public @LoadAnno("@-top1") TextureRegion top1;
     public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;

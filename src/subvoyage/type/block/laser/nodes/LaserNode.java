@@ -14,6 +14,7 @@ import mindustry.gen.Building;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
+import subvoyage.content.other.SvStat;
 import subvoyage.core.anno.LoadAnno;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
@@ -53,6 +54,12 @@ public class LaserNode extends Block implements LaserBlock {
         replaceable = true;
         allowDiagonal = false;
         drawArrow = false;
+    }
+
+    @Override
+    public void setStats() {
+        super.setStats();
+        stats.add(SvStat.laserCapacity,capacity,SvStat.laserPower);
     }
 
     @Override

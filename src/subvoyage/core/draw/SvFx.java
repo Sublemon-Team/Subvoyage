@@ -84,6 +84,27 @@ public class SvFx{
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,45f*e.finpowdown());
         Lines.square(e.x,e.y,e.fin(Interp.pow2Out)*3*tilesize/2f,-45f*e.finpowdown());
     }),
+    blast = new Effect(30f, e -> {
+        z(Layer.block+.1f);
+        color(SvPal.teslaCharge);
+        stroke(e.fout() * 4f);
+        float circleRad = e.finpow() * 1f*8f;
+        Lines.circle(e.x, e.y, circleRad);
+        color(Color.white);
+        Fill.circle(e.x,e.y,circleRad*e.foutpow()*0.75f);
+
+        rand.setSeed(e.id);
+        color(SvPal.teslaCharge.cpy().lerp(Color.white,e.fin()));
+        for(int i = 0; i < 16; i++){
+            float angle = rand.random(360f);
+            float lenRand = rand.random(-0.35f, 0.35f);
+            Tmp.v1.trns(angle, circleRad);
+
+            for(int s : Mathf.signs){
+                Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 6f, e.fout() * 10f * lenRand + 4f, angle + 90f + s * 90f);
+            }
+        }
+    }),
     upsurgeTrail = new Effect(8f, e -> {
         color(SvPal.phosphide);
 

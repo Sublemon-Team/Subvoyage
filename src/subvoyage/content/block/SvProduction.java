@@ -13,7 +13,6 @@ import mindustry.gen.WorldLabel;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
-import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.BurstDrill;
@@ -23,13 +22,15 @@ import mindustry.world.consumers.ConsumeLiquidBase;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.other.SvAttribute;
+import subvoyage.core.draw.block.Draw3DSprite;
 import subvoyage.type.block.crafter.AttributeCrafterBoostable;
-import subvoyage.type.block.production.Diffuser;
+import subvoyage.type.block.production.CoralliteGrinder;
 import subvoyage.type.block.production.ProductionAnchor;
 import subvoyage.type.block.production.Sifter;
 
 import static arc.graphics.g2d.Draw.color;
 import static mindustry.Vars.tilesize;
+import static mindustry.content.Items.sand;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
@@ -37,7 +38,7 @@ import static subvoyage.content.SvBlocks.atl;
 
 public class SvProduction {
     public static Block
-        diffuser, sifter,                 // water-based harvesting
+            coralliteGrinder, sifter,                 // water-based harvesting
         featherDrill, crudeDrill,      // drill harvesting
         productionAnchor,   //special harvesting
 
@@ -46,10 +47,10 @@ public class SvProduction {
 
 
     public static void load() {
-        diffuser = new Diffuser("water-diffuser") {{
+        coralliteGrinder = new CoralliteGrinder("corallite-grinder") {{
             requirements(Category.production, atl(), with(corallite, 10));
             size = 2;
-            craftTime = 30f;
+            craftTime = 360f;
             itemCapacity = 50;
 
             researchCost = with(corallite,5);
@@ -58,12 +59,9 @@ public class SvProduction {
 
             consumeLiquid(water, 6/60f);
             envDisabled |= Env.scorching;
-            results = new Item[] {
-                    spaclanium,spaclanium,
-                    corallite,corallite,
-                    sulfur,
-                    finesand
-            };
+
+            outputItems = new ItemStack[] {new ItemStack(corallite,3),new ItemStack(sand,1)};
+            maxLiquidTiles = 3;
         }};
 
         sifter = new Sifter("water-sifter") {{
@@ -90,7 +88,7 @@ public class SvProduction {
             drillTime = 60f * 8f;
             size = 3;
             itemCapacity = 40;
-            blockedItem = Items.sand;
+            blockedItem = sand;
             fogRadius = 4;
             squareSprite = false;
             updateEffect = Fx.none;
@@ -200,9 +198,19 @@ public class SvProduction {
             squareSprite = false;
             envDisabled |= Env.scorching;
 
-            pumpAmount = 32f/60f/4f;
+            pumpAmount = 15f/60f/4f;
 
-            consumeLiquid(hydrogen,4f/60f).boost();
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawLiquidRegion(),
+                    new DrawRegion("-top-shadow"),
+                    new DrawRegion("") {{
+                        layer = Layer.blockOver;
+                    }},
+                    new DrawRegion("-top")
+            );
+
+            //consumeLiquid(hydrogen,4f/60f).boost(); todo: add this again later
         }};
     }
 }

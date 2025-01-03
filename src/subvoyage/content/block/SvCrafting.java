@@ -1,8 +1,10 @@
 package subvoyage.content.block;
 
+import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
 import arc.struct.IntSeq;
 import mindustry.content.Fx;
+import mindustry.graphics.Layer;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.type.LiquidStack;
@@ -20,7 +22,6 @@ import subvoyage.type.block.laser.blocks.*;
 import subvoyage.type.block.crafter.crude.CrudeSmelter;
 import subvoyage.type.block.crafter.CircularCrusher;
 
-import static mindustry.content.Liquids.nitrogen;
 import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
@@ -31,7 +32,7 @@ public class SvCrafting {
     public static Block
         ceramicBurner, argonCentrifuge, circularCrusher,
         hydrogenElectrolyzer, propanePyrolyzer, crudeCrucible, heliumCompressor,
-        phosphidePhotosynthesizer, nitrideForge,
+        phosphidePhotosynthesizer, nitrideBlaster,
         quartzScutcher, tugRoller
             ;
 
@@ -246,6 +247,50 @@ public class SvCrafting {
                 return new TextureRegion[] {fullIcon};
             }
         };
+        nitrideBlaster = new LaserCrafter("nitride-blaster") {{
+            requirements(Category.crafting, atl(),with(chrome,240,iridium,250,corallite,150,clay,150)); //TODO: reqs
+
+            researchCost = with(chrome,600,iridium,400,corallite,600,clay,400);
+
+            itemCapacity = 25;
+            size = 3;
+            craftEffect = SvFx.blast;
+            craftTime = 2f*60f;
+            envDisabled |= Env.scorching;
+
+            consumeItem(sulfur,1);
+            consumeLiquid(propane,32/60f);
+            consumePower(0.8f);
+
+            laserRequirement = 15f;
+            laserOverpowerScale = 0.8f;
+            laserMaxEfficiency = 2.50f;
+
+            maxSuppliers = 1;
+            inputRange = 8;
+            drawInputs = false;
+
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawArcSmelt() {{
+                        drawCenter = true;
+                        flameColor = SvPal.teslaCharge;
+                        midColor = SvPal.teslaCharge.cpy().lerp(Color.white,0.5f);
+                        particleStroke = circleStroke = 0.3f;
+                    }},
+                    new DrawRegion("") {{
+                        layer = Layer.blockOver;
+                    }}
+            );
+
+            outputItem = new ItemStack(nitride,2);
+        }
+
+            @Override
+            public TextureRegion[] icons() {
+                return new TextureRegion[] {fullIcon};
+            }
+        };
         quartzScutcher = new LaserCrafter("quartz-scutcher") {{
             requirements(Category.crafting,atl(),with(phosphide,350,iridium,600,spaclanium,300,chrome,150));
 
@@ -258,7 +303,7 @@ public class SvCrafting {
             envDisabled |= Env.scorching;
 
             consumeItem(spaclanium,3);
-            consumeLiquid(nitrogen,38/60f);
+            consumeLiquid(hydrogen,38/60f);
             consumeLiquid(argon,38/60f);
             consumePower(400/60f);
             drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(SvPal.quartzWeave), new DrawDefault());
@@ -268,6 +313,8 @@ public class SvCrafting {
             laserOverpowerScale = 0.8f;
             laserMaxEfficiency = 2f;
             inputs = IntSeq.range(0,3);
+
+            capacity = 300;
 
             maxSuppliers = 1;
             inputRange = 8;

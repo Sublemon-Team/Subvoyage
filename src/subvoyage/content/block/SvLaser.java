@@ -42,7 +42,7 @@ public class SvLaser {
             outputs = IntSeq.with(0);
             itemDuration = 60f*4f;
             consumeItem(phosphide,1);
-            consumePower(1.2f);
+            consumePower(1.5f);
         }};
         quartzProjector = new LaserGenerator("quartz-projector") {{
             requirements(Category.crafting, atl(), with(quartzFiber, 80, phosphide, 80, chrome, 50));
@@ -54,7 +54,7 @@ public class SvLaser {
             outputs = IntSeq.with(0);
             itemDuration = 60f*5f;
             consumeItem(quartzFiber,4);
-            consumePower(2.6f);
+            consumePower(5.2f);
         }};
 
 
@@ -118,10 +118,6 @@ public class SvLaser {
 
             maxSuppliers = 3;
 
-            capacity = 1000f;
-
-            consumePower(4f);
-
             inputRange = 16;
             outputRange = 16;
             outputs = IntSeq.with(0);
@@ -136,8 +132,6 @@ public class SvLaser {
             squareSprite = false;
             inputRange = 8;
             outputRange = 16;
-
-            capacity = 1000f;
 
             outputs = IntSeq.with(1,3);
             inputs = IntSeq.with(2);

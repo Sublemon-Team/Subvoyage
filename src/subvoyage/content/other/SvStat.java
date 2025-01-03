@@ -9,7 +9,8 @@ public class SvStat {
         laser = new StatCat("laser");
     public static final Stat
         laserUse = new Stat("laserUse", laser),
-        laserOutput = new Stat("laserOutput", laser); 
+        laserOutput = new Stat("laserOutput", laser),
+        laserCapacity = new Stat("laserCapacity", laser);
     public static final StatUnit
         laserPower = new StatUnit("laserPower",  "[red]"  +"\uEACF" + "[]");
 }

@@ -53,6 +53,7 @@ public class LaserCrafter extends GenericCrafter implements LaserBlock {
         if(laserOutput != 0) stats.add(SvStat.laserOutput,laserOutput,SvStat.laserPower);
         if(laserRequirement > 0) stats.add(SvStat.laserUse,laserRequirement,SvStat.laserPower);
         if(laserMaxEfficiency > 0) stats.add(Stat.maxEfficiency,laserMaxEfficiency*100f, StatUnit.percent);
+        stats.add(SvStat.laserCapacity,capacity,SvStat.laserPower);
     }
 
 
