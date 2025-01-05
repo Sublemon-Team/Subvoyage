@@ -13,9 +13,8 @@ public class Advancement {
 
     public static Advancement
             welcome,beta,
-            sector_dive,
+            sector_submerging,
             unit_helio, unit_hydro, unit_rover,
-            overstress,
             uwu
             ;
 
@@ -31,13 +30,11 @@ public class Advancement {
                 "welcome","sublemon_frog", // Launching Subvoyage
                 "beta","sodilate-boulder1", // Launching Subvoyage
 
-                "sector_dive","ceramic-burner", // Capturing Dive
+                "sector_submerging","ceramic-burner", // Capturing Submerging
 
                 "unit_helio","lapetus-full", // Unit - Lapetus
                 "unit_hydro","leeft-full", // Unit - Leeft
                 "unit_rover","stunt-full", //Unit - Stunt
-
-                "overstress","water-diffuser", //Overstressing Diffuser
 
                 "uwu","leeft-uwu" //UwU Mode
         );

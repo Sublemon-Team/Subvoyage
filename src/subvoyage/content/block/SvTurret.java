@@ -3,6 +3,7 @@ package subvoyage.content.block;
 import arc.graphics.Color;
 import arc.math.Interp;
 import arc.math.Mathf;
+import arc.struct.IntSeq;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.*;
@@ -24,6 +25,7 @@ import subvoyage.content.ost.SvSounds;
 import subvoyage.core.draw.block.DrawTurretCallbacked;
 import subvoyage.core.draw.part.SvRegionPart;
 import subvoyage.core.draw.SvFx;
+import subvoyage.type.block.turret.LaserTurret;
 import subvoyage.type.block.turret.resist.DrawResist;
 import subvoyage.type.block.turret.resist.ResistTurret;
 import subvoyage.type.shoot.ShootUpsurge;
@@ -42,7 +44,7 @@ public class SvTurret {
 
     public static void load() {
         whirl = new ItemTurret("whirl"){{
-            requirements(Category.turret,atl(), with(corallite, 85, clay, 45));
+            requirements(Category.turret,atl(), with(spaclanium, 85, clay, 45, iridium, 30));
             outlineColor = SvPal.outline;
             squareSprite = false;
 
@@ -260,7 +262,7 @@ public class SvTurret {
             limitRange(6);
         }};
         resonance = new PowerTurret("resonance") {{
-            requirements(Category.turret,atl(), with(corallite, 185, iridium, 140, chrome,80));
+            requirements(Category.turret,atl(), with(corallite, 185, iridium, 140, spaclanium,80, clay, 180));
 
             researchCost = with(corallite,800,iridium,500, chrome,300);
 
@@ -346,8 +348,8 @@ public class SvTurret {
             coolant = consume(new ConsumeLiquid(hydrogen, 20f / 60f));
             coolantMultiplier = 8f;
         }};
-        cascade = new ItemTurret("cascade") {{
-            requirements(Category.turret,atl(), with(clay,300,iridium,150, chrome,50,spaclanium,80));
+        cascade = new LaserTurret("cascade") {{
+            requirements(Category.turret,atl(), with(corallite,300,iridium,200,spaclanium,220,clay,150,chrome,100));
 
             researchCost = with(clay,1000,iridium,800, chrome,700,spaclanium,600);
 
@@ -360,7 +362,13 @@ public class SvTurret {
             targetAir = true;
             squareSprite = false;
 
+            inputs = IntSeq.with(1,2,3);
+            laserRequirement = 30;
+            laserMaxEfficiency = 2f;
+            laserOverpowerScale = 0.5f;
+            capacity = 120;
 
+            consumePower(1.2f);
 
             reload = 40f;
             shoot = new ShootSpread(2,30);
@@ -369,8 +377,7 @@ public class SvTurret {
             float mainDamage = CASCADE_DPS/BPS*0.6f;
             float subDamage = CASCADE_DPS/BPS*0.4f/(5f*2f);
 
-            ammo(
-                    chrome, new BasicBulletType(6f, mainDamage){{
+            shootType = new BasicBulletType(6f, mainDamage){{
                         sprite = "large-orb";
                         inaccuracy = 1f;
                         ammoMultiplier = 3f;
@@ -418,7 +425,7 @@ public class SvTurret {
                         trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
 
                         hitEffect = despawnEffect = Fx.hitBulletColor;
-                    }});
+                    }};
 
             smokeEffect = Fx.shootSmokeSmite;
             drawer = new DrawTurret("atlacian-"){{
@@ -524,13 +531,12 @@ public class SvTurret {
             range = 180f;
             scaledHealth = 200;
 
-            coolantMultiplier = 1.2f;
-            coolant = consume(new ConsumeLiquid(hydrogen, 20f / 60f));
+            coolantMultiplier = 1f;
 
             limitRange(6);
         }};
         upsurge = new ItemTurret("upsurge") {{
-            requirements(Category.turret,atl(),with(spaclanium,1)); //TODO: reqs
+            requirements(Category.turret,atl(),with(phosphide,100,iridium,300,spaclanium,300,clay,300,chrome,200));
 
             coolantMultiplier = 1.1f;
             coolant = consume(new ConsumeLiquid(hydrogen, 20f / 60f));
@@ -758,7 +764,9 @@ public class SvTurret {
             spacing = 160;
             fogRadiusMultiplier = 0.4F;
 
-            bulletType = new ExplosionBulletType(RESIST_DPS*0.7f,4*tilesize) {{
+            health = 5400;
+
+            bulletType = new ExplosionBulletType(RESIST_DPS,4*tilesize) {{
                 buildingDamageMultiplier = 0.4f;
                 ammoMultiplier = 1f;
                 speed = 0;
@@ -815,7 +823,14 @@ public class SvTurret {
 
                 killShooter = false;
             }};
-            consumePower(3.3f);
+            consumePower(2.3f);
+
+            inputs = IntSeq.with(1,2,3);
+            laserRequirement = 120;
+            laserMaxEfficiency = 2f;
+            laserOverpowerScale = 0.5f;
+            capacity = 240;
+
             coolant = (ConsumeLiquid) consume(new ConsumeLiquid(hydrogen, 120f / 60f)).boost();
 
             liquidCapacity = 300f;
@@ -909,8 +924,8 @@ public class SvTurret {
             ringRadius = 24f;
             ringAccuracy = 0.8f;
 
-            consumePower(1f);
-            consumeItem(tugSheet,2);
+            consumePower(5f);
+            consumeItem(nitride,3);
         }};
     }
 

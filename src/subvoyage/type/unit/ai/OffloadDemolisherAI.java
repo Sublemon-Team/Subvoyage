@@ -50,10 +50,6 @@ public class OffloadDemolisherAI extends FlyingAI {
                 unit.lookAt(target);
             }
         }
-
-        if(target == null && state.rules.waves && unit.team == state.rules.defaultTeam){
-            moveTo(getClosestSpawner(), state.rules.dropZoneRadius + 130f);
-        }
     }
 
     @Override

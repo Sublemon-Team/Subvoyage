@@ -133,8 +133,6 @@ public class Diffuser extends Block {
                     builds.addUnique(db);
                 diffuserK = builds.size;
             }
-            if(decrease(1f,diffuserK) < 0.35f)
-                Advancement.overstress.unlock();
             
             totalProgress += warmup * delta();
 

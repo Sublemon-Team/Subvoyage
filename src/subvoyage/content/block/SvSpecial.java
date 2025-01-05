@@ -1,13 +1,20 @@
 package subvoyage.content.block;
 
+import arc.Core;
+import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
+import mindustry.content.Liquids;
 import mindustry.entities.TargetPriority;
 import mindustry.gen.Sounds;
+import mindustry.graphics.Layer;
+import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.UnitType;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.MendProjector;
+import mindustry.world.blocks.defense.RegenProjector;
 import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.draw.*;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.content.other.SvTeam;
@@ -22,18 +29,20 @@ import static subvoyage.content.SvBlocks.atl;
 public class SvSpecial {
     public static Block
         buoy,tower, //fog
-        regenProjector, //projectors
+            mendProjector, //projectors
 
         offloadCore, coreDecoder
     ;
 
     public static void load() {
         buoy = new Buoy("buoy") {{
-            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(spaclanium,20));
+            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(spaclanium,10));
             alwaysUnlocked = true;
-            fogRadius = 32;
+            fogRadius = 25;
             envDisabled |= Env.scorching;
             destructible = true;
+
+            buildCostMultiplier = 3f;
 
             priority = TargetPriority.wall;
             health = 120;
@@ -42,7 +51,7 @@ public class SvSpecial {
         }};
 
         tower = new Buoy("tower") {{
-            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(chrome,10,clay,10));
+            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(chrome,30,clay,50,iridium,30));
             fogRadius = 40;
 
             envDisabled |= Env.scorching;
@@ -52,7 +61,7 @@ public class SvSpecial {
 
             discoveryTime *= 1.5f;
 
-            consumeLiquid(hydrogen,4/60f);
+            consumeLiquid(helium,3/60f);
 
             priority = TargetPriority.wall;
             health = 360;
@@ -61,21 +70,36 @@ public class SvSpecial {
         }};
 
         // projectors
-        regenProjector = new MendProjector("regen-projector"){{
+        mendProjector = new RegenProjector("regen-projector"){{
             requirements(Category.effect,atl(), with(spaclanium, 60, clay, 80, iridium, 10));
             researchCost = with(spaclanium,500,clay,280,iridium,100);
 
-            consumePower(0.3f);
+            consumePower(1f);
             consumeLiquid(hydrogen,13/60f);
             squareSprite = false;
 
             size = 2;
-            reload = 100f;
-            range = 48f*2;
-            healPercent = 5f;
-            phaseBoost = 4f;
-            phaseRangeBoost = 20f;
-            health = 400;
+            range = 20;
+            healPercent = 4f / 60f;
+
+            baseColor = Pal.regen;
+            Color col = Color.valueOf("AFBEFF");
+            drawer = new DrawMulti(
+                    new DrawDefault(),
+                    new DrawGlowRegion(){{
+                        color = Color.sky;
+                    }},
+                    new DrawPulseShape(false){{
+                        layer = Layer.effect;
+                        color = col;
+                    }},
+                    new DrawShape(){{
+                        layer = Layer.effect;
+                        radius = 3.5f;
+                        useWarmupRadius = true;
+                        timeScl = 2f;
+                        color = col;
+                    }});
         }};
 
         //offload
@@ -100,7 +124,7 @@ public class SvSpecial {
         };
 
         coreDecoder = new UnitFactory("core-decoder") {{
-            requirements(Category.effect,atl(),with(iridium,150, chrome,90));
+            requirements(Category.effect,atl(),with(corallite,150,clay,120,iridium,150, chrome,90));
 
             researchCost = with(iridium,400,chrome,120);
 
@@ -114,7 +138,7 @@ public class SvSpecial {
             fogRadius = 16;
             size = 2;
             consumePower(6f);
-            consumeLiquid(propane,0.95f);
+            consumeLiquid(helium,0.95f);
             destructible = true;
             envDisabled |= Env.scorching;
         }};

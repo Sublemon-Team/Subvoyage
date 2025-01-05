@@ -38,7 +38,7 @@ public class SvCrafting {
 
     public static void load() {
         ceramicBurner = new GenericCrafter("ceramic-burner") {{
-            requirements(Category.crafting, atl(),with(corallite,150,spaclanium,120));
+            requirements(Category.crafting, atl(),with(corallite,150,spaclanium,120,finesand,30));
             researchCost = with(corallite,30,spaclanium,30);
 
             drawer = new DrawMulti(
@@ -115,7 +115,7 @@ public class SvCrafting {
             hasPower = true;
         }};
         hydrogenElectrolyzer = new GenericCrafter("hydrogen-electrolyzer") {{
-            requirements(Category.crafting, atl(), with(corallite,240,spaclanium,180,iridium,90,clay,120));
+            requirements(Category.crafting, atl(), with(iridium,200,clay,250,chrome,100,phosphide,80));
             craftTime = 50f;
 
             researchCost = with(corallite,720,spaclanium,720,iridium,340,clay,340);
@@ -140,7 +140,7 @@ public class SvCrafting {
             consumePower(0.8f);
         }};
         propanePyrolyzer = new GenericCrafter("propane-pyrolizer") {{
-            requirements(Category.crafting, atl(),with(iridium,300,corallite,300,clay,150));
+            requirements(Category.crafting, atl(),with(corallite,280,iridium,200,clay,250,chrome,100));
             researchCost = with(iridium,300,corallite,700,clay,400);
 
             itemCapacity = 20;
@@ -189,7 +189,7 @@ public class SvCrafting {
             hasPower = true;
         }};
         heliumCompressor = new GenericCrafter("helium-compressor") {{
-            requirements(Category.crafting, atl(),with(chrome,120,iridium,120,corallite,300,clay,100));
+            requirements(Category.crafting, atl(),with(corallite,250,iridium,150,clay,250));
             researchCost = with(chrome,500,iridium,600,corallite,1200,clay,800);
 
             itemCapacity = 20;
@@ -211,7 +211,7 @@ public class SvCrafting {
             hasLiquids = true;
         }};
         phosphidePhotosynthesizer = new LaserCrafter("phosphide-photosynthesizer") {{
-            requirements(Category.crafting, atl(),with(chrome,240,iridium,250,corallite,150,clay,150)); //TODO: reqs
+            requirements(Category.crafting, atl(),with(spaclanium,300,iridium,250,clay,150,chrome,200)); //TODO: reqs
 
             researchCost = with(chrome,600,iridium,400,corallite,600,clay,400);
 
@@ -248,9 +248,7 @@ public class SvCrafting {
             }
         };
         nitrideBlaster = new LaserCrafter("nitride-blaster") {{
-            requirements(Category.crafting, atl(),with(chrome,240,iridium,250,corallite,150,clay,150)); //TODO: reqs
-
-            researchCost = with(chrome,600,iridium,400,corallite,600,clay,400);
+            requirements(Category.crafting, atl(),with(iridium,400,clay,300,chrome,300,phosphide,120)); //TODO: reqs
 
             itemCapacity = 25;
             size = 3;

@@ -71,7 +71,7 @@ public class SvSettings {
         return settings.getBool("subvoyage"+"-"+key);
     }
     public static boolean boolDef(String key,boolean def) {
-        return settings.getBool("sv"+"-"+key,def);
+        return settings.getBool("subvoyage"+"-"+key,def);
     }
     public static void bool(String key,boolean bool) {
         settings.put("subvoyage"+"-"+key,bool);

@@ -2,6 +2,7 @@ package subvoyage.type.block.laser;
 
 import arc.Core;
 import arc.func.Func;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
@@ -132,6 +133,13 @@ public interface LaserBlock {
         Fill.circle(x2 - vx * len2, y2 - vy * len2, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
         Lines.stroke(8f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
         Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+
+        Draw.color(Draw.getColor().cpy().lerp(Color.white,0.3f));
+        Lines.stroke(6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 4.5f * scl + Mathf.cos(Time.time + 5, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 4.5f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+
         Draw.color();
         Lines.stroke(4f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
         Fill.circle(x1 + vx * len1, y1 + vy * len1, 3f * scl + Mathf.cos(Time.time + 5, 10f, 0.5f) * (scl - 0.2f));

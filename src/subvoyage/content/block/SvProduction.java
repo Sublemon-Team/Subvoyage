@@ -48,16 +48,18 @@ public class SvProduction {
 
     public static void load() {
         coralliteGrinder = new CoralliteGrinder("corallite-grinder") {{
-            requirements(Category.production, atl(), with(corallite, 10));
+            requirements(Category.production, atl(), with(corallite, 12));
             size = 2;
             craftTime = 360f;
             itemCapacity = 50;
 
             researchCost = with(corallite,5);
 
+            buildCostMultiplier = 2f;
+
             squareSprite = false;
 
-            consumeLiquid(water, 6/60f);
+            consumeLiquid(water, 15/60f);
             envDisabled |= Env.scorching;
 
             outputItems = new ItemStack[] {new ItemStack(corallite,3),new ItemStack(sand,1)};
@@ -65,56 +67,25 @@ public class SvProduction {
         }};
 
         sifter = new Sifter("water-sifter") {{
-            requirements(Category.production, atl(), with(spaclanium, 50, corallite, 60, clay, 30));
+            requirements(Category.production, atl(), with(spaclanium,20,corallite,60));
             harvestTime = 80f;
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);
 
-            consumePower(4/60f);
+            buildCostMultiplier = 2f;
+
+            consumeItem(finesand,2);
 
             size = 2;
             envDisabled |= Env.scorching;
             squareSprite = false;
             drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawLiquidRegion(water),
-                    new DrawRegion("-top")
+                    new DrawDefault()
             );
         }};
 
-        featherDrill = new BurstDrill("feather-drill") {{
-            requirements(Category.production,atl(), with(corallite, 50, spaclanium, 10));
-            tier = 2;
-            drillTime = 60f * 8f;
-            size = 3;
-            itemCapacity = 40;
-            blockedItem = sand;
-            fogRadius = 4;
-            squareSprite = false;
-            updateEffect = Fx.none;
-
-            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.redLight, 40f));
-            researchCost = with(corallite,200,spaclanium,100);
-
-            consumeLiquid(water, 15/60f);
-            consumeLiquid(hydrogen,8f/60f).boost();
-        }
-            @Override
-            public void setStats() {
-                super.setStats();
-                if (findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase) {
-                    stats.remove(Stat.booster);
-                    stats.add(Stat.booster,
-                            StatValues.speedBoosters("{0}" + StatUnit.timesSpeed.localized(),
-                                    consBase.amount, liquidBoostIntensity, false,
-                                    l -> (consumesLiquid(l) && (findConsumer(f -> f instanceof ConsumeLiquid).booster || ((ConsumeLiquid) findConsumer(f -> f instanceof ConsumeLiquid)).liquid != l)))
-                    );
-                }
-            }
-        };
-
         crudeDrill = new AttributeCrafterBoostable("tectonic-drill") {{
-            requirements(Category.production,atl(), with(corallite, 200, spaclanium, 100, iridium, 100));
+            requirements(Category.production,atl(), with(corallite, 200,  clay, 150, iridium, 100, finesand, 30));
             researchCost = with(corallite,1000,spaclanium,600,iridium,400);
             attribute = SvAttribute.crude;
 
@@ -162,6 +133,42 @@ public class SvProduction {
 
                     color(Color.scarlet);
                     Draw.rect(Icon.cancel.getRegion(), (x+size/4f - 0.75f)*tilesize,(y+size/4f+size-0.1f+0.5f - 1f)*tilesize);
+                }
+            }
+        };
+
+        featherDrill = new BurstDrill("feather-drill") {{
+            requirements(Category.production,atl(), with(corallite, 250, spaclanium, 300, clay, 250, iridium,190));
+            tier = 2;
+            drillTime = 60f * 8f;
+            size = 3;
+            itemCapacity = 40;
+            blockedItem = sand;
+            fogRadius = 4;
+            squareSprite = false;
+            updateEffect = Fx.none;
+
+            drillMultipliers.put(spaclanium,0.1f);
+            drillMultipliers.put(corallite,0.1f);
+            drillMultipliers.put(iridium,0.1f);
+            drillMultipliers.put(sulfur,0.1f);
+
+            drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.redLight, 40f));
+            researchCost = with(corallite,200,spaclanium,100);
+
+            consumeLiquid(water, 15/60f);
+            consumeLiquid(hydrogen,8f/60f).boost();
+        }
+            @Override
+            public void setStats() {
+                super.setStats();
+                if (findConsumer(f -> f instanceof ConsumeLiquidBase && f.booster) instanceof ConsumeLiquidBase consBase) {
+                    stats.remove(Stat.booster);
+                    stats.add(Stat.booster,
+                            StatValues.speedBoosters("{0}" + StatUnit.timesSpeed.localized(),
+                                    consBase.amount, liquidBoostIntensity, false,
+                                    l -> (consumesLiquid(l) && (findConsumer(f -> f instanceof ConsumeLiquid).booster || ((ConsumeLiquid) findConsumer(f -> f instanceof ConsumeLiquid)).liquid != l)))
+                    );
                 }
             }
         };

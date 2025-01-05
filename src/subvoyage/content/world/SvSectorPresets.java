@@ -7,11 +7,11 @@ import subvoyage.type.world.SvSectorPreset;
 import static subvoyage.content.world.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset dive;
+    public static SectorPreset submerging;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-        dive = new SvSectorPreset("dive",atlacian,221,(state) -> {
+        submerging = new SvSectorPreset("dive",atlacian,221,(state) -> {
 
         }) {{
             alwaysUnlocked = true;
@@ -25,6 +25,6 @@ public class SvSectorPresets {
                 r.loadout = Seq.with();
             };
         }};
-        all.addAll(dive);
+        all.addAll(submerging);
     }
 }

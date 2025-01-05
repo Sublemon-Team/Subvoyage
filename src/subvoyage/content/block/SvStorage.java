@@ -69,21 +69,6 @@ public class SvStorage {
                 return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
-        largeVault = new StorageBlock("large-vault"){
-            {
-                requirements(Category.effect,atl(), with(chrome, 100, iridium, 145));
-                researchCost = with(chrome,1000,iridium,1500);
-                size = 3;
-                itemCapacity = 300;
-                scaledHealth = 155;
-                squareSprite = false;
-            }
-
-            @Override
-            protected TextureRegion[] icons() {
-                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
-            }
-        };
 
         unloader = new Unloader("unloader"){{
             requirements(Category.effect,atl(), with(chrome, 25, clay, 30));
@@ -99,19 +84,6 @@ public class SvStorage {
                 return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
-
-        liquidContainer = new LiquidRouter("liquid-container"){{
-            requirements(Category.liquid,atl(), with(corallite, 30, clay, 35));
-
-            researchCost = with(corallite,540,clay,350);
-
-            liquidCapacity = 700f;
-            size = 2;
-            liquidPadding = 3f / 4f;
-
-            solid = true;
-            squareSprite = false;
-        }};
 
         liquidTank = new LiquidRouter("liquid-tank"){{
             requirements(Category.liquid,atl(), with(corallite,80, clay, 140, iridium, 30));

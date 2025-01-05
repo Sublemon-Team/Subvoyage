@@ -16,6 +16,7 @@ import arc.util.Tmp;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import mindustry.Vars;
+import mindustry.content.Blocks;
 import mindustry.core.Renderer;
 import mindustry.core.UI;
 import mindustry.entities.units.BuildPlan;
@@ -58,12 +59,16 @@ public class PowerBubbleNode extends PowerBlock {
             if(!(build instanceof PowerBubbleNodeBuild pb2)) return;
             pb.setLink(value);
             pb2.setLink(pb.pos());
+
+            pb.worldChanges++;
+            pb2.worldChanges++;
         });
         config(Seq.class,(entity, value) -> {
             if(!(entity instanceof PowerBubbleNodeBuild pb)) return;
             value.each(v -> {
                 if(v instanceof BuildPlan p && !(p.x == entity.tileX() && p.y == entity.tileY())) {
                     pb.setLink(new Point2(p.x,p.y).pack());
+                    pb.worldChanges++;
                 }
             });
         });
@@ -167,7 +172,12 @@ public class PowerBubbleNode extends PowerBlock {
         public boolean valid = false;
 
         public Building link() {
-            if(hasLink) return world.build(link);
+            if(hasLink) {
+                if(world.build(link) != null && !world.build(link).isAdded()) {
+                    return null;
+                }
+                return world.build(link);
+            }
             return null;
         }
 
@@ -185,6 +195,11 @@ public class PowerBubbleNode extends PowerBlock {
         int worldChanges = -2;
         float powerUsage = 0f;
 
+        @Override
+        public void onRemoved() {
+            super.onRemoved();
+            removeLinks();
+        }
 
         @Override
         public void updateTile() {
@@ -200,11 +215,31 @@ public class PowerBubbleNode extends PowerBlock {
                         powerUsage = Mathf.clamp(w*h/80f,0f,60f)/60f/2f;
                     }
                     updateLinks();
+                } else {
+                    removeLinks();
                 }
             }
             consume();
         }
+        public void removeLinks() {
+            Seq<Building> builds = Seq.with();
+            power.links.each(i -> {
+                Building prev = world.build(i);
+                //disconnected
+                if(!builds.contains(prev) && !(prev instanceof PowerBubbleMerger.EnergyDockBuild)) {
+                    if(prev != null) prev.power.links.removeValue(pos());
+                    if(prev != null) power.links.removeValue(prev.pos());
 
+                    PowerGraph newgraph = new PowerGraph();
+                    newgraph.reflow(this);
+
+                    if(prev != null && prev.power.graph != newgraph) {
+                        PowerGraph og = new PowerGraph();
+                        og.reflow(prev);
+                    }
+                }
+            });
+        }
         public void updateLinks() {
             Seq<Building> builds = Seq.with();
             if(!(hasLink && link() instanceof PowerBubbleNodeBuild pb)) return;
@@ -220,13 +255,13 @@ public class PowerBubbleNode extends PowerBlock {
                 Building prev = world.build(i);
                 //disconnected
                 if(!builds.contains(prev) && !(prev instanceof PowerBubbleMerger.EnergyDockBuild)) {
-                    prev.power.links.removeValue(pos());
-                    power.links.removeValue(prev.pos());
+                    if(prev != null) prev.power.links.removeValue(pos());
+                    if(prev != null) power.links.removeValue(prev.pos());
 
                     PowerGraph newgraph = new PowerGraph();
                     newgraph.reflow(this);
 
-                    if(prev.power.graph != newgraph) {
+                    if(prev != null && prev.power.graph != newgraph) {
                         PowerGraph og = new PowerGraph();
                         og.reflow(prev);
                     }
@@ -371,10 +406,12 @@ public class PowerBubbleNode extends PowerBlock {
                 pb.link = -1;
                 pb.hasLink = false;
                 pb.valid = pb.checkRectangle();
+                pb.worldChanges++;
             }
             link = value;
             hasLink = world.build(link) instanceof PowerBubbleNodeBuild;
             valid = checkRectangle();
+            worldChanges++;
         }
 
         @Override

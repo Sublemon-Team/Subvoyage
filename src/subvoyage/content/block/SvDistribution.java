@@ -54,20 +54,12 @@ public class SvDistribution {
             }
         };
 
-        highPressureDuct = new Duct("high-pressure-duct") {{
-            requirements(Category.distribution,atl(),with(chrome,1,iridium,1,corallite,1));
-            researchCost = with(chrome,500,corallite,900);
-            health = 180;
-            speed = 3.2f;
-            envDisabled |= Env.scorching;
-        }};
 
         ductBridge = new DuctBridge("duct-bridge") {{
             requirements(Category.distribution,atl(), with(corallite, 4,spaclanium,2));
             researchCost = with(corallite, 16, spaclanium, 4);
 
             ((Duct) duct).bridgeReplacement = this;
-            ((Duct) highPressureDuct).bridgeReplacement = this;
 
             placeableLiquid = true;
             envDisabled |= Env.scorching;
@@ -172,25 +164,12 @@ public class SvDistribution {
             health = 125;
         }};
 
-        highPressureConduit = new Conduit("high-pressure-conduit") {{
-            requirements(Category.liquid,atl(), with(chrome, 1, clay, 1));
-
-            researchCost = with(clay,400, chrome,100);
-
-            envDisabled |= Env.scorching;
-            botColor = SvPal.veryDarkViolet;
-            liquidCapacity = 16f;
-            liquidPressure = 1.225f;
-
-            health = 80;
-        }};
 
         conduitBridge = new DirectionLiquidBridge("bridge-conduit"){{
             requirements(Category.liquid,atl(), with(corallite, 4, clay, 8));
 
             researchCost = with(corallite,80,clay,40);
             ((Conduit) fortifiedConduit).rotBridgeReplacement = this;
-            ((Conduit) highPressureConduit).rotBridgeReplacement = this;
             range = 4;
             hasPower = false;
 

@@ -15,7 +15,7 @@ import static subvoyage.content.SvBlocks.atl;
 
 public class SvLaser {
     public static Block
-        laserProjector, luminescentProjector, quartzProjector, laserSource, laserNode, phosphideLaserNode, tugLaserNode, laserAmplificator, laserSplitter;
+        laserProjector, luminescentProjector, quartzProjector, laserSource, laserNode, phosphideLaserNode, tugLaserNode, laserAmplifier, laserSplitter;
 
     public static void load() {
         laserProjector = new LaserGenerator("laser-projector") {{
@@ -33,7 +33,7 @@ public class SvLaser {
         }};
 
         luminescentProjector = new LaserGenerator("luminescent-projector") {{
-            requirements(Category.crafting, atl(), with(iridium, 300, phosphide, 200, chrome, 50));
+            requirements(Category.crafting, atl(), with(iridium,200,phosphide,100,spaclanium,200,chrome,150));
             laserOutput = 60f;
             maxSuppliers = 0;
             size = 3;
@@ -111,7 +111,7 @@ public class SvLaser {
             inputs = IntSeq.with(1,2,3);
         }};
 
-        laserAmplificator = new LaserAmplifier("laser-amplifier") {{
+        laserAmplifier = new LaserAmplifier("laser-amplifier") {{
             requirements(Category.crafting, atl(), with(iridium, 80, chrome, 80, spaclanium, 10));
             size = 3;
             squareSprite = false;

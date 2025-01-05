@@ -34,7 +34,7 @@ public class ContentStates {
     CASCADE_DPS = TURRET_DMG_U*3.4f,
     SPECTRUM_DPS = TURRET_DMG_U*5.5f,
     UPSURGE_DPS = TURRET_DMG_U*4.3f,
-    RESIST_DPS = TURRET_DMG_U*9.8f,
+    RESIST_DPS = TURRET_DMG_U*5.8f,
 
     //UNITS TIER 1
     HELIO_T1_HU = OFFENSE_HP_U * 1f,

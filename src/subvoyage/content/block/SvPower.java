@@ -27,17 +27,19 @@ public class SvPower {
 
     public static void load() {
         powerBubbleNode = new PowerBubbleNode("power-bubble-node") {{
-            requirements(Category.power,atl(),with(iridium,20,corallite,4));
+            requirements(Category.power,atl(),with(iridium,8,corallite,4));
             size = 1;
             outputsPower = false;
             consumesPower = true;
             squareSprite = false;
+            buildCostMultiplier = 1.5f;
         }};
         powerBubbleMerger = new PowerBubbleMerger("power-bubble-merger") {{
             requirements(Category.power,atl(),with(iridium,20,corallite,20));
             size = 1;
             range = 12f;
             consumePowerBuffered(400f);
+            buildCostMultiplier = 3f;
             consumesPower = outputsPower = true;
             squareSprite = false;
         }};
@@ -53,7 +55,7 @@ public class SvPower {
             size = 2;
         }};
         spaclaniumHydrolyzer = new ConsumeGenerator("spaclanium-hydrolyzer") {{
-            requirements(Category.power,atl(), with(corallite, 20, clay, 30, iridium, 25));
+            requirements(Category.power,atl(), with(spaclanium, 160, clay, 90, iridium, 45));
 
             researchCost = with(corallite,200,clay,150,iridium,100);
 

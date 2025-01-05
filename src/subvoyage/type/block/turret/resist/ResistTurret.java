@@ -9,6 +9,7 @@ import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.math.geom.Vec2;
+import arc.struct.IntSeq;
 import arc.struct.OrderedMap;
 import arc.struct.Seq;
 import arc.util.Time;
@@ -20,19 +21,27 @@ import mindustry.game.Team;
 import mindustry.gen.Posc;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.ui.Bar;
 import mindustry.world.Tile;
 import mindustry.world.blocks.defense.turrets.BaseTurret;
 import mindustry.world.consumers.ConsumeLiquidBase;
 import mindustry.world.draw.DrawBlock;
 import mindustry.world.meta.Stat;
+import mindustry.world.meta.StatUnit;
 import mindustry.world.meta.StatValues;
+import subvoyage.content.other.SvStat;
+import subvoyage.type.block.laser.LaserBlock;
+import subvoyage.type.block.laser.LaserBuild;
+import subvoyage.type.block.laser.LaserGraph;
+import subvoyage.type.block.laser.LaserUtil;
+import subvoyage.type.block.turret.LaserTurret;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static mindustry.Vars.*;
 
-public class ResistTurret extends BaseTurret {
+public class ResistTurret extends BaseTurret implements LaserBlock {
     public final int timerTarget = timers++;
     /** Ticks between attempt at finding a target. */
     public float targetInterval = 20;
@@ -61,6 +70,22 @@ public class ResistTurret extends BaseTurret {
     public Color heatColor;
     public float elevation;
 
+    public IntSeq inputs = IntSeq.with(0,1,2,3);
+    public IntSeq outputs = IntSeq.with();
+
+    public short inputRange = 8,outputRange = 0;
+    public byte maxSuppliers = 1;
+
+    public float capacity = 60f;
+
+    public float laserRequirement = 0f;
+    public float laserMaxEfficiency = 1f;
+    public float laserOverpowerScale = 1f;
+    public float laserOutput = 0f;
+
+    public boolean drawInputs = false;
+    public boolean drawOutputs = true;
+
     public ResistTurret(String name) {
         super(name);
         elevation = -1f;
@@ -71,6 +96,21 @@ public class ResistTurret extends BaseTurret {
         recoilPow = 1;
 
     }
+
+    @Override
+    public void drawPlace(int x, int y, int rotation, boolean valid) {
+        super.drawPlace(x, y, rotation, valid);
+        select(x * tilesize + offset, y * tilesize + offset, tilesize * (size + spacing), size, Pal.placing);
+        if(valid) drawLinks(this,x,y,rotation,drawInputs,drawOutputs);
+    }
+
+    @Override public short inputRange() {return inputRange;}
+    @Override public short outputRange() {return outputRange;}
+
+    @Override public byte maxSuppliers() {return maxSuppliers;}
+
+    @Override public IntSeq inputs() {return inputs;}
+    @Override public IntSeq outputs() {return outputs;}
 
     @Override
     public void load() {
@@ -86,6 +126,22 @@ public class ResistTurret extends BaseTurret {
         this.stats.add(Stat.ammo, StatValues.ammo(OrderedMap.of(
                 this,bulletType
         )));
+        if(laserOutput != 0) stats.add(SvStat.laserOutput,laserOutput,SvStat.laserPower);
+        if(laserRequirement > 0) stats.add(SvStat.laserUse,laserRequirement,SvStat.laserPower);
+        if(laserMaxEfficiency > 0) stats.add(Stat.maxEfficiency,laserMaxEfficiency*100f, StatUnit.percent);
+        stats.add(SvStat.laserCapacity,capacity,SvStat.laserPower);
+    }
+    @Override
+    public void setBars() {
+        super.setBars();
+        addBar("laser", (entity) -> {
+            if(entity instanceof PowerRingTurretBuild lb)
+                return new Bar(
+                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(lb.laserEfficiency() * 100.0F + 0.01F)),
+                        () -> LaserUtil.getLaserColor(lb.rawLaser()),
+                        () -> lb.laser() / lb.laserRequirement());
+            return new Bar();
+        });
     }
 
     public TextureRegion[] icons() {
@@ -108,11 +164,6 @@ public class ResistTurret extends BaseTurret {
         Draw.reset();
     }
 
-    @Override
-    public void drawPlace(int x, int y, int rotation, boolean valid){
-        super.drawPlace(x, y, rotation, valid);
-        select(x * tilesize + offset, y * tilesize + offset, tilesize * (size + spacing), size, Pal.placing);
-    }
 
     public boolean intersectsSpacing(int sx, int sy, int ox, int oy, int ext){
         if(spacing < 1) return true;
@@ -141,12 +192,73 @@ public class ResistTurret extends BaseTurret {
         return true;
     }
 
-    public class PowerRingTurretBuild extends BaseTurretBuild {
+    public class PowerRingTurretBuild extends BaseTurretBuild implements LaserBuild {
         public Vec2 recoilOffset = new Vec2();
         List<ResistRing> rings = new ArrayList<>();
         public float curRecoil;
         public float heat;
         public float smoothWarmup = 0;
+
+        LaserGraph graph;
+
+        @Override
+        public void updateEfficiencyMultiplier() {
+            efficiency *= laserEfficiency();
+        }
+
+        public float laserEfficiency() {
+            if(laserRequirement() > 0){
+                float over = Math.max(laser() - laserRequirement(), 0.0F);
+                return Math.min(Mathf.clamp(laser() / laserRequirement()) + over / laserRequirement() * laserOverpowerScale, laserMaxEfficiency);
+            }
+            return 1f;
+        }
+        @Override
+        public void onRemoved() {
+            clearLaser(this);
+        }
+        @Override
+        public void onDestroyed() {clearLaser(this);}
+
+        @Override
+        public void created() {
+            graph = new LaserGraph();
+        }
+
+        @Override
+        public float laser() {
+            return graph().broken() ? 0f : inputLaser(this)+laserOutput*efficiency;
+        }
+        @Override
+        public float rawLaser() {
+            return inputLaser(this)+ laserOutput * efficiency;
+        }
+
+        @Override
+        public float laserRequirement() {
+            return laserRequirement;
+        }
+
+        @Override
+        public float maxPower() {
+            return capacity;
+        }
+
+        @Override
+        public boolean consumer() {
+            return true;
+        }
+
+        @Override
+        public boolean supplier() {
+            return false;
+        }
+
+        @Override
+        public LaserGraph graph() {
+            return graph;
+        }
+
 
         @Override
         public boolean wasVisible() {
@@ -156,8 +268,9 @@ public class ResistTurret extends BaseTurret {
         @Override
         public void updateTile() {
             super.updateTile();
+            updateLaser(this);
             wasVisible = true;
-            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
+            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,Mathf.clamp(efficiency()));
             int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
             smoothWarmup = Mathf.lerp(smoothWarmup,(float) estimatedRingCount/(minRingCount+boostRingCount),Time.delta/40f);
             float rr =ringRadius*1.5f;
@@ -197,7 +310,7 @@ public class ResistTurret extends BaseTurret {
                     }
                     ring.lifetime += Time.delta;
                     Tmp.v1.setZero();
-                    Tmp.v1.trns(ring.angle,ringMovementSpeed*delta());
+                    Tmp.v1.trns(ring.angle,ringMovementSpeed*laserEfficiency()*delta());
                     ring.x += Tmp.v1.x;
                     ring.y += Tmp.v1.y;
                     if(Mathf.within(ring.x,ring.y,ring.targetX,ring.targetY,rr)) {
@@ -254,6 +367,7 @@ public class ResistTurret extends BaseTurret {
         public final Rand rand = new Rand();
         @Override
         public void draw() {
+            drawStatus(this);
             drawer.draw(this);
             Draw.z(Layer.effect);
             for (ResistRing ring : rings) {

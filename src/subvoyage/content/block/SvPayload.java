@@ -26,10 +26,10 @@ import static subvoyage.content.SvBlocks.atl;
 
 public class SvPayload {
     public static Block
-        helicopterFabricator, hydromechFabricator,
-        helicopterRefabricator, hydromechRefabricator,
+        helicopterFabricator, hydromechFabricator, roverFabricator,
+        helicopterRefabricator, hydromechRefabricator, roverRefabricator,
         laserRefabricator,
-        helicopterAssembler, hydromechAssembler, assemblyModule,
+        helicopterAssembler, hydromechAssembler, roverAssembler, assemblyModule,
         fortifiedPayloadConveyor, fortifiedPayloadRouter,
         payloadLoader,payloadUnloader,
         payloadLaunchPad
@@ -37,7 +37,7 @@ public class SvPayload {
     public static void load() {
         helicopterFabricator = new Fabricator("helicopter-factory"){
             {
-                requirements(Category.units, atl(), with(iridium, 60, clay, 70));
+                requirements(Category.units, atl(), with(corallite,120,spaclanium,120,clay,90,iridium,50));
 
                 researchCost = with(iridium, 400, clay, 500);
                 regionSuffix = "-fortified";
@@ -61,7 +61,7 @@ public class SvPayload {
         };
 
         hydromechFabricator = new Fabricator("hydromech-factory") {{
-            requirements(Category.units, atl(), with(iridium, 60, clay, 70, chrome, 30));
+            requirements(Category.units, atl(), with(corallite,150,spaclanium,150,clay,130,iridium,100));
             regionSuffix = "-fortified";
             researchCost = with(iridium,600,clay,600, chrome,120);
 
@@ -83,9 +83,32 @@ public class SvPayload {
                 inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
+        roverFabricator = new Fabricator("rover-factory") {{
+            requirements(Category.units, atl(), with(corallite, 200, chrome, 190, clay, 350,iridium,250));
+            regionSuffix = "-fortified";
+            researchCost = with(iridium,600,clay,600, chrome,120);
+
+            consumeLiquid(propane,0.45f);
+            configurable = false;
+            plans = Seq.with(
+                    new UnitPlan(leeft, 60f * 25, with(iridium, 20))
+            );
+            size = 3;
+            consumePower(1f);
+            consumeLiquid(hydrogen,8/60f).boost();
+        }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
 
         helicopterRefabricator = new Refabricator("helicopter-refabricator") {{
-            requirements(Category.units, atl(), with(iridium,100,clay,200,spaclanium,100));
+            requirements(Category.units, atl(), with(corallite,300,spaclanium,320,clay,300,iridium,200,chrome,250));
             regionSuffix = "-fortified";
             researchCost = with(iridium,1200,clay,1200,spaclanium,1670);
             constructTime = 60f * 30f;
@@ -95,7 +118,7 @@ public class SvPayload {
             );
             consumePower(2.5f);
             consumeLiquid(argon, 25f / 60f);
-            consumeItems(with(iridium, 30, sulfur,10));
+            consumeItems(with(chrome, 30, iridium,10));
             consumeLiquid(hydrogen,8/60f).boost();
         }
 
@@ -110,7 +133,7 @@ public class SvPayload {
 
 
         hydromechRefabricator = new Refabricator("hydromech-refabricator") {{
-            requirements(Category.units, atl(), with(iridium,100, chrome,100,corallite,200));
+            requirements(Category.units, atl(), with(corallite,300,spaclanium,320,clay,300,iridium,200,phosphide,150));
             regionSuffix = "-fortified";
             researchCost = with(iridium,1400, chrome,1000,corallite,1670);
             constructTime = 60f * 30f;
@@ -118,9 +141,9 @@ public class SvPayload {
             upgrades.addAll(
                     new UnitType[]{leeft,flagshi}
             );
-            consumePower(2.5f);
-            consumeLiquid(helium, 25f / 60f);
-            consumeItems(with(iridium, 30, spaclanium,10));
+            consumePower(2.6f);
+            consumeLiquid(helium, 35f / 60f);
+            consumeItems(with(phosphide, 30, crude,10));
             consumeLiquid(hydrogen,8/60f).boost();
         }
 
@@ -132,6 +155,30 @@ public class SvPayload {
                 inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
+        roverRefabricator = new Refabricator("rover-refabricator") {{
+            requirements(Category.units, atl(), with(corallite,300,spaclanium,320,clay,200,iridium,320,nitride,150));
+            regionSuffix = "-fortified";
+            researchCost = with(iridium,1400, chrome,1000,corallite,1670);
+            constructTime = 60f * 30f;
+            size = 3;
+            upgrades.addAll(
+                    new UnitType[]{leeft,flagshi}
+            );
+            consumePower(2.8f);
+            consumeLiquid(propane, 35f / 60f);
+            consumeItems(with(nitride, 30, corallite,10));
+            consumeLiquid(hydrogen,12/60f).boost();
+        }
+
+            @Override
+            public void load(){
+                super.load();
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
+
 
         laserRefabricator = new LaserReconstructor("laser-refabricator") {{
             requirements(Category.units, atl(), with(nitride, 180, phosphide, 180, chrome, 250, clay, 300));
@@ -148,7 +195,8 @@ public class SvPayload {
 
             upgrades.addAll(
                     new UnitType[]{flagshi, vanguard},
-                    new UnitType[]{skath, charon}
+                    new UnitType[]{skath, charon},
+                    new UnitType[]{zeal,gambit}
             );
 
             hasLiquids = true;
@@ -243,6 +291,44 @@ public class SvPayload {
                 inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
             }
         };
+        roverAssembler = new LaserUnitAssembler("rover-assembler") {{
+            requirements(Category.units, atl(), with(phosphide,1000,quartzFiber,500,iridium,750, chrome,600));
+            regionSuffix = "-fortified";
+            size = 5;
+            plans.add(
+                    new UnitAssembler.AssemblerUnitPlan(squadron, 60f * 70f, PayloadStack.list(flagshi, 4)),
+                    new UnitAssembler.AssemblerUnitPlan(armada, 60f * 60f * 3f, PayloadStack.list(vanguard, 4))
+            );
+            areaSize = 13;
+            itemCapacity = 40;
+
+            consumeLaserTier0 = 240f;
+            consumeLaserTier1 = 400f;
+
+            inputRange = 16;
+            maxSuppliers = 1;
+            laserMaxEfficiency = 1.25f;
+            inputs = IntSeq.with(1,2,3);
+
+            capacity = 1000f;
+
+            consumePower(3.5f);
+            consumeLiquid(helium, 80f / 60f);
+            consumeItem(phosphide, 40);
+            consumeItem(iridium,40);
+
+            researchCostMultiplier = 0.4f;
+            droneType = ((LaserUnitAssembler) helicopterAssembler).droneType;
+            dronesCreated = ((LaserUnitAssembler) helicopterAssembler).dronesCreated;
+        }
+            @Override
+            public void load(){
+                super.load();
+                topRegion = atlas.find(name + "-top", Subvoyage.ID + "-factory-top-" + size + regionSuffix);
+                outRegion = atlas.find(name + "-out", Subvoyage.ID + "-factory-out-" + size + regionSuffix);
+                inRegion = atlas.find(name + "-in", Subvoyage.ID + "-factory-in-" + size + regionSuffix);
+            }
+        };
 
         assemblyModule = new UnitAssemblerModule("assembly-module") {{
             requirements(Category.units, atl(), with(iridium,1200,quartzFiber,1200,spaclanium,1200, chrome,1200));
@@ -281,7 +367,7 @@ public class SvPayload {
         }};
 
         payloadLoader = new PayloadLoader("payload-loader"){{
-            requirements(Category.units,atl(), with(iridium,50, chrome,30,clay,50));
+            requirements(Category.units,atl(), with(iridium,120, chrome,30,corallite,170));
             regionSuffix = "-fortified";
             hasPower = true;
             consumePower(2f);
@@ -299,7 +385,7 @@ public class SvPayload {
         };
 
         payloadUnloader = new PayloadUnloader("payload-unloader"){{
-            requirements(Category.units,atl(), with(iridium,50, chrome,30,clay,50));
+            requirements(Category.units,atl(), with(iridium,120, chrome,30,corallite,170));
             regionSuffix = "-fortified";
             researchCostMultiplier = 0f;
             hasPower = true;
@@ -317,7 +403,7 @@ public class SvPayload {
         };
 
         payloadLaunchPad = new PayloadLaunchPad("payload-launch-pad") {{
-            requirements(Category.units, atl(), with(iridium,50, chrome,30,clay,50));
+            requirements(Category.units, atl(), with(iridium,150, chrome,30,clay,150));
 
             researchCost = with(iridium,200,chrome,50,clay,50);
 
