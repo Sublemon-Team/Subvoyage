@@ -48,7 +48,8 @@ public class Subvoyage extends Mod {
         Events.on(EventType.FileTreeInitEvent.class, e -> app.post(SvShaders::init));
         Events.on(EventType.DisposeEvent.class, e -> SvShaders.dispose());
         Events.on(ContentInitEvent.class, e -> {
-            LoadAnnoProcessor.begin(SvCrafting.class);
+            LoadAnnoProcessor.begin(ID);
+            /*LoadAnnoProcessor.begin(SvCrafting.class);
             LoadAnnoProcessor.begin(SvDefense.class);
             LoadAnnoProcessor.begin(SvDistribution.class);
             LoadAnnoProcessor.begin(SvEnvironment.class);
@@ -58,7 +59,7 @@ public class Subvoyage extends Mod {
             LoadAnnoProcessor.begin(SvProduction.class);
             LoadAnnoProcessor.begin(SvSpecial.class);
             LoadAnnoProcessor.begin(SvStorage.class);
-            LoadAnnoProcessor.begin(SvTurret.class);
+            LoadAnnoProcessor.begin(SvTurret.class);*/
         });
     }
 
