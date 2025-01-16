@@ -62,7 +62,7 @@ public class SvProduction {
             consumeLiquid(water, 15/60f);
             envDisabled |= Env.scorching;
 
-            outputItems = new ItemStack[] {new ItemStack(corallite,3),new ItemStack(sand,1)};
+            outputItems = new ItemStack[] {new ItemStack(corallite,3),new ItemStack(finesand,1)};
             maxLiquidTiles = 3;
         }};
 

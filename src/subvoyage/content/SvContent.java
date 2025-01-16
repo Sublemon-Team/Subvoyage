@@ -24,23 +24,6 @@ public class SvContent {
 
         //SvEnvironment.load();
         SvBlocks.loadCat();
-        new Block("anno-loader") { //<- not a real block
-            @Override
-            public void load() {
-                super.load();
-                LoadAnnoProcessor.begin(SvCrafting.class);
-                LoadAnnoProcessor.begin(SvDefense.class);
-                LoadAnnoProcessor.begin(SvDistribution.class);
-                LoadAnnoProcessor.begin(SvEnvironment.class);
-                LoadAnnoProcessor.begin(SvLaser.class);
-                LoadAnnoProcessor.begin(SvPayload.class);
-                LoadAnnoProcessor.begin(SvPower.class);
-                LoadAnnoProcessor.begin(SvProduction.class);
-                LoadAnnoProcessor.begin(SvSpecial.class);
-                LoadAnnoProcessor.begin(SvStorage.class);
-                LoadAnnoProcessor.begin(SvTurret.class);
-            }
-        };
 
         SvPlanets.load();
         SvSectorPresets.load();
