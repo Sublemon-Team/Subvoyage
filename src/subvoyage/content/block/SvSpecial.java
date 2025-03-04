@@ -105,14 +105,14 @@ public class SvSpecial {
         //offload
         offloadCore = new OffloadCore("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
-            health = 3000;
+            health = 1000;
             size = 3;
 
-            itemCapacity = 1000;
+            itemCapacity = 200;
 
-            lowTierUnits = new UnitType[] {lapetus,leeft};
-            midTierUnits = new UnitType[] {skath,flagshi};
-            highTierUnits = new UnitType[] {charon,callees,vanguard,squadron};
+            lowTierUnits = new UnitType[] {lapetus,leeft,stunt};
+            midTierUnits = new UnitType[] {skath,flagshi,zeal};
+            highTierUnits = new UnitType[] {charon,vanguard,gambit};
 
             unitType = shift;
         }
@@ -136,7 +136,7 @@ public class SvSpecial {
             health = 2560;
             priority = TargetPriority.core;
             fogRadius = 16;
-            size = 2;
+            size = 3;
             consumePower(6f);
             consumeLiquid(helium,0.95f);
             destructible = true;

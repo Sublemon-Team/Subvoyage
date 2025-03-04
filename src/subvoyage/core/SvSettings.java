@@ -39,9 +39,6 @@ public class SvSettings {
                 ui.showConfirm("@confirm", "@settings.sv-clear-advancements.confirm", SvSettings::resetAdvancements);
             }));
 
-            sliderPref(t,ID+"-offload-core-ico","subvoyage-offload-shield-sides",
-                    6,3,10,
-                    s -> s == 10 ? bundle.get("circle") : s+"");
             sliderPref(t,ID+"-atlacian","subvoyage-planet-divisions",
                     6,5,8,
                     String::valueOf);

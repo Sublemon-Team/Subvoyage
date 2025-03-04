@@ -2975,6 +2975,18 @@ public class SvUnits{
                         aliveTime = 30f * 60f;
                     }};
 
+                    parts.add(new HoverPart(){{
+                        x = 0f;
+                        y = -8f;
+                        mirror = false;
+                        radius = 6f;
+                        phase = 10f;
+                        stroke = 2f;
+                        sides = 6;
+                        layerOffset = -0.001f;
+                        color = SvPal.phosphide;
+                    }});
+
                     speed = 2.7f;
                     accel = 0.08f;
                     drag = 0.04f;

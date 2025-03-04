@@ -151,11 +151,6 @@ public class SvProduction {
             squareSprite = false;
             updateEffect = Fx.none;
 
-            drillMultipliers.put(spaclanium,0.1f);
-            drillMultipliers.put(corallite,0.1f);
-            drillMultipliers.put(iridium,0.1f);
-            drillMultipliers.put(sulfur,0.1f);
-
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.redLight, 40f));
             researchCost = with(corallite,200,spaclanium,100);
 

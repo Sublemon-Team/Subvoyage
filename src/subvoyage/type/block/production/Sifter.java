@@ -1,8 +1,10 @@
 package subvoyage.type.block.production;
 
 import arc.*;
+import arc.func.Intc2;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
+import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.util.*;
 import mindustry.content.*;
@@ -30,7 +32,7 @@ public class Sifter extends Block {
 
     public float harvestTime = 60f;
     public float liquidOutput = 10/60f;
-    public int oreSearchRadius = 9;
+    public int oreSearchRadius = 5;
 
     public Sifter(String name) {
         super(name);
@@ -102,14 +104,18 @@ public class Sifter extends Block {
     public Item getPopulatedOreItem(Tile tile) {
         List<Item> candidates = new ArrayList<>();
         if(tile == null) return null;
-        Geometry.circle(tile.x,tile.y,oreSearchRadius,(x,y) -> {
-            Tile cTile = world.tile(x,y);
-            if(cTile == null) return;
-            boolean sol = cTile.solid();
-            if(!sol) return;
-            Item drop = cTile.wallDrop();
-            if(drop != null) candidates.add(drop);
-        });
+        for(int dx = -oreSearchRadius; dx <= oreSearchRadius; dx++){
+            for(int dy = -oreSearchRadius; dy <= oreSearchRadius; dy++){
+                ((Intc2) (x, y) -> {
+                    Tile cTile = world.tile(x,y);
+                    if(cTile == null) return;
+                    boolean sol = cTile.solid();
+                    if(!sol) return;
+                    Item drop = cTile.wallDrop();
+                    if(drop != null) candidates.add(drop);
+                }).get(tile.x+dx,tile.y+dy);
+            }
+        }
         if(candidates.isEmpty()) return null;
         Map<Item,Integer> itemCounts = new HashMap<>();
         int frequentCount = 0;
@@ -142,7 +148,7 @@ public class Sifter extends Block {
         Item toDraw = getPopulatedOreItemCached(x,y);
         if(toDraw == null || toDraw.fullIcon.texture == null) {
             Draw.z(Layer.block+2);
-            Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
+            Drawf.dashSquare(Pal.redDust,(x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize*2);
             WorldLabel.drawAt(Core.bundle.get("water-sifter.place.message"), (x + size / 4f) * tilesize, (y + size / 4f + size - 0.1f) * tilesize,
             Layer.block + 3, WorldLabel.flagOutline, 0.8f);
 
@@ -150,7 +156,7 @@ public class Sifter extends Block {
             Draw.rect(Icon.cancel.getRegion(), (x+size/4f)*tilesize,(y+size/4f+size-0.1f+0.5f)*tilesize);
         } else {
             Draw.z(Layer.block+2);
-            Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.accent);
+            Drawf.dashSquare(Pal.accent,(x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize*2);
             Draw.rect(toDraw.fullIcon,(x+size/4f)*tilesize,(y+size/4f+size-0.1f+0.5f)*tilesize, itemSize*1.25f, itemSize*1.25f);
             WorldLabel.drawAt(toDraw.localizedName,(x+size/4f)*tilesize,(y+size/4f+size-0.1f)*tilesize,
                     Layer.block+3,WorldLabel.flagOutline,0.8f);

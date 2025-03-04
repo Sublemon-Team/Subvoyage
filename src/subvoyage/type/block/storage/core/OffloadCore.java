@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.math.Rand;
@@ -93,7 +94,6 @@ public class OffloadCore extends CoreBlock {
             }
             isFirstWave = false;
             isUpgradeWave = false;
-            Sounds.wave.play(2f,1f,0f);
         }
 
 
@@ -118,7 +118,6 @@ public class OffloadCore extends CoreBlock {
             };
             waveTimer = unitTier*10f*60f;
             isUpgradeWave = true;
-            Sounds.laserbig.play(0.3f,3f,0f);
             SvFx.resonanceExplosion.create(x,y,0,Pal.accent,new Object());
             Fx.blastExplosion.create(x,y,0, Pal.accent,new Object());
             shieldCooldown = 60f;
@@ -149,8 +148,8 @@ public class OffloadCore extends CoreBlock {
         private void selectNextUnit() {
             UnitType[] selectFrom = new UnitType[0];
             if(unitTier >= 0 && unitTier < 4) for (UnitType u : lowTierUnits) selectFrom = Structs.add(selectFrom,u);
-            if(unitTier >= 1) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
-            if(unitTier >= 4) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 3 && unitTier < 9) for (UnitType u : midTierUnits) selectFrom = Structs.add(selectFrom,u);
+            if(unitTier >= 8) for (UnitType u : highTierUnits) selectFrom = Structs.add(selectFrom,u);
             if(selectFrom.length > 0) nextUnit = Structs.random(rand,selectFrom);
         }
 
@@ -199,9 +198,12 @@ public class OffloadCore extends CoreBlock {
             if(!Vars.renderer.animateShields){
                 Draw.alpha(0.5f);
             }
-            int sides = SvSettings.iDef("offload-shield-sides",6);
-            if(sides == 10) Fill.circle(x,y,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
-            else Fill.poly(x,y,sides,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
+            int sides = 6;
+            for (int i = 0; i < shieldLayers; i++) {
+                Lines.stroke(6f);
+                Lines.poly(x,y,6,(float) i/shieldLayers * smoothShieldLayers * tilesize + size * tilesize);
+            }
+            //Fill.poly(x,y,sides,(smoothShieldLayers < 0.8 ? smoothShieldLayers : size+smoothShieldLayers)*tilesize);
             Draw.reset();
         }
 
