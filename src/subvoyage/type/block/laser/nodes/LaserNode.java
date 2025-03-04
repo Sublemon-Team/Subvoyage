@@ -15,7 +15,7 @@ import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.content.other.SvStat;
-import subvoyage.core.anno.LoadAnno;
+import subvoyage.core.anno.LoadAnnoProcessor;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
@@ -36,8 +36,8 @@ public class LaserNode extends Block implements LaserBlock {
 
     public float capacity = 60f;
 
-    public @LoadAnno("@-top1") TextureRegion top1;
-    public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
+    public @LoadAnnoProcessor.LoadAnno("@-top1") TextureRegion top1;
+    public @LoadAnnoProcessor.LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
     public LaserNode(String name) {
         super(name);

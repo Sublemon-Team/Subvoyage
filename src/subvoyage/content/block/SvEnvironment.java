@@ -4,6 +4,7 @@ import arc.*;
 import mindustry.content.*;
 import mindustry.world.*;
 import mindustry.world.blocks.environment.*;
+import mindustry.world.draw.DrawLiquidRegion;
 import mindustry.world.draw.DrawMulti;
 import mindustry.world.draw.DrawRegion;
 import mindustry.world.meta.*;
@@ -24,7 +25,7 @@ public class SvEnvironment {
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
     legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateStone, darkSodilateFloor, hardWater, darkHardWater,
-    crudesQuarry,
+    crudesQuarry, sulfurSand,
     // walls
     legartyteWall, agaryteWall, archalyteWall, sodilateWall,
     // boulders
@@ -177,6 +178,12 @@ public class SvEnvironment {
             attributes.set(Attribute.water, -1f);
             attributes.set(SvAttribute.sodilate, 1f);
             variants = 3;
+        }};
+        sulfurSand = new Floor("sulfur-sand"){{
+            attributes.set(Attribute.water, -1f);
+            itemDrop = SvItems.sulfur;
+            playerUnmineable = true;
+            variants = 1;
         }};
         sodilateWall = new StaticWall("sodilate-wall"){{
             sodilateStone.asFloor().wall = this;

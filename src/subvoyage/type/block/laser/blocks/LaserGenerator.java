@@ -13,10 +13,8 @@ import mindustry.gen.Building;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
-import mindustry.world.meta.Stat;
-import mindustry.world.meta.StatUnit;
 import subvoyage.content.other.SvStat;
-import subvoyage.core.anno.LoadAnno;
+import subvoyage.core.anno.LoadAnnoProcessor;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
@@ -37,8 +35,8 @@ public class LaserGenerator extends Block implements LaserBlock {
 
     public float laserOutput = 10f;
 
-    public @LoadAnno("@-top1") TextureRegion top1;
-    public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
+    public @LoadAnnoProcessor.LoadAnno("@-top1") TextureRegion top1;
+    public @LoadAnnoProcessor.LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
     public float itemDuration = 120f;
 

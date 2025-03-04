@@ -11,6 +11,7 @@ import mindustry.type.LiquidStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.*;
+import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.block.DrawBurner;
@@ -211,7 +212,7 @@ public class SvCrafting {
             hasLiquids = true;
         }};
         phosphidePhotosynthesizer = new LaserCrafter("phosphide-photosynthesizer") {{
-            requirements(Category.crafting, atl(),with(spaclanium,300,iridium,250,clay,150,chrome,200)); //TODO: reqs
+            requirements(Category.crafting, atl(),with(spaclanium,300,iridium,250,clay,150,chrome,200));
 
             researchCost = with(chrome,600,iridium,400,corallite,600,clay,400);
 
@@ -248,7 +249,7 @@ public class SvCrafting {
             }
         };
         nitrideBlaster = new LaserCrafter("nitride-blaster") {{
-            requirements(Category.crafting, atl(),with(iridium,400,clay,300,chrome,300,phosphide,120)); //TODO: reqs
+            requirements(Category.crafting, atl(),with(iridium,400,clay,300,chrome,300,phosphide,120));
 
             itemCapacity = 25;
             size = 3;

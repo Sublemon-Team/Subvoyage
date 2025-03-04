@@ -3,6 +3,7 @@ package subvoyage.type.block.storage.core;
 import arc.func.Boolp;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.TextureRegion;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
@@ -27,6 +28,7 @@ import static subvoyage.core.draw.SvFx.rand;
 
 public class AtlacianCore extends CoreBlock {
     public Seq<Item> bannedItems = new Seq<>();
+
     public AtlacianCore(String name) {
         super(name);
     }
@@ -51,31 +53,9 @@ public class AtlacianCore extends CoreBlock {
         camera.position.set(x,y);
     }
 
-    private static final Vec2 vector = new Vec2();
-    public static void dashCircleWavy(float x, float y, float radius) {
-        float scaleFactor = 0.6F;
-        int sides = 10 + (int)(radius * scaleFactor);
-        if (sides % 2 == 1) {
-            ++sides;
-        }
-
-        vector.set(0.0F, 0.0F);
-
-        for(int i = 0; i < sides; i += 2) {
-            vector.set(radius, 0.0F).rotate(360.0F / (float)sides * (float)i + 90.0F + (radius*(i+1)*Time.time)%10);
-            float x1 = vector.x;
-            float y1 = vector.y;
-            vector.set(radius, 0.0F).rotate(360.0F / (float)sides * (float)(i + 1) + 90.0F + (radius*(i+1)*Time.time)%10);
-            line(x1 + x, y1 + y, vector.x + x, vector.y + y);
-        }
-
-    }
-
-
-
     @Override
     public void drawShadow(Tile tile) {
-        if(tile.build instanceof SubvoyageCoreBuild b) {
+        if(tile.build instanceof SubvoyageCoreBuild) {
             float fin = Interp.pow3.apply(1-landTime/coreLandDuration);
             float s = region.height/4f*fin;
             Draw.color(0f, 0f, 0f, BlockRenderer.shadowColor.a);

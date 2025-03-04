@@ -62,7 +62,10 @@ public class SvProduction {
             consumeLiquid(water, 15/60f);
             envDisabled |= Env.scorching;
 
+            sulfurDrawer = new DrawRegion("-sulfur");
+
             outputItems = new ItemStack[] {new ItemStack(corallite,3),new ItemStack(finesand,1)};
+            sulfurVariant = new ItemStack[] {new ItemStack(sulfur,2),new ItemStack(finesand, 2)};
             maxLiquidTiles = 3;
         }};
 

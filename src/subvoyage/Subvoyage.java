@@ -49,17 +49,6 @@ public class Subvoyage extends Mod {
         Events.on(EventType.DisposeEvent.class, e -> SvShaders.dispose());
         Events.on(ContentInitEvent.class, e -> {
             LoadAnnoProcessor.begin(ID);
-            /*LoadAnnoProcessor.begin(SvCrafting.class);
-            LoadAnnoProcessor.begin(SvDefense.class);
-            LoadAnnoProcessor.begin(SvDistribution.class);
-            LoadAnnoProcessor.begin(SvEnvironment.class);
-            LoadAnnoProcessor.begin(SvLaser.class);
-            LoadAnnoProcessor.begin(SvPayload.class);
-            LoadAnnoProcessor.begin(SvPower.class);
-            LoadAnnoProcessor.begin(SvProduction.class);
-            LoadAnnoProcessor.begin(SvSpecial.class);
-            LoadAnnoProcessor.begin(SvStorage.class);
-            LoadAnnoProcessor.begin(SvTurret.class);*/
         });
     }
 

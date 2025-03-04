@@ -12,12 +12,11 @@ import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
 import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
-import subvoyage.core.anno.LoadAnno;
+import subvoyage.core.anno.LoadAnnoProcessor;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.type.block.laser.LaserUtil;
-import subvoyage.type.block.power.node.PowerBubbleNode;
 
 import static mindustry.Vars.player;
 import static mindustry.Vars.tilesize;
@@ -34,8 +33,8 @@ public class LaserAmplifier extends Block implements LaserBlock {
 
     public float capacity = 1000f;
 
-    public @LoadAnno("@-top1") TextureRegion top1;
-    public @LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
+    public @LoadAnnoProcessor.LoadAnno("@-top1") TextureRegion top1;
+    public @LoadAnnoProcessor.LoadAnno(value = "@-top2",def = "@-top1") TextureRegion top2;
 
     public LaserAmplifier(String name) {
         super(name);
