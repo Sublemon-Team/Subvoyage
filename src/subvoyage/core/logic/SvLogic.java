@@ -139,6 +139,9 @@ public class SvLogic {
             if(prev.val == 0) {
                 SvSettings.resetSaves(atlacian);
                 SvSettings.resetTree(atlacian.techTree);
+
+                Advancement.beta.unlock();
+
                 prev.val = 1;
             }
             Core.app.exit();

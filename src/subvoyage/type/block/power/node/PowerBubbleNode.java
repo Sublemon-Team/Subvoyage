@@ -35,6 +35,7 @@ import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
 import subvoyage.core.draw.SvPal;
+import subvoyage.core.draw.SvRender;
 import subvoyage.util.SvMath;
 import subvoyage.util.Var;
 
@@ -200,10 +201,14 @@ public class PowerBubbleNode extends PowerBlock {
             super.onRemoved();
             removeLinks();
         }
-
+        public boolean recheck = false;
         @Override
         public void updateTile() {
             super.updateTile();
+            if(hasLink && link() instanceof PowerBubbleNodeBuild pb) pb.setLink(pos());
+            if(recheck && hasLink && link() instanceof PowerBubbleNodeBuild pb) {
+                power.graph.addGraph(pb.power.graph);
+            }
             if(worldChanges != world.tileChanges) {
                 worldChanges = world.tileChanges;
                 if(hasLink && link() instanceof PowerBubbleNodeBuild pb) pb.setLink(pos());
@@ -215,6 +220,7 @@ public class PowerBubbleNode extends PowerBlock {
                         powerUsage = Mathf.clamp(w*h/80f,0f,60f)/60f/2f;
                     }
                     updateLinks();
+                    recheck = true;
                 } else {
                     removeLinks();
                 }
@@ -316,9 +322,8 @@ public class PowerBubbleNode extends PowerBlock {
                     Draw.z(Layer.blockUnder);
                     Draw.rect(region,build.x,y,0);
                     Draw.rect(region,x,build.y,0);
-                    Draw.z(Layer.block);
 
-                    Draw.z(Layer.shields);
+                    Draw.z(SvRender.Layer.powerBubbles);
                     Draw.color(SvPal.powerLaser.cpy().saturation(0.2f));
                     if(!Vars.renderer.animateShields){
                         Draw.alpha(0.2f);
@@ -326,21 +331,15 @@ public class PowerBubbleNode extends PowerBlock {
                     Fill.crect(x,y,build.x-x,build.y-y);
                     Draw.z(Layer.block);
                 } else {
-                    Draw.alpha(0.5f);
+                    Draw.z(Layer.blockUnder);
                     Draw.rect(region,build.x,y,0);
                     Draw.rect(region,x,build.y,0);
 
-                    Draw.color(Pal.remove, Renderer.laserOpacity);
-                    drawLaser(x,y,build.x,y,size,build.block.size,0.25f,0f);
-                    Draw.color(Pal.remove, Renderer.laserOpacity);
-                    drawLaser(build.x,y,build.x,build.y,size,build.block.size,0.25f,0f);
-                    Draw.color(Pal.remove, Renderer.laserOpacity);
-                    drawLaser(build.x,build.y,x,build.y,size,build.block.size,0.25f,0f);
-                    Draw.color(Pal.remove, Renderer.laserOpacity);
-                    drawLaser(x,build.y,x,y,size,build.block.size,0.25f,0f);
-
-                    Draw.z(Layer.shields);
+                    Draw.z(SvRender.Layer.powerBubbles);
                     Draw.color(Pal.remove,0.8f);
+                    if(!Vars.renderer.animateShields){
+                        Draw.alpha(0.2f);
+                    }
                     Fill.crect(x,y,build.x-x,build.y-y);
                     Draw.z(Layer.block);
                 }
@@ -402,6 +401,7 @@ public class PowerBubbleNode extends PowerBlock {
         }
 
         public void setLink(int value) {
+            if(link == value) return;
             if(hasLink && world.build(link) instanceof PowerBubbleNodeBuild pb) {
                 pb.link = -1;
                 pb.hasLink = false;

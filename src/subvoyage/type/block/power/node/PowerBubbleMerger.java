@@ -352,7 +352,23 @@ public class PowerBubbleMerger extends PowerBlock {
 
             super.created();
         }
-
+        int worldChanges = 0;
+        boolean upd = false;
+        @Override
+        public void updateTile() {
+            super.updateTile();
+            if(upd) {
+                getNodeLinks(tile, tile.block(), team, other -> {
+                    if(!power.links.contains(other.pos())){
+                        configureAny(other.pos());
+                    }
+                });
+            }
+            if(worldChanges != world.tileChanges) {
+                worldChanges = world.tileChanges;
+                upd = true;
+            }
+        }
 
         @Override
         public void placed(){

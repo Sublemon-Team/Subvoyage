@@ -11,6 +11,7 @@ import arc.util.*;
 import mindustry.graphics.*;
 import mindustry.type.Planet;
 import subvoyage.core.SvVars;
+import subvoyage.core.draw.SvRender;
 
 import static mindustry.Vars.*;
 import static mindustry.graphics.Shaders.getShaderFi;
@@ -18,6 +19,7 @@ import static mindustry.graphics.Shaders.getShaderFi;
 
 public class SvShaders{
     public static SurfaceShader hardWater;
+    public static SurfaceShader powerBubbles;
     public static SurfaceShader underwaterRegion;
     public static SurfaceShader bloom;
 
@@ -72,6 +74,37 @@ public class SvShaders{
                     else renderer.effectBuffer.getTexture().bind(0);
 
                     setUniformi("u_distortmap", 2);
+                }
+            }
+        };
+        powerBubbles = new SurfaceShader("powerbubbles") {
+
+            @Override
+            public String textureName() {
+                return "noise";
+            }
+
+            @Override
+            public void apply() {
+                setUniformf("u_campos", Core.camera.position.x - Core.camera.width / 2, Core.camera.position.y - Core.camera.height / 2);
+                setUniformf("u_resolution", Core.camera.width, Core.camera.height);
+                setUniformf("u_time", Time.time);
+
+                setUniformf("u_ww",world.width()*tilesize);
+                setUniformf("u_wh",world.height()*tilesize);
+
+                //setUniformf("u_opacity",Core.settings.getInt("sv-metal-fuming-opacity")/100f);
+
+                if(hasUniform("u_noise")){
+                    if(noiseTex == null){
+                        noiseTex = Core.assets.get("sprites/" + textureName() + ".png", Texture.class);
+                    }
+
+                    noiseTex.bind(1);
+                    if(SvRender.buffer != null) SvRender.buffer.getTexture().bind(0);
+                    else renderer.effectBuffer.getTexture().bind(0);
+
+                    setUniformi("u_noise", 1);
                 }
             }
         };

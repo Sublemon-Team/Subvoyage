@@ -10,8 +10,10 @@ import arc.math.Mathf;
 import arc.math.Rand;
 import arc.util.Time;
 import mindustry.graphics.Layer;
+import mindustry.graphics.Shaders;
 import mindustry.type.Weather;
 import subvoyage.core.SvVars;
+import subvoyage.core.draw.shader.SvShaders;
 import subvoyage.type.block.storage.core.AtlacianCore;
 import subvoyage.type.world.SvEnvironment;
 
@@ -21,21 +23,30 @@ import static mindustry.Vars.*;
 public class SvRender {
     public static FrameBuffer buffer;
 
+    public static class Layer extends mindustry.graphics.Layer {
+        public static final float
+                powerBubbles = (86.7f),
+                powerBubbleBlock = 87f
+                ;
+    }
+
     public static void draw() {
         if(AtlacianCore.cutscene) {
             camera.position.set(player.bestCore().x,player.bestCore().y);
         }
-        /*Draw.draw(Layer.min,() -> {
-            if(buffer == null) buffer = new FrameBuffer();
-            buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
-            buffer.begin(Color.clear);
-        });
-        Draw.draw(Layer.weather+1,() -> {
-            buffer.end();
-            //buffer.blit(Shaders.screenspace);
-            Draw.z(Layer.weather);
-            buffer.blit(SvShaders.underwaterRegion);
-        });*/
+        Draw.drawRange(Layer.powerBubbles, 0.2f,
+                () -> {
+                    if(buffer == null) buffer = new FrameBuffer();
+                    buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
+                    buffer.begin(Color.clear);
+                },
+                () -> {
+                    buffer.end();
+                    //buffer.blit(Shaders.screenspace);
+                    Draw.blend(Blending.additive);
+                    buffer.blit(SvShaders.powerBubbles);
+                    Draw.blend();
+                });
         SvVars.effectBuffer = buffer;
     }
 

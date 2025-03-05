@@ -108,6 +108,8 @@ public class SvSpecial {
             health = 1000;
             size = 3;
 
+            teamPassable = true;
+
             itemCapacity = 200;
 
             lowTierUnits = new UnitType[] {lapetus,leeft,stunt};
