@@ -38,14 +38,14 @@ void main(){
 
     vec4 maxed = max(max(max(texture2D(u_texture, c + vec2(0, step) * v), texture2D(u_texture, c + vec2(0, -step) * v)), texture2D(u_texture, c + vec2(step, 0) * v)), texture2D(u_texture, c + vec2(-step, 0) * v));
     float mmm = 1.0;
-    if(tester < mth || (0.45 > noi && noi > 0.43)){
+    if(tester < mth || (0.45 > noi && noi > 0.43) || (0.55 > noi && noi > 0.53) || (0.35 > noi && noi > 0.33)){
         color *= 1.2;
         mmm *= 2;
     }
-    if(tester < mth && (0.45 > noi && noi > 0.43)){
+    /*if(tester < mth && (0.45 > noi && noi > 0.43)){
         color *= 1.5;
         mmm *= 1.5;
-    }
+    }*/
     if(texture2D(u_texture, c).a < 0.9 && maxed.a > 0.9){
         gl_FragColor = vec4(maxed.rgb, maxed.a * 100.0);
     }

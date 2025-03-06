@@ -1,13 +1,18 @@
 package subvoyage.type.unit.ability;
 
 import arc.Core;
+import arc.graphics.Blending;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
+import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.scene.ui.layout.Table;
 import arc.struct.ObjectMap;
 import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.content.StatusEffects;
 import mindustry.entities.abilities.Ability;
 import mindustry.game.Team;
@@ -49,9 +54,12 @@ public class LegionfieldAbility extends Ability {
     }
 
     public static ObjectMap<Team,Float> lastRadius = new ObjectMap<>();
+    public static ObjectMap<Team,Float> lastCount = new ObjectMap<>();
     public static ObjectMap<Team,Vec2> point = new ObjectMap<>();
     public static ObjectMap<Team,Float> pointRad = new ObjectMap<>();
-
+    public static int count(Team team) {
+        return (int) (float) lastCount.get(team,0f);
+    }
     public static void update() {
         List<Team> teams = new ArrayList<>();
         for (Unit unit : Groups.unit) if(!teams.contains(unit.team)) teams.add(unit.team);
@@ -67,7 +75,7 @@ public class LegionfieldAbility extends Ability {
                         .filter(a -> a instanceof LegionfieldAbility).findFirst().get();
                 point.add(u.x,u.y);
 
-                rad += abil.radius/(count/2+1);
+                rad += abil.radius/(count/2f+1);
                 count++;
             }
 
@@ -82,13 +90,14 @@ public class LegionfieldAbility extends Ability {
                 LegionfieldAbility abil = (LegionfieldAbility) Arrays.stream(u.abilities)
                         .filter(a -> a instanceof LegionfieldAbility).findFirst().get();
                 if(!Mathf.within(u.x,u.y,lastPoint.x,lastPoint.y,lastRad*2)) {
-                    rad -= abil.radius/(count/2+1);
+                    rad -= abil.radius/(count/2f+1);
                     count--;
                 }
             }
+            lastCount.put(team,count);
             LegionfieldAbility.point.put(team,point);
             LegionfieldAbility.pointRad.put(team,rad);
-            lastRadius.put(team,Mathf.lerp(lastRadius(team),rad, Time.delta/10f));
+            lastRadius.put(team,Mathf.lerp(lastRadius(team),rad, Time.delta/30f));
         }
     }
 
@@ -104,7 +113,7 @@ public class LegionfieldAbility extends Ability {
 
     @Override
     public void update(Unit unit) {
-        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team))) {
+        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,radius(unit.team))) {
             float mult = Mathf.clamp(radius(unit.team)/(radius),1f,3f);
             unit.speedMultiplier(Mathf.clamp(radius(unit.team)/(radius),1f,3f));
             if(radius(unit.team) > radius) unit.apply(StatusEffects.shielded);
@@ -127,13 +136,69 @@ public class LegionfieldAbility extends Ability {
 
     @Override
     public void draw(Unit unit) {
-        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,8f + 8f * radius(unit.team))) {
+        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team))) {
             float z = Draw.z();
-            Draw.z(Layer.shields);
-            Lines.stroke(3f, unit.team.color);
-            Lines.circle(point(unit.team).x, point(unit.team).y, 8f + 8f * lastRadius(unit.team));
+            float x = point(unit.team).x;
+            float y = point(unit.team).y;
+            float rad = 8f * lastRadius(unit.team);
+            Color teamColor = Tmp.c2.set(unit.team.color).mul(1.1f);
+            Color teamColor2 = Tmp.c3.set(unit.team.color).mul(1.1f);
+
+            Draw.z(Layer.blockUnder-0.2f);
+
+            lightInner(x,y, 6,rad * 0.9f,rad,0f,
+                    teamColor.a(0),
+                    teamColor2.a(1f/count(unit.team)));
+            lightInner(x,y, 6,rad * 0.9f,0,0f,
+                    teamColor.mul(1.25f).a(0),
+                    teamColor2.mul(1.25f).a(0.5f/count(unit.team)));
+            lightInner(x,y, 6,rad * 1.05f,rad,0f,
+                    teamColor.mul(0.2f).a(0),
+                    teamColor2.mul(0.2f).a(1f/count(unit.team)));
+
             Draw.z(z);
             Draw.reset();
+        } else if (!Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team))) {
+            float z = Draw.z();
+            float x = unit.x;
+            float y = unit.y;
+            float rad = 8f + 8f * radius;
+            Color teamColor = Tmp.c2.set(unit.team.color).saturation(0f).mul(0.75f);
+            Color teamColor2 = Tmp.c3.set(unit.team.color).saturation(0f).mul(0.75f);
+
+            Draw.z(Layer.blockUnder-0.2f);
+
+            lightInner(x,y, 6,rad * 0.9f,rad,0f,
+                    teamColor.a(0),
+                    teamColor2.a(0.5f));
+            lightInner(x,y, 6,rad * 0.9f,0,0f,
+                    teamColor.mul(1.25f).a(0),
+                    teamColor2.mul(1.25f).a(0.25f));
+            lightInner(x,y, 6,rad * 1.05f,rad,0f,
+                    teamColor.mul(0.2f).a(0),
+                    teamColor2.mul(0.2f).a(0.5f));
+
+            Draw.z(z);
+            Draw.reset();
+        }
+    }
+
+    public static void lightInner(float x, float y, int sides, float innerRadius, float radius, float rotation, Color center, Color edge){
+        float centerf = center.toFloatBits(), edgef = edge.toFloatBits();
+
+        float space = 360f / sides;
+
+        for(int i = 0; i < sides; i ++){
+            float px = Angles.trnsx(space * i + rotation, radius);
+            float py = Angles.trnsy(space * i + rotation, radius);
+            float px2 = Angles.trnsx(space * (i + 1) + rotation, radius);
+            float py2 = Angles.trnsy(space * (i + 1) + rotation, radius);
+            Fill.quad(
+                    x + Angles.trnsx(space * i + rotation, innerRadius), y + Angles.trnsy(space * i + rotation, innerRadius), centerf,
+                    x + px, y + py, edgef,
+                    x + px2, y + py2, edgef,
+                    x + Angles.trnsx(space * (i+1) + rotation, innerRadius), y + Angles.trnsy(space * (i+1) + rotation, innerRadius), centerf
+            );
         }
     }
 }
