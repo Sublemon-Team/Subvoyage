@@ -20,6 +20,7 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.draw.DrawTurret;
+import subvoyage.core.draw.DataEffect;
 import subvoyage.core.draw.SvPal;
 import subvoyage.content.ost.SvSounds;
 import subvoyage.core.draw.block.DrawTurretCallbacked;
@@ -640,22 +641,12 @@ public class SvTurret {
             maxAmmo = ammoPerShot * 3;
 
             reload = 160f;
-            shoot = new ShootMulti() {{
-                shots = 4;
-                shotDelay = 10f;
-                source = new ShootHelix() {{
-                    mag = 2f;
-                    scl = 10f;
-                }};
-                dest = new ShootPattern[] {
-                        new ShootSpread() {{
-                            spread = -30f;
-                            shots = 2;
-                        }}
-                };
+            shoot = new ShootPattern() {{
+                shots = 1;
+                firstShotDelay = 10f;
             }};
 
-            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots);
+            float BPS = (120f/reload);
             float mainDamage = SPECTRUM_DPS/BPS;
 
             drawer = new DrawTurret("atlacian-") {{
@@ -719,42 +710,95 @@ public class SvTurret {
             predictTarget = false;
             range = 180f;
             shootY = 4f;
-            ammo(nitride,new ArtilleryBulletType(2.5f, mainDamage, "shell") {{
-                hitEffect = new MultiEffect(Fx.titanExplosion, Fx.titanSmoke);
-                collidesAir = true;
-                collidesGround = true;
-                pierce = true;
-                pierceCap = 1;
-                despawnEffect = Fx.none;
-                knockback = 2f;
-                lifetime = 140f;
-                height = 19f;
-                width = 17f;
-                splashDamageRadius = 65f;
-                splashDamage = mainDamage;
-                scaledSplashDamage = true;
-                backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
-                frontColor = Color.white;
-                ammoMultiplier = 1f;
-                hitSound = Sounds.titanExplosion;
+            ammo(nitride,new ArtilleryBulletType(2.5f, 0, "shell") {{
+                lifetime = 60f;
 
-                status = StatusEffects.blasted;
+                intervalDelay = 30f;
+                bulletInterval = 100f;
 
-                knockback = 5f;
+                height = width = 0f;
+                collides = false;
+                hittable = false;
 
-                trailLength = 32;
-                trailWidth = 3.35f;
-                trailSinScl = 2.5f;
-                trailSinMag = 0.5f;
-                trailEffect = Fx.none;
-                despawnShake = 7f;
+                scaleLife = false;
 
-                shootEffect = Fx.shootTitan;
-                smokeEffect = Fx.shootSmokeTitan;
-                trailInterp = Interp.slope;
-                shrinkX = 0.2f;
-                shrinkY = 0.1f;
-                buildingDamageMultiplier = 0.3f;
+                fragBullets = 1;
+                fragAngle = fragSpread = fragRandomSpread = fragVelocityMin = fragVelocityMax = 0;
+
+                fragBullet = new ExplosionBulletType(mainDamage * 0.3f,8f*5f) {{
+                    killShooter = false;
+
+                    hitEffect = new MultiEffect(new DataEffect(SvFx.spectrumExplosion,8f*5f));
+                    collidesAir = true;
+                    collidesGround = true;
+                    pierce = true;
+                    pierceCap = 1;
+                    despawnEffect = Fx.none;
+                    knockback = 2f;
+                    splashDamageRadius = 65f;
+                    splashDamage = mainDamage;
+                    scaledSplashDamage = true;
+                    backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
+                    frontColor = Color.white;
+                    ammoMultiplier = 1f;
+                    hitSound = Sounds.titanExplosion;
+
+                    status = StatusEffects.blasted;
+
+                    knockback = 5f;
+
+                    trailLength = 32;
+                    trailWidth = 3.35f;
+                    trailSinScl = 2.5f;
+                    trailSinMag = 0.5f;
+                    trailEffect = Fx.none;
+                    despawnShake = 7f;
+
+                    shootEffect = Fx.shootTitan;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    trailInterp = Interp.slope;
+                    shrinkX = 0.2f;
+                    shrinkY = 0.1f;
+                    buildingDamageMultiplier = 0.3f;
+                }};
+
+                intervalBullet = new ExplosionBulletType(mainDamage * 0.7f,8f*8f) {{
+                    killShooter = false;
+
+                    hitEffect = new MultiEffect(new DataEffect(SvFx.spectrumExplosion,8f*8f));
+                    collidesAir = true;
+                    collidesGround = true;
+                    pierce = true;
+                    pierceCap = 1;
+                    despawnEffect = Fx.none;
+                    knockback = 2f;
+                    splashDamageRadius = 65f;
+                    splashDamage = mainDamage;
+                    scaledSplashDamage = true;
+                    backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
+                    frontColor = Color.white;
+                    ammoMultiplier = 1f;
+                    hitSound = Sounds.titanExplosion;
+
+                    status = StatusEffects.blasted;
+
+                    knockback = 5f;
+
+                    trailLength = 32;
+                    trailWidth = 3.35f;
+                    trailSinScl = 2.5f;
+                    trailSinMag = 0.5f;
+                    trailEffect = Fx.none;
+                    despawnShake = 7f;
+
+                    shootEffect = Fx.shootTitan;
+                    smokeEffect = Fx.shootSmokeTitan;
+                    trailInterp = Interp.slope;
+                    shrinkX = 0.2f;
+                    shrinkY = 0.1f;
+                    buildingDamageMultiplier = 0.3f;
+                }};
+
             }});
         }};
         resistance = new ResistTurret("resistance") {{

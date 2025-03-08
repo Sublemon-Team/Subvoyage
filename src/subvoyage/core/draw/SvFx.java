@@ -18,6 +18,7 @@ import static arc.graphics.g2d.Lines.*;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.state;
 import static mindustry.Vars.tilesize;
+import static subvoyage.type.unit.ability.LegionfieldAbility.lightInner;
 
 public class SvFx{
     public static final Rand rand = new Rand();
@@ -215,6 +216,26 @@ public class SvFx{
 
             for(int s : Mathf.signs){
                 Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 6f, e.fout() * 10f * lenRand + 6f, angle + 90f + s * 90f);
+            }
+        }
+    }),
+
+    spectrumExplosion = new Effect(60f, 160f, e -> {
+        color(e.color);
+        stroke(e.fout() * 3f);
+        float circleRad = 6f + e.finpow() * (float) e.data;
+        Lines.circle(e.x, e.y, circleRad);
+
+        lightInner(e.x,e.y,(int) (circleRad*8), circleRad * e.fin(), circleRad, 0f,
+                e.color.cpy().a(0f),e.color.cpy());
+
+        rand.setSeed(e.id);
+        for(int i = 0; i < 16; i++){
+            float angle = rand.random(360f);
+            float lenRand = rand.random(0.5f, 2f);
+            Tmp.v1.trns(angle, circleRad);
+            for(int s : Mathf.signs){
+                Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * 12f, e.fout() * 10f * lenRand + 6f, angle + 90f + s * 90f);
             }
         }
     }),

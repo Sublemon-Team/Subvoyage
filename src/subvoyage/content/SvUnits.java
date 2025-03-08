@@ -2912,7 +2912,6 @@ public class SvUnits{
         }};
 
         //todo: sounds
-        //todo: drone engine, or smth like a elude trail
         covenant = new RoverUnitType("covenant") {{
             constructor = TankUnit::create;
             itemCapacity = 10;
