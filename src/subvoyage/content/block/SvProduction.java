@@ -3,6 +3,7 @@ package subvoyage.content.block;
 import arc.Core;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
+import arc.struct.Seq;
 import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.entities.TargetPriority;
@@ -35,6 +36,7 @@ import static mindustry.content.Liquids.water;
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
 import static subvoyage.content.SvBlocks.atl;
+import static subvoyage.type.block.production.Sifter.drawErrorInfo;
 
 public class SvProduction {
     public static Block
@@ -129,13 +131,8 @@ public class SvProduction {
                 super.drawPlace(x, y, rotation, valid);
                 int efficiency = (int)((baseEfficiency + Math.min(maxBoost, boostScale * sumAttribute(attribute, x, y))) * 100f);
                 if(efficiency < 100) {
-                    Draw.z(Layer.block+2);
-                    //Drawf.dashCircle((x+size/4f)*tilesize,(y+size/4f)*tilesize,oreSearchRadius*tilesize, Pal.redDust);
-                    WorldLabel.drawAt(Core.bundle.get("tectonic-drill.place.message"), (x + size / 4f - 0.75f) * tilesize, (y + size / 4f + size - 0.1f - 1f) * tilesize,
-                            Layer.block + 3, WorldLabel.flagOutline, 0.8f);
-
-                    color(Color.scarlet);
-                    Draw.rect(Icon.cancel.getRegion(), (x+size/4f - 0.75f)*tilesize,(y+size/4f+size-0.1f+0.5f - 1f)*tilesize);
+                    Seq<String> errors = Seq.with("tectonic-drill.place.message");
+                    drawErrorInfo(size,x*tilesize-4f,y*tilesize-8f,errors);
                 }
             }
         };

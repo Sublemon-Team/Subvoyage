@@ -42,6 +42,7 @@ import subvoyage.util.Var;
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
+import static subvoyage.type.block.production.Sifter.drawErrorInfo;
 
 public class PowerBubbleNode extends PowerBlock {
 
@@ -286,30 +287,44 @@ public class PowerBubbleNode extends PowerBlock {
         }
 
 
+        boolean tooBig = false;
+        boolean tooSmall = false;
+        boolean tooMuchEnv = false;
+        boolean overlaps = false;
+
         public boolean checkRectangle() {
+            tooBig = tooSmall = tooMuchEnv = overlaps = false;
             if(!(hasLink && link() instanceof PowerBubbleNodeBuild pb)) return false;
 
             float maxArea = range*range*tilesize;
             float w = Math.abs(pb.x-x);
             float h = Math.abs(pb.y-y);
-            if(w <= tilesize || h <= tilesize) return false;
+            if(w <= tilesize || h <= tilesize)
+                tooSmall = true;
 
             float area = w*h;
-            if(area > maxArea) return false;
+            if(area > maxArea)
+                tooBig = true;
 
-            Var<Boolean> hasEnv = Var.bool();
+            Var<Integer> envCount = Var.init(0);
             Var<Boolean> rectOverlap = Var.bool();
             SvMath.rectangle(pb.tileX(),pb.tileY(),tileX(),tileY(),(x,y) -> {
                 Tile tile = world.tile(x,y);
                 if(tile.block() != null && tile.block().isStatic())
-                    hasEnv.val = true;
+                    envCount.val++;
                 if(tile.build instanceof PowerBubbleNodeBuild pb2 && (link != pb2.pos() && pb2 != this))
                     rectOverlap.val = true;
             });
-            if(!world.tile(tileX(),pb.tileY()).block().isAir() || !world.tile(pb.tileX(),tileY()).block().isAir()) return false;
-            if(hasEnv.val) return false;
-            if(rectOverlap.val) return false;
-            return true;
+            if(envCount.val > 6)
+                tooMuchEnv = true;
+            if(rectOverlap.val)
+                overlaps = true;
+
+            pb.tooBig = tooBig;
+            pb.tooSmall = tooSmall;
+            pb.tooMuchEnv = tooMuchEnv;
+            pb.overlaps = overlaps;
+            return !(tooMuchEnv || overlaps || tooBig || tooSmall);
         }
 
         @Override
@@ -336,7 +351,7 @@ public class PowerBubbleNode extends PowerBlock {
                     Draw.rect(region,x,build.y,0);
 
                     Draw.z(SvRender.Layer.powerBubbles);
-                    Draw.color(Pal.remove,0.8f);
+                    Draw.color(Pal.remove);
                     if(!Vars.renderer.animateShields){
                         Draw.alpha(0.2f);
                     }
@@ -345,6 +360,18 @@ public class PowerBubbleNode extends PowerBlock {
                 }
                 Draw.reset();
             }
+        }
+
+        @Override
+        public void drawSelect() {
+            super.drawSelect();
+            Seq<String> errors = Seq.with();
+            if(tooBig) errors.add("pbubble.error.too-big");
+            if(tooSmall) errors.add("pbubble.error.too-small");
+            if(tooMuchEnv) errors.add("pbubble.error.env");
+            if(overlaps) errors.add("pbubble.error.overlap");
+
+            drawErrorInfo(size,x-3f,y,errors);
         }
 
         @Override

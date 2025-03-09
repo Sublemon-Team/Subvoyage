@@ -89,7 +89,7 @@ public class LegionfieldAbility extends Ability {
                 if(u.team != team) continue;
                 LegionfieldAbility abil = (LegionfieldAbility) Arrays.stream(u.abilities)
                         .filter(a -> a instanceof LegionfieldAbility).findFirst().get();
-                if(!Mathf.within(u.x,u.y,lastPoint.x,lastPoint.y,lastRad*2)) {
+                if(!Mathf.within(u.x,u.y,lastPoint.x,lastPoint.y,lastRad*2+8f)) {
                     rad -= abil.radius/(count/2f+1);
                     count--;
                 }
@@ -136,7 +136,7 @@ public class LegionfieldAbility extends Ability {
 
     @Override
     public void draw(Unit unit) {
-        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team))) {
+        if(Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team) + 8f)) {
             float z = Draw.z();
             float x = point(unit.team).x;
             float y = point(unit.team).y;
@@ -158,7 +158,7 @@ public class LegionfieldAbility extends Ability {
 
             Draw.z(z);
             Draw.reset();
-        } else if (!Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team))) {
+        } else if (!Mathf.within(unit.x,unit.y,point(unit.team).x,point(unit.team).y,4f * radius(unit.team) + 8f)) {
             float z = Draw.z();
             float x = unit.x;
             float y = unit.y;
