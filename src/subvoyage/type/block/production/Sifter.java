@@ -254,7 +254,7 @@ public class Sifter extends Block {
 
             progress += getProgressIncrease(getHarvestTime());
             float liq = liquidOutput * edelta() - item.hardness*0.8f/60f;
-            liquids.add(Liquids.water,liq);
+            if(liquids.get(Liquids.water) < liquidCapacity) liquids.add(Liquids.water,liq);
             if(progress >= 1f) {
                 progress %= 1f;
                 harvest();
