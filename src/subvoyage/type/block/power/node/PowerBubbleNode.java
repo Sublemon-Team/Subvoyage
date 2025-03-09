@@ -60,6 +60,22 @@ public class PowerBubbleNode extends PowerBlock {
             if(!(entity instanceof PowerBubbleNodeBuild pb)) return;
             var build = world.build(value);
             if(!(build instanceof PowerBubbleNodeBuild pb2)) return;
+
+            if(pb.link == value) {
+                pb.setLink(-1);
+                pb2.setLink(-2);
+
+                pb.hasLink = false;
+                pb2.hasLink = false;
+
+                pb.removeLinks();
+                pb2.removeLinks();
+
+                pb.worldChanges++;
+                pb2.worldChanges++;
+                return;
+            }
+
             pb.setLink(value);
             pb2.setLink(pb.pos());
 
@@ -376,6 +392,12 @@ public class PowerBubbleNode extends PowerBlock {
             if(overlaps) errors.add("pbubble.error.overlap");
 
             drawErrorInfo(size,x-3f,y,errors);
+
+            if(hasLink && link() instanceof PowerBubbleNodeBuild pb) {
+                Lines.stroke(1.5f,Pal.accent);
+                Lines.quad(x,y,pb.x,y,pb.x,pb.y,x,pb.y);
+            }
+            Draw.reset();
         }
 
         @Override
@@ -432,7 +454,10 @@ public class PowerBubbleNode extends PowerBlock {
         }
 
         public void setLink(int value) {
-            if(link == value) return;
+            if(link == value) {
+                hasLink = true;
+                return;
+            }
             if(hasLink && world.build(link) instanceof PowerBubbleNodeBuild pb) {
                 pb.link = -1;
                 pb.hasLink = false;

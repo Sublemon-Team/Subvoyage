@@ -149,8 +149,8 @@ public class Sifter extends Block {
         super.drawPlace(x, y, rotation, valid);
         Item toDraw = getPopulatedOreItemCached(x,y);
 
-        boolean hasNoWater = !world.tile(x,y).floor().isLiquid;
-        boolean hasNearby = hasNearbySelf(world.tile(x,y));
+        boolean hasNoWater = world.tile(x,y) == null || world.tile(x,y).floor() == null || !world.tile(x,y).floor().isLiquid;
+        boolean hasNearby = world.tile(x,y) != null && hasNearbySelf(world.tile(x,y));
         boolean hasNoOre = toDraw == null || toDraw.fullIcon.texture == null;
 
         boolean error = hasNoWater || hasNearby || hasNoOre;
