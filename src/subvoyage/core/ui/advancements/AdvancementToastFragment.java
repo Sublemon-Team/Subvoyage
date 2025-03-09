@@ -84,7 +84,7 @@ public class AdvancementToastFragment extends Table {
         return findCache(id);
     };
     public String title() {
-        return current == null ? "oh" :  clamp(current.title,20);
+        return current == null ? "oh" :  clamp(current.title,22);
     }
     public String description() {
         return current == null ? "no" : clamp(current.description,70);

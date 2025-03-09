@@ -42,6 +42,7 @@ import subvoyage.util.Var;
 import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
 import static mindustry.world.blocks.power.PowerNode.makeBatteryBalance;
+import static subvoyage.core.ui.advancements.Advancement.big_bubble;
 import static subvoyage.type.block.production.Sifter.drawErrorInfo;
 
 public class PowerBubbleNode extends PowerBlock {
@@ -324,6 +325,9 @@ public class PowerBubbleNode extends PowerBlock {
             pb.tooSmall = tooSmall;
             pb.tooMuchEnv = tooMuchEnv;
             pb.overlaps = overlaps;
+
+            if(tooBig)
+                big_bubble.unlock();
             return !(tooMuchEnv || overlaps || tooBig || tooSmall);
         }
 

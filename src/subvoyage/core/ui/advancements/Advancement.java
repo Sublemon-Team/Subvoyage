@@ -5,6 +5,7 @@ import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Reflect;
 import arc.util.Structs;
+import mindustry.Vars;
 import subvoyage.core.SvSettings;
 import subvoyage.core.ui.SvUI;
 
@@ -15,6 +16,7 @@ public class Advancement {
             welcome,beta,
             sector_submerging,
             unit_helio, unit_hydro, unit_rover,
+            big_bubble,
             uwu
             ;
 
@@ -35,6 +37,8 @@ public class Advancement {
                 "unit_helio","lapetus-full", // Unit - Lapetus
                 "unit_hydro","leeft-full", // Unit - Leeft
                 "unit_rover","stunt-full", //Unit - Stunt
+
+                "big_bubble","power-bubble-node", //Other
 
                 "uwu","leeft-uwu" //UwU Mode
         );
@@ -79,6 +83,9 @@ public class Advancement {
     }
 
     public void unlock() {
+        boolean test = false;
+        if(!Vars.state.isCampaign() && !test) return;
+        if(Vars.state.rules.infiniteResources && !test) return;
         Advancement.unlock(this);
     }
 

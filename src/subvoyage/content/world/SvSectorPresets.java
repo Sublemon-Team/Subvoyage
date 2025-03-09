@@ -11,7 +11,7 @@ public class SvSectorPresets {
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-        submerging = new SvSectorPreset("dive",atlacian,221,(state) -> {
+        /*submerging = new SvSectorPreset("dive",atlacian,221,(state) -> {
 
         }) {{
             alwaysUnlocked = true;
@@ -24,7 +24,7 @@ public class SvSectorPresets {
             rules = (r) -> {
                 r.loadout = Seq.with();
             };
-        }};
-        all.addAll(submerging);
+        }};*/
+        all.addAll();
     }
 }
