@@ -50,6 +50,28 @@ public class SvFx{
         Fill.circle(e.x,e.y,e.fout()*3.5f);
     }),
 
+    heliWave = new Effect(30f, e -> {
+        z(Layer.bullet);
+        color(e.color);
+        float size = (float) e.data;
+        float rad = size*12f * e.fin();
+
+        lightInner(e.x,e.y,(int) (rad*8),rad*e.fin(),rad,
+                0f, e.color.cpy().a(0f), e.color.cpy());
+        lightInner(e.x,e.y,(int) (rad*8),rad+rad*e.fout() * 0.2f,rad,
+                0f, e.color.cpy().a(0f), e.color.cpy());
+
+        rand.setSeed(e.id);
+        for(int i = 0; i < 16; i++){
+            float angle = rand.random(360f);
+            float lenRand = rand.random(0.5f, 2f);
+            Tmp.v1.trns(angle, rad);
+            for(int s : Mathf.signs){
+                Drawf.tri(e.x + Tmp.v1.x, e.y + Tmp.v1.y, e.foutpow() * size * 2f, e.fout() * size * lenRand + 6f, angle + 90f + s * 90f);
+            }
+        }
+    }),
+
     shootShockwave = new Effect(60f, e -> {
         Draw.color(e.color);
 
@@ -157,23 +179,23 @@ public class SvFx{
 
     payloadLaunchPadRocketLaunch = new Effect(240f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvPayload.payloadLaunchPad;
-        Draw.alpha(e.foutpowdown());
-        Draw.scl(1f+e.finpow()*4f,1f+e.finpow()*4f);
-        float x = SvDraw._3D.xHeight(e.x,e.finpow());
-        float y = SvDraw._3D.yHeight(e.y,e.finpow());
+        Draw.alpha(e.fout());
+        Draw.scl(1f+ e.finpowdown()*2f,1f+ e.finpowdown()*2f);
+        float x = SvDraw._3D.xHeight(e.x,e.finpowdown()*2f);
+        float y = SvDraw._3D.yHeight(e.y,e.finpowdown()*2f);
         Draw.rect(launchPad.rocketRegion,x,y,e.fin()*360f);
-        if(e.fout() > 0.75f && !state.isPaused()) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fout() > 0.97f && !state.isPaused()) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
+        if(e.fout() > 0.75f && !state.isPaused() && rand.chance(0.5f)) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fout() > 0.97f && !state.isPaused() && rand.chance(0.125f)) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
     }),
     payloadLaunchPadRocketLand = new Effect(240f,e -> {
         PayloadLaunchPad launchPad = (PayloadLaunchPad) SvPayload.payloadLaunchPad;
         Draw.alpha(e.finpowdown());
-        Draw.scl(1f+e.foutpowdown()*4f,1f+e.foutpowdown()*4f);
-        float x = SvDraw._3D.xHeight(e.x,e.foutpowdown());
-        float y = SvDraw._3D.yHeight(e.y,e.foutpowdown());
+        Draw.scl(1f+ e.foutpow()*2f,1f+ e.foutpow()*2f);
+        float x = SvDraw._3D.xHeight(e.x,e.foutpow());
+        float y = SvDraw._3D.yHeight(e.y,e.foutpow());
         Draw.rect(launchPad.rocketRegion,x,y,e.fin()*360f);
-        if(e.fin() > 0.75f && !state.isPaused()) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
-        if(e.fin() > 0.97f && !state.isPaused()) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
+        if(e.fin() > 0.75f && !state.isPaused() && rand.chance(0.9f)) rocketLandDust.create(x,y,Mathf.random(360f),Pal.stoneGray.cpy().a(0.2f),new Object());
+        if(e.fin() > 0.97f && !state.isPaused() && rand.chance(0.125f)) Fx.launchPod.create(x,y,0,Pal.accent,new Object());
     }),
 
     smokeCloud = new Effect(25, e -> {

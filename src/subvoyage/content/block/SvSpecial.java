@@ -36,7 +36,7 @@ public class SvSpecial {
 
     public static void load() {
         buoy = new Buoy("buoy") {{
-            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(spaclanium,10));
+            requirements(Category.effect,atl(BuildVisibility.fogOnly), with(corallite,20));
             alwaysUnlocked = true;
             fogRadius = 25;
             envDisabled |= Env.scorching;
@@ -47,7 +47,7 @@ public class SvSpecial {
             priority = TargetPriority.wall;
             health = 120;
 
-            researchCost = with(spaclanium,8);
+            researchCost = with(corallite,3);
         }};
 
         tower = new Buoy("tower") {{

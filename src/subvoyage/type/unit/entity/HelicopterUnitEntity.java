@@ -8,11 +8,15 @@ import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.util.Time;
+import mindustry.Vars;
+import mindustry.entities.Effect;
 import mindustry.entities.units.StatusEntry;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import subvoyage.content.SvUnits;
+import subvoyage.core.draw.SvFx;
+import subvoyage.core.draw.SvPal;
 import subvoyage.type.unit.type.HelicopterUnitType;
 
 import java.util.Iterator;
@@ -21,6 +25,7 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     public float localAcceleration = 0;
     public boolean isAccelerating = false;
+    public float lastAccel = 0f;
 
     @Override
     public int classId() {
@@ -56,19 +61,21 @@ public class HelicopterUnitEntity extends UnitEntity {
             StatusEntry e = (StatusEntry)var9.next();
             e.effect.draw(this, e.time);
         }
-        Draw.scl(1f-(localAcceleration/10f));
         this.type.draw(this);
     }
 
+    public float accel() {
+        return accelSmooth;
+    }
 
     @Override
     public float shadowAlpha() {
-        return 1-(0.5f+localAcceleration/2);
+        return accel();
     }
 
     @Override
     public float elevation() {
-        return (localAcceleration);
+        return accel();
     }
 
     public static HelicopterUnitEntity create() {
@@ -96,13 +103,34 @@ public class HelicopterUnitEntity extends UnitEntity {
     }
 
     @Override
+    public void wobble() {
+        this.x += Mathf.sin(Time.time + (float)(this.id() % 10 * 12), 25.0F, 0.05F) * Time.delta * this.elevation * accel();
+        this.y += Mathf.cos(Time.time + (float)(this.id() % 10 * 12), 25.0F, 0.05F) * Time.delta * this.elevation * accel();
+    }
+
+    public boolean reachedFullAltitude = false;
+    public float accelSmooth = 0f;
+
+    @Override
     public void update() {
         super.update();
+        accelSmooth = Mathf.lerp(accelSmooth,vel.len()/type.speed,Time.delta/10f);
         if(!isAccelerating) {
             localAcceleration -= Time.delta/30f;
             localAcceleration = Mathf.clamp(localAcceleration,0,1);
         } else isAccelerating = false;
         if(type instanceof  HelicopterUnitType hType) hType.onUpdate.accept(this);
+
+        if(accel() > 0.7f) {
+            reachedFullAltitude = true;
+        }
+
+        if(lastAccel > 0.25 && accel() <= 0.25 && accel()-lastAccel < 0 && reachedFullAltitude) {
+            SvFx.heliWave.at(x,y,0f, SvPal.heatGlow, type.stepShake);
+            Effect.shake(type.stepShake,type.stepShake,new Vec2(x,y));
+            reachedFullAltitude = false;
+        }
+        lastAccel = accel();
     }
 
 

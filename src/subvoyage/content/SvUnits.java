@@ -441,33 +441,31 @@ public class SvUnits{
         lapetus = new HelicopterUnitType("lapetus"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.05f;
-            speed = 1.4f;
+            speed = 1.7f;
             rotateSpeed = 4f;
             accel = 0.1f;
             health = HELIO_T1_HU;
             engineSize = 0;
-            hitSize = 20f;
+            hitSize = 16f;
             researchCostMultiplier = 0;
-            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){
-                {
-                    layer = Layer.flyingUnitLow;
-                    xScl = 1.5f;
-                    yScl = 1.5f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
-                }
-            };
-
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
 
             float BPS = 2f * 0.5f;
 
-            parts.add(copter);
+            parts.add(new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 1f;
+                yScl = 1f;
+                y = 2f;
+                rotationSpeed = 400f;
+            }});
+
+            parts.add(new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 0.5f;
+                yScl = 0.5f;
+                y = -5.5f;
+                rotationSpeed = 200f;
+            }});
             weapons.add(new Weapon(Subvoyage.ID + "-marine-weapon"){{
                 x = 5f;
                 layerOffset = -2;
@@ -504,8 +502,7 @@ public class SvUnits{
         skath = new HelicopterUnitType("skath"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.15f;
-            speed = 1.3f;
+            speed = 1.6f;
             rotateSpeed = 3f;
             accel = 0.25f;
             health = HELIO_T2_HU;
@@ -530,16 +527,6 @@ public class SvUnits{
                 y = -10.5f;
                 rotationSpeed = 400f;
             }};
-
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-
-                tail.unitRot = e.rotation();
-                tail.unitX = e.x;
-                tail.unitY = e.y;
-            };
 
             parts.addAll(copter, tail);
 
@@ -614,8 +601,7 @@ public class SvUnits{
         charon = new HelicopterUnitType("charon"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.5f;
+            speed = 1.55f;
             rotateSpeed = 2f;
             accel = 0.45f;
             health = HELIO_T3_HU;
@@ -633,12 +619,6 @@ public class SvUnits{
                     y = -0.15f;
                     rotationSpeed = 400f;
             }};
-
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
 
             float BPS = 60f/10f;
 
@@ -733,8 +713,7 @@ public class SvUnits{
         callees = new HelicopterUnitType("callees"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.6f;
+            speed = 1.4f;
             rotateSpeed = 4f;
             researchCostMultiplier = 0f;
             accel = 0.45f;
@@ -743,21 +722,15 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 45f;
-            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(Subvoyage.ID + "-medium-rotator"){{
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                     mirror = true;
                     layer = Layer.flyingUnitLow;
-                    xScl = 1.2f;
-                    yScl = 1.2f;
+                    xScl = 1.8f;
+                    yScl = 1.8f;
                     x = 16.5f;
                     y = -0.15f;
                     rotationSpeed = 400f;
             }};
-
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
 
             parts.add(copter);
             abilities.add(new ShieldArcAbility() {{
@@ -874,8 +847,7 @@ public class SvUnits{
         ganymede = new HelicopterUnitType("ganymede"){{
             aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.8f;
+            speed = 1.3f;
             rotateSpeed = 3f;
             accel = 0.45f;
             health = HELIO_T5_HU;
@@ -884,33 +856,23 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 64f;
-            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(Subvoyage.ID + "-medium-rotator"){{
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                 mirror = true;
                 layer = Layer.flyingUnitLow;
-                xScl = 1.6f;
-                yScl = 1.6f;
+                xScl = 2.4f;
+                yScl = 2.4f;
                 x = 23.5f;
                 y = -2.75f;
                 rotationSpeed = 400f;
             }};
 
-            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(Subvoyage.ID + "-medium-rotator"){{
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
                 layer = Layer.flyingUnitLow;
-                xScl = 0.8f;
-                yScl = 0.8f;
+                xScl = 1.2f;
+                yScl = 1.2f;
                 y = -33.25f;
                 rotationSpeed = 400f;
             }};
-
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-
-                tail.unitRot = e.rotation();
-                tail.unitX = e.x;
-                tail.unitY = e.y;
-            };
 
             parts.add(copter, tail);
 

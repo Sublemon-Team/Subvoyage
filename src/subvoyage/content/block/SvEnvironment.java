@@ -13,6 +13,7 @@ import subvoyage.content.other.SvAttribute;
 import subvoyage.core.draw.shader.SvShaders;
 import subvoyage.core.draw.block.Draw3DSprite;
 import subvoyage.core.draw.block.Draw3DStem;
+import subvoyage.type.block.environment.CrackFloor;
 import subvoyage.type.block.environment.DrawerBlock;
 
 import java.util.HashMap;
@@ -24,10 +25,10 @@ public class SvEnvironment {
     oreSpaclanium,oreCorallite,oreSulfur,oreIridium,oreChromium,
     wallOreSpaclanium,wallOreCorallite,wallOreIridium,wallOreChromium,
     // floors
-    legartyteStone, darkLegartyteStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateStone, darkSodilateFloor, hardWater, darkHardWater,
-    crudesQuarry, sulfurSand,
+    legartyteStone, darkLegartyteStone, legaryellowStone, legargreenStone, archalyteStone, darkArchalyteStone, agaryteStone, sodilateStone, darkSodilateFloor, hardWater, darkHardWater,
+    crudesQuarry, sulfurSand, cracks,
     // walls
-    legartyteWall, agaryteWall, archalyteWall, sodilateWall,
+    legartyteWall, agaryteWall, legaryellowWall, legargreenWall, archalyteWall, sodilateWall,
     // boulders
     agaryteBoulder, agaryteBlocks, legartyteBoulder, darkLegaryteBoulder, archalyteBoulder, sodilateBoulder, sodilateBlocks, archalyteSpikes, hauntedTree;
 
@@ -144,11 +145,30 @@ public class SvEnvironment {
             attributes.set(Attribute.water, -1f);
             variants = 3;
         }};
+        legargreenStone = new Floor("legargreen-stone"){{
+            attributes.set(Attribute.water, -1f);
+            variants = 3;
+        }};
+        legaryellowStone = new Floor("legaryellow-stone"){{
+            attributes.set(Attribute.water, -1f);
+            variants = 3;
+        }};
+
+
         legartyteWall = new StaticWall("legartyte-wall"){{
             legartyteStone.asFloor().wall = this;
             darkLegartyteStone.asFloor().wall = this;
             variants = 3;
         }};
+        legaryellowWall = new StaticWall("legaryellow-wall"){{
+            legaryellowStone.asFloor().wall = this;
+            variants = 3;
+        }};
+        legargreenWall = new StaticWall("legargreen-wall"){{
+            legargreenStone.asFloor().wall = this;
+            variants = 3;
+        }};
+
         archalyteStone = new Floor("archalyte-stone"){{
             attributes.set(Attribute.water, -1f);
             variants = 3;
@@ -184,6 +204,9 @@ public class SvEnvironment {
             itemDrop = SvItems.sulfur;
             playerUnmineable = true;
             variants = 1;
+        }};
+        cracks = new CrackFloor("crack") {{
+            variants = 3;
         }};
         sodilateWall = new StaticWall("sodilate-wall"){{
             sodilateStone.asFloor().wall = this;

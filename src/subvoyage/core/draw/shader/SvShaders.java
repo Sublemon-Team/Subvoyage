@@ -21,12 +21,10 @@ public class SvShaders{
     public static SurfaceShader hardWater;
     public static SurfaceShader powerBubbles;
     public static SurfaceShader underwaterRegion;
-    public static SurfaceShader bloom;
 
     public static boolean useDefaultBuffer = false;
 
     public static CacheLayer.ShaderLayer hardWaterLayer;
-    public static CacheLayer.ShaderLayer bloomLayer;
     public static PlanetTextureShader planetTextureShader;
 
     public static Fi file(String name){
@@ -108,10 +106,8 @@ public class SvShaders{
                 }
             }
         };
-        bloom = new SurfaceShader("bloom");
         CacheLayer.addLast(
-                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater),
-                bloomLayer = new CacheLayer.ShaderLayer(bloom)
+                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater)
         );
     }
 
@@ -211,6 +207,8 @@ public class SvShaders{
                 }
 
                 noiseTex.bind(1);
+
+                SvRender.buffer.getTexture().bind(0);
                 renderer.effectBuffer.getTexture().bind(0);
 
                 setUniformi("u_noise", 1);

@@ -78,27 +78,23 @@ public class SvTurret {
             }};
 
             shootSound = Sounds.blaster;
-            reload = 20f;
+            reload = 60f;
+            shoot = new ShootUpsurge() {{
+                shots = 2;
+                shotDelay = 10;
+                firstShotDelay = 10;
+            }};;
 
-            shoot = new ShootWhirl(){{
-                barrels = new float[]{
-                        -6, 2.5f, 0,
-                        6, 2.5f, 0
-                };
-                shotDelay = 5f;
-            }};
+            float BPS = 2f;
 
-            float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*shoot.shots;
-
-            float mainDamage = WHIRL_DPS/BPS*0.75f;
-            float subDamage = WHIRL_DPS/BPS*0.25f;
+            float mainDamage = WHIRL_DPS/BPS;
 
             ammo(
-                    spaclanium,new MissileBulletType(3.7f, mainDamage){{
-                        width = 7f;
-                        height = 12f;
-                        shrinkY = 0f;
-                        lifetime = 60f;
+                    spaclanium, new BasicBulletType(3.7f, mainDamage) {{
+                        width = 15f;
+                        height = 15f;
+                        shrinkY = 0.1f;
+                        lifetime = 3.7f*10*8f;
                         hitEffect = Fx.blastExplosion;
                         despawnEffect = Fx.blastExplosion;
                         shootEffect = SvFx.pulverize;
@@ -108,14 +104,7 @@ public class SvTurret {
                         trailWidth = 3f;
                         trailLength = 5;
 
-                        //status = StatusEffects.electrified; //TODO: replace with custom effect
-                        statusDuration = 60f;
-
                         ammoMultiplier = 2f;
-                        lightningColor = SvPal.spaclanium;
-                        lightningDamage = subDamage/2f;
-                        lightning = 2;
-                        lightningLength = 10;
                     }}
             );
 
@@ -123,13 +112,13 @@ public class SvTurret {
             recoil = 1f;
             rotate = false;
 
-            range = 170f;
+            range = 18*8f;
             scaledHealth = 900/9f;
 
             coolantMultiplier = 1f;
             coolant = consume(new ConsumeLiquid(hydrogen, 20f / 60f));
 
-            limitRange(2);
+            limitRange(0);
         }};
         rupture = new ItemTurret("rupture"){{
             requirements(Category.turret,atl(), with(corallite, 145, clay, 125, iridium, 30));

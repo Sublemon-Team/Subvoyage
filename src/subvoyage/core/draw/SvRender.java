@@ -26,7 +26,9 @@ public class SvRender {
     public static class Layer extends mindustry.graphics.Layer {
         public static final float
                 powerBubbles = (86.7f),
-                powerBubbleBlock = 87f
+                powerBubbleBlock = 87f,
+
+                floorMedian = scorch + 5f
                 ;
     }
 
@@ -34,15 +36,14 @@ public class SvRender {
         if(AtlacianCore.cutscene) {
             camera.position.set(player.bestCore().x,player.bestCore().y);
         }
+        if(buffer == null) buffer = new FrameBuffer();
+        buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
         Draw.drawRange(Layer.powerBubbles, 0.2f,
                 () -> {
-                    if(buffer == null) buffer = new FrameBuffer();
-                    buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
                     buffer.begin(Color.clear);
                 },
                 () -> {
                     buffer.end();
-                    //buffer.blit(Shaders.screenspace);
                     Draw.blend(Blending.additive);
                     buffer.blit(SvShaders.powerBubbles);
                     Draw.blend();

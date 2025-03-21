@@ -4,6 +4,7 @@ import arc.Core;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
 import arc.util.Eachable;
+import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
@@ -73,6 +74,7 @@ public class CoralliteGrinder extends GenericCrafter {
         else super.drawPlanRegion(plan,list);
     }
     public boolean useSulfur(Tile tile) {
+        if(tile == null) return false;
         return tile.getLinkedTilesAs(this,tempTiles).sum(other -> other.floor().itemDrop == SvItems.sulfur ? 1 : 0) > 1;
     }
     @Override

@@ -40,7 +40,7 @@ public class SvTechTree {
         }
 
         atlacian.techTree = nodeRoot("atlacian",corePuffer,true,() -> {
-            cost(buoy,spaclanium,5);
+            cost(buoy,corallite,5);
             node(buoy,() -> {
                 cost(tower,clay,120,iridium,70,chrome,40);
                 node(tower);

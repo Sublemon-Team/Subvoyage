@@ -149,7 +149,7 @@ public class PayloadLaunchPad extends PayloadBlock {
         public float launchWarmup = 0f;
         public boolean loaded;
         public boolean inProgress = false;
-        public float inProgressSmooth = 0f;
+        public float inProgressSmooth = 1f;
 
         public Payload cachePayload;
 
@@ -264,6 +264,8 @@ public class PayloadLaunchPad extends PayloadBlock {
                                 launchWarmup = 0f;
 
                                 cachePayload = null;
+
+                                Fx.launchPod.create(other.x,other.y,0,Pal.accent,new Object());
                                 //reset state after shooting immediately
                             });
                         }
