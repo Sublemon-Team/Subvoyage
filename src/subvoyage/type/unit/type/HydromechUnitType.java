@@ -4,13 +4,17 @@ import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.Scaled;
 import arc.math.geom.*;
+import arc.util.Tmp;
 import mindustry.Vars;
+import mindustry.entities.Leg;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.part.DrawPart;
 import mindustry.entities.units.WeaponMount;
 import mindustry.game.*;
 import mindustry.gen.*;
+import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
+import mindustry.graphics.Pal;
 import subvoyage.type.unit.custom.HydromechState;
 import subvoyage.type.unit.custom.HydromechStateStats;
 import subvoyage.type.unit.weapon.HydromechWeapon;
@@ -172,13 +176,87 @@ public class HydromechUnitType extends AtlacianUnitType {
     }
 
 
-
+    private static final Vec2 legOffset = new Vec2();
     @Override
     public <T extends Unit & Legsc> void drawLegs(T unit) {
         float v = unit instanceof HydromechUnitEntity hm ? hm.liquidedSmooth() : 0f;
+        float sc = 1-v;
         Draw.scl(1-v);
         Draw.alpha(1-v);
-        if(v < 0.5f) super.drawLegs(unit);
+
+        applyColor(unit);
+        Tmp.c3.set(Draw.getMixColor());
+
+        Leg[] legs = unit.legs();
+
+        float ssize = footRegion.width * footRegion.scl() * 1.5f;
+        float rotation = unit.baseRotation();
+        float invDrown = 1f - unit.drownTime;
+
+        if(footRegion.found()){
+            for(Leg leg : legs){
+                Drawf.shadow( Mathf.lerp(leg.base.x,unit.x,1f-sc),  Mathf.lerp(leg.base.y,unit.y,1f-sc), ssize, invDrown);
+            }
+        }
+
+        //legs are drawn front first
+        for(int j = legs.length - 1; j >= 0; j--){
+            int i = (j % 2 == 0 ? j/2 : legs.length - 1 - j/2);
+            Leg leg = legs[i];
+            boolean flip = i >= legs.length/2f;
+            int flips = Mathf.sign(flip);
+
+            Vec2 position = unit.legOffset(legOffset, i).add(unit);
+
+            Tmp.v1.set(leg.base).sub(leg.joint).inv().setLength(legExtension * sc);
+
+            if(footRegion.found() && leg.moving && shadowElevation > 0){
+                float scl = shadowElevation * invDrown;
+                float elev = Mathf.slope(1f - leg.stage) * scl * sc;
+                Draw.color(Pal.shadow);
+                Draw.rect(footRegion,  Mathf.lerp(leg.base.x + shadowTX * elev,unit.x,1f-sc),  Mathf.lerp(leg.base.y + shadowTY * elev,unit.y,1f-sc), position.angleTo(leg.base));
+                Draw.color();
+            }
+
+            Draw.mixcol(Tmp.c3, Tmp.c3.a);
+
+            if(footRegion.found()){
+                Draw.rect(footRegion, Mathf.lerp(leg.base.x,unit.x,1f-sc), Mathf.lerp(leg.base.y,unit.y,1f-sc), position.angleTo(leg.base));
+            }
+
+            Lines.stroke(legRegion.height * legRegion.scl() * flips);
+            Lines.line(legRegion,
+                    Mathf.lerp(position.x,unit.x,1f-sc),
+                    Mathf.lerp(position.y,unit.y,1f-sc),
+                    Mathf.lerp(leg.joint.x,unit.x,1f-sc),
+                    Mathf.lerp(leg.joint.y,unit.y,1f-sc), false);
+
+            Lines.stroke(legBaseRegion.height * legRegion.scl() * flips);
+            Lines.line(legBaseRegion,
+                    Mathf.lerp(leg.joint.x + Tmp.v1.x,unit.x,1f-sc),
+                    Mathf.lerp(leg.joint.y + Tmp.v1.y,unit.y,1f-sc),
+                    Mathf.lerp(leg.base.x,unit.x,1f-sc),
+                    Mathf.lerp(leg.base.y,unit.y,1f-sc), false);
+
+            if(jointRegion.found()){
+                Draw.rect(jointRegion, leg.joint.x, leg.joint.y);
+            }
+        }
+
+        //base joints are drawn after everything else
+        if(baseJointRegion.found()){
+            for(int j = legs.length - 1; j >= 0; j--){
+                //TODO does the index / draw order really matter?
+                Vec2 position = unit.legOffset(legOffset, (j % 2 == 0 ? j/2 : legs.length - 1 - j/2)).add(unit);
+                Draw.rect(baseJointRegion, position.x, position.y, rotation);
+            }
+        }
+
+        if(baseRegion.found()){
+            Draw.rect(baseRegion, unit.x, unit.y, rotation - 90);
+        }
+
+        Draw.reset();
     }
 
     @Override

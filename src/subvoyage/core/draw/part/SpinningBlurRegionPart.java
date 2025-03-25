@@ -5,6 +5,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
+import arc.struct.Seq;
 import arc.util.*;
 import mindustry.entities.part.*;
 import mindustry.graphics.*;
@@ -51,8 +52,10 @@ public class SpinningBlurRegionPart extends DrawPart{
             Draw.xscl *= 1.5f;
             Draw.yscl *= 1.5f;
 
-            Draw.z(layer);
             Draw.alpha(1f-accel);
+            Draw.z(layer-5f);
+            Draw.rect(outlineR, vec.x + rx, vec.y + ry, rot);
+            Draw.z(layer);
             Draw.rect(rotator, vec.x + rx, vec.y + ry, rot);
             if(blur){
                 Draw.z(layer - 1);
@@ -74,8 +77,10 @@ public class SpinningBlurRegionPart extends DrawPart{
                 Draw.xscl *= 1.5f;
                 Draw.yscl *= 1.5f;
 
-                Draw.z(layer);
                 Draw.alpha(1f-accel);
+                Draw.z(layer-5f);
+                Draw.rect(outlineR, mirrorVec.x + rx, mirrorVec.y + ry, -rot + (params.rotation-90) * 2);
+                Draw.z(layer);
                 Draw.rect(rotator, mirrorVec.x + rx, mirrorVec.y + ry, -rot + (params.rotation-90) * 2);
                 if(blur  && accel > 0.3f){
                     Draw.z(layer - 1);
@@ -102,5 +107,12 @@ public class SpinningBlurRegionPart extends DrawPart{
             blurR = Core.atlas.find(suffix + "-blur");
             lightR = Core.atlas.find(suffix + "-blur-light");
         }
+
+        outlineR = Core.atlas.find(suffix + "-outline");
+    }
+
+    @Override
+    public void getOutlines(Seq<TextureRegion> out) {
+        out.addAll(rotator, top);
     }
 }

@@ -439,7 +439,6 @@ public class SvUnits{
 
         //helicopter
         lapetus = new HelicopterUnitType("lapetus"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             speed = 1.7f;
             rotateSpeed = 4f;
@@ -500,7 +499,6 @@ public class SvUnits{
         }};
 
         skath = new HelicopterUnitType("skath"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             speed = 1.6f;
             rotateSpeed = 3f;
@@ -512,11 +510,12 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 20f;
+            rotateMoveFirst = true;
             SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                 layer = Layer.flyingUnitLow;
-                xScl = 1.27f;
-                yScl = 1.27f;
-                y = 2.47f;
+                xScl = 1.35f;
+                yScl = 1.35f;
+                y = 4.47f;
                 rotationSpeed = 400f;
             }};
 
@@ -524,7 +523,7 @@ public class SvUnits{
                 layer = Layer.flyingUnitLow;
                 xScl = 0.75f;
                 yScl = 0.75f;
-                y = -10.5f;
+                y = -8.5f;
                 rotationSpeed = 400f;
             }};
 
@@ -599,7 +598,6 @@ public class SvUnits{
         }};
 
         charon = new HelicopterUnitType("charon"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             speed = 1.55f;
             rotateSpeed = 2f;
@@ -612,30 +610,34 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
+
+            rotateMoveFirst = true;
+
             SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
-                    layer = Layer.flyingUnitLow;
-                    xScl = 2f;
-                    yScl = 2f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
+                layer = Layer.flyingUnitLow;
+                xScl = 1.5f;
+                yScl = 1.5f;
+                y = 7f;
+                rotationSpeed = 400f;
             }};
+
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 0.75f;
+                yScl = 0.75f;
+                y = -12f;
+                rotationSpeed = 400f;
+            }};
+
+            parts.addAll(copter, tail);
 
             float BPS = 60f/10f;
 
             float abilityDamage = HELIO_T3_DPS/BPS*0.05f;
             float weaponDamage = HELIO_T3_DPS/BPS*0.95f;
 
-            parts.add(copter);
             abilities.add(
-            new MoveEffectAbility(3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }},
-
-            new MoveEffectAbility(-3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }},
-
-            new MoveLightningAbility(abilityDamage,8,0.1f,0f,1f,2f, SvPal.heatGlow)
+                    new MoveLightningAbility(abilityDamage,8,0.1f,22f,1f,2f, SvPal.heatGlow)
             );
 
             weapons.add(new Weapon(Subvoyage.ID + "-rocket-launcher"){{
@@ -711,10 +713,9 @@ public class SvUnits{
         }};
 
         callees = new HelicopterUnitType("callees"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             speed = 1.4f;
-            rotateSpeed = 4f;
+            rotateSpeed = 2f;
             researchCostMultiplier = 0f;
             accel = 0.45f;
             health = HELIO_T4_HU;
@@ -722,17 +723,31 @@ public class SvUnits{
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 45f;
+
+            rotateMoveFirst = true;
+
             SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
-                    mirror = true;
-                    layer = Layer.flyingUnitLow;
-                    xScl = 1.8f;
-                    yScl = 1.8f;
-                    x = 16.5f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
+                layer = Layer.flyingUnitLow;
+                xScl = 2f;
+                yScl = 2f;
+                y = 2f;
+                rotationSpeed = 400f;
+
+                mirror = true;
+
+                x = 16f;
             }};
 
-            parts.add(copter);
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 1.25f;
+                yScl = 1.25f;
+                y = -18f;
+                rotationSpeed = 800f;
+            }};
+
+            parts.addAll(copter, tail);
+
             abilities.add(new ShieldArcAbility() {{
                 radius = hitSize;
                 regen = 0.1f;
@@ -755,9 +770,6 @@ public class SvUnits{
 
             trailLength = 20;
             trailScl = 1.9f;
-            setEnginesMirror(
-                new UnitEngine(7.2f, -15, 2.25f, -90)
-            );
 
             float BPS = 2f * 2f;
             float bulletDamage = HELIO_T4_DPS/BPS;
@@ -845,34 +857,48 @@ public class SvUnits{
         }};
 
         ganymede = new HelicopterUnitType("ganymede"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
             speed = 1.3f;
-            rotateSpeed = 3f;
+            rotateSpeed = 1f;
             accel = 0.45f;
             health = HELIO_T5_HU;
             researchCostMultiplier = 0f;
+
+            lowAltitude = false;
 
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 64f;
             SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                 mirror = true;
-                layer = Layer.flyingUnitLow;
-                xScl = 2.4f;
-                yScl = 2.4f;
-                x = 23.5f;
-                y = -2.75f;
+                layer = Layer.flyingUnit;
+                xScl = 2f;
+                yScl = 2f;
+                x = 24f;
+                y = 0f;
                 rotationSpeed = 400f;
             }};
 
             SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
-                layer = Layer.flyingUnitLow;
-                xScl = 1.2f;
-                yScl = 1.2f;
-                y = -33.25f;
+                layer = Layer.flyingUnit;
+                xScl = 1.5f;
+                yScl = 1.5f;
+                y = -27f;
                 rotationSpeed = 400f;
             }};
+
+            float orbRad = 10f, partRad = 3f;
+            int pa = 10;
+
+            abilities.add(new SuppressionFieldAbility(){{
+                orbRadius = orbRad;
+                particleSize = partRad;
+                y = 92/4f-320/32f;
+                particles = pa;
+
+                color = SvPal.heatGlow;
+                particleColor = Pal.lightOrange.cpy();
+            }});
 
             parts.add(copter, tail);
 
@@ -884,15 +910,15 @@ public class SvUnits{
 
             trailLength = 20;
             trailScl = 1.9f;
-            setEnginesMirror(
-            new UnitEngine(14f, -20, 2.75f, -90)
-            );
 
             weapons.add(new Weapon(Subvoyage.ID + "-beam-weapon"){{
                 shadow = 20f;
                 mirror = false;
                 shootY = 7f;
                 rotate = true;
+
+                layerOffset = -100;
+
                 x = 0;
                 y = 4f;
 

@@ -9,12 +9,17 @@ import arc.math.Mathf;
 import arc.math.geom.Vec2;
 import arc.util.Time;
 import mindustry.Vars;
+import mindustry.ai.types.CommandAI;
+import mindustry.content.Fx;
 import mindustry.entities.Effect;
+import mindustry.entities.bullet.BulletType;
+import mindustry.entities.bullet.ExplosionBulletType;
 import mindustry.entities.units.StatusEntry;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
 import subvoyage.content.SvUnits;
+import subvoyage.core.draw.DataEffect;
 import subvoyage.core.draw.SvFx;
 import subvoyage.core.draw.SvPal;
 import subvoyage.type.unit.type.HelicopterUnitType;
@@ -111,6 +116,9 @@ public class HelicopterUnitEntity extends UnitEntity {
     public boolean reachedFullAltitude = false;
     public float accelSmooth = 0f;
 
+
+    public transient BulletType expl = null;
+
     @Override
     public void update() {
         super.update();
@@ -126,12 +134,35 @@ public class HelicopterUnitEntity extends UnitEntity {
         }
 
         if(lastAccel > 0.25 && accel() <= 0.25 && accel()-lastAccel < 0 && reachedFullAltitude) {
-            SvFx.heliWave.at(x,y,0f, SvPal.heatGlow, type.stepShake);
             Effect.shake(type.stepShake,type.stepShake,new Vec2(x,y));
             reachedFullAltitude = false;
         }
         lastAccel = accel();
+
+        if(dead) {
+            accelSmooth = Mathf.approachDelta(accelSmooth,0,1/60f);
+            if(!Vars.state.isPaused()) rotation += Time.delta / hitSize * 80f * accel();
+        }
+    }
+
+    @Override
+    public boolean canPass(int tileX, int tileY) {
+        return true;
     }
 
 
+    @Override
+    public boolean isPathImpassable(int tileX, int tileY) {
+        return Vars.world.tiles.in(tileX, tileY);
+    }
+
+    @Override
+    public boolean isGrounded() {
+        return accel() < 0.3f;
+    }
+
+    @Override
+    public boolean isFlying() {
+        return accel() > 0.3f;
+    }
 }

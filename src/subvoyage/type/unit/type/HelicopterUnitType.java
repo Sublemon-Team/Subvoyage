@@ -7,6 +7,8 @@ import arc.math.Scaled;
 import arc.math.geom.Position;
 import arc.util.Tmp;
 import mindustry.Vars;
+import mindustry.ai.ControlPathfinder;
+import mindustry.ai.types.FlyingAI;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.part.DrawPart;
 import mindustry.entities.units.WeaponMount;
@@ -15,6 +17,7 @@ import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.blocks.environment.Floor;
+import subvoyage.type.unit.ai.HelicopterAI;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
 import subvoyage.type.unit.weapon.HydromechWeapon;
 
@@ -33,6 +36,9 @@ public class HelicopterUnitType extends AtlacianUnitType {
         rotateMoveFirst = false;
         drag = 0.15f;
         strafePenalty = 1f;
+        pathCost = (team,tile) -> 100;
+
+        aiController = HelicopterAI::new;
     }
 
     @Override
@@ -43,7 +49,7 @@ public class HelicopterUnitType extends AtlacianUnitType {
         boolean isPayload = !unit.isAdded();
 
         Mechc mech = unit instanceof Mechc ? (Mechc)unit : null;
-        float z = isPayload ? Draw.z() : unit.elevation > 0.5f ? (lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit) : groundLayer + Mathf.clamp(hitSize / 4000f, 0, 0.01f);
+        float z = isPayload ? Draw.z() : lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit;
 
         if(unit.controller().isBeingControlled(player.unit())){
             drawControl(unit);
