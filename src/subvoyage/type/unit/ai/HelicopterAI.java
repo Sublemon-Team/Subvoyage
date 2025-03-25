@@ -16,7 +16,7 @@ import static mindustry.Vars.state;
 
 public class HelicopterAI extends FlyingAI {
     public boolean keepFlying = true;
-    public Teamc troop = null;
+    public Unit troop = null;
     public Unit head = null;
     @Override
     public void updateMovement() {
@@ -48,10 +48,10 @@ public class HelicopterAI extends FlyingAI {
         }
 
         if(troop != null) {
-            moveTo(troop, unit().hitSize*1.2f);
+            moveTo(troop, Math.max(troop.hitSize+16f,unit.hitSize+16f));
         }
         if(head != null) {
-            target = head.controller() instanceof HelicopterAI ai ? ai.target : null;
+            target = head.controller() instanceof HelicopterAI ai ? (ai.target == null ? target : ai.target) : null;
         }
     }
 
@@ -59,23 +59,26 @@ public class HelicopterAI extends FlyingAI {
     public void updateTargeting() {
         super.updateTargeting();
 
-        boolean groundTurret = targetGroundTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.2f) != null;
-        boolean airTurret = targetAirTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.2f) != null;
+        boolean groundTurret = targetGroundTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.5f) != null;
+        boolean airTurret = targetAirTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*2f) != null;
 
-        System.out.println(groundTurret + " " + airTurret);
+        System.out.println(groundTurret);
+        System.out.println(airTurret);
 
         keepFlying = true;
         if(groundTurret && !airTurret) keepFlying = true;
         if(airTurret && !groundTurret) keepFlying = false;
 
-        troop = findTroop(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.2f, unit().hitSize*1.2f);
-        head = findMain(unit.getX(), unit.getY(), unit.type.fogRadius*8f);
+        if(troop == null || Mathf.dst(troop.x(),troop.y(),unit.x(),unit.y()) < unit().hitSize*1.2f)
+            troop = findTroop(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.2f, unit().hitSize*1.2f);
+        if(head == null)
+            head = findMain(unit.getX(), unit.getY(), unit.type.fogRadius*8f);
     }
 
     public Unit findMain(float x, float y, float range) {
         return Units.closest(unit.team,x,y,range,u -> u instanceof HelicopterUnitEntity,(u,xo,yo) -> -u.hitSize -u.health);
     }
-    public Teamc findTroop(float x, float y, float range, float minRange) {
+    public Unit findTroop(float x, float y, float range, float minRange) {
         return Units.closest(unit.team,x,y,range,u -> u instanceof HelicopterUnitEntity && Mathf.dst(x,y,u.getX(),u.getY()) > minRange,(u,xo,yo) -> -u.hitSize -u.health);
     }
 

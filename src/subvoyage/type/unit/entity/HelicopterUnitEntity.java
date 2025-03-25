@@ -15,6 +15,7 @@ import mindustry.entities.Effect;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.ExplosionBulletType;
 import mindustry.entities.units.StatusEntry;
+import mindustry.gen.Hitboxc;
 import mindustry.gen.UnitEntity;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
@@ -143,6 +144,8 @@ public class HelicopterUnitEntity extends UnitEntity {
             accelSmooth = Mathf.approachDelta(accelSmooth,0,1/60f);
             if(!Vars.state.isPaused()) rotation += Time.delta / hitSize * 80f * accel();
         }
+
+        physref.body.layer = 2; // prevent isGrounded affecting physics
     }
 
     @Override
@@ -158,11 +161,11 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     @Override
     public boolean isGrounded() {
-        return accel() < 0.3f;
+        return accel() < 0.1f;
     }
 
     @Override
     public boolean isFlying() {
-        return accel() > 0.3f;
+        return accel() > 0.1f;
     }
 }
