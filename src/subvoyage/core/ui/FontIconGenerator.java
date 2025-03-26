@@ -23,6 +23,7 @@ public class FontIconGenerator {
         Seq<Font> fonts = Seq.with(Fonts.def, Fonts.outline);
         Texture uitex = Core.atlas.find("logo").texture;
         int size = (int)(Fonts.def.getData().lineHeight/Fonts.def.getData().scaleY);
+
         try(Scanner scan = new Scanner(Vars.tree.get("icons/"+ Subvoyage.ID +"-icons.properties").read(512))){
             while(scan.hasNextLine()){
                 String line = scan.nextLine();

@@ -64,7 +64,7 @@ public class SvTechTree {
                 node(ductRouter);
                 cost(ductBridge,corallite,15);
                 node(ductBridge);
-                cost(ductSorter,corallite,15);
+                noCost(ductSorter);
                 node(ductSorter,() -> {
                     noCost(ductInvSorter);
                     node(ductInvSorter);

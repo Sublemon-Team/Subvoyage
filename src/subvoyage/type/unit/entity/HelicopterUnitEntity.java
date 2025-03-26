@@ -123,7 +123,7 @@ public class HelicopterUnitEntity extends UnitEntity {
     @Override
     public void update() {
         physref.body.layer = 2;
-        
+
         super.update();
         accelSmooth = Mathf.lerp(accelSmooth,vel.len()/type.speed,Time.delta/10f);
         if(!isAccelerating) {

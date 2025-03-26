@@ -12,5 +12,5 @@ public class SvStat {
         laserOutput = new Stat("laserOutput", laser),
         laserCapacity = new Stat("laserCapacity", laser);
     public static final StatUnit
-        laserPower = new StatUnit("laserPower",  "[red]"  +"\uEACF" + "[]");
+        laserPower = new StatUnit("laserPower",  "[red]"  +"\uEAD1" + "[]");
 }

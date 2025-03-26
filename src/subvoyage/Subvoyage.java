@@ -56,7 +56,7 @@ public class Subvoyage extends Mod {
     public void init() {
         super.init();
         SvSettings.load();
-        FontIconGenerator.loadIcons();
+        //FontIconGenerator.loadIcons();
     }
 
     @Override
