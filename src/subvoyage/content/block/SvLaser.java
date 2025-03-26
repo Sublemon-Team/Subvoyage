@@ -5,6 +5,7 @@ import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.meta.BuildVisibility;
 import subvoyage.type.block.laser.blocks.LaserGenerator;
+import subvoyage.type.block.laser.blocks.LaserSource;
 import subvoyage.type.block.laser.nodes.LaserAmplifier;
 import subvoyage.type.block.laser.nodes.LaserNode;
 import subvoyage.type.block.laser.nodes.LaserSplitter;
@@ -58,7 +59,7 @@ public class SvLaser {
         }};
 
 
-        laserSource = new LaserGenerator("laser-source") {{
+        laserSource = new LaserSource("laser-source") {{
             requirements(Category.crafting, atl(BuildVisibility.sandboxOnly), with());
             laserOutput = 1000f;
             maxSuppliers = 0;
