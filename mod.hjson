@@ -22,3 +22,7 @@ minGameVersion: 145
 
 #this is a java mod
 java: true
+
+dependencies : [
+    font-icon-lib
+]
