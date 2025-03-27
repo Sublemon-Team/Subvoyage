@@ -9,15 +9,19 @@ import arc.graphics.gl.FrameBuffer;
 import arc.math.Mathf;
 import arc.math.Rand;
 import arc.util.Time;
+import mindustry.Vars;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Shaders;
 import mindustry.type.Weather;
+import subvoyage.core.SvSettings;
 import subvoyage.core.SvVars;
 import subvoyage.core.draw.shader.SvShaders;
 import subvoyage.type.block.storage.core.AtlacianCore;
 import subvoyage.type.world.SvEnvironment;
+import subvoyage.util.Var;
 
-import static arc.Core.camera;
+import static arc.Core.*;
+import static arc.Core.settings;
 import static mindustry.Vars.*;
 
 public class SvRender {
@@ -25,10 +29,8 @@ public class SvRender {
 
     public static class Layer extends mindustry.graphics.Layer {
         public static final float
-                powerBubbles = (86.7f),
-                powerBubbleBlock = 87f,
-
-                floorMedian = scorch + 5f
+                laser = 72.2f,
+                powerBubbles = 86.7f
                 ;
     }
 
@@ -38,16 +40,33 @@ public class SvRender {
         }
         if(buffer == null) buffer = new FrameBuffer();
         buffer.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
-        Draw.drawRange(Layer.powerBubbles, 0.2f,
-                () -> {
-                    buffer.begin(Color.clear);
-                },
-                () -> {
-                    buffer.end();
-                    Draw.blend(Blending.additive);
-                    buffer.blit(SvShaders.powerBubbles);
-                    Draw.blend();
-                });
+
+        if(SvSettings.bool("laser-shaders"))
+            Draw.drawRange(Layer.laser, 0.1f,
+                    () -> {
+                        renderer.bloom.resize(graphics.getWidth(), graphics.getHeight());
+                        renderer.bloom.setBloomIntensity(2f / 4f);
+                        renderer.bloom.blurPasses = 1;
+                        renderer.bloom.capture();
+                        buffer.begin(Color.clear);
+                    },
+                    () -> {
+                        buffer.end();
+                        buffer.blit(SvShaders.laser);
+                        Draw.blend();
+                        renderer.bloom.render();
+                    });
+        if(SvSettings.bool("power-bubble-shaders"))
+            Draw.drawRange(Layer.powerBubbles, 0.2f,
+                    () -> {
+                        buffer.begin(Color.clear);
+                    },
+                    () -> {
+                        buffer.end();
+                        Draw.blend(Blending.additive);
+                        buffer.blit(SvShaders.powerBubbles);
+                        Draw.blend();
+                    });
         SvVars.effectBuffer = buffer;
     }
 

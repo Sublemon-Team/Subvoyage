@@ -11,7 +11,7 @@ public class LaserUtil {
     public static LinkedHashMap<Float,Color> laserPowerColors = new LinkedHashMap<>();
 
     static {
-        laserPowerColors.put(0f, SvPal.laserRed.cpy().a(0.5f).mul(0.5f));
+        laserPowerColors.put(0f, SvPal.laserRed.cpy().mul(0.2f));
         laserPowerColors.put(10f, SvPal.laserRed);
         laserPowerColors.put(100f,SvPal.laserGreen);
         laserPowerColors.put(270f,SvPal.laserBlue);

@@ -50,6 +50,9 @@ public class SvSettings {
             checkPref(t,ID+"-leeft-uwu","subvoyage-leeft-uwu",false, SvUnits::loadUwu);
             checkPref(t,ID+"-phosphide-wall-large-full","subvoyage-wall-tiling",true);
 
+            checkPref(t, ID+"-laser-projector","subvoyage-laser-shaders",true);
+            checkPref(t, ID+"-power-bubble-node","subvoyage-power-bubble-shaders",true);
+
             SvUnits.loadUwu(unitUwu());
         });
     }

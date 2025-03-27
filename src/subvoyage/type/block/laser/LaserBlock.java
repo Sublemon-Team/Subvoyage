@@ -20,7 +20,10 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.ui.Bar;
 import mindustry.world.Block;
+import subvoyage.core.SvSettings;
 import subvoyage.core.draw.SvFx;
+import subvoyage.core.draw.SvRender;
+import subvoyage.core.draw.shader.SvShaders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +123,11 @@ public interface LaserBlock {
     };
 
 
-    default void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity){
+    default void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float power, float scl, float bloomIntensity){
+        if(SvSettings.bool("laser-shaders") && power > 0.99) {
+            drawLaserShadered(x1, y1, x2, y2, size1, size2, scl, bloomIntensity);
+            return;
+        }
         float angle1 = Angles.angle(x1, y1, x2, y2),
                 vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
                 len1 = size1 * tilesize / 2f, len2 = size2 * tilesize / 2f;
@@ -144,6 +151,23 @@ public interface LaserBlock {
         Lines.stroke(4f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
         Fill.circle(x1 + vx * len1, y1 + vy * len1, 3f * scl + Mathf.cos(Time.time + 5, 10f, 0.5f) * (scl - 0.2f));
         Fill.circle(x2 - vx * len2, y2 - vy * len2, 3f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
+        Draw.z(layer);
+    }
+
+    default void drawLaserShadered(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity) {
+        float angle1 = Angles.angle(x1, y1, x2, y2),
+                vx = Mathf.cosDeg(angle1), vy = Mathf.sinDeg(angle1),
+                len1 = size1 * tilesize / 2f, len2 = size2 * tilesize / 2f;
+        //len1 = 0, len2 = 0;
+        float layer = Draw.z();
+
+        scl = Math.max(scl+bloomIntensity/2f,0.2f)*0.5f;
+
+        Draw.z(SvRender.Layer.laser);
+        Fill.circle(x1 + vx * len1, y1 + vy * len1, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Fill.circle(x2 - vx * len2, y2 - vy * len2, 6f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
+        Lines.stroke(8f * scl + Mathf.cos(Time.time, 10f, 0.5f) * (scl - 0.2f));
         Lines.line(x1 + vx * len1, y1 + vy * len1, x2 - vx * len2, y2 - vy * len2);
         Draw.z(layer);
     }

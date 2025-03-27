@@ -34,6 +34,7 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
+import subvoyage.core.SvSettings;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.SvRender;
 import subvoyage.util.SvMath;
@@ -360,7 +361,7 @@ public class PowerBubbleNode extends PowerBlock {
 
                     Draw.z(SvRender.Layer.powerBubbles);
                     Draw.color(SvPal.powerLaser.cpy().saturation(0.2f));
-                    if(!Vars.renderer.animateShields){
+                    if(!SvSettings.bool("power-bubble-shaders")){
                         Draw.alpha(0.2f);
                     }
                     Fill.crect(x,y,build.x-x,build.y-y);
@@ -372,7 +373,7 @@ public class PowerBubbleNode extends PowerBlock {
 
                     Draw.z(SvRender.Layer.powerBubbles);
                     Draw.color(Pal.remove);
-                    if(!Vars.renderer.animateShields){
+                    if(!SvSettings.bool("power-bubble-shaders")){
                         Draw.alpha(0.2f);
                     }
                     Fill.crect(x,y,build.x-x,build.y-y);

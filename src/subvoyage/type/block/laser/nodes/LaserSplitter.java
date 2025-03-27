@@ -133,7 +133,7 @@ public class LaserSplitter extends Block implements LaserBlock {
             Color color = LaserUtil.getLaserColor(laser);
             for (Building consumer : graph().consumers) {
                 Draw.color(color);
-                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,smthScl,Mathf.clamp((laser-300f)/700f));
+                drawLaser(x,y,consumer.x,consumer.y,size,consumer.block.size,laser(),smthScl,Mathf.clamp((laser-300f)/700f));
             }
         }
 
