@@ -31,6 +31,7 @@ import subvoyage.type.block.turret.resist.DrawResist;
 import subvoyage.type.block.turret.resist.ResistTurret;
 import subvoyage.type.shoot.ShootUpsurge;
 import subvoyage.type.shoot.ShootWhirl;
+import subvoyage.type.shoot.ShootZigZag;
 
 import static mindustry.Vars.tilesize;
 import static mindustry.type.ItemStack.with;
@@ -133,15 +134,14 @@ public class SvTurret {
             squareSprite = false;
 
             cooldownTime = 60f;
-            shoot = new ShootHelix() {{
-                mag = 3;
+            shoot = new ShootZigZag() {{
+                mag = 5;
+                scl = 4f;
             }};
             reload = 80f;
 
             float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots*2f);
-            float mainDamage = RUPTURE_DPS/BPS*0.9f;
-            float subDamage = RUPTURE_DPS/BPS*0.1f/(3+3*3f);
-
+            float mainDamage = RUPTURE_DPS/BPS*1f;
             ammo(
                     sulfur, new BasicBulletType(6f, mainDamage){{
                         width = 6f;
@@ -155,33 +155,8 @@ public class SvTurret {
                         trailLength = 12;
                         trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
                         hitEffect = despawnEffect = Fx.hitBulletColor;
-                        shoot = new ShootHelix();
-                        ammoPerShot = 3;
-                        fragBullet = intervalBullet = new BasicBulletType(6f, subDamage) {{
-                            width = 9f;
-                            hitSize = 5f;
-                            height = 15f;
-                            pierce = true;
-                            pierceCap = 3;
-                            lifetime = 15f;
-                            pierceBuilding = true;
-                            hitColor = backColor = trailColor = Pal.bulletYellow;
-                            frontColor = Color.white;
-                            trailWidth = 2.1f;
-                            trailLength = 5;
 
-                            status = StatusEffects.slow; //TODO: replaceEffect
-                            statusDuration = 60f;
-                            hitEffect = despawnEffect = new WaveEffect(){{
-                                colorFrom = colorTo = Pal.boostFrom;
-                                sizeTo = 4f;
-                                strokeFrom = 4f;
-                                lifetime = 10f;
-                            }};
-                            buildingDamageMultiplier = 0.3f;
-                            homingPower = 0.2f;
-                            homingRange = 30f;
-                        }};
+                        ammoPerShot = 3;
                         intervalRandomSpread = 0f;
                         intervalSpread = 80f;
                         intervalBullets = 3;

@@ -4,10 +4,12 @@ import arc.Core;
 import arc.graphics.Blending;
 import arc.graphics.Color;
 import arc.graphics.Texture;
+import arc.graphics.g2d.Bloom;
 import arc.graphics.g2d.Draw;
 import arc.graphics.gl.FrameBuffer;
 import arc.math.Mathf;
 import arc.math.Rand;
+import arc.util.Nullable;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.graphics.Layer;
@@ -26,6 +28,7 @@ import static mindustry.Vars.*;
 
 public class SvRender {
     public static FrameBuffer buffer;
+    public static @Nullable Bloom bloom;
 
     public static class Layer extends mindustry.graphics.Layer {
         public static final float
@@ -35,6 +38,7 @@ public class SvRender {
     }
 
     public static void draw() {
+        if(bloom == null) bloom = new Bloom(true);
         if(AtlacianCore.cutscene) {
             camera.position.set(player.bestCore().x,player.bestCore().y);
         }
@@ -44,17 +48,16 @@ public class SvRender {
         if(SvSettings.bool("laser-shaders"))
             Draw.drawRange(Layer.laser, 0.1f,
                     () -> {
-                        renderer.bloom.resize(graphics.getWidth(), graphics.getHeight());
-                        renderer.bloom.setBloomIntensity(2f / 4f);
-                        renderer.bloom.blurPasses = 1;
-                        renderer.bloom.capture();
+                        bloom.resize(graphics.getWidth(), graphics.getHeight());
+                        bloom.setBloomIntensity(2f / 4f);
+                        bloom.blurPasses = 1;
+                        bloom.capture();
                         buffer.begin(Color.clear);
                     },
                     () -> {
                         buffer.end();
                         buffer.blit(SvShaders.laser);
-                        Draw.blend();
-                        renderer.bloom.render();
+                        bloom.render();
                     });
         if(SvSettings.bool("power-bubble-shaders"))
             Draw.drawRange(Layer.powerBubbles, 0.2f,

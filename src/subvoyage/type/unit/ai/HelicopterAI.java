@@ -21,6 +21,8 @@ public class HelicopterAI extends FlyingAI {
     public Unit troop = null;
     public Unit head = null;
 
+    public float groundCooldown = 0f;
+
     @Override
     public void updateMovement() {
         unloadPayloads();
@@ -45,7 +47,11 @@ public class HelicopterAI extends FlyingAI {
             moveTo(getClosestSpawner(), state.rules.dropZoneRadius + 130f);
         }
 
-        if (heli.vel.len() < 0.3f && keepFlying) {
+        if(groundCooldown > 5f * 60f) {
+            groundCooldown = -5f * 60f;
+        }
+
+        if (heli.vel.len() < 0.3f && keepFlying || groundCooldown > 0f) {
             float steerX = Mathf.sinDeg(Time.time) * 12f;
             float steerY = Mathf.cosDeg(Time.time) * 12f;
 
@@ -54,6 +60,7 @@ public class HelicopterAI extends FlyingAI {
             heli.movePref(new Vec2(steerX, steerY).times(new Vec2(len, len)));
         }
         if (!keepFlying) {
+            groundCooldown += Time.delta;
             //heli.vel.lerp(0f,0f,Time.delta/60f);
         }
 
@@ -74,7 +81,7 @@ public class HelicopterAI extends FlyingAI {
         super.updateTargeting();
 
         boolean groundTurret = targetGroundTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*1.5f) != null;
-        boolean airTurret = targetAirTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*4f) != null;
+        boolean airTurret = targetAirTurret(unit.getX(), unit.getY(), unit.type.fogRadius*8f*2f) != null;
 
         keepFlying = true;
         if(groundTurret && !airTurret) keepFlying = true;
