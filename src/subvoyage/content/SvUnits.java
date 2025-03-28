@@ -465,11 +465,11 @@ public class SvUnits{
                 y = -5.5f;
                 rotationSpeed = 200f;
             }});
-            weapons.add(new Weapon(Subvoyage.ID + "-marine-weapon"){{
-                x = 5f;
-                layerOffset = -2;
+            weapons.add(new Weapon(name+"-weapon"){{
+                x = 4f;
+                y = -2f + 1/4f;
                 reload = 60f;
-                recoil = 2f;
+                recoil = 1f;
                 shootSound = Sounds.missileLaunch;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
@@ -531,11 +531,11 @@ public class SvUnits{
 
             float BPS = 2f * 1.12f;
 
-            weapons.add(new Weapon(Subvoyage.ID + "-missile-launcher"){{
-                x = 7f;
-                y = -2f;
+            weapons.add(new Weapon(name+"-weapon"){{
+                x = 6f+2/4f;
+                y = -1/4f;
                 reload = 160f;
-                recoil = 2f;
+                recoil = 1f;
                 shootSound = Sounds.mediumCannon;
 
                 top = false;
@@ -640,11 +640,11 @@ public class SvUnits{
                     new MoveLightningAbility(abilityDamage,8,0.1f,22f,1f,2f, SvPal.heatGlow)
             );
 
-            weapons.add(new Weapon(Subvoyage.ID + "-rocket-launcher"){{
+            weapons.add(new Weapon(name+"-weapon"){{
                 top = false;
                 alternate = false;
-                x = 6f;
-                y = 2f;
+                x = 0f;
+                shootY = 128/8f-12/4f;
                 reload = 10f;
                 recoil = 2f;
                 shootSound = Sounds.bolt;
@@ -775,31 +775,20 @@ public class SvUnits{
             float bulletDamage = HELIO_T4_DPS/BPS;
 
             weapons.add(new Weapon(name + "-weapon"){{
-                top = false;
-                x = 13f;
-                y = 8f;
+                top = true;
 
                 reload = 90f;
                 recoil = 2f;
 
                 rotate = true;
-                rotateSpeed = 0.4f;
-                layerOffset = -2f;
-                rotationLimit = 22f;
+                rotateSpeed = 0f;
+                rotationLimit = 0f;
+
+                mirror = false;
+                x = 0f;
+                y = 5f;
 
                 shootSound = SvSounds.poweredMissileShoot;
-                parts.add(new RegionPart("-blade"){{
-                    heatProgress = PartProgress.warmup;
-                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = SvPal.heatGlow;
-                    x = 5 / 4f;
-                    y = 0f;
-                    moveRot = -33f;
-                    moveY = -1f;
-                    moveX = -1f;
-                    under = true;
-                    mirror = true;
-                }});
 
                 bullet = new BasicBulletType(4f, bulletDamage*0.2f){{
                     knockback = 4f;
@@ -911,16 +900,19 @@ public class SvUnits{
             trailLength = 20;
             trailScl = 1.9f;
 
-            weapons.add(new Weapon(Subvoyage.ID + "-beam-weapon"){{
-                shadow = 20f;
+            weapons.add(new Weapon(name + "-big-weapon"){{
                 mirror = false;
-                shootY = 7f;
-                rotate = true;
-
-                layerOffset = -100;
+                shootY = 4f;
+                rotate = false;
 
                 x = 0;
-                y = 4f;
+                y = 33f;
+
+                parts.add(new RegionPart("-blade") {{
+                    mirror = true;
+                    y = 0f;
+                    x = 8f;
+                }});
 
                 targetInterval = 20f;
                 targetSwitchInterval = 35f;
@@ -1150,32 +1142,21 @@ public class SvUnits{
                 top = false;
                 alternate = false;
 
-                x = 23f;
-                y = 12f;
+                x = 29f;
+                y = 16f;
+
+                shootX = -2f;
 
                 cooldownTime = 0f;
                 reload = 10f;
                 recoil = 2f;
 
-                rotate = true;
+                rotate = false;
                 rotateSpeed = 0.4f;
-                layerOffset = -2f;
                 rotationLimit = 22f;
                 shootCone = 360f;
 
                 shootSound = Sounds.bolt;
-                parts.add(new RegionPart("-blade"){{
-                    heatProgress = PartProgress.warmup;
-                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = SvPal.heatGlow;
-                    x = 5 / 4f;
-                    y = 0f;
-                    moveRot = -33f;
-                    moveY = -1f;
-                    moveX = -1f;
-                    under = true;
-                    mirror = true;
-                }});
 
                 shoot = new ShootBarrel() {{
                     barrels = new float[] {

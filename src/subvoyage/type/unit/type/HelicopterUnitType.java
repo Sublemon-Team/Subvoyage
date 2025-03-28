@@ -84,31 +84,31 @@ public class HelicopterUnitType extends AtlacianUnitType {
             drawCrawl(c);
         }
 
-        Draw.scl(scale);
+        
 
         if(drawBody) drawOutline(unit);
-        Draw.scl(scale);
+        
         drawWeaponOutlines(unit);
-        Draw.scl(scale);
+        
         if(engineLayer > 0) Draw.z(engineLayer);
-        Draw.scl(scale);
+        
         if(trailLength > 0 && !naval && (unit.isFlying() || !useEngineElevation)){
             drawTrail(unit);
         }
-        Draw.scl(scale);
+        
         if(engines.size > 0) drawEngines(unit);
         Draw.z(z);
-        Draw.scl(scale);
+        
         if(drawBody) drawBody(unit);
-        Draw.scl(scale);
+        
         if(drawCell) drawCell(unit);
-        Draw.scl(scale);
+        
         drawWeapons(unit);
-        Draw.scl(scale);
+        
         if(drawItems) drawItems(unit);
-        Draw.scl(scale);
+        
         drawLight(unit);
-        Draw.scl(scale);
+        
         if(unit.shieldAlpha > 0 && drawShields){
             drawShield(unit);
         }
