@@ -15,6 +15,7 @@ import mindustry.world.Block;
 import mindustry.world.meta.BlockGroup;
 import subvoyage.content.other.SvStat;
 import subvoyage.core.anno.LoadAnnoProcessor;
+import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
@@ -133,6 +134,7 @@ public class LaserGenerator extends Block implements LaserBlock {
         @Override
         public void updateTile() {
             super.updateTile();
+            if(laser() > 0.5f) Advancement.laser.unlock();
             boolean valid = this.efficiency > 0.0F;
             if (hasItems && valid && this.generationTime <= 0.0F) {
                 this.consume();

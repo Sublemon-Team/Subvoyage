@@ -3207,6 +3207,7 @@ public class SvUnits{
         }
         callees.region = atlas.find(callees.name+(isUwu ? "-uwu" : ""));
         callees.drawCell = !isUwu;
+        callees.weapons.first().layerOffset = isUwu ? -1 : 0;
         for (DrawPart part : callees.parts) {
             if(part instanceof SpinningBlurRegionPart p) {
                 p.draw = !isUwu;

@@ -14,9 +14,10 @@ public class Advancement {
 
     public static Advancement
             welcome,beta,
-            sector_submerging,
+            sector_thaw,
             unit_helio, unit_hydro, unit_rover,
             big_bubble,
+            laser,
             uwu
             ;
 
@@ -32,7 +33,9 @@ public class Advancement {
                 "welcome","sublemon_frog", // Launching Subvoyage
                 "beta","sodilate-boulder1", // Launching Subvoyage
 
-                "sector_submerging","ceramic-burner", // Capturing Submerging
+                "sector_thaw","ceramic-burner", // Capturing Thaw
+
+                "laser","laser-projector", // Progression
 
                 "unit_helio","lapetus-full", // Unit - Lapetus
                 "unit_hydro","leeft-full", // Unit - Leeft
@@ -83,7 +86,7 @@ public class Advancement {
     }
 
     public void unlock() {
-        boolean test = false;
+        boolean test = true;
         if(!Vars.state.isCampaign() && !test) return;
         if(Vars.state.rules.infiniteResources && !test) return;
         Advancement.unlock(this);
