@@ -122,7 +122,7 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     @Override
     public void update() {
-        physref.body.layer = 2;
+        if(physref != null) physref.body.layer = 2;
 
         super.update();
         accelSmooth = Mathf.lerp(accelSmooth,vel.len()/type.speed,Time.delta/10f);
@@ -147,7 +147,7 @@ public class HelicopterUnitEntity extends UnitEntity {
             if(!Vars.state.isPaused()) rotation += Time.delta / hitSize * 80f * accel();
         }
 
-        physref.body.layer = 2; // prevent isGrounded affecting physics
+        if(physref != null) physref.body.layer = 2; // prevent isGrounded affecting physics
     }
 
     @Override
