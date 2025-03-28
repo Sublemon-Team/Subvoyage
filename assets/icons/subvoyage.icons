@@ -2,3 +2,23 @@
 team-icon #EAD0 @-team-melius melius
 
 icon #EAD1 @-laser-icon
+icon auto @-corallite-ore-icon corallite-ore
+icon auto @-corallite-icon corallite
+icon auto @-hydrocyclone-icon hydrocyclone
+icon auto @-sulfur-sand-icon sulfur-sand
+icon auto @-sulfur-icon sulfur
+icon auto @-buoy-icon buoy
+icon auto @-spaclanium-ore-icon spaclanium-ore
+icon auto @-spaclanium-icon spaclanium
+icon auto @-water-sifter-icon sifter
+icon auto @-finesand-icon finesand
+icon auto @-ceramic-burner-icon ceramic-burner
+icon auto @-clay-icon clay
+icon auto @-core-puffer-icon puffer-core
+icon auto @-centrifugal-pump-icon centrifugal-pump
+icon auto @-sealed-duct-icon sealed-duct
+
+# Vanilla resources icons compatibility
+icon auto @-corallite-icon subvoyage-corallite
+icon auto @-spaclanium-icon subvoyage-spaclanium
+icon auto @-finesand-icon subvoyage-finesand

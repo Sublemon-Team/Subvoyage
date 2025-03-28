@@ -1,17 +1,19 @@
 package subvoyage.content.world;
 
 import arc.struct.Seq;
+import mindustry.content.SectorPresets;
 import mindustry.type.*;
+import mindustry.ui.Fonts;
 import subvoyage.type.world.SvSectorPreset;
 
 import static subvoyage.content.world.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset submerging;
+    public static SectorPreset thaw;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
-        /*submerging = new SvSectorPreset("dive",atlacian,221,(state) -> {
+        thaw = new SvSectorPreset("thaw",atlacian,221,state -> {
 
         }) {{
             alwaysUnlocked = true;
@@ -24,7 +26,7 @@ public class SvSectorPresets {
             rules = (r) -> {
                 r.loadout = Seq.with();
             };
-        }};*/
-        all.addAll();
+        }};
+        all.addAll(thaw);
     }
 }

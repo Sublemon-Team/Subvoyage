@@ -26,7 +26,7 @@ import static subvoyage.content.block.SvPower.*;
 import static subvoyage.content.block.SvSpecial.*;
 import static subvoyage.content.block.SvDefense.*;
 import static subvoyage.content.block.SvTurret.*;
-import static subvoyage.content.world.SvSectorPresets.submerging;
+import static subvoyage.content.world.SvSectorPresets.thaw;
 
 public class SvTechTree {
 
@@ -46,7 +46,7 @@ public class SvTechTree {
                 node(tower);
             });
             cost(coralliteGrinder,corallite,5);
-            node(coralliteGrinder, with(onsector(submerging)), () -> {
+            node(coralliteGrinder, with(onsector(thaw)), () -> {
                 cost(sifter,corallite,10,spaclanium,10);
                 node(sifter,() -> {
                 });
@@ -59,7 +59,7 @@ public class SvTechTree {
                 });
             });
             cost(duct,corallite,2);
-            node(duct, with(onsector(submerging)), () -> {
+            node(duct, with(onsector(thaw)), () -> {
                 cost(ductRouter,corallite,15);
                 node(ductRouter);
                 cost(ductBridge,corallite,15);
@@ -83,7 +83,7 @@ public class SvTechTree {
                 });
             });
             cost(ceramicBurner,corallite,50,spaclanium,10,finesand,5);
-            node(ceramicBurner, with(onsector(submerging)), () -> {
+            node(ceramicBurner, with(onsector(thaw)), () -> {
                 cost(argonCentrifuge,corallite,100,spaclanium,80,clay,80,iridium,40);
                 node(argonCentrifuge, () -> {
                     cost(heliumCompressor,corallite,250,iridium,200,clay,250);
@@ -111,7 +111,7 @@ public class SvTechTree {
                 });
             });
             cost(centrifugalPump,corallite,5);
-            node(centrifugalPump, with(onsector(submerging)),() -> {
+            node(centrifugalPump, with(onsector(thaw)),() -> {
                 cost(fortifiedConduit,corallite,4);
                 node(fortifiedConduit, () -> {
                     cost(isolatedConduit,corallite,120,clay,60,iridium,30);
@@ -290,6 +290,7 @@ public class SvTechTree {
 
     public static void noCost(Block content) {
         content.researchCostMultiplier = 0f;
+        content.researchCost = new ItemStack[] {};
     }
     public static void noCost(UnitType content) {
         content.researchCostMultiplier = 0f;

@@ -73,7 +73,7 @@ public class SvProduction {
 
         sifter = new Sifter("water-sifter") {{
             requirements(Category.production, atl(), with(spaclanium,20,corallite,60));
-            harvestTime = 80f;
+            harvestTime = 30f;
             itemCapacity = 50;
             researchCost = with(spaclanium,100,corallite,60,clay,50);
 

@@ -63,6 +63,7 @@ public class SvPlanets{
             allowLaunchSchematics = false;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = false;
+            updateLighting = false;
 
             //doesn't play well with configs
             prebuildBase = true;
@@ -74,6 +75,7 @@ public class SvPlanets{
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
+                r.lighting = false;
             };
 
             iconColor = Color.white;
