@@ -10,6 +10,7 @@ import mindustry.world.draw.DrawDefault;
 import mindustry.world.draw.DrawGlowRegion;
 import mindustry.world.draw.DrawMulti;
 import mindustry.world.draw.DrawWarmupRegion;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.type.block.power.generator.WindTurbine;
 import subvoyage.type.block.power.node.PowerBubbleMerger;
@@ -44,7 +45,7 @@ public class SvPower {
             squareSprite = false;
         }};
         windTurbine = new WindTurbine("wind-turbine") {{
-            requirements(Category.power,atl(),with(corallite,60,clay,15,iridium,30));
+            requirements(Category.power,atl(BuildVisibility.sandboxOnly),with(corallite,60,clay,15,iridium,30));
 
             researchCost = with(corallite,250,clay,80,iridium,40);
 

@@ -37,7 +37,6 @@ public class SvSpecial {
     public static void load() {
         buoy = new Buoy("buoy") {{
             requirements(Category.effect,atl(BuildVisibility.fogOnly), with(corallite,20));
-            alwaysUnlocked = true;
             fogRadius = 25;
             envDisabled |= Env.scorching;
             destructible = true;

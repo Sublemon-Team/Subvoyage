@@ -12,6 +12,7 @@ import mindustry.world.Block;
 import mindustry.world.blocks.production.GenericCrafter;
 import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
+import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.block.DrawBurner;
@@ -291,7 +292,7 @@ public class SvCrafting {
             }
         };
         quartzScutcher = new LaserCrafter("quartz-scutcher") {{
-            requirements(Category.crafting,atl(),with(phosphide,350,iridium,600,spaclanium,300,chrome,150));
+            requirements(Category.crafting,atl(BuildVisibility.sandboxOnly),with(phosphide,350,iridium,600,spaclanium,300,chrome,150)); //todo hidden
 
             researchCost = with(phosphide,2350,iridium,2400,spaclanium,2400,chrome,1500);
 

@@ -90,6 +90,10 @@ public class SvTechTree {
                     node(heliumCompressor,() -> {
 
                     });
+                    cost(circularCrusher,corallite,150,iridium,200,spaclanium,50);
+                    node(circularCrusher,with(research(crudeDrill)), () -> {
+
+                    });
                     cost(propanePyrolyzer,corallite,500,iridium,300,clay,250,chrome,100);
                     node(propanePyrolyzer,() -> {
                         cost(nitrideBlaster,iridium,500,clay,400,chrome,400,phosphide,120);
@@ -211,7 +215,10 @@ public class SvTechTree {
                 cost(fortifiedPayloadConveyor, iridium,50,chrome,50);
                 node(fortifiedPayloadConveyor,() -> {
                     cost(container,chrome,80,iridium,80);
-                    node(container);
+                    node(container,() -> {
+                        noCost(unloader);
+                        node(unloader);
+                    });
 
                     noCost(fortifiedPayloadRouter);
                     node(fortifiedPayloadRouter);

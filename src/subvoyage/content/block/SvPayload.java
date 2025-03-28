@@ -12,6 +12,7 @@ import mindustry.world.blocks.payloads.PayloadRouter;
 import mindustry.world.blocks.payloads.PayloadUnloader;
 import mindustry.world.blocks.units.UnitAssembler;
 import mindustry.world.blocks.units.UnitAssemblerModule;
+import mindustry.world.meta.BuildVisibility;
 import subvoyage.Subvoyage;
 import subvoyage.type.block.payload.PayloadLaunchPad;
 import subvoyage.type.block.laser.blocks.*;
@@ -181,7 +182,7 @@ public class SvPayload {
 
 
         laserRefabricator = new LaserReconstructor("laser-refabricator") {{
-            requirements(Category.units, atl(), with(nitride, 180, phosphide, 180, chrome, 250, clay, 300));
+            requirements(Category.units, atl(BuildVisibility.sandboxOnly), with(nitride, 180, phosphide, 180, chrome, 250, clay, 300));
             regionSuffix = "-fortified";
             researchCost = with(nitride, 80, phosphide, 80, chrome, 400, clay, 1000);
             constructTime = 60f * 40f;
@@ -217,7 +218,7 @@ public class SvPayload {
         };
 
         helicopterAssembler = new LaserUnitAssembler("helicopter-assembler") {{
-            requirements(Category.units, atl(), with(nitride,1000,quartzFiber,500,iridium,750, chrome,600));
+            requirements(Category.units, atl(BuildVisibility.sandboxOnly), with(nitride,1000,quartzFiber,500,iridium,750, chrome,600));
             regionSuffix = "-fortified";
             size = 5;
             plans.add(
@@ -254,7 +255,7 @@ public class SvPayload {
             }
         };
         hydromechAssembler = new LaserUnitAssembler("hydromech-assembler") {{
-            requirements(Category.units, atl(), with(phosphide,1000,quartzFiber,500,iridium,750, chrome,600));
+            requirements(Category.units, atl(BuildVisibility.sandboxOnly), with(phosphide,1000,quartzFiber,500,iridium,750, chrome,600));
             regionSuffix = "-fortified";
             size = 5;
             plans.add(
@@ -292,7 +293,7 @@ public class SvPayload {
             }
         };
         roverAssembler = new LaserUnitAssembler("rover-assembler") {{
-            requirements(Category.units, atl(), with(phosphide,1000,quartzFiber,500,iridium,750, chrome,600));
+            requirements(Category.units, atl(BuildVisibility.sandboxOnly), with(phosphide,1000,quartzFiber,500,iridium,750, chrome,600));
             regionSuffix = "-fortified";
             size = 5;
             plans.add(
@@ -331,7 +332,7 @@ public class SvPayload {
         };
 
         assemblyModule = new UnitAssemblerModule("assembly-module") {{
-            requirements(Category.units, atl(), with(iridium,1200,quartzFiber,1200,spaclanium,1200, chrome,1200));
+            requirements(Category.units, atl(BuildVisibility.sandboxOnly), with(iridium,1200,quartzFiber,1200,spaclanium,1200, chrome,1200));
             consumePower(4f);
             regionSuffix = "-fortified";
             researchCostMultiplier = 0.75f;
