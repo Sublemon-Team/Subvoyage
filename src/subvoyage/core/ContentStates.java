@@ -3,15 +3,15 @@ package subvoyage.core;
 public class ContentStates {
     public static final float
     HU = 400f, //HEALTH UNIT
-    DU = 200f,
+    DU = 190f,
 
     TURRET_DMG_U = DU*0.8f,
 
-    WALL_HP_U = DU*2f, // for 1x1 wall
+    WALL_HP_U = DU*2.5f, // for 1x1 wall
     WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall
 
     OFFENSE_HP_U = HU*1.125f,
-    OFFENSE_DMG_U = DU*0.25f,
+    OFFENSE_DMG_U = DU*0.22f,
     DEFENSE_HP_U = HU*1.5f,
     DEFENSE_DMG_U = DU*0.2f,
     SPECIAL_HP_U = HU*1.05f,
@@ -21,11 +21,11 @@ public class ContentStates {
     CLAY_WALL_HP = WALL_HP_U,
     CLAY_WALL_LARGE_HP = WALL_LARGE_HP_U,
 
-    PHOSPHIDE_WALL_HP = WALL_HP_U*1.875f,
-    PHOSPHIDE_WALL_LARGE_HP = WALL_LARGE_HP_U*1.875f,
+    PHOSPHIDE_WALL_HP = WALL_HP_U*1.375f,
+    PHOSPHIDE_WALL_LARGE_HP = WALL_LARGE_HP_U*1.375f,
 
-    TUGSHEET_WALL_HP = WALL_HP_U*3.625f,
-    TUGSHEET_WALL_LARGE_HP = WALL_LARGE_HP_U*3.625f,
+    TUGSHEET_WALL_HP = WALL_HP_U*2.225f,
+    TUGSHEET_WALL_LARGE_HP = WALL_LARGE_HP_U*2.225f,
 
     //TURRETS
     WHIRL_DPS = TURRET_DMG_U,
