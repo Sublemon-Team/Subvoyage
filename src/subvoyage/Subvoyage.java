@@ -2,8 +2,13 @@ package subvoyage;
 
 import arc.*;
 import arc.util.*;
+import mindustry.Vars;
+import mindustry.async.AsyncProcess;
+import mindustry.async.PhysicsProcess;
+import mindustry.entities.EntityGroup;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
+import mindustry.gen.Unit;
 import mindustry.mod.*;
 import subvoyage.content.block.*;
 import subvoyage.content.world.SvTechTree;
@@ -19,6 +24,7 @@ import subvoyage.core.logic.SvLogic;
 import subvoyage.core.ui.FontIconGenerator;
 import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.core.SvSettings;
+import subvoyage.type.unit.entity.HelicopterUnitEntity;
 
 import static arc.Core.*;
 
@@ -56,6 +62,19 @@ public class Subvoyage extends Mod {
     public void init() {
         super.init();
         SvSettings.load();
+
+        //we'll just break in and do our giggles
+        Vars.asyncCore.processes.add(new AsyncProcess() {
+            @Override
+            public void begin() {
+                AsyncProcess.super.begin();
+                PhysicsProcess physics = (PhysicsProcess) Vars.asyncCore.processes.find(e -> e instanceof PhysicsProcess phys);
+                EntityGroup<Unit> group = Reflect.get(physics,"group");
+                group.each(e -> {
+                    if(e instanceof HelicopterUnitEntity h) h.physref.body.layer = 2;
+                });
+            }
+        });
         //FontIconGenerator.loadIcons();
     }
 

@@ -6,10 +6,12 @@ import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
+import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.ai.types.CommandAI;
+import mindustry.async.PhysicsProcess;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
 import mindustry.entities.bullet.BulletType;
@@ -122,8 +124,6 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     @Override
     public void update() {
-        if(physref != null) physref.body.layer = 2;
-
         super.update();
         accelSmooth = Mathf.lerp(accelSmooth,vel.len()/type.speed,Time.delta/10f);
         if(!isAccelerating) {
@@ -146,8 +146,6 @@ public class HelicopterUnitEntity extends UnitEntity {
             accelSmooth = Mathf.approachDelta(accelSmooth,0,1/60f);
             if(!Vars.state.isPaused()) rotation += Time.delta / hitSize * 80f * accel();
         }
-
-        if(physref != null) physref.body.layer = 2; // prevent isGrounded affecting physics
     }
 
     @Override
