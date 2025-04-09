@@ -18,12 +18,15 @@ import mindustry.type.ItemStack;
 import mindustry.world.Block;
 import mindustry.world.blocks.production.BurstDrill;
 import mindustry.world.blocks.production.Pump;
+import mindustry.world.consumers.ConsumeItems;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.consumers.ConsumeLiquidBase;
+import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import subvoyage.content.other.SvAttribute;
 import subvoyage.core.draw.block.Draw3DSprite;
+import subvoyage.type.ConsumesOr;
 import subvoyage.type.block.crafter.AttributeCrafterBoostable;
 import subvoyage.type.block.production.CoralliteGrinder;
 import subvoyage.type.block.production.ProductionAnchor;
@@ -79,7 +82,10 @@ public class SvProduction {
 
             buildCostMultiplier = 2f;
 
-            consumeItem(finesand,2);
+            consume(new ConsumesOr(
+                    new ConsumeItems(with(finesand,2)),
+                    new ConsumePower(16/60f,10f,true)
+            ));
 
             size = 2;
             envDisabled |= Env.scorching;

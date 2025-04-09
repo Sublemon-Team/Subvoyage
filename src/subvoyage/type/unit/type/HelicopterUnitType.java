@@ -42,6 +42,12 @@ public class HelicopterUnitType extends AtlacianUnitType {
     }
 
     @Override
+    public void init() {
+        super.init();
+        payloadCapacity = hitSize * hitSize * 0.85f;
+    }
+
+    @Override
     public void draw(Unit unit) {
         if(unit.inFogTo(Vars.player.team())) return;
 

@@ -167,6 +167,8 @@ public class SvTurret {
                         fragSpread = 90f;
                         fragBullets = 3;
                         fragVelocityMin = 1f;
+
+                        knockback = -3f;
                     }}
             );
 

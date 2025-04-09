@@ -8,6 +8,8 @@ import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
+import arc.scene.ui.layout.Table;
+import arc.struct.Seq;
 import arc.util.Time;
 import mindustry.Vars;
 import mindustry.ai.types.CommandAI;
@@ -17,10 +19,12 @@ import mindustry.entities.Effect;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.ExplosionBulletType;
 import mindustry.entities.units.StatusEntry;
-import mindustry.gen.Hitboxc;
-import mindustry.gen.UnitEntity;
+import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
+import mindustry.world.blocks.payloads.BuildPayload;
+import mindustry.world.blocks.payloads.Payload;
+import mindustry.world.blocks.payloads.UnitPayload;
 import subvoyage.content.SvUnits;
 import subvoyage.core.draw.DataEffect;
 import subvoyage.core.draw.SvFx;
@@ -29,7 +33,7 @@ import subvoyage.type.unit.type.HelicopterUnitType;
 
 import java.util.Iterator;
 
-public class HelicopterUnitEntity extends UnitEntity {
+public class HelicopterUnitEntity extends PayloadUnit {
 
     public float localAcceleration = 0;
     public boolean isAccelerating = false;
@@ -122,9 +126,20 @@ public class HelicopterUnitEntity extends UnitEntity {
 
     public transient BulletType expl = null;
 
+
     @Override
     public void update() {
         super.update();
+
+        if(dead()) {
+            for (int i = 0; i < payloads.size; i++) {
+                Payload load = payloads.peek();
+                if (this.tryDropPayload(load)) {
+                    this.payloads.pop();
+                }
+            }
+        }
+
         accelSmooth = Mathf.lerp(accelSmooth,vel.len()/type.speed,Time.delta/10f);
         if(!isAccelerating) {
             localAcceleration -= Time.delta/30f;
