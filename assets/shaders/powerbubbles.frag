@@ -40,7 +40,7 @@ void main(){
     float mmm = 1.0;
     if(tester < mth || (0.45 > noi && noi > 0.43) || (0.55 > noi && noi > 0.53) || (0.35 > noi && noi > 0.33)){
         color *= 1.2;
-        mmm *= 2;
+        mmm *= 2.0;
     }
     /*if(tester < mth && (0.45 > noi && noi > 0.43)){
         color *= 1.5;
