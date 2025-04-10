@@ -40,26 +40,26 @@ void main() {
 
     vec4 maxed = max(
     max(
-    max(texture2D(u_texture, c + vec2(0, step) * v + offset), texture2D(u_texture, c + vec2(0, -step) * v + offset)),
-    texture2D(u_texture, c + vec2(step, 0) * v + offset)
+    max(texture2D(u_texture, c + vec2(0.0, step) * v + offset), texture2D(u_texture, c + vec2(0.0, -step) * v + offset)),
+    texture2D(u_texture, c + vec2(step, 0.0) * v + offset)
     ),
-    texture2D(u_texture, c + vec2(-step, 0) * v + offset)
+    texture2D(u_texture, c + vec2(-step, 0.0) * v + offset)
     );
 
     vec4 maxed2 = max(
     max(
-    max(texture2D(u_texture, c + vec2(0, step2) * v + offset), texture2D(u_texture, c + vec2(0, -step2) * v + offset)),
-    texture2D(u_texture, c + vec2(step2, 0) * v + offset)
+    max(texture2D(u_texture, c + vec2(0.0, step2) * v + offset), texture2D(u_texture, c + vec2(0.0, -step2) * v + offset)),
+    texture2D(u_texture, c + vec2(step2, 0.0) * v + offset)
     ),
-    texture2D(u_texture, c + vec2(-step2, 0) * v + offset)
+    texture2D(u_texture, c + vec2(-step2, 0.0) * v + offset)
     );
 
     vec4 maxed3 = max(
     max(
-    max(texture2D(u_texture, c + vec2(0, step3) * v + offset), texture2D(u_texture, c + vec2(0, -step3) * v + offset)),
-    texture2D(u_texture, c + vec2(step3, 0) * v + offset)
+    max(texture2D(u_texture, c + vec2(0.0, step3) * v + offset), texture2D(u_texture, c + vec2(0.0, -step3) * v + offset)),
+    texture2D(u_texture, c + vec2(step3, 0.0) * v + offset)
     ),
-    texture2D(u_texture, c + vec2(-step3, 0) * v + offset)
+    texture2D(u_texture, c + vec2(-step3, 0.0) * v + offset)
     );
 
     // Усиливаем цвет лазера (яркость и насыщенность)
