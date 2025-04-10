@@ -22,7 +22,7 @@ void main(){
     float stime = u_time / 5.0;
 
     vec4 sampled = texture2D(u_texture, c);
-    vec3 color = sampled.rgb * vec3(0.9, 0.9, 1);
+    vec3 color = sampled.rgb * vec3(0.9, 0.9, 1.0);
     vec4 noiseSample = texture2D(u_noise,coords / DSCALE * (-1.0,1.0) + stime / 1024.0);
     vec4 noiseSample2 = texture2D(u_noise,coords / NSCALE * (1.0,-1.0) + stime / 1024.0);
 
@@ -33,10 +33,10 @@ void main(){
     sin(stime / 10.0 - coords.y/2.0) * 4.0 * noi +
     sin(stime / 7.0 + coords.y/1.0) * 0.5 +
     sin(coords.x / 3.0 + coords.y / 2.0) +
-    sin(stime / 20.0 + coords.x/4.0) * 1.0, mscl) + noi * 6;
+    sin(stime / 20.0 + coords.x/4.0) * 1.0, mscl) + noi * 6.0;
 
 
-    vec4 maxed = max(max(max(texture2D(u_texture, c + vec2(0, step) * v), texture2D(u_texture, c + vec2(0, -step) * v)), texture2D(u_texture, c + vec2(step, 0) * v)), texture2D(u_texture, c + vec2(-step, 0) * v));
+    vec4 maxed = max(max(max(texture2D(u_texture, c + vec2(0.0, step) * v), texture2D(u_texture, c + vec2(0.0, -step) * v)), texture2D(u_texture, c + vec2(step, 0.0) * v)), texture2D(u_texture, c + vec2(-step, 0.0) * v));
     float mmm = 1.0;
     if(tester < mth || (0.45 > noi && noi > 0.43) || (0.55 > noi && noi > 0.53) || (0.35 > noi && noi > 0.33)){
         color *= 1.2;
