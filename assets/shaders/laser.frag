@@ -74,7 +74,7 @@ void main() {
     vec4 noiseSample3 = texture2D(u_noise, coords / vec2(128.0,116.0) * vec2(0.8) + stime / 64.0);
     float noi = noiseSample3.r;
     if(maxed3.a > 0.8 && (sampled.a < 0.8 && orig.a < 0.8) && noi < 0.5 && noi > 0.3)
-    gl_FragColor = vec4(mix(maxed3.rgb, vec3(0.0), 0.1), 0.2f);
+    gl_FragColor = vec4(mix(maxed3.rgb, vec3(0.0), 0.1), 0.2);
 
     if (maxed2.a > 0.8 && (sampled.a < 0.8 && orig.a < 0.8))
     gl_FragColor = vec4(mix(maxed2.rgb, vec3(1.0), 0.3), 1.0);
