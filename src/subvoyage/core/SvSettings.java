@@ -102,11 +102,14 @@ public class SvSettings {
 
     static void sliderPref(SettingsMenuDialog.SettingsTable t, String ico, String name, int def, int min, int max, SettingsMenuDialog.StringProcessor p) {
         t.pref(new SliderIconSetting(ico,name, def,min,max,1,p));
+        settings.defaults(name, def);
     }
     static void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def) {
         t.pref(new CheckIconSetting(ico,name,def,null));
+        settings.defaults(name, def);
     }
     static void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def, Boolc changed) {
         t.pref(new CheckIconSetting(ico,name,def,changed));
+        settings.defaults(name, def);
     }
 }

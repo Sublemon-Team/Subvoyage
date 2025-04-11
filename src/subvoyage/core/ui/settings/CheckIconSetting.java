@@ -49,4 +49,5 @@ public class CheckIconSetting extends SettingsMenuDialog.SettingsTable.CheckSett
         addDesc(table.add(both).width(Math.min(Core.graphics.getWidth() / 1.2f, 460f)).left().padTop(4f).get());
         table.row();
     }
+
 }
