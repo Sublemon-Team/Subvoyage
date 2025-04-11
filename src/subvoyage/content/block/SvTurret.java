@@ -29,6 +29,7 @@ import subvoyage.core.draw.SvFx;
 import subvoyage.type.block.turret.LaserTurret;
 import subvoyage.type.block.turret.resist.DrawResist;
 import subvoyage.type.block.turret.resist.ResistTurret;
+import subvoyage.type.shoot.ShootSpreadForwardBackwards;
 import subvoyage.type.shoot.ShootUpsurge;
 import subvoyage.type.shoot.ShootWhirl;
 import subvoyage.type.shoot.ShootZigZag;
@@ -134,9 +135,9 @@ public class SvTurret {
             squareSprite = false;
 
             cooldownTime = 60f;
-            shoot = new ShootZigZag() {{
-                mag = 5;
-                scl = 4f;
+            shoot = new ShootSpread() {{
+                spread = 5f;
+                shots = 2;
             }};
             reload = 80f;
 
@@ -155,6 +156,7 @@ public class SvTurret {
                         trailLength = 12;
                         trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
                         hitEffect = despawnEffect = Fx.hitBulletColor;
+
 
                         ammoPerShot = 3;
                         intervalRandomSpread = 0f;

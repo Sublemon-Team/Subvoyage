@@ -26,6 +26,7 @@ import static subvoyage.content.block.SvPower.*;
 import static subvoyage.content.block.SvSpecial.*;
 import static subvoyage.content.block.SvDefense.*;
 import static subvoyage.content.block.SvTurret.*;
+import static subvoyage.content.world.SvSectorPresets.construction;
 import static subvoyage.content.world.SvSectorPresets.thaw;
 
 public class SvTechTree {
@@ -132,7 +133,7 @@ public class SvTechTree {
                 });
             });
             cost(whirl,corallite,100,clay,60,iridium,30);
-            node(whirl,() -> {
+            node(whirl,with(onsector(construction)),() -> {
                 noCost(rupture);
                 node(rupture);
 
@@ -165,7 +166,7 @@ public class SvTechTree {
                 });
             });
             cost(powerBubbleNode,corallite,40,iridium,20);
-            node(powerBubbleNode,() -> {
+            node(powerBubbleNode,with(onsector(construction)),() -> {
                 noCost(powerBubbleMerger);
                 node(powerBubbleMerger);
 
@@ -289,6 +290,12 @@ public class SvTechTree {
                     nodeProduce(hydrogen,() -> {
 
                     });
+                });
+            });
+
+            node(thaw,() -> {
+                node(construction,with(sector(thaw)), () -> {
+
                 });
             });
         });

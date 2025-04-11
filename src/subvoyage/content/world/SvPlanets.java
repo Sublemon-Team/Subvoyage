@@ -98,25 +98,11 @@ public class SvPlanets{
             alwaysUnlocked = true;
             landCloudColor = SvPal.atlacianLandCloud;
 
-            if(!Version.isAtLeast("147"))
-                try {
-                    Seq<Item> hiddenItems = Reflect.get(this,"hiddenItems");
-                    hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
-                            .removeAll(SvItems.atlacianItems);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
+                    .removeAll(SvItems.atlacianItems);
         }};
 
-        if(!Version.isAtLeast("147"))
-            try {
-                Seq<Item> hiddenItems = Reflect.get(serpulo, "hiddenItems");
-                hiddenItems.addAll(SvItems.atlacianItems);
-
-                hiddenItems = Reflect.get(erekir, "hiddenItems");
-                hiddenItems.addAll(SvItems.atlacianItems);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        serpulo.hiddenItems.addAll(SvItems.atlacianItems);
+        erekir.hiddenItems.addAll(SvItems.atlacianItems);
     }
 }
