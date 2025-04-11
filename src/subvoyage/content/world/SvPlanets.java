@@ -5,11 +5,14 @@ import arc.graphics.*;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.math.geom.Vec3;
+import arc.struct.Seq;
+import arc.util.Reflect;
 import arc.util.io.Reads;
 import arc.util.io.Writes;
 import arc.util.serialization.Json;
 import arc.util.serialization.JsonReader;
 import mindustry.content.*;
+import mindustry.core.Version;
 import mindustry.game.*;
 import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
@@ -94,11 +97,26 @@ public class SvPlanets{
 
             alwaysUnlocked = true;
             landCloudColor = SvPal.atlacianLandCloud;
-            hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
-                    .removeAll(SvItems.atlacianItems);
+
+            if(!Version.isAtLeast("147"))
+                try {
+                    Seq<Item> hiddenItems = Reflect.get(this,"hiddenItems");
+                    hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
+                            .removeAll(SvItems.atlacianItems);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }};
 
-        serpulo.hiddenItems.addAll(SvItems.atlacianItems);
-        erekir.hiddenItems.addAll(SvItems.atlacianItems);
+        if(!Version.isAtLeast("147"))
+            try {
+                Seq<Item> hiddenItems = Reflect.get(serpulo, "hiddenItems");
+                hiddenItems.addAll(SvItems.atlacianItems);
+
+                hiddenItems = Reflect.get(erekir, "hiddenItems");
+                hiddenItems.addAll(SvItems.atlacianItems);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }

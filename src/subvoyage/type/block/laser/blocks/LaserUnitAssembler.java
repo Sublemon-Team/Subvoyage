@@ -3,14 +3,16 @@ package subvoyage.type.block.laser.blocks;
 import arc.Core;
 import arc.graphics.Color;
 import arc.math.Mathf;
+import arc.scene.Element;
 import arc.struct.IntSeq;
+import arc.util.Reflect;
 import arc.util.Scaling;
 import arc.util.Strings;
+import mindustry.core.Version;
 import mindustry.gen.Icon;
 import mindustry.graphics.Pal;
 import mindustry.type.PayloadStack;
 import mindustry.ui.Bar;
-import mindustry.ui.ItemImage;
 import mindustry.ui.Styles;
 import mindustry.world.blocks.units.UnitAssembler;
 import mindustry.world.meta.Stat;
@@ -21,6 +23,8 @@ import subvoyage.type.block.laser.LaserBlock;
 import subvoyage.type.block.laser.LaserBuild;
 import subvoyage.type.block.laser.LaserGraph;
 import subvoyage.type.block.laser.LaserUtil;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
     public float consumeLaserTier0 = 0f;
@@ -131,7 +135,18 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
                                 }
 
                                 PayloadStack stack = plan.requirements.get(i);
-                                req.add(new ItemImage(stack)).pad(5);
+                                if(Version.isAtLeast("147")) {
+                                    req.add((Element)
+                                            Reflect.invoke(StatValues.class,"stack",new Object[] {stack},PayloadStack.class)).pad(5);
+                                } else {
+                                    try {
+                                        Class<?> itemImage = Class.forName("mindustry.ui.ItemImage");
+                                        req.add((Element) itemImage.getConstructor(PayloadStack.class).newInstance(stack)).pad(5);
+                                    } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+                                             InstantiationException | InvocationTargetException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
                         }).right().grow().pad(10f);
                     }else{

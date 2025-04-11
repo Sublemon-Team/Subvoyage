@@ -57,10 +57,6 @@ public class HelicopterUnitType extends AtlacianUnitType {
         Mechc mech = unit instanceof Mechc ? (Mechc)unit : null;
         float z = isPayload ? Draw.z() : lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit;
 
-        if(unit.controller().isBeingControlled(player.unit())){
-            drawControl(unit);
-        }
-
         if(!isPayload && (unit.isFlying() || shadowElevation > 0)){
             Draw.z(Math.min(Layer.darkness, z - 1f));
             drawShadow(unit);

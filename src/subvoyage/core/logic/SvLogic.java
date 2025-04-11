@@ -6,6 +6,8 @@ import arc.util.Log;
 import arc.util.Structs;
 import arc.util.Time;
 import arc.util.serialization.Jval;
+import mindustry.Vars;
+import mindustry.core.Version;
 import mindustry.game.Team;
 import mindustry.gen.Musics;
 import mindustry.type.SectorPreset;
@@ -76,6 +78,14 @@ public class SvLogic {
         if(state.isGame()) gameUpdate();
         if(state.isMenu()) menuUpdate();
         SvVars.atlacianMapControl.update();
+
+        try {
+            if(state.rules.waves) {
+                state.rules.objectiveFlags.add("wave"+state.wave);
+            }
+        } catch (Exception e) {
+
+        }
     }
 
     public static void gameUpdate() {

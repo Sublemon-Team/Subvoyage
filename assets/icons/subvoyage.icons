@@ -17,8 +17,11 @@ icon auto @-clay-icon clay
 icon auto @-core-puffer-icon puffer-core
 icon auto @-centrifugal-pump-icon centrifugal-pump
 icon auto @-sealed-duct-icon sealed-duct
+icon auto @-power-bubble-node-icon power-bubble-node
+icon auto @-power-bubble-scheme-icon power-bubble-scheme 4 10
 
 # Vanilla resources icons compatibility
 icon auto @-corallite-icon subvoyage-corallite
 icon auto @-spaclanium-icon subvoyage-spaclanium
 icon auto @-finesand-icon subvoyage-finesand
+icon auto @-iridium-icon subvoyage-iridium

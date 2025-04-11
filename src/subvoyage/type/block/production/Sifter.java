@@ -13,12 +13,15 @@ import mindustry.entities.units.*;
 import mindustry.game.*;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.logic.LAccess;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.production.Drill;
+import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.type.ConsumesOr;
 
 import java.util.*;
 
@@ -226,6 +229,7 @@ public class Sifter extends Block {
         rect(Icon.cancel.getRegion(), x, y + 3f);
     }
 
+
     public void worldReset() {
         populatedOres.clear();
     }
@@ -285,6 +289,14 @@ public class Sifter extends Block {
         public float warmup() {
             return efficiency;
         }
+
+        @Override
+        public double sense(LAccess sensor) {
+            if(sensor == LAccess.efficiency && consumers[0] instanceof ConsumesOr cor)
+                return cor.consumes.find(e -> e instanceof ConsumePower).efficiency(this);
+            return super.sense(sensor);
+        }
+
     }
 
 }

@@ -1,10 +1,13 @@
 package subvoyage;
 
 import arc.*;
+import arc.graphics.Color;
+import arc.graphics.Colors;
 import arc.util.*;
 import mindustry.Vars;
 import mindustry.async.AsyncProcess;
 import mindustry.async.PhysicsProcess;
+import mindustry.core.Version;
 import mindustry.entities.EntityGroup;
 import mindustry.game.*;
 import mindustry.game.EventType.*;
@@ -62,7 +65,7 @@ public class Subvoyage extends Mod {
     public void init() {
         super.init();
         SvSettings.load();
-
+        Colors.put("sv-accent",Color.valueOf("7ede8a"));
         //we'll just break in and do our giggles
         Vars.asyncCore.processes.add(new AsyncProcess() {
             @Override
@@ -75,6 +78,19 @@ public class Subvoyage extends Mod {
                 });
             }
         });
+
+        try {
+            if(Version.isAtLeast("147")) {
+                Reflect.invoke(Vars.logicVars, "put", new Object[] {"@melius", SvTeam.melius},
+                        String.class, Object.class);
+            }
+            else {
+                Reflect.invoke(Vars.logicVars, "put", new Object[] {"@melius", SvTeam.melius},
+                        String.class, Object.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //FontIconGenerator.loadIcons();
     }
 

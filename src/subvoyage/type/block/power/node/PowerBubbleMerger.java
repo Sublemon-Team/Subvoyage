@@ -216,9 +216,9 @@ public class PowerBubbleMerger extends PowerBlock {
     public void getNodeLinks(Tile tile, Block block, Team team, Cons<Building> others){
         if(!autolink) return;
 
-        Boolf<Building> valid = other -> other != null && other.tile() != tile && other.block.connectedPower && other.power != null &&
+        Boolf<Building> valid = other -> other != null && other.tile != tile && other.block.connectedPower && other.power != null &&
                 (other.block instanceof PowerBubbleNode) &&
-                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile(), range * tilesize) && other.team == team &&
+                overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile, range * tilesize) && other.team == team &&
                 !graphs.contains(other.power.graph) &&
                 !PowerBubbleMerger.insulated(tile, other.tile) &&
                 !Structs.contains(Edges.getEdges(size), p -> { //do not link to adjacent buildings
@@ -325,7 +325,7 @@ public class PowerBubbleMerger extends PowerBlock {
     }
 
     protected boolean overlaps(Building src, Building other, float range){
-        return overlaps(src.x, src.y, other.tile(), range);
+        return overlaps(src.x, src.y, other.tile, range);
     }
 
     protected boolean overlaps(Tile src, Tile other, float range){

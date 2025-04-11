@@ -8,11 +8,13 @@ import mindustry.content.Fx;
 import mindustry.content.Items;
 import mindustry.entities.TargetPriority;
 import mindustry.entities.effect.MultiEffect;
+import mindustry.game.MapObjectives;
 import mindustry.gen.Icon;
 import mindustry.gen.Sounds;
 import mindustry.gen.WorldLabel;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.logic.LExecutor;
 import mindustry.type.Category;
 import mindustry.type.ItemStack;
 import mindustry.world.Block;
@@ -84,9 +86,8 @@ public class SvProduction {
 
             consume(new ConsumesOr(
                     new ConsumeItems(with(finesand,2)),
-                    new ConsumePower(16/60f,10f,true)
+                    new ConsumePower(36/60f,0f,false)
             ));
-
             size = 2;
             envDisabled |= Env.scorching;
             squareSprite = false;

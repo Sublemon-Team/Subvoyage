@@ -26,6 +26,8 @@ import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.input.Placement;
+import mindustry.io.TypeIO;
+import mindustry.logic.LExecutor;
 import mindustry.type.Item;
 import mindustry.type.Liquid;
 import mindustry.type.UnitType;
@@ -34,6 +36,7 @@ import mindustry.world.Block;
 import mindustry.world.Tile;
 import mindustry.world.blocks.power.PowerBlock;
 import mindustry.world.blocks.power.PowerGraph;
+import mindustry.world.blocks.power.PowerNode;
 import subvoyage.core.SvSettings;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.SvRender;
@@ -103,7 +106,7 @@ public class PowerBubbleNode extends PowerBlock {
     public void setBars(){
         super.setBars();
         addBar("power",entity -> {
-            PowerGraph g = entity.power().graph;
+            PowerGraph g = entity.power.graph;
             return new Bar(() ->
                     Core.bundle.format("bar.powerbalance",
                             ((g.getPowerBalance() >= 0 ? "+" : "") + UI.formatAmount((long)(g.getPowerBalance() * 60)))),
@@ -151,7 +154,8 @@ public class PowerBubbleNode extends PowerBlock {
     public void handlePlacementLine(Seq<BuildPlan> plans) {
         Seq<BuildPlan> cpy = Seq.with();
         plans.each(p -> cpy.add(p.copy()));
-        plans.each(p -> p.config = cpy);
+
+        plans.each(p -> p.config = cpy.map(e -> Point2.pack(e.x,e.y)).find(e -> !e.equals(Point2.pack(p.x,p.y))));
     }
 
     public boolean overlaps(@Nullable Tile src, @Nullable Tile other){
@@ -168,7 +172,7 @@ public class PowerBubbleNode extends PowerBlock {
     }
 
     protected boolean overlaps(Building src, Building other, float range){
-        return overlaps(src.x, src.y, other.tile(), range);
+        return overlaps(src.x, src.y, other.tile, range);
     }
 
     protected boolean overlaps(Tile src, Tile other, float range){
@@ -230,21 +234,24 @@ public class PowerBubbleNode extends PowerBlock {
             }
             if(worldChanges != world.tileChanges) {
                 worldChanges = world.tileChanges;
-                if(hasLink && link() instanceof PowerBubbleNodeBuild pb) pb.setLink(pos());
-                valid = checkRectangle();
-                if(valid) {
-                    if(link() instanceof PowerBubbleNodeBuild pb) {
-                        float w = Math.abs(pb.x - x);
-                        float h = Math.abs(pb.y - y);
-                        powerUsage = Mathf.clamp(w*h/80f,0f,60f)/60f/2f;
-                    }
-                    updateLinks();
-                    recheck = true;
-                } else {
-                    removeLinks();
-                }
+                updateAll();
             }
             consume();
+        }
+        public void updateAll() {
+            if(hasLink && link() instanceof PowerBubbleNodeBuild pb) pb.setLink(pos());
+            valid = checkRectangle();
+            if(valid) {
+                if(link() instanceof PowerBubbleNodeBuild pb) {
+                    float w = Math.abs(pb.x - x);
+                    float h = Math.abs(pb.y - y);
+                    powerUsage = Mathf.clamp(w*h/80f,0f,60f)/60f/2f;
+                }
+                updateLinks();
+                recheck = true;
+            } else {
+                removeLinks();
+            }
         }
         public void removeLinks() {
             Seq<Building> builds = Seq.with();
@@ -333,7 +340,7 @@ public class PowerBubbleNode extends PowerBlock {
                 if(tile.build instanceof PowerBubbleNodeBuild pb2 && (link != pb2.pos() && pb2 != this))
                     rectOverlap.val = true;
             });
-            if(envCount.val > 6)
+            if(envCount.val > 8*8)
                 tooMuchEnv = true;
             if(rectOverlap.val)
                 overlaps = true;
@@ -483,6 +490,24 @@ public class PowerBubbleNode extends PowerBlock {
             if(revision >= 1) {
                 setLink(read.i());
             }
+        }
+
+        @Override
+        public void created() {
+            super.created();
+            updateAll();
+        }
+
+        @Override
+        public void placed() {
+            super.placed();
+            updateAll();
+        }
+
+        @Override
+        public void updateProximity() {
+            super.updateProximity();
+            updateAll();
         }
 
         @Override
