@@ -99,9 +99,14 @@ public class SvLogic {
         if(state.rules.planet == atlacian && beta) Advancement.beta.unlock();
 
         for (SectorPreset sect : SvSectorPresets.all) {
-            if(sect.sector.isCaptured() && Advancement.get("sector_"+sect.name.replace("subvoyage-","")) != null) {
-                Advancement.get("sector_"+sect.name.replace("subvoyage-","")).unlock();
+            String id = "sector_" + sect.name.replace("subvoyage-", "").replace("-", "_");
+            if(sect.sector.isCaptured() && Advancement.get(id) != null) {
+                Advancement.get(id).unlock();
             }
+        }
+
+        if(state.getSector() != null && state.getSector().preset == SvSectorPresets.segment) {
+            if(state.wave > 100) Advancement.the_segment_hundred_wave.unlock();
         }
     }
     public static void menuUpdate() {

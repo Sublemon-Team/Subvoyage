@@ -26,8 +26,7 @@ import static subvoyage.content.block.SvPower.*;
 import static subvoyage.content.block.SvSpecial.*;
 import static subvoyage.content.block.SvDefense.*;
 import static subvoyage.content.block.SvTurret.*;
-import static subvoyage.content.world.SvSectorPresets.construction;
-import static subvoyage.content.world.SvSectorPresets.thaw;
+import static subvoyage.content.world.SvSectorPresets.*;
 
 public class SvTechTree {
 
@@ -44,7 +43,7 @@ public class SvTechTree {
             cost(buoy,corallite,5);
             node(buoy,() -> {
                 cost(tower,clay,120,iridium,70,chrome,40);
-                node(tower);
+                node(tower,withNever(),() -> {});
             });
             cost(coralliteGrinder,corallite,5);
             node(coralliteGrinder, with(onsector(thaw)), () -> {
@@ -52,9 +51,9 @@ public class SvTechTree {
                 node(sifter,() -> {
                 });
                 cost(crudeDrill,corallite,300,clay,280,iridium,200,finesand,80);
-                node(crudeDrill,() -> {
+                node(crudeDrill,with(onsector(segment)),() -> {
                     cost(featherDrill,corallite,200,spaclanium,50,clay,250,iridium,250);
-                    node(featherDrill,() -> {
+                    node(featherDrill,withNever(),() -> {
 
                     });
                 });
@@ -86,9 +85,9 @@ public class SvTechTree {
             cost(ceramicBurner,corallite,50,spaclanium,10,finesand,5);
             node(ceramicBurner, with(onsector(thaw)), () -> {
                 cost(argonCentrifuge,corallite,100,spaclanium,80,clay,80,iridium,40);
-                node(argonCentrifuge, () -> {
+                node(argonCentrifuge,with(sector(construction)),() -> {
                     cost(heliumCompressor,corallite,250,iridium,200,clay,250);
-                    node(heliumCompressor,() -> {
+                    node(heliumCompressor,withNever(),() -> {
 
                     });
                     cost(circularCrusher,corallite,150,iridium,200,spaclanium,50);
@@ -96,7 +95,7 @@ public class SvTechTree {
 
                     });
                     cost(propanePyrolyzer,corallite,500,iridium,300,clay,250,chrome,100);
-                    node(propanePyrolyzer,() -> {
+                    node(propanePyrolyzer,withNever(),() -> {
                         cost(nitrideBlaster,iridium,500,clay,400,chrome,400,phosphide,120);
                         node(nitrideBlaster,() -> {
 
@@ -106,11 +105,11 @@ public class SvTechTree {
                         node(crudeCrucible);
                     });
                     cost(phosphidePhotosynthesizer,spaclanium,500,iridium,300,clay,250,chrome,300);
-                    node(phosphidePhotosynthesizer,() -> {
+                    node(phosphidePhotosynthesizer,withNever(),() -> {
 
                     });
                     cost(hydrogenElectrolyzer,iridium,400,clay,400,chrome,300,phosphide,80);
-                    node(hydrogenElectrolyzer,() -> {
+                    node(hydrogenElectrolyzer,withNever(),() -> {
 
                     });
                 });
@@ -138,16 +137,16 @@ public class SvTechTree {
                 node(rupture);
 
                 cost(resonance,corallite,250,spaclanium,50,iridium,300,clay,250);
-                node(resonance,() -> {
+                node(resonance,with(sector(segment)),() -> {
                     cost(cascade,corallite,500,iridium,400,spaclanium,120,clay,250,chrome,200);
-                    node(cascade,() -> {
+                    node(cascade,withNever(),() -> {
                         cost(upsurge,phosphide,600,iridium,800,spaclanium,500,clay,500,chrome,300);
                         node(upsurge,() -> {
 
                         });
                     });
                     cost(mendProjector,phosphide,600,chrome,200,nitride,150);
-                    node(mendProjector);
+                    node(mendProjector,withNever(),() -> {});
                 });
 
                 cost(clayWall,clay,80);
@@ -173,22 +172,22 @@ public class SvTechTree {
                 cost(spaclaniumHydrolyzer,spaclanium,200,clay,90,iridium,60);
                 node(spaclaniumHydrolyzer,() -> {
                     cost(hydrocarbonicGenerator, corallite,300,phosphide,280,clay,250,chrome,235,iridium,140);
-                    node(hydrocarbonicGenerator);
+                    node(hydrocarbonicGenerator,with(research(propane)),() -> {});
                 });
             });
             cost(helicopterFabricator,corallite,100,spaclanium,120,clay,120,iridium,90);
-            node(helicopterFabricator,() -> {
+            node(helicopterFabricator,with(onsector(segment)),() -> {
                 noCost(lapetus);
                 node(lapetus);
 
                 cost(helicopterRefabricator,corallite,600,spaclanium,820,clay,700,iridium,500,chrome,250);
-                node(helicopterRefabricator,() -> {
+                node(helicopterRefabricator,withNever(),() -> {
                     noCost(skath);
                     node(skath);
                 });
 
                 cost(hydromechFabricator,corallite,200,spaclanium,160,clay,250,iridium,120);
-                node(hydromechFabricator,() -> {
+                node(hydromechFabricator,withNever(),() -> {
                     noCost(leeft);
                     node(leeft);
 
@@ -211,7 +210,7 @@ public class SvTechTree {
                     });
                 });
                 cost(coreDecoder,corallite,200,chrome,80,clay,150,iridium,150);
-                node(coreDecoder);
+                node(coreDecoder,withNever(),() -> {});
 
                 cost(fortifiedPayloadConveyor, iridium,50,chrome,50);
                 node(fortifiedPayloadConveyor,() -> {
@@ -295,7 +294,9 @@ public class SvTechTree {
 
             node(thaw,() -> {
                 node(construction,with(sector(thaw)), () -> {
+                    node(segment,with(sector(construction),research(argonCentrifuge)), () -> {
 
+                    });
                 });
             });
         });
@@ -331,6 +332,8 @@ public class SvTechTree {
         return new Objectives.Research(content);
     }
 
+
+    public static Seq<Objectives.Objective> withNever() {return with(never());}
 
 
 

@@ -17,6 +17,7 @@ import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.units.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -219,7 +220,10 @@ public class SvUnits{
         }};
 
         commute = new AtlacianUnitType("commute"){{
-            aiController = BuilderAI::new;
+            controller = u -> new BuilderAI(true, 300f) {{
+                buildRadius = 30*8f;
+            }};
+
             constructor = PayloadUnit::create;
             isEnemy = false;
             coreUnitDock = true;

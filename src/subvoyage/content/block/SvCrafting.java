@@ -35,7 +35,9 @@ public class SvCrafting {
         ceramicBurner, argonCentrifuge, circularCrusher,
         hydrogenElectrolyzer, propanePyrolyzer, crudeCrucible, heliumCompressor,
         phosphidePhotosynthesizer, nitrideBlaster,
-        quartzScutcher, tugRoller
+        quartzScutcher, tugRoller,
+
+        distiller
             ;
 
     public static void load() {
@@ -323,6 +325,37 @@ public class SvCrafting {
             hasItems = true;
             hasLiquids = true;
             hasPower = true;
+        }};
+
+        distiller = new GenericCrafter("distiller"){{
+            requirements(Category.crafting, atl(BuildVisibility.editorOnly), with(spaclanium, 100, corallite, 60));
+            outputLiquid = new LiquidStack(water, 32/60f);
+            craftTime = 140f;
+
+            researchCost = with(spaclanium, 700, corallite, 800);
+            itemCapacity = 30;
+            size = 2;
+
+            squareSprite = false;
+            hasItems = true;
+            hasLiquids = true;
+            envDisabled |= Env.scorching;
+            drawer = new DrawMulti(
+                    new DrawRegion("-bottom"),
+                    new DrawLiquidTile(hardWater, 2f),
+                    new DrawBubbles(Color.valueOf("7693e3")){{
+                        sides = 10;
+                        recurrence = 3f;
+                        spread = 6;
+                        radius = 1.5f;
+                        amount = 20;
+                    }},
+                    new DrawBlurSpin("-rotator", 6f),
+                    new DrawRegion("-top"),
+                    new DrawDefault()
+            );
+
+            consumeLiquid(hardWater, 16/60f);
         }};
     }
 }

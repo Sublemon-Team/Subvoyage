@@ -1,6 +1,7 @@
 package subvoyage.content.block;
 
 import arc.graphics.g2d.TextureRegion;
+import mindustry.game.Team;
 import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.liquid.LiquidRouter;
@@ -21,7 +22,9 @@ public class SvStorage {
     public static Block
         corePuffer,
 
-        container, largeVault, unloader, liquidContainer, liquidTank
+        container, largeVault, unloader, liquidContainer, liquidTank,
+
+        coreBastion //malis-like
             ;
 
     public static void load() {
@@ -96,5 +99,32 @@ public class SvStorage {
             solid = true;
             squareSprite = false;
         }};
+
+        coreBastion = new AtlacianCore("core-bastion") {{
+            requirements(Category.effect,atl(BuildVisibility.editorOnly), with(spaclanium,600,corallite,600,clay,300,sulfur,300));
+            alwaysUnlocked = true;
+            buildVisibility = BuildVisibility.editorOnly;
+            isFirstTier = true;
+            unitType = commute;
+            health = 4000;
+            itemCapacity = 3000;
+            size = 4;
+
+
+            incinerateNonBuildable = true;
+            squareSprite = false;
+            requiresCoreZone = false;
+            envDisabled |= Env.scorching;
+            unitCapModifier = 12;
+
+            placeableLiquid = true;
+            bannedItems.addAll(crude);
+        }
+
+            @Override
+            protected TextureRegion[] icons(){
+                return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
+            }
+        };
     }
 }

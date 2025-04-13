@@ -11,6 +11,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.UnitType;
 import mindustry.world.Block;
+import mindustry.world.blocks.defense.BuildTurret;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.RegenProjector;
 import mindustry.world.blocks.units.UnitFactory;
@@ -31,7 +32,9 @@ public class SvSpecial {
         buoy,tower, //fog
             mendProjector, //projectors
 
-        offloadCore, coreDecoder
+        offloadCore, coreDecoder,
+
+        buildTower //malis-like
     ;
 
     public static void load() {
@@ -142,6 +145,20 @@ public class SvSpecial {
             consumeLiquid(helium,0.95f);
             destructible = true;
             envDisabled |= Env.scorching;
+        }};
+
+        buildTower = new BuildTurret("build-tower") {{
+            requirements(Category.effect,atl(BuildVisibility.editorOnly), with(chrome, 150, clay, 180, iridium, 150));
+            health = 2100;
+            size = 3;
+
+            ambientSound = Sounds.electricHum;
+
+            fogRadius = 6;
+
+            envDisabled |= Env.scorching;
+
+            consumePower(90f/60f);
         }};
     }
 }

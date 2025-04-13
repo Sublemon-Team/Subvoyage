@@ -100,6 +100,8 @@ public class SvPlanets{
 
             hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
                     .removeAll(SvItems.atlacianItems);
+
+            enemyBuildSpeedMultiplier = 0.4f;
         }};
 
         serpulo.hiddenItems.addAll(SvItems.atlacianItems);

@@ -15,8 +15,10 @@ public class Advancement {
     public static Advancement
             welcome,beta,
             sector_thaw,
+            sector_construction,
+            sector_the_segment,
             unit_helio, unit_hydro, unit_rover,
-            big_bubble,
+            big_bubble, the_segment_hundred_wave,
             laser,
             uwu
             ;
@@ -34,6 +36,8 @@ public class Advancement {
                 "beta","sodilate-boulder1", // Launching Subvoyage
 
                 "sector_thaw","ceramic-burner", // Capturing Thaw
+                "sector_construction","power-bubble-node", // Capturing Construction
+                "sector_the_segment","build-tower-adv", // Capturing The Segment
 
                 "laser","laser-projector", // Progression
 
@@ -42,6 +46,7 @@ public class Advancement {
                 "unit_rover","stunt-full", //Unit - Stunt
 
                 "big_bubble","power-bubble-node", //Other
+                "the_segment_hundred_wave","core-bastion-adv", //The Segment - Survive 100 Wave
 
                 "uwu","leeft-uwu" //UwU Mode
         );

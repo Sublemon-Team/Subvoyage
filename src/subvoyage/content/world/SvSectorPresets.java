@@ -9,7 +9,7 @@ import subvoyage.type.world.SvSectorPreset;
 import static subvoyage.content.world.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset thaw, construction;
+    public static SectorPreset thaw, construction, segment;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
@@ -21,7 +21,7 @@ public class SvSectorPresets {
             overrideLaunchDefaults = true;
 
             addStartingItems = false;
-            difficulty = 1;
+            difficulty = 0;
 
             rules = (r) -> {
                 r.loadout = Seq.with();
@@ -39,10 +39,22 @@ public class SvSectorPresets {
             difficulty = 1;
 
             rules = (r) -> {
-                r.loadout = Seq.with();
+
             };
         }};
 
-        all.addAll(thaw);
+        segment = new SvSectorPreset("the-segment",atlacian,103,state -> {
+
+        }) {{
+            captureWave = 0;
+
+            difficulty = 2;
+
+            rules = (r) -> {
+                r.attackMode = true;
+            };
+        }};
+
+        all.addAll(thaw,construction,segment);
     }
 }

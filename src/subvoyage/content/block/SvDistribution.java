@@ -13,6 +13,8 @@ import mindustry.world.blocks.units.UnitCargoUnloadPoint;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
+import subvoyage.type.block.distribution.ItemPipeline;
+import subvoyage.type.block.distribution.LiquidPipeline;
 
 import static mindustry.type.ItemStack.with;
 import static subvoyage.content.SvItems.*;
@@ -22,9 +24,10 @@ import static subvoyage.content.SvBlocks.atl;
 public class SvDistribution {
     public static Block
         duct,isolatedDuct,highPressureDuct,ductRouter,ductBridge,ductSorter,ductInvSorter, ductUnderflow, ductOverflow, ductDistributor, incinerator,
+        itemPipeline,
         //shipCargoStation, shipUnloadPoint,
 
-        fortifiedConduit, isolatedConduit, highPressureConduit, conduitRouter, conduitBridge
+        fortifiedConduit, isolatedConduit, highPressureConduit, conduitRouter, conduitBridge, liquidPipeline
     ;
 
     public static void load() {
@@ -186,6 +189,28 @@ public class SvDistribution {
             solid = false;
 
             envDisabled |= Env.scorching;
+        }};
+
+        itemPipeline = new ItemPipeline("item-pipeline") {{
+            requirements(Category.distribution,atl(BuildVisibility.editorOnly),with());
+
+            health = 1200;
+
+            range = 24;
+
+            pulse = false;
+            hasPower = false;
+        }};
+
+        liquidPipeline = new LiquidPipeline("liquid-pipeline") {{
+            requirements(Category.distribution,atl(BuildVisibility.editorOnly),with());
+
+            health = 1200;
+
+            range = 64;
+
+            pulse = false;
+            hasPower = false;
         }};
     }
 }
