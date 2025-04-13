@@ -3,7 +3,7 @@ package subvoyage.core;
 public class ContentStates {
     public static final float
     HU = 400f, //HEALTH UNIT
-    DU = 190f,
+    DU = 170f,
 
     TURRET_DMG_U = DU*0.8f,
 
