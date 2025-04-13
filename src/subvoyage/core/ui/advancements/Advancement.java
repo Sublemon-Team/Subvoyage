@@ -18,8 +18,8 @@ public class Advancement {
             sector_construction,
             sector_the_segment,
             unit_helio, unit_hydro, unit_rover,
-            big_bubble, the_segment_hundred_wave,
-            laser,
+            big_bubble, the_segment_hundred_wave, crusher, helicopter_tricked, water_to_sifter,
+            laser, hard_water,
             uwu
             ;
 
@@ -39,7 +39,9 @@ public class Advancement {
                 "sector_construction","power-bubble-node", // Capturing Construction
                 "sector_the_segment","build-tower-adv", // Capturing The Segment
 
-                "laser","laser-projector", // Progression
+                // Progression
+                "hard_water","liquid-hard-water", // Hard Water
+                "laser","laser-projector", // Laser
 
                 "unit_helio","lapetus-full", // Unit - Lapetus
                 "unit_hydro","leeft-full", // Unit - Leeft
@@ -47,6 +49,9 @@ public class Advancement {
 
                 "big_bubble","power-bubble-node", //Other
                 "the_segment_hundred_wave","core-bastion-adv", //The Segment - Survive 100 Wave
+                "crusher","circular-crusher", // Crusher
+                "helicopter_tricked","commute-rupture", // Helicopter - Tricked
+                "water_to_sifter","water-sifter", // Connect water to sifter
 
                 "uwu","leeft-uwu" //UwU Mode
         );

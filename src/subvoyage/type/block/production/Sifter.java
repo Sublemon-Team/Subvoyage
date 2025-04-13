@@ -21,6 +21,7 @@ import mindustry.world.blocks.production.Drill;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.type.ConsumesOr;
 
 import java.util.*;
@@ -297,6 +298,13 @@ public class Sifter extends Block {
             return super.sense(sensor);
         }
 
+        @Override
+        public boolean acceptLiquid(Building source, Liquid liquid) {
+            if(liquid == Liquids.water) {
+                Advancement.water_to_sifter.unlock();
+            }
+            return super.acceptLiquid(source, liquid);
+        }
     }
 
 }

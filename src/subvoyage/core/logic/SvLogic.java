@@ -12,6 +12,7 @@ import mindustry.game.Team;
 import mindustry.gen.Musics;
 import mindustry.type.SectorPreset;
 import subvoyage.Subvoyage;
+import subvoyage.content.SvItems;
 import subvoyage.core.SvSettings;
 import subvoyage.core.SvVars;
 import subvoyage.content.world.SvSectorPresets;
@@ -108,6 +109,9 @@ public class SvLogic {
         if(state.getSector() != null && state.getSector().preset == SvSectorPresets.segment) {
             if(state.wave > 100) Advancement.the_segment_hundred_wave.unlock();
         }
+
+        if(SvItems.hardWater.unlocked())
+            Advancement.hard_water.unlock();
     }
     public static void menuUpdate() {
 

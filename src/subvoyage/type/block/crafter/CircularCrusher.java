@@ -10,6 +10,7 @@ import mindustry.graphics.Drawf;
 import mindustry.world.blocks.production.AttributeCrafter;
 import subvoyage.content.SvItems;
 import subvoyage.core.draw.SvPal;
+import subvoyage.core.ui.advancements.Advancement;
 
 public class CircularCrusher extends AttributeCrafter{
     public float sinMag = 0f, sinScl = 10f, sideOffset = 0f, lenOffset = 5f, horiOffset = 0f, angleOffset = 0f;
@@ -47,6 +48,11 @@ public class CircularCrusher extends AttributeCrafter{
         float visualSand = 0f;
         float visualCrude = 0f;
 
+        @Override
+        public void updateTile() {
+            super.updateTile();
+            if(efficiency > 0.01) Advancement.crusher.unlock();
+        }
 
         @Override
         public void draw(){

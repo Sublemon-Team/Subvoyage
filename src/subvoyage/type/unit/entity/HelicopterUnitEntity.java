@@ -22,6 +22,7 @@ import mindustry.entities.units.StatusEntry;
 import mindustry.gen.*;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Pal;
+import mindustry.world.blocks.defense.turrets.Turret;
 import mindustry.world.blocks.payloads.BuildPayload;
 import mindustry.world.blocks.payloads.Payload;
 import mindustry.world.blocks.payloads.UnitPayload;
@@ -29,6 +30,7 @@ import subvoyage.content.SvUnits;
 import subvoyage.core.draw.DataEffect;
 import subvoyage.core.draw.SvFx;
 import subvoyage.core.draw.SvPal;
+import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.type.unit.type.HelicopterUnitType;
 
 import java.util.Iterator;
@@ -172,6 +174,14 @@ public class HelicopterUnitEntity extends PayloadUnit {
     @Override
     public boolean isPathImpassable(int tileX, int tileY) {
         return Vars.world.tiles.in(tileX, tileY);
+    }
+
+    @Override
+    public void collision(Hitboxc other, float x, float y) {
+        super.collision(other, x, y);
+        if(other instanceof Bullet b && b.owner() instanceof Turret.TurretBuild tb && tb.block instanceof Turret t && !t.targetGround && isGrounded()) {
+            Advancement.helicopter_tricked.unlock();
+        }
     }
 
     @Override
