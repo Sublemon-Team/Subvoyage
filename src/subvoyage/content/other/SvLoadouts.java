@@ -1,14 +1,25 @@
 package subvoyage.content.other;
 
+import arc.Events;
+import mindustry.Vars;
 import mindustry.game.*;
+import mindustry.world.blocks.storage.CoreBlock;
+import subvoyage.content.world.SvPlanets;
+import subvoyage.content.block.SvStorage;
 
-public class SvLoadouts{
+public class SvLoadouts {
     public static Schematic
-        basicPuffer,basicShore,basicReef;
+            corePuffer;
 
     public static void load() {
-        basicPuffer = Schematics.readBase64("bXNjaAF4nGNgYWBhZmDJS8xNZeBOzi9K1S0oTUtLLWLgTkktTi7KLCjJzM9jYGBgy0lMSs0pZmCKjmVkEC0uTSrLr0xMT9VF1sLAwAhCQAIA8R4WdQ==");
-        basicShore = Schematics.readBase64("bXNjaAF4nE3MzQpAQBRA4UN+iq3X8ESyuMaNKWPkDuXtWerUtzyUlAXFLkFpXDy1t/WT2pJK8DONuVWDJO+MdlZzpz+SjztQbTLpZuTDmNHZNd3xkUX73wYyyL94AShUHMY=");
-        basicReef = Schematics.readBase64("bXNjaAF4nEXMQQ6CMBRF0QshNcrQdbAi4+BTntiEUtNfTdi9zsyZHwJhYNgti3MsVVOVHpy8yXJauHh8KltL0RkXeazp1VLZgbDZrM3pb/eOq7/nTzls1fRfoIP+hy/YIRvI");
+        corePuffer = Schematics.readBase64("bXNjaAF4nGNgYWBhZmDJS8xNZWBMZuBOSS1OLsosKMnMz2NgYGDLSUxKzSlmYIqOZWQQLS5NKsuvTExP1U3OL0rVLShNS0stAqpiBCEgAQDM5RJw");
+        Events.run(EventType.Trigger.update, () -> {
+            if (!Vars.schematics.getLoadouts((CoreBlock) SvStorage.corePuffer).contains(corePuffer)) {
+                Vars.schematics.getLoadouts((CoreBlock) SvStorage.corePuffer).clear();
+                Vars.schematics.getLoadouts((CoreBlock) SvStorage.corePuffer).add(corePuffer);
+            }
+            SvPlanets.atlacian.defaultCore = SvStorage.corePuffer;
+            SvPlanets.atlacian.generator.defaultLoadout = corePuffer;
+        });
     }
 }

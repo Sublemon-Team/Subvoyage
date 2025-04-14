@@ -1,5 +1,6 @@
 package subvoyage.type.block.laser;
 
+
 import mindustry.gen.Building;
 
 public class LaserLink {

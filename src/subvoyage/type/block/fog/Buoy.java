@@ -6,7 +6,6 @@ import arc.struct.*;
 import arc.util.*;
 import arc.util.io.*;
 import mindustry.*;
-import mindustry.content.*;
 import mindustry.game.*;
 import mindustry.graphics.*;
 import mindustry.input.*;

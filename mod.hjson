@@ -8,17 +8,19 @@ name: "subvoyage"
 author: "Skoow, IriDark"
 
 #the fully qualified main class of the mod
-main: "subvoyage.SubvoyageMod"
+main: "subvoyage.Subvoyage"
 
 #the mod description as seen in the mod dialog
 description: "Aquatic-stylized mod with new planet and unique mechanics"
 subtitle: "Aquatic-stylized content in new planet."
 
 #the mod version
-version: 0.5f-beta
+version: 0.6-beta
 
 #the minimum game build required to run this mod
-minGameVersion: 145
+minGameVersion: 146
 
 #this is a java mod
 java: true
+
+dependencies : []

@@ -1,15 +1,23 @@
 package subvoyage.content;
 
+import arc.files.Fi;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.*;
+import arc.math.geom.Rect;
+import arc.math.geom.Vec2;
+import arc.struct.ObjectMap;
+import arc.util.Time;
 import mindustry.ai.types.*;
 import mindustry.content.*;
+import mindustry.entities.Effect;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
+import mindustry.entities.pattern.ShootBarrel;
 import mindustry.entities.units.*;
+import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
@@ -17,33 +25,55 @@ import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
 import mindustry.world.meta.*;
-import subvoyage.*;
-import subvoyage.content.other.*;
-import subvoyage.content.sound.*;
-import subvoyage.draw.part.*;
-import subvoyage.draw.visual.*;
-import subvoyage.type.ai.*;
-import subvoyage.type.shoot.*;
-import subvoyage.type.shoot.bullet.*;
-import subvoyage.type.unit.helicopter.*;
-import subvoyage.type.unit.hydromech.*;
-import subvoyage.type.unit.hydromech.custom.*;
-import subvoyage.type.unit.hydromech.weapons.*;
-import subvoyage.type.unit.type.*;
-import subvoyage.type.unit.weapons.*;
+import subvoyage.content.ost.SvSounds;
+import subvoyage.core.draw.SvFx;
+import subvoyage.core.draw.SvPal;
+import subvoyage.core.draw.part.SpinningBlurRegionPart;
+import subvoyage.Subvoyage;
+import subvoyage.type.bullet.BallisticBulletType;
+import subvoyage.type.unit.ability.LegionfieldAbility;
+import subvoyage.type.unit.ai.DefenderDroneAI;
+import subvoyage.type.unit.type.AtlacianUnitType;
+import subvoyage.type.unit.type.RoverUnitType;
+import subvoyage.core.ui.advancements.Advancement;
+import subvoyage.type.bullet.DecayingBulletType;
+import subvoyage.type.shoot.ShootLeeft;
+import subvoyage.type.shoot.ShootSpreadForwardBackwards;
+import subvoyage.type.shoot.ShootStunt;
+import subvoyage.type.shoot.ShootUpsurge;
+import subvoyage.type.unit.ai.OffloadDemolisherAI;
+import subvoyage.type.unit.ai.StraightMissileAI;
+import subvoyage.type.unit.custom.HydromechState;
+import subvoyage.type.unit.custom.HydromechStateStats;
+import subvoyage.type.unit.entity.HelicopterUnitEntity;
+import subvoyage.type.unit.entity.HydromechUnitEntity;
+import subvoyage.type.unit.type.HelicopterUnitType;
+import subvoyage.type.unit.type.HydromechUnitType;
+import subvoyage.type.unit.weapon.DroneWeapon;
+import subvoyage.type.unit.weapon.HydromechRepairBeam;
+import subvoyage.type.unit.weapon.HydromechWeapon;
+import subvoyage.type.unit.custom.HydromechWeaponStateStats;
 
 import static arc.Core.atlas;
+import static arc.graphics.g2d.Draw.color;
+import static arc.graphics.g2d.Draw.z;
+import static arc.graphics.g2d.Lines.lineAngle;
+import static arc.graphics.g2d.Lines.stroke;
+import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
+import static subvoyage.core.ContentStates.*;
 
 public class SvUnits{
     public static UnitType
     // core
     shift,distort,commute,
-    cryptal,
+            demolish,
     //helicopters
     lapetus, skath, charon, callees,ganymede,
     //hydromechs
     leeft, flagshi, vanguard, squadron, armada,
+    //rovers
+    stunt, zeal, gambit, covenant,
     //cargo,payload
     bulker,
     pisun; //shh, don't tell anyone
@@ -53,6 +83,7 @@ public class SvUnits{
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
+
         //core
         shift = new AtlacianUnitType("shift"){{
             aiController = BuilderAI::new;
@@ -189,7 +220,10 @@ public class SvUnits{
         }};
 
         commute = new AtlacianUnitType("commute"){{
-            aiController = BuilderAI::new;
+            controller = u -> new BuilderAI(true, 300f) {{
+                buildRadius = 30*8f;
+            }};
+
             constructor = PayloadUnit::create;
             isEnemy = false;
             coreUnitDock = true;
@@ -207,12 +241,12 @@ public class SvUnits{
             mineWalls = true;
             mineFloor = true;
 
-            itemCapacity = 90;
-            mineSpeed = 10f;
+            itemCapacity = 30;
+            mineSpeed = 5f;
             mineTier = 2;
-            buildSpeed = 3f;
+            buildSpeed = 0.6f;
             drag = 0.05f;
-            speed = 6f;
+            speed = 5f;
             rotateSpeed = 20f;
             accel = 0.1f;
             fogRadius = 0f;
@@ -231,7 +265,7 @@ public class SvUnits{
             weapons.add(new RepairBeamWeapon(){{
                 widthSinMag = 0.11f;
                 reload = 20f;
-                x = 2f;
+                x = 0f;
                 y = 6.5f;
                 rotate = false;
                 shootY = 0f;
@@ -240,7 +274,7 @@ public class SvUnits{
                 fractionRepairSpeed = 0.06f;
                 aimDst = 0f;
                 shootCone = 15f;
-                mirror = true;
+                mirror = false;
 
                 targetUnits = true;
                 targetBuildings = true;
@@ -255,13 +289,13 @@ public class SvUnits{
             }});
         }};
 
-        cryptal = new AtlacianUnitType("cryptal") {{
+        demolish = new AtlacianUnitType("demolish") {{
             constructor = UnitEntity::create;
             playerControllable = false;
             logicControllable = false;
-            controller = (e) -> new CryptalAI();
+            controller = (e) -> new OffloadDemolisherAI();
 
-            health = 750;
+            health = (HELIO_T2_HU + HELIO_T1_HU)/2f;
 
             //aiController = CryptalAI::new;
             circleTarget = true;
@@ -269,11 +303,16 @@ public class SvUnits{
             speed = 2f;
             rotateSpeed = 5f;
             omniMovement = false;
+            faceTarget = true;
+            rotateMoveFirst = true;
             lowAltitude = true;
             flying = true;
-            engineSize = 0f;
+            engineSize = 2f;
+            engineOffset = 6f;
 
-            float haloY = 3.2f;
+            hitSize =  20f;
+
+            float haloY = 8f;
             parts.addAll(
                     new ShapePart() {{
                         circle = true;
@@ -352,29 +391,45 @@ public class SvUnits{
                     }}
             );
 
-            weapons.add(new OffloadDestroyWeapon() {{
+            weapons.add(new Weapon() {{
                 y = haloY;
                 x = 0;
                 alternate = false;
                 mirror = false;
 
                 rotate = true;
-                shootWarmupSpeed = 0.01f;
+                shootWarmupSpeed = 0.005f;
                 minWarmup = 0.8f;
 
+                parentizeEffects = true;
+
                 bullet = new LaserBoltBulletType(1f,0f) {
+                    {
+                        shootEffect = smokeEffect = Fx.none;
+                    }
                     @Override
                     public void draw(Bullet b) {
-                        super.draw(b);
+
                     }
 
                     @Override
                     public void update(Bullet b) {
                         b.remove();
-                        super.update(b);
                     }
                 };
             }
+                ObjectMap<Unit,Float> time = ObjectMap.of();
+                @Override
+                public void update(Unit unit, WeaponMount mount) {
+                    super.update(unit, mount);
+                    float t = time.get(unit,0f);
+                    if(mount.warmup > 0.1f && t >= 30f) {
+                        SvFx.shootShockwave.at(unit.x,unit.y,unit.rotation, Pal.accent, bullet.keepVelocity || parentizeEffects ? unit : null);
+                        t %= 30f;
+                    }
+                    t += Time.delta;
+                    time.put(unit,t);
+                }
 
                 @Override
                 protected void handleBullet(Unit unit, WeaponMount mount, Bullet bullet) {
@@ -389,48 +444,48 @@ public class SvUnits{
 
         //helicopter
         lapetus = new HelicopterUnitType("lapetus"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.05f;
-            speed = 1.6f;
+            speed = 1.7f;
             rotateSpeed = 4f;
             accel = 0.1f;
-            health = 800f;
+            health = HELIO_T1_HU;
             engineSize = 0;
-            hitSize = 20f;
+            hitSize = 16f;
             researchCostMultiplier = 0;
-            RotatorRegionPart copter = new RotatorRegionPart(){
-                {
-                    layer = Layer.flyingUnitLow;
-                    xScl = 1.5f;
-                    yScl = 1.5f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
-                }
-            };
 
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
+            float BPS = 2f * 0.5f;
 
-            parts.add(copter);
-            weapons.add(new Weapon(SubvoyageMod.ID + "-marine-weapon"){{
-                x = 5f;
-                layerOffset = -2;
+            parts.add(new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 1f;
+                yScl = 1f;
+                y = 2f;
+                rotationSpeed = 400f;
+            }});
+
+            parts.add(new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 0.5f;
+                yScl = 0.5f;
+                y = -5.5f;
+                rotationSpeed = 200f;
+            }});
+            weapons.add(new Weapon(name+"-weapon"){{
+                x = 4f;
+                y = -2f + 1/4f;
                 reload = 60f;
-                recoil = 2f;
+                recoil = 1f;
                 shootSound = Sounds.missileLaunch;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
                 top = false;
                 alternate = false;
-                bullet = new BasicBulletType(3f, 8){{
+
+                bullet = new BasicBulletType(3f, HELIO_T1_DPS/BPS) {{
                     sprite = "missile-large";
                     width = 6f;
                     height = 13f;
-                    lifetime = 70f;
+                    lifetime = 40f;
                     hitSize = 6f;
                     hitColor = backColor = trailColor = SvPal.heatGlow;
                     frontColor = Color.white;
@@ -439,7 +494,7 @@ public class SvUnits{
                     hitEffect = despawnEffect = Fx.blastExplosion;
                     smokeEffect = SvFx.shootLauncher;
                     splashDamageRadius = 10f;
-                    splashDamage = 20f;
+                    splashDamage = 25f;
 
                     trailEffect = SvFx.missileTrailSmokeSmall;
                     trailRotation = true;
@@ -449,103 +504,110 @@ public class SvUnits{
         }};
 
         skath = new HelicopterUnitType("skath"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.15f;
-            speed = 1.3f;
+            speed = 1.6f;
             rotateSpeed = 3f;
             accel = 0.25f;
-            health = 1350f;
+            health = HELIO_T2_HU;
 
             researchCostMultiplier = 0;
 
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 20f;
-            RotatorRegionPart copter = new RotatorRegionPart(){{
+            rotateMoveFirst = true;
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                 layer = Layer.flyingUnitLow;
-                xScl = 1.27f;
-                yScl = 1.27f;
-                y = 2.47f;
+                xScl = 1.35f;
+                yScl = 1.35f;
+                y = 4.47f;
                 rotationSpeed = 400f;
             }};
 
-            RotatorRegionPart tail = new RotatorRegionPart(){{
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
                 layer = Layer.flyingUnitLow;
                 xScl = 0.75f;
                 yScl = 0.75f;
-                y = -10.5f;
+                y = -8.5f;
                 rotationSpeed = 400f;
             }};
 
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-
-                tail.unitRot = e.rotation();
-                tail.unitX = e.x;
-                tail.unitY = e.y;
-            };
-
             parts.addAll(copter, tail);
-            weapons.add(new Weapon(SubvoyageMod.ID + "-missile-launcher"){{
-                x = 7f;
-                y = -2f;
-                reload = 200f;
-                recoil = 2f;
+
+            float BPS = 2f * 1.12f;
+
+            weapons.add(new Weapon(name+"-weapon"){{
+                x = 6f+2/4f;
+                y = -1/4f;
+                reload = 160f;
+                recoil = 1f;
                 shootSound = Sounds.mediumCannon;
 
                 top = false;
                 alternate = true;
+
+                shoot = new ShootUpsurge();
                 shoot.shots = 6;
                 shoot.shotDelay = 15f;
+
                 bullet = new BasicBulletType(){{
-                    sprite = "missile-large";
-                    width = height = 8f;
+                    sprite = "shell";
+                    width = height = 12f;
                     maxRange = 50f;
                     ignoreRotation = true;
 
                     hitColor = trailColor = SvPal.heatGlow;
                     frontColor = Color.white;
-                    trailWidth = 2f;
+                    trailWidth = 4f;
                     trailLength = 8;
                     hitEffect = despawnEffect = Fx.blastExplosion;
-                    smokeEffect = SvFx.shootLauncher;
+                    smokeEffect = Fx.shootSmokeDisperse;
+
+                    rotationOffset = 90f;
+                    trailRotation = true;
+                    trailEffect = SvFx.skathTrail;
+                    trailChance = 0.44f;
+
+                    weaveMag = 10f;
+                    weaveScale = 60f;
+                    weaveRandom = false;
+
                     hitSound = Sounds.plasmaboom;
 
                     backColor = SvPal.heatGlow;
-                    frontColor = Color.white;
+
+                    mixColorFrom = SvPal.heatGlow;
                     mixColorTo = Color.white;
 
                     ejectEffect = Fx.none;
                     hitSize = 22f;
 
                     collidesAir = true;
-                    lifetime = 87f;
+                    lifetime = 30f;
+
+                    pierce = true;
+                    pierceCap = 1;
 
                     hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
                     keepVelocity = false;
                     weaveMag = 2f;
                     weaveScale = 1f;
-                    speed = 0.8f;
+                    speed = 1.1f;
                     drag = -0.020f;
                     homingPower = 0.05f;
 
-                    splashDamage = 3f;
+                    damage = splashDamage = HELIO_T2_DPS/BPS;
                     splashDamageRadius = 20f;
                 }};
             }});
         }};
 
         charon = new HelicopterUnitType("charon"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.5f;
+            speed = 1.55f;
             rotateSpeed = 2f;
             accel = 0.45f;
-            health = 4220f;
+            health = HELIO_T3_HU;
 
             researchCostMultiplier = 0f;
 
@@ -553,302 +615,224 @@ public class SvUnits{
 
             engineOffset = -7.5f;
             engineSize = 0;
-            RotatorRegionPart copter = new RotatorRegionPart(){{
-                    layer = Layer.flyingUnitLow;
-                    xScl = 2f;
-                    yScl = 2f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
+
+            rotateMoveFirst = true;
+
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 1.5f;
+                yScl = 1.5f;
+                y = 7f;
+                rotationSpeed = 400f;
             }};
 
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 0.75f;
+                yScl = 0.75f;
+                y = -12f;
+                rotationSpeed = 400f;
+            }};
 
-            parts.add(copter);
+            parts.addAll(copter, tail);
+
+            float BPS = 60f/10f;
+
+            float abilityDamage = HELIO_T3_DPS/BPS*0.05f;
+            float weaponDamage = HELIO_T3_DPS/BPS*0.95f;
+
             abilities.add(
-            new MoveEffectAbility(3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }},
-
-            new MoveEffectAbility(-3, engineOffset - 4, Pal.sapBulletBack, SvFx.missileTrailShort, 1.5f){{
-                teamColor = true;
-            }}
+                    new MoveLightningAbility(abilityDamage,8,0.1f,22f,1f,2f, SvPal.heatGlow)
             );
 
-            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
-                top = false;
-                mirror = true;
-                alternate = false;
-
-                x = 4f;
-                y = -9.25f;
-
-                reload = 50f;
-                targetInterval = 10f;
-                targetSwitchInterval = 15f;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    hitEffect = Fx.pointHit;
-                    maxRange = 100f;
-                    damage = 17f;
-                }};
-            }});
-
-            weapons.add(new Weapon(SubvoyageMod.ID + "-rocket-launcher"){{
+            weapons.add(new Weapon(name+"-weapon"){{
                 top = false;
                 alternate = false;
-                x = 6f;
-                y = 2f;
-                reload = 120f;
+                x = 0f;
+                shootY = 128/8f-12/4f;
+                reload = 10f;
                 recoil = 2f;
-                shootSound = Sounds.missileLaunch;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    smokeEffect = Fx.shootSmokeTitan;
-                    hitColor = Pal.suppress;
-                    shake = 1f;
-                    speed = 0f;
-                    keepVelocity = false;
-                    collidesAir = true;
-                    spawnUnit = new MissileUnitType("charon-missile"){{
-                        outlineColor = Pal.darkOutline;
-                        trailRotation = true;
-                        targetAir = true;
-                        physics = true;
-                        lowAltitude = true;
+                shootSound = Sounds.bolt;
+                shoot = new ShootBarrel() {{
+                    barrels = new float[] {
+                            -4f, 1f, -10f,
+                            -2f, 0.5f, 10f,
+                            0f, 0f, 0f,
+                            2f, 0.5f, -10f,
+                            4f, 1f, 10f
+                    };
+                }};
 
-                        hitEffect = despawnEffect = Fx.blastExplosion;
-                        smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmokeSmall;
-                        trailInterval = 3f;
-                        trailWidth = 1f;
-                        trailLength = 6;
+                bullet = new RailBulletType() {{
+                    length = 8*10f;
+                    damage = weaponDamage;
 
-                        speed = 4.6f;
-                        maxRange = 5f;
-                        health = 40;
-                        homingDelay = 5f;
+                    hitColor = SvPal.heatGlow;
+                    hitEffect = endEffect = Fx.hitBulletColor;
+                    pierceDamageFactor = 1.05f;
+                    pointEffectSpace = 60f;
 
-                        engineSize = 3f;
-                        hitColor = engineColor = trailColor = SvPal.heatGlow;
-                        engineLayer = Layer.effect;
-                        deathExplosionEffect = Fx.none;
-                        loopSoundVolume = 0.1f;
-                        parts.add(new ShapePart(){{
-                            layer = Layer.effect;
-                            circle = true;
-                            y = -0.25f;
-                            radius = 1.5f;
-                            color = SvPal.heatGlow;
-                            colorTo = Color.white;
-                            progress = PartProgress.life.curve(Interp.pow5In);
-                        }});
+                    smokeEffect = Fx.colorSpark;
 
-                        parts.add(new RegionPart("-fin"){{
-                            mirror = true;
-                            progress = PartProgress.life.mul(3f).curve(Interp.pow5In);
-                            moveRot = 32f;
-                            rotation = -6f;
-                            moveY = 1.5f;
-                            x = 3f / 4f;
-                            y = -6f / 4f;
-                        }});
+                    endEffect = new Effect(14f, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        Drawf.tri(e.x, e.y, e.fout() * 1.5f, 5f, e.rotation);
+                    });
 
-                        weapons.add(new Weapon(){{
-                            shootCone = 360f;
-                            mirror = false;
-                            reload = 1f;
-                            shootOnDeath = true;
-                            bullet = new ExplosionBulletType(40, 15){{
-                                collidesAir = true;
-                                suppressionRange = 80f;
-                                fragBullets = 5;
-                                fragBullet = new BasicBulletType(4f,10f) {{
-                                    sprite = "missile-large";
-                                    width = height = 8f;
-                                    maxRange = 50f;
-                                    ignoreRotation = true;
+                    shootEffect = new Effect(10, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        float w = 1.2f + 7 * e.fout();
 
-                                    hitColor = trailColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    trailWidth = 2f;
-                                    trailLength = 8;
-                                    hitEffect = despawnEffect = Fx.blastExplosion;
-                                    smokeEffect = SvFx.shootLauncher;
-                                    hitSound = Sounds.plasmaboom;
+                        Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+                        color(e.color);
 
-                                    backColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    mixColorTo = Color.white;
+                        for(int i : Mathf.signs){
+                            Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                        }
 
-                                    ejectEffect = Fx.none;
-                                    hitSize = 22f;
+                        Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+                    });
 
-                                    collidesAir = true;
-                                    lifetime = 87f;
+                    lineEffect = new Effect(20f, e -> {
+                        if(!(e.data instanceof Vec2 v)) return;
+                        z(Layer.bullet);
+                        color(e.color);
+                        stroke(e.fout() * 1.5f + 1f);
 
-                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                    keepVelocity = false;
-                                    weaveMag = 2f;
-                                    weaveScale = 1f;
-                                    speed = 0.8f;
-                                    drag = -0.020f;
-                                    homingPower = 0.01f;
+                        Fx.rand.setSeed(e.id);
+                        for(int i = 0; i < 7; i++){
+                            Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+                            Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+                        }
 
-                                    splashDamage = 10f;
-                                    splashDamageRadius = 10f;
-                                }};
-
-                                shootEffect = new ExplosionEffect(){{
-                                    lifetime = 50f;
-                                    waveStroke = 5f;
-                                    waveLife = 8f;
-                                    waveColor = Color.white;
-                                    sparkColor = smokeColor = SvPal.heatGlow;
-                                    waveRad = 40f;
-                                    smokeSize = 4f;
-                                    smokes = 7;
-                                    smokeSizeBase = 0f;
-                                    sparks = 10;
-                                    sparkRad = 40f;
-                                    sparkLen = 6f;
-                                    sparkStroke = 2f;
-                                }};
-                            }};
-                        }});
-                    }};
+                        e.scaled(14f, b -> {
+                            stroke(b.fout() * 3f);
+                            color(e.color);
+                            Lines.line(e.x, e.y, v.x, v.y);
+                        });
+                    });
                 }};
             }});
         }};
 
         callees = new HelicopterUnitType("callees"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.6f;
-            rotateSpeed = 4f;
+            speed = 1.4f;
+            rotateSpeed = 2f;
             researchCostMultiplier = 0f;
             accel = 0.45f;
-            health = 8820f;
+            health = HELIO_T4_HU;
 
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 45f;
-            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
-                    mirror = true;
-                    layer = Layer.flyingUnitLow;
-                    xScl = 1.2f;
-                    yScl = 1.2f;
-                    x = 16.5f;
-                    y = -0.15f;
-                    rotationSpeed = 400f;
+
+            rotateMoveFirst = true;
+
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 2f;
+                yScl = 2f;
+                y = 2f;
+                rotationSpeed = 400f;
+
+                mirror = true;
+
+                x = 16f;
             }};
 
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
-            };
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnitLow;
+                xScl = 1.25f;
+                yScl = 1.25f;
+                y = -18f;
+                rotationSpeed = 800f;
+            }};
 
-            parts.add(copter);
-            abilities.add(new SuppressionFieldAbility(){{
-                layer = Layer.flyingUnitLow - 1;
-                orbRadius = 0.65f;
-                y = 6f;
+            parts.addAll(copter, tail);
 
-                color = SvPal.heatGlow;
-                particleColor = SvPal.suppresion;
+            abilities.add(new ShieldArcAbility() {{
+                radius = hitSize;
+                regen = 0.1f;
+                max = 200f;
+                cooldown = 10f * 60f;
+                angle = 80f;
+                angleOffset = 100f;
+                whenShooting = true;
+                width = 10f;
+            }},new ShieldArcAbility() {{
+                radius = hitSize;
+                regen = 0.1f;
+                max = 200f;
+                cooldown = 10f * 60f;
+                angle = 80f;
+                angleOffset = -100f;
+                whenShooting = true;
+                width = 10f;
             }});
 
             trailLength = 20;
             trailScl = 1.9f;
-            setEnginesMirror(
-                new UnitEngine(7.2f, -15, 2.25f, -90)
-            );
+
+            float BPS = 2f * 2f;
+            float bulletDamage = HELIO_T4_DPS/BPS;
 
             weapons.add(new Weapon(name + "-weapon"){{
-                top = false;
-                x = 13f;
-                y = 8f;
-                shoot.shots = 3;
-                shoot.shotDelay = 12f;
+                top = true;
 
-                reload = 160f;
+                reload = 90f;
                 recoil = 2f;
 
                 rotate = true;
-                rotateSpeed = 0.4f;
-                layerOffset = -2f;
-                rotationLimit = 22f;
-                minWarmup = 0.95f;
-                shootWarmupSpeed = 0.1f;
-                inaccuracy = 28f;
-                shootCone = 40f;
+                rotateSpeed = 0f;
+                rotationLimit = 0f;
 
-                shootSound = Sounds.missileLaunch;
-                parts.add(new RegionPart("-blade"){{
-                    heatProgress = PartProgress.warmup;
-                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = SvPal.heatGlow;
-                    x = 5 / 4f;
-                    y = 0f;
-                    moveRot = -33f;
-                    moveY = -1f;
-                    moveX = -1f;
-                    under = true;
-                    mirror = true;
-                }});
+                mirror = false;
+                x = 0f;
+                y = 5f;
 
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    smokeEffect = Fx.shootSmokeTitan;
-                    hitColor = Pal.suppress;
-                    shake = 1f;
-                    speed = 0f;
-                    keepVelocity = false;
-                    collidesAir = true;
-                    spawnUnit = new MissileUnitType("callees-missile"){{
-                        outlineColor = Pal.darkOutline;
-                        trailRotation = true;
-                        targetAir = true;
-                        physics = true;
-                        lowAltitude = true;
+                shootSound = SvSounds.poweredMissileShoot;
 
-                        hitEffect = despawnEffect = Fx.blastExplosion;
-                        smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmokeSmall;
-                        trailInterval = 3f;
-                        trailWidth = 1f;
-                        trailLength = 6;
+                bullet = new BasicBulletType(4f, bulletDamage*0.2f){{
+                    knockback = 4f;
+                    width = 25f;
+                    hitSize = 20f;
+                    height = 20f;
+                    sprite = "shell";
+                    shootEffect = Fx.shootBigColor;
+                    smokeEffect = Fx.shootSmokeSquareSparse;
+                    ammoMultiplier = 1;
+                    hitColor = backColor = trailColor = SvPal.heatGlow;
+                    frontColor = SvPal.heatGlow;
+                    trailWidth = 8f;
+                    trailLength = 10;
+                    trailInterp = Interp.fade;
+                    hitEffect = despawnEffect = Fx.hitSquaresColor;
+                    buildingDamageMultiplier = 0.2f;
 
-                        speed = 4.6f;
-                        maxRange = 3f;
-                        health = 40;
-                        homingDelay = 5f;
+                    fragBullets = 1;
+                    fragVelocityMin = fragSpread = fragRandomSpread = fragVelocityMax = 0;
 
-                        engineSize = 3f;
-                        hitColor = engineColor = trailColor = SvPal.heatGlow;
-                        engineLayer = Layer.effect;
-                        deathExplosionEffect = Fx.none;
-                        loopSoundVolume = 0.1f;
-                        weapons.add(new Weapon(){{
-                            shootCone = 360f;
-                            mirror = false;
-                            reload = 1f;
-                            shootOnDeath = true;
-                            bullet = new ExplosionBulletType(150, 25f){{
-                                collidesAir = true;
-                                suppressionRange = 80f;
-                                shootEffect = new ExplosionEffect(){{
+                    pierce = true;
+
+                    fragBullet = new ExplosionBulletType(bulletDamage*0.75f, 50f){{
+                        collidesAir = true;
+                        suppressionRange = 10f;
+
+                        killShooter = false;
+
+                        despawnSound = SvSounds.flashExplosion;
+                        despawnEffect = new MultiEffect(
+                                SvFx.colorRadExplosion.get(new Object[] {SvPal.heatGlow,50f}),
+                                new ExplosionEffect(){{
                                     lifetime = 50f;
                                     waveStroke = 5f;
                                     waveLife = 8f;
                                     waveColor = Color.white;
                                     sparkColor = smokeColor = SvPal.heatGlow;
-                                    waveRad = 40f;
+                                    waveRad = 35f;
                                     smokeSize = 4f;
                                     smokes = 7;
                                     smokeSizeBase = 0f;
@@ -856,317 +840,389 @@ public class SvUnits{
                                     sparkRad = 40f;
                                     sparkLen = 6f;
                                     sparkStroke = 2f;
-                                }};
-                            }};
-                        }});
+                                }});
                     }};
+
+                    lifetime = 40f;
                 }};
+
+                shoot = new ShootSpreadForwardBackwards(6, 5f);
             }});
         }};
 
         ganymede = new HelicopterUnitType("ganymede"){{
-            aiController = FlyingAI::new;
             constructor = HelicopterUnitEntity::create;
-            drag = 0.16f;
-            speed = 1.8f;
-            rotateSpeed = 3f;
+            speed = 1.3f;
+            rotateSpeed = 1f;
             accel = 0.45f;
-            health = 18820f;
+            health = HELIO_T5_HU;
             researchCostMultiplier = 0f;
+
+            lowAltitude = false;
 
             engineOffset = -7.5f;
             engineSize = 0;
             hitSize = 64f;
-            RotatorRegionPart copter = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
+            SpinningBlurRegionPart copter = new SpinningBlurRegionPart(){{
                 mirror = true;
-                layer = Layer.flyingUnitLow;
-                xScl = 1.6f;
-                yScl = 1.6f;
-                x = 23.5f;
-                y = -2.75f;
+                layer = Layer.flyingUnit;
+                xScl = 2f;
+                yScl = 2f;
+                x = 24f;
+                y = 0f;
                 rotationSpeed = 400f;
             }};
 
-            RotatorRegionPart tail = new RotatorRegionPart(SubvoyageMod.ID + "-medium-rotator"){{
-                layer = Layer.flyingUnitLow;
-                xScl = 0.8f;
-                yScl = 0.8f;
-                y = -33.25f;
+            SpinningBlurRegionPart tail = new SpinningBlurRegionPart(){{
+                layer = Layer.flyingUnit;
+                xScl = 1.5f;
+                yScl = 1.5f;
+                y = -27f;
                 rotationSpeed = 400f;
             }};
 
-            onDraw = (e) -> {
-                copter.unitRot = e.rotation();
-                copter.unitX = e.x;
-                copter.unitY = e.y;
+            float orbRad = 10f, partRad = 3f;
+            int pa = 10;
 
-                tail.unitRot = e.rotation();
-                tail.unitX = e.x;
-                tail.unitY = e.y;
-            };
-
-            parts.add(copter, tail);
             abilities.add(new SuppressionFieldAbility(){{
-                layer = Layer.flyingUnitLow - 1;
-                orbRadius = 0.65f;
-                y = 18f;
+                orbRadius = orbRad;
+                particleSize = partRad;
+                y = 92/4f-320/32f;
+                particles = pa;
 
                 color = SvPal.heatGlow;
-                particleColor = SvPal.suppresion;
+                particleColor = Pal.lightOrange.cpy();
             }});
+
+            parts.add(copter, tail);
+
+            float mainWeaponBPS = 0.25f*6f;
+            float mainWeaponDamage = (HELIO_T5_DPS*0.75f)/mainWeaponBPS;
+
+            float subWeaponBPS = 3f*2f;
+            float subWeaponDamage = (HELIO_T5_DPS*0.25f)/subWeaponBPS;
 
             trailLength = 20;
             trailScl = 1.9f;
-            setEnginesMirror(
-            new UnitEngine(14f, -20, 2.75f, -90)
-            );
 
-            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
-                top = false;
-                mirror = true;
-                alternate = false;
-
-                x = 12f;
-                y = -12.25f;
-
-                reload = 40f;
-                targetInterval = 10f;
-                targetSwitchInterval = 15f;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.disperseTrail;
-                    hitEffect = Fx.pointHit;
-                    maxRange = 100f;
-                    damage = 18f;
-                }};
-            }});
-
-            weapons.add(new PointDefenseWeapon(name + "-point-defense"){{
-                top = false;
-                mirror = true;
-                alternate = false;
-                x = 12f;
-                y = 21f;
-
-                reload = 40f;
-                targetInterval = 10f;
-                targetSwitchInterval = 15f;
-                bullet = new BulletType(){{
-                    shootEffect = Fx.disperseTrail;
-                    hitEffect = Fx.pointHit;
-                    maxRange = 100f;
-                    damage = 18f;
-                }};
-            }});
-
-            weapons.add(new Weapon(SubvoyageMod.ID + "-beam-weapon"){{
-                shadow = 20f;
-                controllable = false;
-                autoTarget = true;
+            weapons.add(new Weapon(name + "-big-weapon"){{
                 mirror = false;
-                shake = 3f;
-                shootY = 7f;
-                rotate = true;
+                shootY = 4f;
+                rotate = false;
+
                 x = 0;
-                y = 4f;
+                y = 33f;
+
+                parts.add(new RegionPart("-blade") {{
+                    mirror = true;
+                    y = 0f;
+                    x = 8f;
+                }});
 
                 targetInterval = 20f;
                 targetSwitchInterval = 35f;
 
                 rotateSpeed = 3.5f;
-                reload = 170f;
+                reload = 4*60f;
                 recoil = 1f;
-                shootSound = Sounds.beam;
-                continuous = true;
-                cooldownTime = reload;
-                immunities.add(StatusEffects.burning);
-                bullet = new ContinuousLaserBulletType(){{
-                    maxRange = 90f;
-                    damage = 22f;
-                    length = 95f;
-                    hitEffect = Fx.smeltsmoke;
-                    drawSize = 200f;
-                    lifetime = 155f;
-                    shake = 1f;
+                shootSound = SvSounds.poweredMissileShoot;
 
-                    shootEffect = Fx.shootHeal;
-                    smokeEffect = Fx.none;
-                    width = 4f;
-                    largeHit = false;
+                bullet = new BasicBulletType(5f,mainWeaponDamage*0.1f) {{
+                    sprite = "circle-bullet";
+                    backColor = SvPal.heatGlow;
+                    frontColor = Color.white;
+                    width = height = 10f;
+                    shrinkY = 0f;
+                    trailLength = 20;
+                    trailWidth = 7f;
+                    trailColor = SvPal.heatGlow;
+                    trailInterval = 3f;
 
-                    incendChance = 0.03f;
-                    incendSpread = 5f;
-                    incendAmount = 1;
-                    colors = new Color[]{SvPal.heatGlow.a(.2f), SvPal.heatGlow.a(.5f), SvPal.heatGlow.mul(1.2f), Color.white};
+                    shake = 5f;
+
+                    fragBullets = 5;
+                    fragBullet = new BulletType(){{
+                        shootEffect = Fx.sparkShoot;
+                        smokeEffect = Fx.shootSmokeTitan;
+                        hitColor = Pal.suppress;
+                        shake = 1f;
+                        speed = 0f;
+                        keepVelocity = false;
+                        collidesAir = true;
+                        spawnUnit = new MissileUnitType("ganymede-missile"){{
+                            outlineColor = Pal.darkOutline;
+                            trailRotation = true;
+                            targetAir = true;
+                            physics = true;
+                            lowAltitude = true;
+
+                            lifetime = 20f;
+
+                            hitEffect = despawnEffect = Fx.blastExplosion;
+                            smokeEffect = SvFx.shootLauncher;
+                            trailEffect = SvFx.missileTrailSmokeSmall;
+                            trailInterval = 3f;
+                            trailWidth = 1f;
+                            trailLength = 6;
+
+                            speed = 4.6f;
+                            maxRange = 3f;
+                            health = 40;
+                            homingDelay = 5f;
+
+                            engineSize = 3f;
+                            hitColor = engineColor = trailColor = SvPal.heatGlow;
+                            engineLayer = Layer.effect;
+                            deathExplosionEffect = Fx.none;
+                            loopSoundVolume = 0.1f;
+
+                            weapons.add(new Weapon(){{
+                                shootCone = 360f;
+                                mirror = false;
+                                reload = 1f;
+                                shootOnDeath = true;
+                                bullet = new EmpBulletType(){{
+                                    float rad = 8*3f;
+
+                                    fragBullets = 1;
+                                    fragBullet = new EmpBulletType(){{
+                                        float rad = 8*4f;
+
+                                        scaleLife = true;
+                                        lightOpacity = 0.7f;
+                                        unitDamageScl = 1.1f;
+                                        healPercent = 0.2f;
+                                        timeIncrease = 3f;
+                                        timeDuration = 60f * 20f;
+                                        powerDamageScl = 1.1f;
+                                        damage = mainWeaponDamage*0.5f;
+                                        hitColor = lightColor = SvPal.heatGlow;
+                                        lightRadius = 8*4f;
+                                        clipSize = 8*5f;
+                                        shootEffect = new Effect(40, e -> {
+                                            color(SvPal.heatGlow);
+                                            stroke(e.fout() * 1.6f);
+
+                                            randLenVectors(e.id, 18, e.finpow() * 27f, e.rotation, 360f, (x, y) -> {
+                                                float ang = Mathf.angle(x, y);
+                                                lineAngle(e.x + x, e.y + y, ang, e.fout() * 6 + 1f);
+                                            });
+                                        });
+                                        smokeEffect = Fx.shootBigSmoke2;
+                                        lifetime = 30f;
+                                        sprite = "circle-bullet";
+                                        backColor = SvPal.heatGlow;
+                                        frontColor = Color.white;
+                                        width = height = 8f;
+                                        shrinkY = 0f;
+                                        speed = 0f;
+                                        trailLength = 20;
+                                        trailWidth = 3f;
+                                        trailColor = SvPal.heatGlow;
+                                        trailInterval = 3f;
+                                        splashDamage = 20f;
+                                        radius = rad;
+                                        splashDamageRadius = rad;
+                                        hitShake = 4f;
+                                        trailRotation = true;
+                                        trailInterp = Interp.fastSlow;
+                                        status = StatusEffects.electrified;
+                                        hitSound = Sounds.plasmaboom;
+
+                                        trailEffect = new Effect(16f, e -> {
+                                            color(SvPal.heatGlow);
+                                            for(int s : Mathf.signs){
+                                                Drawf.tri(e.x, e.y, 4f, 10f * e.fslope(), e.rotation + 90f*s);
+                                            }
+                                        });
+
+                                        hitEffect = new Effect(50f, 100f, e -> {
+                                            e.scaled(7f, b -> {
+                                                color(SvPal.heatGlow, b.fout());
+                                                Fill.circle(e.x, e.y, rad);
+                                            });
+
+                                            color(SvPal.heatGlow);
+                                            stroke(e.fout() * 3f);
+                                            Lines.circle(e.x, e.y, rad);
+
+                                            int points = 10;
+                                            float offset = Mathf.randomSeed(e.id, 360f);
+                                            for(int i = 0; i < points; i++){
+                                                float angle = i* 360f / points + offset;
+                                                //for(int s : Mathf.zeroOne){
+                                                Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, 10f * e.fout(), angle/* + s*180f*/);
+                                                Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, -20f * e.fout(), angle/* + s*180f*/);
+                                                //}
+                                            }
+
+                                            Fill.circle(e.x, e.y, 12f * e.fout());
+                                            color();
+                                            Fill.circle(e.x, e.y, 6f * e.fout());
+                                            Drawf.light(e.x, e.y, rad * 1.6f, SvPal.heatGlow, e.fout());
+                                        });
+                                    }};
+
+                                    scaleLife = true;
+                                    lightOpacity = 0.7f;
+                                    unitDamageScl = 1.1f;
+                                    healPercent = 0.2f;
+                                    timeIncrease = 3f;
+                                    timeDuration = 60f * 20f;
+                                    powerDamageScl = 1.1f;
+                                    damage = mainWeaponDamage*0.4f;
+                                    hitColor = lightColor = SvPal.heatGlow;
+                                    lightRadius = 8*4f;
+                                    clipSize = 8*5f;
+                                    shootEffect = new Effect(40, e -> {
+                                        color(SvPal.heatGlow);
+                                        stroke(e.fout() * 1.6f);
+
+                                        randLenVectors(e.id, 18, e.finpow() * 27f, e.rotation, 360f, (x, y) -> {
+                                            float ang = Mathf.angle(x, y);
+                                            lineAngle(e.x + x, e.y + y, ang, e.fout() * 6 + 1f);
+                                        });
+                                    });
+                                    smokeEffect = Fx.shootBigSmoke2;
+                                    lifetime = 0f;
+                                    sprite = "circle-bullet";
+                                    backColor = SvPal.heatGlow;
+                                    frontColor = Color.white;
+                                    width = height = 8f;
+                                    shrinkY = 0f;
+                                    speed = 0f;
+                                    trailLength = 20;
+                                    trailWidth = 3f;
+                                    trailColor = SvPal.heatGlow;
+                                    trailInterval = 3f;
+                                    splashDamage = 20f;
+                                    radius = rad;
+                                    splashDamageRadius = rad;
+                                    hitShake = 4f;
+                                    trailRotation = true;
+                                    trailInterp = Interp.fastSlow;
+                                    status = StatusEffects.electrified;
+                                    hitSound = SvSounds.flashExplosion;
+
+                                    trailEffect = new Effect(16f, e -> {
+                                        color(SvPal.heatGlow);
+                                        for(int s : Mathf.signs){
+                                            Drawf.tri(e.x, e.y, 4f, 10f * e.fslope(), e.rotation + 90f*s);
+                                        }
+                                    });
+
+                                    hitEffect = new Effect(50f, 100f, e -> {
+                                        e.scaled(7f, b -> {
+                                            color(SvPal.heatGlow, b.fout());
+                                            Fill.circle(e.x, e.y, rad);
+                                        });
+
+                                        color(SvPal.heatGlow);
+                                        stroke(e.fout() * 3f);
+                                        Lines.circle(e.x, e.y, rad);
+
+                                        int points = 10;
+                                        float offset = Mathf.randomSeed(e.id, 360f);
+                                        for(int i = 0; i < points; i++){
+                                            float angle = i* 360f / points + offset;
+                                            //for(int s : Mathf.zeroOne){
+                                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, 10f * e.fout(), angle/* + s*180f*/);
+                                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, -20f * e.fout(), angle/* + s*180f*/);
+                                            //}
+                                        }
+
+                                        Fill.circle(e.x, e.y, 12f * e.fout());
+                                        color();
+                                        Fill.circle(e.x, e.y, 6f * e.fout());
+                                        Drawf.light(e.x, e.y, rad * 1.6f, SvPal.heatGlow, e.fout());
+                                    });
+                                }};
+                            }});
+                        }};
+                    }};
                 }};
             }});
 
             weapons.add(new Weapon(name + "-weapon"){{
                 top = false;
-                x = 23f;
-                y = 12f;
-                shoot.shots = 5;
-                shoot.shotDelay = 12f;
+                alternate = false;
 
-                reload = 360f;
+                x = 29f;
+                y = 16f;
+
+                shootX = -2f;
+
+                cooldownTime = 0f;
+                reload = 10f;
                 recoil = 2f;
 
-                rotate = true;
+                rotate = false;
                 rotateSpeed = 0.4f;
-                layerOffset = -2f;
                 rotationLimit = 22f;
-                minWarmup = 0.95f;
-                shootWarmupSpeed = 0.1f;
-                inaccuracy = 28f;
-                shootCone = 40f;
+                shootCone = 360f;
 
-                shootSound = Sounds.missileLaunch;
-                parts.add(new RegionPart("-blade"){{
-                    heatProgress = PartProgress.warmup;
-                    progress = PartProgress.warmup.blend(PartProgress.reload, 0.15f);
-                    heatColor = SvPal.heatGlow;
-                    x = 5 / 4f;
-                    y = 0f;
-                    moveRot = -33f;
-                    moveY = -1f;
-                    moveX = -1f;
-                    under = true;
-                    mirror = true;
-                }});
+                shootSound = Sounds.bolt;
 
-                bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
-                    smokeEffect = Fx.shootSmokeTitan;
-                    hitColor = Pal.suppress;
-                    shake = 1f;
-                    speed = 0f;
-                    keepVelocity = false;
-                    collidesAir = true;
-                    spawnUnit = new MissileUnitType("ganymede-missile"){{
-                        outlineColor = Pal.darkOutline;
-                        trailRotation = true;
-                        targetAir = true;
-                        physics = true;
-                        lowAltitude = true;
+                shoot = new ShootBarrel() {{
+                    barrels = new float[] {
+                            -4f, 1f, -10f,
+                            -2f, 0.5f, 10f,
+                            0f, 0f, 0f,
+                            2f, 0.5f, -10f,
+                            4f, 1f, 10f
+                    };
+                }};
 
-                        hitEffect = despawnEffect = Fx.blastExplosion;
-                        smokeEffect = SvFx.shootLauncher;
-                        trailEffect = SvFx.missileTrailSmokeSmall;
-                        trailInterval = 3f;
-                        trailWidth = 1f;
-                        trailLength = 6;
+                bullet = new RailBulletType() {{
+                    length = 8*10f;
+                    damage = subWeaponDamage;
 
-                        speed = 4.6f;
-                        maxRange = 3f;
-                        health = 40;
-                        homingDelay = 5f;
+                    hitColor = SvPal.heatGlow;
+                    hitEffect = endEffect = Fx.hitBulletColor;
+                    pierceDamageFactor = 1.05f;
+                    pointEffectSpace = 60f;
 
-                        engineSize = 3f;
-                        hitColor = engineColor = trailColor = SvPal.heatGlow;
-                        engineLayer = Layer.effect;
-                        deathExplosionEffect = Fx.none;
-                        loopSoundVolume = 0.1f;
-                        weapons.add(new Weapon(){{
-                            shootCone = 360f;
-                            mirror = false;
-                            reload = 1f;
-                            shootOnDeath = true;
-                            bullet = new ExplosionBulletType(250, 50f){{
-                                collidesAir = true;
-                                suppressionRange = 80f;
+                    smokeEffect = Fx.colorSpark;
 
+                    endEffect = new Effect(14f, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        Drawf.tri(e.x, e.y, e.fout() * 1.5f, 5f, e.rotation);
+                    });
 
-                                fragBullets = 2;
-                                fragBullet = new BasicBulletType(10f,3f) {{
-                                    sprite = "missile-large";
-                                    width = height = 8f;
-                                    maxRange = 50f;
-                                    ignoreRotation = true;
+                    shootEffect = new Effect(10, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        float w = 1.2f + 7 * e.fout();
 
-                                    hitColor = trailColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    trailWidth = 2f;
-                                    trailLength = 8;
-                                    hitEffect = despawnEffect = Fx.blastExplosion;
-                                    smokeEffect = SvFx.shootLauncher;
-                                    hitSound = Sounds.plasmaboom;
+                        Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+                        color(e.color);
 
-                                    backColor = SvPal.heatGlow;
-                                    frontColor = Color.white;
-                                    mixColorTo = Color.white;
+                        for(int i : Mathf.signs){
+                            Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                        }
 
-                                    ejectEffect = Fx.none;
-                                    hitSize = 22f;
+                        Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+                    });
 
-                                    collidesAir = true;
-                                    lifetime = 30f;
+                    lineEffect = new Effect(20f, e -> {
+                        if(!(e.data instanceof Vec2 v)) return;
+                        z(Layer.bullet);
+                        color(e.color);
+                        stroke(e.fout() * 1.5f + 1f);
 
-                                    hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                    keepVelocity = false;
-                                    weaveMag = 2f;
-                                    weaveScale = 1f;
-                                    speed = 0.8f;
-                                    drag = -0.020f;
-                                    homingPower = 0.01f;
+                        Fx.rand.setSeed(e.id);
+                        for(int i = 0; i < 7; i++){
+                            Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+                            Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+                        }
 
-                                    fragBullets = 10;
-                                    fragBullet = new BasicBulletType(20f,3f) {{
-                                        sprite = "missile-large";
-                                        width = height = 8f;
-                                        maxRange = 50f;
-                                        ignoreRotation = true;
-
-                                        hitColor = trailColor = SvPal.heatGlow;
-                                        frontColor = Color.white;
-                                        trailWidth = 2f;
-                                        trailLength = 8;
-                                        hitEffect = despawnEffect = Fx.blastExplosion;
-                                        smokeEffect = SvFx.shootLauncher;
-                                        hitSound = Sounds.plasmaboom;
-
-                                        backColor = SvPal.heatGlow;
-                                        frontColor = Color.white;
-                                        mixColorTo = Color.white;
-
-                                        ejectEffect = Fx.none;
-                                        hitSize = 22f;
-
-                                        collidesAir = true;
-                                        lifetime = 30f;
-
-                                        hitEffect = new MultiEffect(Fx.blastExplosion, Fx.smokeCloud);
-                                        keepVelocity = false;
-                                        weaveMag = 2f;
-                                        weaveScale = 1f;
-                                        speed = 0.8f;
-                                        drag = -0.020f;
-                                        homingPower = 0.01f;
-
-                                        splashDamage = 20f;
-                                        splashDamageRadius = 10f;
-                                    }};
-
-                                    splashDamage = 20f;
-                                    splashDamageRadius = 10f;
-                                }};
-
-                                shootEffect = new ExplosionEffect(){{
-                                    lifetime = 50f;
-                                    waveStroke = 5f;
-                                    waveLife = 8f;
-                                    waveColor = Color.white;
-                                    sparkColor = smokeColor = SvPal.heatGlow;
-                                    waveRad = 40f;
-                                    smokeSize = 4f;
-                                    smokes = 7;
-                                    smokeSizeBase = 0f;
-                                    sparks = 10;
-                                    sparkRad = 40f;
-                                    sparkLen = 6f;
-                                    sparkStroke = 2f;
-                                }};
-                            }};
-                        }});
-                    }};
+                        e.scaled(14f, b -> {
+                            stroke(b.fout() * 3f);
+                            color(e.color);
+                            Lines.line(e.x, e.y, v.x, v.y);
+                        });
+                    });
                 }};
             }});
         }};
@@ -1176,15 +1232,16 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
             rotateSpeed = 8f;
-            health = 1500;
+            armor = 4;
+            health = HYDRO_T1_HU;
             hitSize = 15f;
             withStates(
-                    HydromechState.GROUND,new UnitStatState() {{
-                        speed = 0.8f;
+                    HydromechState.GROUND,new HydromechStateStats() {{
+                        speed = 1.1f;
                         inwardsDamageMul = 1.2f;
                     }},
-                    HydromechState.WATER,new UnitStatState() {{
-                        speed = 1.6f;
+                    HydromechState.WATER,new HydromechStateStats() {{
+                        speed = 1.8f;
                     }}
             );
 
@@ -1204,6 +1261,10 @@ public class SvUnits{
             shadowElevation = 0.1f;
             groundLayer = Layer.legUnit - 1f;
             targetAir = true;
+
+            float BPS = 3f;
+            float weaponDamage = HYDRO_T1_DPS/BPS;
+
             weapons.add(new HydromechWeapon(name + "-weapon") {{
                 shoot = new ShootLeeft() {{shots = 2;}};
                 reload = 40f;
@@ -1219,15 +1280,15 @@ public class SvUnits{
                 soundPitchMin = 0.5f;
                 soundPitchMax = 0.55f;
 
-                groundStat = new WeaponStatState() {{
-                    damage = 18f;
+                groundStat = new HydromechWeaponStateStats() {{
+                    damage = weaponDamage;
                     lifetime = 40f;
                 }};
-                waterStat = new WeaponStatState() {{
-                    damage = 18f;
+                waterStat = new HydromechWeaponStateStats() {{
+                    damage = weaponDamage;
                     lifetime = 68f;
                 }};
-                bullet = new DecayingBulletType(4f,18f,9f) {{
+                bullet = new DecayingBulletType(4f,weaponDamage,2f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
                     hitColor = backColor = trailColor = Pal.missileYellow;
@@ -1245,14 +1306,14 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.07f;
             rotateSpeed = 8f;
-            health = 3220;
+            health = HYDRO_T2_HU;
             hitSize = 20f;
             researchCostMultiplier = 0;
             withStates(
-                    HydromechState.GROUND,new UnitStatState() {{
+                    HydromechState.GROUND,new HydromechStateStats() {{
                         speed = 0.8f;
                     }},
-                    HydromechState.WATER,new UnitStatState() {{
+                    HydromechState.WATER,new HydromechStateStats() {{
                         speed = 1.6f;
                         inwardsDamageMul = 1.2f;
                     }}
@@ -1297,7 +1358,7 @@ public class SvUnits{
                 rotate = false;
                 shootY = 0f;
                 beamWidth = 0.7f;
-                repairSpeed = 0.3f;
+                repairSpeed = 0.03f;
                 aimDst = 0f;
                 shootCone = 15f;
                 mirror = false;
@@ -1315,6 +1376,10 @@ public class SvUnits{
                     maxRange = 60f;
                 }};
             }});
+
+            float BPS = 2f * 2.25f;
+            float weaponDamage = HYDRO_T2_DPS/BPS;
+
             weapons.add(new HydromechWeapon(name + "-weapon") {{
                 shoot = new ShootLeeft() {{shots = 3;}};
                 reload = 40f;
@@ -1332,16 +1397,16 @@ public class SvUnits{
                 sclX = 1.65f;
                 sclY = 1.5f;
 
-                groundStat = new WeaponStatState() {{
+                groundStat = new HydromechWeaponStateStats() {{
                     lifetime = 50;
-                    damage = 25f;
+                    damage = weaponDamage;
                 }};
-                waterStat = new WeaponStatState() {{
+                waterStat = new HydromechWeaponStateStats() {{
                     lifetime = 78;
-                    damage = 9f;
+                    damage = weaponDamage*0.85f;
                 }};
 
-                bullet = new DecayingBulletType(4f,9f,4f) {{
+                bullet = new DecayingBulletType(4f,weaponDamage,4f) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
                     hitColor = backColor = trailColor = Pal.missileYellow;
@@ -1360,7 +1425,7 @@ public class SvUnits{
             drag = 0.14f;
             rotateSpeed = 5f;
             researchCostMultiplier = 0f;
-            health = 6220;
+            health = HYDRO_T3_HU;
             hitSize = 20f;
 
             waveTrailX = 8f;
@@ -1372,11 +1437,11 @@ public class SvUnits{
             accel = 0.4f;
 
             withStates(
-            HydromechState.GROUND, new UnitStatState(){{
+            HydromechState.GROUND, new HydromechStateStats(){{
                 speed = 0.6f;
                 inwardsDamageMul = 0.6f;
             }},
-            HydromechState.WATER, new UnitStatState(){{
+            HydromechState.WATER, new HydromechStateStats(){{
                 speed = 0.9f;
                 inwardsDamageMul = 0.8f;
             }}
@@ -1421,6 +1486,12 @@ public class SvUnits{
                         heatColor = Color.red;
                         mirror = true;
                     }});
+
+            float BPSWater = 0.25f;
+            float BPSGround = 0.6f;
+
+            float waterDamage = HYDRO_T3_DPS/BPSWater*0.6f;
+            float groundDamage = HYDRO_T3_DPS/BPSGround;
 
             weapons.add(new HydromechWeapon() {{
                 reload = 240f;
@@ -1499,7 +1570,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(50f, 50f){{
+                            bullet = new ExplosionBulletType(waterDamage, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
@@ -1552,7 +1623,6 @@ public class SvUnits{
                 cooldownTime = reload;
 
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -1613,7 +1683,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(90, 50f){{
+                            bullet = new ExplosionBulletType(groundDamage, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootEffect = new ExplosionEffect(){{
@@ -1651,32 +1721,13 @@ public class SvUnits{
                     };
                 }};
             }});
-
-            weapons.add(new HydromechWeapon(name+"-hydrogun") {{
-                autoTarget = true;
-                controllable = false;
-                rotate = true;
-
-                x = 0f;
-                y = -2f;
-                mirror = false;
-                cooldownTime = 1f;
-                hasHeat = false;
-                rotateSpeed = 5f;
-                alwaysShootWhenMoving = true;
-                recoil = 0.1f;
-
-                shootSound = Sounds.none;
-
-                bullet = new LiquidBulletType(Liquids.water);
-            }});
         }};
 
         squadron = new HydromechUnitType("squadron"){{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 7260;
+            health = HYDRO_T4_HU;
             researchCostMultiplier = 0f;
             hitSize = 32f;
 
@@ -1691,15 +1742,20 @@ public class SvUnits{
             accel = 1f;
 
             withStates(
-            HydromechState.GROUND, new UnitStatState(){{
+            HydromechState.GROUND, new HydromechStateStats(){{
                 speed = 0.5f;
                 inwardsDamageMul = 1.1f;
             }},
-            HydromechState.WATER, new UnitStatState(){{
+            HydromechState.WATER, new HydromechStateStats(){{
                 speed = 0.6f;
                 inwardsDamageMul = 1f;
             }}
             );
+            float BPSWater = 3f;
+            float BPSGround = 2f;
+
+            float damageWater = HYDRO_T4_DPS/BPSWater;
+            float damageGround = HYDRO_T4_DPS/BPSGround;
 
             weapons.add(new HydromechWeapon(name + "-weapon"){
                 {
@@ -1717,7 +1773,6 @@ public class SvUnits{
                     layerOffset = 0.015f;
 
                     bullet = new BulletType(){{
-                        shootEffect = Fx.sparkShoot;
                         smokeEffect = Fx.shootSmokeTitan;
 
                         hitColor = Pal.suppress;
@@ -1788,7 +1843,7 @@ public class SvUnits{
                                 mirror = false;
                                 reload = 1f;
                                 shootOnDeath = true;
-                                bullet = new ExplosionBulletType(90, 50f){{
+                                bullet = new ExplosionBulletType(damageGround, 50f){{
                                     collidesAir = true;
                                     suppressionRange = 80f;
                                     shootSound = SvSounds.flashExplosion;
@@ -1830,7 +1885,6 @@ public class SvUnits{
                     }};
 
                     parts.add(new RegionPart("-blade"){{
-                        //todo barrel rotating
                         outlineLayerOffset = -0.001f;
                         layerOffset = 0.01f;
                         outline = true;
@@ -1888,7 +1942,6 @@ public class SvUnits{
                 layerOffset = 0.015f;
 
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -1959,7 +2012,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(80, 30f){{
+                            bullet = new ExplosionBulletType(damageWater, 30f){{
                                 collidesAir = true;
                                 suppressionRange = 10f;
                                 shootSound = SvSounds.flashExplosion;
@@ -2000,7 +2053,6 @@ public class SvUnits{
                     };
                 }};
                 parts.add(new RegionPart("-blade"){{
-                    //todo barrel rotating
                     outlineLayerOffset = -0.001f;
                     layerOffset = 0.01f;
                     outline = true;
@@ -2073,7 +2125,7 @@ public class SvUnits{
             constructor = HydromechUnitEntity::create;
             drag = 0.14f;
             rotateSpeed = 2f;
-            health = 20060;
+            health = HYDRO_T5_HU;
             hitSize = 32f;
             researchCostMultiplier = 0f;
 
@@ -2096,6 +2148,13 @@ public class SvUnits{
                 width = 6f;
                 whenShooting = false;
             }});
+
+            float BPS1 = 3*2f;
+            float BPS2 = 0.15f*5f*2f;
+
+            float damage1 = HYDRO_T5_DPS*0.2f/BPS1;
+            float damage2 = HYDRO_T5_DPS*0.8f/BPS2;
+
             weapons.add(new HydromechWeapon(leeft.name+"-weapon") {{
                 shoot = new ShootLeeft() {{shots = 2;}};
                 reload = 20f;
@@ -2113,15 +2172,15 @@ public class SvUnits{
                 soundPitchMin = 0.5f;
                 soundPitchMax = 0.55f;
 
-                groundStat = new WeaponStatState() {{
+                groundStat = new HydromechWeaponStateStats() {{
                     damage = 18f;
-                    lifetime = 40f;
+                    lifetime = damage1;
                 }};
-                waterStat = new WeaponStatState() {{
+                waterStat = new HydromechWeaponStateStats() {{
                     damage = 18f;
-                    lifetime = 68f;
+                    lifetime = damage1;
                 }};
-                bullet = new BasicBulletType(4f,60f) {{
+                bullet = new BasicBulletType(4f,damage1) {{
                     shootEffect = SvFx.pulverize;
                     smokeEffect = Fx.none;
                     hitColor = backColor = trailColor = SvPal.hydromech;
@@ -2135,7 +2194,6 @@ public class SvUnits{
             }});
             weapons.add(new HydromechWeapon(name+"-weapon") {{
                 layerOffset = -0.001f;
-                top = false;
                 x = 58/4f;
                 y = 8/4f;
                 rotate = true;
@@ -2152,7 +2210,6 @@ public class SvUnits{
 
                 heatColor = Color.red;
                 bullet = new BulletType(){{
-                    shootEffect = Fx.sparkShoot;
                     smokeEffect = Fx.shootSmokeTitan;
 
                     hitColor = Pal.suppress;
@@ -2223,7 +2280,7 @@ public class SvUnits{
                             mirror = false;
                             reload = 1f;
                             shootOnDeath = true;
-                            bullet = new ExplosionBulletType(120, 100f){{
+                            bullet = new ExplosionBulletType(damage2, 50f){{
                                 collidesAir = true;
                                 suppressionRange = 80f;
                                 shootSound = SvSounds.flashExplosion;
@@ -2232,7 +2289,6 @@ public class SvUnits{
                                 fragSpread = 90f;
                                 fragVelocityMin = fragVelocityMax = 1f;
                                 fragBullet = new BulletType() {{
-                                    shootEffect = Fx.sparkShoot;
                                     smokeEffect = Fx.shootSmokeTitan;
 
                                     hitColor = Pal.suppress;
@@ -2250,7 +2306,7 @@ public class SvUnits{
                                         physics = false;
                                         lowAltitude = true;
 
-                                        lifetime = 30f;
+                                        lifetime = 15f;
 
                                         hitEffect = despawnEffect = Fx.blastExplosion;
                                         smokeEffect = SvFx.shootLauncher;
@@ -2301,12 +2357,12 @@ public class SvUnits{
                                             mirror = false;
                                             reload = 1f;
                                             shootOnDeath = true;
-                                            bullet = new ExplosionBulletType(120, 100f){{
+                                            bullet = new ExplosionBulletType(damage2, 40f){{
                                                 collidesAir = true;
                                                 suppressionRange = 80f;
                                                 shootSound = SvSounds.flashExplosion;
                                                 shootEffect = new MultiEffect(
-                                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,100f}),
+                                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,40f}),
                                                         new ExplosionEffect(){{
                                                             lifetime = 50f;
                                                             waveStroke = 5f;
@@ -2342,7 +2398,7 @@ public class SvUnits{
                                     };
                                 }};
                                 shootEffect = new MultiEffect(
-                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,100f}),
+                                        SvFx.colorRadExplosion.get(new Object[] {SvPal.hydromech,50f}),
                                         new ExplosionEffect(){{
                                             lifetime = 50f;
                                             waveStroke = 5f;
@@ -2393,11 +2449,11 @@ public class SvUnits{
 
             accel = 1f;
             withStates(
-            HydromechState.GROUND, new UnitStatState(){{
+            HydromechState.GROUND, new HydromechStateStats(){{
                 speed = 0.5f;
                 inwardsDamageMul = 1.2f;
             }},
-            HydromechState.WATER, new UnitStatState(){{
+            HydromechState.WATER, new HydromechStateStats(){{
                 speed = 0.7f;
                 inwardsDamageMul = 1f;
             }}
@@ -2433,6 +2489,611 @@ public class SvUnits{
             groundLayer = Layer.legUnit + 1f;
             targetAir = true;
         }};
+        //rover
+        stunt = new RoverUnitType("stunt") {{
+            constructor = TankUnit::create;
+            itemCapacity = 5;
+
+            health = ROVER_T1_HU;
+            armor = 1f;
+            researchCostMultiplier = 0;
+            hitSize = 12;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 2f;
+            }});
+
+            speed = 1f;
+
+            treadPullOffset = 14;
+            treadRects = new Rect[] {
+                    new Rect(6-32f,14-32f,18,47)
+            };
+
+            float BPS = 1f*1.5f;
+            float damageMain = ROVER_T1_DPS/BPS*1f;
+            float damageSub = ROVER_T1_DPS/BPS*0f;
+
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 120f;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.8f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 5f;
+
+                shoot = new ShootStunt() {{
+                    shots = 2;
+                }};
+
+                range = 60;
+
+                bullet = new BasicBulletType(4f,damageSub) {{
+                    width = 12f;
+                    height = 12f;
+                    lifetime = 30f;
+                    hitSize = 12f;
+
+                    hitColor = backColor = trailColor = SvPal.phosphide;
+                    frontColor = SvPal.spaclanium;
+                    trailWidth = 5f;
+                    trailLength = 8;
+
+                    hitEffect = despawnEffect = Fx.trailFade;
+                    smokeEffect = SvFx.shootLauncher;
+
+                    hittable = false;
+                    collides = false;
+                    damage = 0;
+
+                    fragOnHit = true;
+                    fragOnAbsorb = false;
+                    fragAngle = 0f;
+                    fragSpread = 0;
+                    fragRandomSpread = 0f;
+                    fragVelocityMax = fragVelocityMin = 0;
+                    fragLifeMin = 1;
+                    fragBullets = 1;
+
+                    shootSound = Sounds.shootAlt;
+
+                    fragBullet = new BombBulletType(damageMain,20f) {{
+                        width = 12f;
+                        height = 12f;
+                        sprite = "large-bomb";
+                        despawnEffect = new Effect(40f, 100f, e -> {
+                            color(SvPal.phosphide);
+                            stroke(e.fout() * 2f);
+                            float circleRad = 4f + e.finpow() * 15f;
+                            Lines.circle(e.x, e.y, circleRad);
+                            color(SvPal.phosphide);
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 6f, 20f * e.fout(), i*90+e.rotation);
+                            }
+
+                            color();
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 3f, 10f * e.fout(), i*90+e.rotation);
+                            }
+
+                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                        });;
+                        shootEffect = Fx.none;
+                        smokeEffect = Fx.none;
+
+                        keepVelocity = false;
+
+                        shootSound = Sounds.laser;
+
+                        hitColor = backColor = trailColor = Pal.sap.cpy().a(0.7f);
+                        frontColor = SvPal.spaclanium.cpy().a(0.7f);
+
+                        status = StatusEffects.blasted;
+                        statusDuration = 60f;
+                        shrinkY = shrinkX = 0.5f;
+                    }};
+
+                    trailEffect = SvFx.missileTrailSmokeSmall;
+                    trailRotation = true;
+                    trailInterval = 3f;
+                }};
+            }});
+        }};
+
+        zeal = new RoverUnitType("zeal") {{
+            constructor = TankUnit::create;
+            itemCapacity = 5;
+
+            health = ROVER_T2_HU;
+            armor = 2f;
+            researchCostMultiplier = 0;
+            hitSize = 18;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 3f;
+            }});
+            abilities.add(new EnergyFieldAbility(10f, 65f, 5*8f) {{
+                statusDuration = 60f * 2f;
+                maxTargets = 5;
+                healPercent = 0.05f;
+                sameTypeHealMult = 1.25f;
+                effectRadius = 1f;
+                y = -4f;
+                color = SvPal.spaclanium;
+            }});
+
+            speed = 0.8f;
+
+            treadPullOffset = 3;
+
+            float BPS = 0.75f;
+            float damageMain = ROVER_T2_DPS/BPS;
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 80f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 12f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 0.7f;
+
+                shootSound = SvSounds.rifleShoot;
+
+                bullet = new EmpBulletType(){{
+                    float rad = 8*3f;
+
+                    scaleLife = true;
+                    lightOpacity = 0.7f;
+                    unitDamageScl = 1.1f;
+                    healPercent = 0.2f;
+                    timeIncrease = 3f;
+                    timeDuration = 60f * 20f;
+                    powerDamageScl = 1.1f;
+                    damage = damageMain;
+                    hitColor = lightColor = SvPal.spaclanium;
+                    lightRadius = 8*4f;
+                    clipSize = 8*5f;
+                    shootEffect = new Effect(40, e -> {
+                        color(SvPal.phosphide);
+                        stroke(e.fout() * 1.6f);
+
+                        randLenVectors(e.id, 18, e.finpow() * 27f, e.rotation, 360f, (x, y) -> {
+                            float ang = Mathf.angle(x, y);
+                            lineAngle(e.x + x, e.y + y, ang, e.fout() * 6 + 1f);
+                        });
+                    });
+                    smokeEffect = Fx.shootBigSmoke2;
+                    lifetime = 15f;
+                    sprite = "circle-bullet";
+                    backColor = SvPal.phosphide;
+                    frontColor = Color.white;
+                    width = height = 8f;
+                    shrinkY = 0f;
+                    speed = 4f;
+                    trailLength = 20;
+                    trailWidth = 3f;
+                    trailColor = SvPal.phosphide;
+                    trailInterval = 3f;
+                    splashDamage = damageMain;
+                    radius = rad;
+                    splashDamageRadius = rad;
+                    hitShake = 4f;
+                    trailRotation = true;
+                    trailInterp = Interp.fastSlow;
+                    status = StatusEffects.electrified;
+                    hitSound = SvSounds.flashExplosion;
+
+                    trailEffect = new Effect(16f, e -> {
+                        color(SvPal.phosphide);
+                        for(int s : Mathf.signs){
+                            Drawf.tri(e.x, e.y, 4f, 10f * e.fslope(), e.rotation + 90f*s);
+                        }
+                    });
+
+                    hitEffect = new Effect(50f, 100f, e -> {
+                        e.scaled(7f, b -> {
+                            color(SvPal.phosphide, b.fout());
+                            Fill.circle(e.x, e.y, rad);
+                        });
+
+                        color(SvPal.spaclanium);
+                        stroke(e.fout() * 3f);
+                        Lines.circle(e.x, e.y, rad);
+
+                        int points = 10;
+                        float offset = Mathf.randomSeed(e.id, 360f);
+                        for(int i = 0; i < points; i++){
+                            float angle = i* 360f / points + offset;
+                            //for(int s : Mathf.zeroOne){
+                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, 10f * e.fout(), angle/* + s*180f*/);
+                            Drawf.tri(e.x + Angles.trnsx(angle, rad), e.y + Angles.trnsy(angle, rad), 5f, -20f * e.fout(), angle/* + s*180f*/);
+                            //}
+                        }
+
+                        Fill.circle(e.x, e.y, 12f * e.fout());
+                        color();
+                        Fill.circle(e.x, e.y, 6f * e.fout());
+                        Drawf.light(e.x, e.y, rad * 1.6f, SvPal.spaclanium, e.fout());
+                    });
+                }};
+            }});
+
+            treadRects = new Rect[] {
+                    new Rect(13-48f,5-48f,17,88)
+            };
+        }};
+
+        gambit = new RoverUnitType("gambit") {{
+            constructor = TankUnit::create;
+            itemCapacity = 10;
+
+            health = ROVER_T3_HU;
+            armor = 4f;
+            researchCostMultiplier = 0;
+            hitSize = 26;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 4f;
+            }});
+
+            speed = 0.7f;
+            rotateSpeed = 1.8f;
+
+            treadPullOffset = 3;
+
+            canBoost = true;
+            boostMultiplier = 0.7f;
+
+            engineSize = 8f;
+            engineOffset = 40f/4f;
+
+            setEnginesMirror(new UnitEngine() {{
+                radius = 8f;
+                x = 0;
+                y = 40f/4f;
+            }});
+
+            float BPS = 0.5f*4f;
+            float damageMain = ROVER_T3_DPS/BPS;
+            weapons.add(new Weapon(name+"-weapon") {{
+                reload = 120f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 16f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                rotate = true;
+                rotateSpeed = 0.8f;
+
+                inaccuracy = 5f;
+
+                bullet = new BasicBulletType(4f,0f) {{
+                    collides = false;
+                    hittable = false;
+
+                    lifetime = 30f;
+                    fragBullets = 4;
+                    fragVelocityMin = fragVelocityMax = 1f;
+                    fragSpread = 360f/4f;
+                    fragRandomSpread = 0f;
+
+                    scaleLife = true;
+
+                    width = height = 16f;
+                    trailLength = 8;
+                    trailWidth = 6f;
+
+                    hitEffect = Fx.none;
+
+                    backColor = trailColor = hitColor = SvPal.phosphide;
+                    frontColor = Color.white;
+
+                    despawnEffect = new Effect(90f, 100f, e -> {
+                        color(SvPal.phosphide);
+                        stroke(e.fout() * 2f);
+                        float circleRad = 4f + e.finpow() * 30f;
+
+
+                        color(SvPal.phosphide);
+                        for(int i = 0; i < 4; i++){
+                            Drawf.tri(e.x, e.y, 8f, 60f * Mathf.lerp(e.fin(),0,e.time > 80 ? (e.time-80)/10f : 0), i*90+e.rotation);
+                        }
+
+                        Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                    });
+                    despawnSound = SvSounds.gambitBombCharge;
+
+                    fragBullet = new BasicBulletType(){{
+                        width = height = 0f;
+
+                        maxRange = 30f;
+
+                        backColor = trailColor = hitColor = SvPal.phosphide;
+                        frontColor = Color.white;
+
+                        hitSound = Sounds.plasmaboom;
+
+                        shootCone = 180f;
+                        ejectEffect = Fx.none;
+                        hitShake = 4f;
+
+                        collidesAir = false;
+
+                        lifetime = 80f;
+
+                        despawnSound = SvSounds.flashExplosion;
+
+                        despawnEffect = new Effect(40f, 100f, e -> {
+                            color(SvPal.phosphide);
+                            stroke(e.fout() * 2f);
+                            float circleRad = 4f + e.finpow() * 40f;
+                            Lines.circle(e.x, e.y, circleRad);
+                            color(SvPal.phosphide);
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 6f, 50f * e.fout(), i*90+e.rotation);
+                            }
+
+                            color();
+                            for(int i = 0; i < 4; i++){
+                                Drawf.tri(e.x, e.y, 3f, 30f * e.fout(), i*90+e.rotation);
+                            }
+
+                            Drawf.light(e.x, e.y, circleRad * 1.6f, SvPal.phosphide, e.fout());
+                        });
+                        hitEffect = Fx.massiveExplosion;
+                        keepVelocity = false;
+
+                        shrinkX = 0.7f;
+                        shrinkInterp = Interp.pow3Out;
+
+                        speed = 0.5f;
+                        collides = false;
+
+                        splashDamage = damageMain;
+                        splashDamageRadius = 50f;
+                    }};
+                }};
+
+                ejectEffect = Fx.none;
+                recoil = 2.5f;
+                shootSound = SvSounds.rifleShoot;
+            }});
+
+            treadRects = new Rect[] {
+                    new Rect(24-64f,7-64f,20,112)
+            };
+        }};
+
+        //todo: sounds
+        covenant = new RoverUnitType("covenant") {{
+            constructor = TankUnit::create;
+            itemCapacity = 10;
+
+            health = ROVER_T4_HU;
+            armor = 4f;
+            researchCostMultiplier = 0;
+            hitSize = 32f;
+
+            abilities.add(new LegionfieldAbility() {{
+                radius = 6f;
+            }});
+
+            speed = 0.6f;
+            rotateSpeed = 1.6f;
+
+            treadPullOffset = 3;
+
+            float BPS = 3f;
+            float BPS2 = 4f*0.83f;
+            float damageMain = (ROVER_T4_DPS*0.7f)/BPS;
+            float damageSub = (ROVER_T4_DPS*0.3f)/BPS2;
+            weapons.add(new DroneWeapon(name+"-weapon") {{
+                reload = 10f*60f;
+                alternate = false;
+                mirror = false;
+                linearWarmup = false;
+                minWarmup = 0.3f;
+
+                shootY = 8f;
+
+                top = true;
+
+                x = 0f;
+                y = 0f;
+
+                layerOffset = 0.01f;
+
+                parts.add(new RegionPart("-blade") {{
+                     x = 0; y = 0;
+                     mirror = true;
+                     outlineLayerOffset = -0.005f;
+
+                     moveRot = -20f;
+                     progress = PartProgress.reload;
+                }});
+
+                rotate = true;
+                rotateSpeed = 0.5f;
+
+                inaccuracy = 5f;
+                drone = new AtlacianUnitType("covenant-weapon-drone"){{
+                    constructor = UnitEntity::create;
+
+                    hidden = true;
+                    playerControllable = logicControllable = false;
+
+                    controller = (u) -> new DefenderDroneAI() {{
+                        filter = (u) -> u.type == covenant;
+                        aliveTime = 30f * 60f;
+                    }};
+
+                    parts.add(new HoverPart(){{
+                        x = 0f;
+                        y = -8f;
+                        mirror = false;
+                        radius = 6f;
+                        phase = 10f;
+                        stroke = 2f;
+                        sides = 6;
+                        layerOffset = -0.001f;
+                        color = SvPal.phosphide;
+                    }});
+
+                    speed = 2.7f;
+                    accel = 0.08f;
+                    drag = 0.04f;
+                    flying = true;
+                    health = ROVER_T1_HU*0.8f;
+                    engineOffset = 5.75f;
+
+                    targetFlags = BlockFlag.all;
+
+                    hitSize = 9;
+                    itemCapacity = 10;
+
+                    weapons.add(new Weapon(){{
+                        y = 0f;
+                        x = 0f;
+                        mirror = false;
+                        reload = 20f;
+
+                        bullet = new BasicBulletType(3f, damageMain){{
+                            width = 12f;
+                            height = 12f;
+
+                            lifetime = 30f;
+
+                            hitSize = 12f;
+
+                            hitColor = backColor = trailColor = SvPal.phosphide;
+                            frontColor = SvPal.spaclanium;
+                            trailWidth = 5f;
+                            trailLength = 8;
+
+                            hitEffect = despawnEffect = Fx.trailFade;
+                            smokeEffect = SvFx.shootLauncher;
+                        }};
+                        shootSound = SvSounds.rifleShoot;
+                    }});
+                }};
+
+                bullet = new BallisticBulletType(1f,0f) {{
+                    lifetime = 120f;
+
+                    scaleLife = true;
+
+                    width = 16f; height = 16f;
+                    trailWidth = 2.5f; trailLength = 8;
+
+                    trailColor = hitColor = backColor = SvPal.phosphide;
+                    frontColor = Color.white;
+
+                    collides = false;
+
+                    parts.add(new FlarePart(){{
+                        progress = PartProgress.life.slope().curve(Interp.pow2In);
+                        radius = 0f;
+                        radiusTo = 35f;
+                        stroke = 3f;
+                        rotation = 45f;
+                        y = -5f;
+                        followRotation = true;
+                    }});
+
+                    shootEffect = new MultiEffect(Fx.shootBigColor, new Effect(9, e -> {
+                        color(Color.white, e.color, e.fin());
+                        stroke(0.7f + e.fout());
+                        Lines.square(e.x, e.y, e.fin() * 5f, e.rotation + 45f);
+
+                        Drawf.light(e.x, e.y, 23f, e.color, e.fout() * 0.7f);
+                    }), new WaveEffect(){{
+                        colorFrom = colorTo = SvPal.phosphide;
+                        sizeTo = 15f;
+                        lifetime = 12f;
+                        strokeFrom = 3f;
+                    }});
+
+                    despawnEffect = new MultiEffect(Fx.massiveExplosion, new WrapEffect(Fx.dynamicSpikes, SvPal.phosphide, 24f), new WaveEffect(){{
+                        colorFrom = colorTo = SvPal.phosphide;
+                        sizeTo = 40f;
+                        lifetime = 12f;
+                        strokeFrom = 4f;
+                    }});
+                }
+
+                    @Override
+                    public void despawned(Bullet b) {
+                        super.despawned(b);
+                        spawnDrone(b);
+                    }
+                };
+
+                ejectEffect = Fx.none;
+                recoil = 2.5f;
+                shootSound = SvSounds.rifleShoot;
+            }});
+
+            for (int sign : Mathf.signs) {
+                weapons.add(new Weapon(name+"-weapon-small") {{
+                    reload = 0.6f * 60f;
+                    alternate = true;
+                    mirror = true;
+                    linearWarmup = false;
+                    minWarmup = 0.3f;
+                    x = 8f;
+                    y = -2f + sign * 8f;
+
+                    rotate = true;
+                    rotateSpeed = 60f/60f;
+
+                    inaccuracy = 5f;
+
+                    bullet = new BasicBulletType(3f, damageSub){{
+                        width = 12f;
+                        height = 12f;
+
+                        lifetime = 30f;
+
+                        hitSize = 12f;
+
+                        hitColor = backColor = trailColor = SvPal.phosphide;
+                        frontColor = SvPal.spaclanium;
+                        trailWidth = 5f;
+                        trailLength = 8;
+
+                        hitEffect = despawnEffect = Fx.trailFade;
+                        smokeEffect = SvFx.shootLauncher;
+                    }};
+                    shootSound = SvSounds.rifleShoot;
+                }});
+            }
+
+
+            treadRects = new Rect[] {
+                    new Rect(21-80f,7-80f,27,152)
+            };
+        }};
 
         //other
         bulker = new AtlacianUnitType("bulker"){{
@@ -2462,7 +3123,7 @@ public class SvUnits{
             setEnginesMirror(
                     new UnitEngine(24 / 4f, -24 / 4f, 2.3f, 315f)
             );
-        }};;
+        }};
 
         pisun = new AtlacianUnitType("assembler-drone"){{
             controller = u -> new AssemblerAI();
@@ -2507,6 +3168,7 @@ public class SvUnits{
 
 
     public static void loadUwu(boolean isUwu) {
+        if(isUwu && Advancement.uwu != null) Advancement.uwu.unlock();
         leeft.region = atlas.find(leeft.name+(isUwu ? "-uwu" :""));
         leeft.weapons.first().layerOffset = isUwu ? -1 : 0;
         leeft.drawCell = !isUwu;
@@ -2517,7 +3179,7 @@ public class SvUnits{
 
         vanguard.region = atlas.find(vanguard.name+(isUwu ? "-uwu" :""));
         vanguard.drawCell = !isUwu;
-        vanguard.weapons.get(2).layerOffset = isUwu ? -1 : 0;
+        //vanguard.weapons.get(2).layerOffset = isUwu ? -1 : 0;
         ((HydromechUnitType) vanguard).bodyHeat = !isUwu;
 
         squadron.region = atlas.find(squadron.name+(isUwu ? "-uwu" :""));
@@ -2528,5 +3190,49 @@ public class SvUnits{
         armada.region = atlas.find(armada.name+(isUwu ? "-uwu" :""));
         armada.drawCell = !isUwu;
         ((HydromechUnitType) armada).bodyHeat = !isUwu;
+
+        lapetus.region = atlas.find(lapetus.name+(isUwu ? "-uwu" : ""));
+        lapetus.drawCell = !isUwu;
+        if(lapetus.parts.first() instanceof SpinningBlurRegionPart part) {
+            part.draw = !isUwu;
+        }
+        skath.region = atlas.find(skath.name+(isUwu ? "-uwu" : ""));
+        skath.drawCell = !isUwu;
+        for (DrawPart part : skath.parts) {
+            if(part instanceof SpinningBlurRegionPart p) {
+                p.draw = !isUwu;
+            }
+        }
+        charon.region = atlas.find(charon.name+(isUwu ? "-uwu" : ""));
+        charon.drawCell = !isUwu;
+        for (DrawPart part : charon.parts) {
+            if(part instanceof SpinningBlurRegionPart p) {
+                p.draw = !isUwu;
+            }
+        }
+        callees.region = atlas.find(callees.name+(isUwu ? "-uwu" : ""));
+        callees.drawCell = !isUwu;
+        callees.weapons.first().layerOffset = isUwu ? -1 : 0;
+        for (DrawPart part : callees.parts) {
+            if(part instanceof SpinningBlurRegionPart p) {
+                p.draw = !isUwu;
+            }
+        }
+        ganymede.region = atlas.find(ganymede.name+(isUwu ? "-uwu" : ""));
+        ganymede.drawCell = !isUwu;
+        for (DrawPart part : ganymede.parts) {
+            if(part instanceof SpinningBlurRegionPart p) {
+                p.draw = !isUwu;
+            }
+        }
+        stunt.region = atlas.find(stunt.name+(isUwu ? "-uwu" : ""));
+        stunt.drawCell = !isUwu;
+        stunt.weapons.first().layerOffset = isUwu ? -1 : 0;
+        zeal.region = atlas.find(zeal.name+(isUwu ? "-uwu" : ""));
+        zeal.drawCell = !isUwu;
+        zeal.weapons.first().layerOffset = isUwu ? -1 : 0;
+        gambit.region = atlas.find(gambit.name+(isUwu ? "-uwu" : ""));
+        gambit.drawCell = !isUwu;
+        gambit.weapons.first().layerOffset = isUwu ? -1 : 0;
     }
 }
