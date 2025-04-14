@@ -18,7 +18,7 @@ public class Advancement {
             sector_construction,
             sector_the_segment,
             unit_helio, unit_hydro, unit_rover,
-            big_bubble, the_segment_hundred_wave, crusher, helicopter_tricked, water_to_sifter,
+            big_bubble, the_segment_hundred_wave, helicopter_tricked, water_to_sifter,
             laser, hard_water,
             uwu
             ;
@@ -49,7 +49,6 @@ public class Advancement {
 
                 "big_bubble","power-bubble-node", //Other
                 "the_segment_hundred_wave","core-bastion-adv", //The Segment - Survive 100 Wave
-                "crusher","circular-crusher", // Crusher
                 "helicopter_tricked","commute-rupture", // Helicopter - Tricked
                 "water_to_sifter","water-sifter", // Connect water to sifter
 
@@ -96,7 +95,7 @@ public class Advancement {
     }
 
     public void unlock() {
-        boolean test = true;
+        boolean test = false;
         if(!Vars.state.isCampaign() && !test) return;
         if(Vars.state.rules.infiniteResources && !test) return;
         Advancement.unlock(this);

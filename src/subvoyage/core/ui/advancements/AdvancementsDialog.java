@@ -17,7 +17,7 @@ import static subvoyage.core.ui.advancements.AdvancementToastFragment.found;
 public class AdvancementsDialog extends BaseDialog {
 
     public AdvancementsDialog() {
-        super("Subvoyage: "+Core.bundle.get("advancements"));
+        super("Subvoyage: "+Core.bundle.get("sv_advancement"));
         addCloseButton();
         shouldPause = false;
     }
@@ -26,7 +26,7 @@ public class AdvancementsDialog extends BaseDialog {
         cont.clear();
         Table all = cont.table().grow().pad(20f).margin(10f).get();
 
-        all.add(new Bar(bundle.get("stat.progress") + ": " + Mathf.floor(getProgress()*1000f)/10f + "%",
+        all.add(new Bar(bundle.get("sv_advancement.progress") + ": " + Mathf.floor(getProgress()*1000f)/10f + "%",
                         Pal.accent,
                         this::getProgress))
                 .align(Align.top).height(18f).pad(4f).top().minWidth(320).maxWidth(640f).growX();

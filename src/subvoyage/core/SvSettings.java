@@ -2,19 +2,19 @@ package subvoyage.core;
 
 import arc.Core;
 import arc.func.Boolc;
+import arc.func.Prov;
+import arc.scene.style.Drawable;
+import arc.scene.style.TextureRegionDrawable;
 import mindustry.content.TechTree;
 import mindustry.gen.Icon;
 import mindustry.type.Planet;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import subvoyage.content.SvUnits;
+import subvoyage.core.ui.SvUI;
 import subvoyage.core.ui.advancements.Advancement;
-import subvoyage.core.ui.settings.BannerPref;
-import subvoyage.core.ui.settings.ButtonPref;
-import subvoyage.core.ui.settings.CheckIconSetting;
-import subvoyage.core.ui.settings.SliderIconSetting;
+import subvoyage.core.ui.settings.*;
 
-import static arc.Core.bundle;
-import static arc.Core.settings;
+import static arc.Core.*;
 import static mindustry.Vars.*;
 import static subvoyage.Subvoyage.ID;
 import static subvoyage.content.world.SvPlanets.atlacian;
@@ -22,36 +22,51 @@ import static subvoyage.content.world.SvPlanets.atlacian;
 public class SvSettings {
     public static void load() {
         ui.settings.addCategory(bundle.get("setting.subvoyage-title"),"subvoyage-icon",t -> {
+            table = t;
+
             t.pref(new BannerPref(ID+"-modname",256));
 
-            t.pref(new ButtonPref(Core.bundle.get("sv-clear-campaign"), Icon.trash,() -> {
+            separator("subvoyage-data");
+
+            buttonPref("subvoyage-clear-campaign",Icon.save,() -> {
                 ui.showConfirm("@confirm", "@settings.sv-clear-campaign.confirm", () -> {
                     resetSaves(atlacian);
                     ui.showInfoOnHidden("@settings.sv-clear-campaign-close.confirm", () -> {
                         Core.app.exit();
                     });
                 });
-            }));
-            t.pref(new ButtonPref(Core.bundle.get("sv-clear-tech-tree"),Icon.trash,() -> {
+            });
+            buttonPref("subvoyage-clear-tech-tree",Icon.tree,() -> {
                 ui.showConfirm("@confirm", "@settings.sv-clear-tech-tree.confirm", () -> resetTree(atlacian.techTree));
-            }));
-            t.pref(new ButtonPref(Core.bundle.get("sv-clear-advancements"),Icon.trash,() -> {
+            });
+            buttonPref("subvoyage-clear-advancements",Icon.modePvp,() -> {
                 ui.showConfirm("@confirm", "@settings.sv-clear-advancements.confirm", SvSettings::resetAdvancements);
-            }));
+            });
 
-            sliderPref(t,ID+"-atlacian","subvoyage-planet-divisions",
-                    6,5,8,
-                    String::valueOf);
-            /*sliderPref(t,ID+"-liquid-hard-water","sv-metal-fuming-opacity",
-                    75,0,100,
-                    s -> s == 0 ? bundle.get("off") : s+"%");*/
+            separator("subvoyage-graphics");
 
-            checkPref(t,ID+"-energy-dock-ship","subvoyage-autoupdate",true);
-            checkPref(t,ID+"-leeft-uwu","subvoyage-leeft-uwu",false, SvUnits::loadUwu);
-            checkPref(t,ID+"-phosphide-wall-large-full","subvoyage-wall-tiling",true);
+            var planetQuality = bundle.get("setting.subvoyage-planet-divisions.name");
+            var lowQuality = bundle.get("setting.subvoyage-planet-divisions.1");
+            var mediumQuality = bundle.get("setting.subvoyage-planet-divisions.2");
+            var highQuality = bundle.get("setting.subvoyage-planet-divisions.3");
+            buttonPref("subvoyage-planet-divisions",() -> planetQuality + ":\n" + bundle.get("setting.subvoyage-planet-divisions."+i("planet-divisions")),new TextureRegionDrawable(atlas.find(ID+"-atlacian")),
+                    () -> {
+                        SvUI.planetQuality.showDialog();
+                    });
+            settings.defaults("subvoyage-planet-divisions", 6);
 
-            checkPref(t, ID+"-laser-projector","subvoyage-laser-shaders",true);
-            checkPref(t, ID+"-power-bubble-node","subvoyage-power-bubble-shaders",true);
+            switchPref(ID+"-laser-projector","subvoyage-laser-shaders",true);
+            switchPref(ID+"-power-bubble-node","subvoyage-power-bubble-shaders",true);
+            switchPref(ID+"-phosphide-wall-large-full","subvoyage-wall-tiling",true);
+
+            separator("subvoyage-other");
+
+            switchPref(ID+"-energy-dock-ship","subvoyage-autoupdate",true);
+            buttonPref("subvoyage-autoupdate-btn",null,UpdateManager::begin);
+
+            separator("subvoyage-fun");
+
+            switchPref(ID+"-leeft-uwu","subvoyage-leeft-uwu",false, SvUnits::loadUwu);
 
             SvUnits.loadUwu(unitUwu());
         });
@@ -100,16 +115,35 @@ public class SvSettings {
         Advancement.all.each(Advancement::lock);
     }
 
-    static void sliderPref(SettingsMenuDialog.SettingsTable t, String ico, String name, int def, int min, int max, SettingsMenuDialog.StringProcessor p) {
-        t.pref(new SliderIconSetting(ico,name, def,min,max,1,p));
+    static SettingsMenuDialog.SettingsTable table;
+
+    static void separator(String name) {
+        table.pref(new SeparatorPref(name));
+    }
+    static void buttonPref(String name, Drawable drawable, Runnable listener) {
+        table.pref(new ButtonPref(name, drawable, listener));
+    }
+    static void buttonPref(String name, Prov<CharSequence> title, Drawable drawable, Runnable listener) {
+        table.pref(new ButtonPref(name, drawable, title, listener));
+    }
+    static void sliderPref(String ico, String name, int def, int min, int max, SettingsMenuDialog.StringProcessor p) {
+        table.pref(new SliderIconSetting(ico,name, def,min,max,1,p));
         settings.defaults(name, def);
     }
-    static void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def) {
-        t.pref(new CheckIconSetting(ico,name,def,null));
+    static void switchPref(String ico, String name, boolean def) {
+        table.pref(new SwitchPref(ico,name,def,null));
         settings.defaults(name, def);
     }
-    static void checkPref(SettingsMenuDialog.SettingsTable t, String ico, String name, boolean def, Boolc changed) {
-        t.pref(new CheckIconSetting(ico,name,def,changed));
+    static void switchPref(String ico, String name, boolean def, Boolc changed) {
+        table.pref(new SwitchPref(ico,name,def,changed));
+        settings.defaults(name, def);
+    }
+    static void checkPref(String ico, String name, boolean def) {
+        table.pref(new CheckIconSetting(ico,name,def,null));
+        settings.defaults(name, def);
+    }
+    static void checkPref(String ico, String name, boolean def, Boolc changed) {
+        table.pref(new CheckIconSetting(ico,name,def,changed));
         settings.defaults(name, def);
     }
 }

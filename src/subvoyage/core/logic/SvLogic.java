@@ -40,6 +40,9 @@ public class SvLogic {
     public static void clientLoad() {
         checkUpdates();
         checkChanges();
+
+        UpdateManager.checkFico();
+
         control.input.addLock(AtlacianCore.lock);
         bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
 
@@ -136,11 +139,6 @@ public class SvLogic {
         boolean autoUpdate = SvSettings.autoUpdate();
         Log.info("[Subvoyage] Autoupdate: "+(autoUpdate ? "Enabled" : "Disabled"));
         if(autoUpdate) UpdateManager.begin();
-        Http.get(ghApi+"/repos/"+ Subvoyage.repo+"/releases/latest", res -> {
-            var json = Jval.read(res.getResultAsString());
-            String tagName = json.getString("tag_name");
-            beta = Structs.contains(Subvoyage.versionControl.parseTagAttributes(tagName.replace("b","-beta")),(a) -> a.name().equals("BETA"));
-        },(err) -> {});
     }
 
     static int currentVersion = 1;

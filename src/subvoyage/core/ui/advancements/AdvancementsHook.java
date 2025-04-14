@@ -12,7 +12,7 @@ import static subvoyage.content.world.SvPlanets.atlacian;
 import static subvoyage.core.ui.SvUI.advancements;
 
 public class AdvancementsHook {
-    public static void register() {
+    public static void load() {
         addAchievement();
     }
     static void addAchievement(){
@@ -40,7 +40,7 @@ public class AdvancementsHook {
     static TextButton btn() {
         return
                 ui.planet.buttons.button(
-                        "@advancements",
+                        "@sv_advancement",
                         Icon.modePvp,
                         AdvancementsHook::openAdvancements)
                     .name("atl-advancements")

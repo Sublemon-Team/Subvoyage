@@ -13,7 +13,6 @@ import mindustry.game.*;
 import mindustry.game.EventType.*;
 import mindustry.gen.Unit;
 import mindustry.mod.*;
-import subvoyage.content.block.*;
 import subvoyage.content.world.SvTechTree;
 import subvoyage.content.SvContent;
 import subvoyage.content.SvUnits;
@@ -24,7 +23,6 @@ import subvoyage.core.draw.shader.SvShaders;
 import subvoyage.core.draw.SvRender;
 import subvoyage.core.logic.SvCall;
 import subvoyage.core.logic.SvLogic;
-import subvoyage.core.ui.FontIconGenerator;
 import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.core.SvSettings;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
@@ -36,7 +34,7 @@ public class Subvoyage extends Mod {
 
     public static UpdateManager.VersionControl versionControl = new UpdateManager.VersionControl();
     public static String currentTag = "v0.6b";
-    public static String repo = "Sublemon-Team/Subvoyage";
+    public static String GITHUB_REPO = "Sublemon-Team/Subvoyage";
 
     public Subvoyage(){
         Events.run(Trigger.update, SvLogic::update);

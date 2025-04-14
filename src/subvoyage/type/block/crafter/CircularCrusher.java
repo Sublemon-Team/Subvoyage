@@ -49,12 +49,6 @@ public class CircularCrusher extends AttributeCrafter{
         float visualCrude = 0f;
 
         @Override
-        public void updateTile() {
-            super.updateTile();
-            if(efficiency > 0.01) Advancement.crusher.unlock();
-        }
-
-        @Override
         public void draw(){
 
             int crudeCount = items.get(SvItems.crude);

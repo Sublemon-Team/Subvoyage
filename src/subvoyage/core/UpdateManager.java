@@ -1,23 +1,83 @@
 package subvoyage.core;
 
-import arc.util.Http;
-import arc.util.Log;
-import arc.util.Structs;
+import arc.Core;
+import arc.files.Fi;
+import arc.func.Floatc;
+import arc.util.*;
+import arc.util.io.Streams;
 import arc.util.serialization.Jval;
 import subvoyage.Subvoyage;
+import subvoyage.util.Var;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static arc.Core.bundle;
-import static mindustry.Vars.ghApi;
-import static mindustry.Vars.ui;
+import static mindustry.Vars.*;
+import static mindustry.Vars.mods;
 
 public class UpdateManager {
+    public static String FICO_REPO = "Sublemon-Team/FontIconsLib";
+
+    public static void checkFico() {
+        if(mods.getMod("font-icon-lib") != null) return; //it's installed
+        Core.settings.put("mod-" + "font-icon-lib" + "-enabled",true);
+        ui.loadfrag.show(Core.bundle.get("@subvoyage-installing-fico"));
+        Var<Float> loadingProgress = new Var<>(0f);
+        ui.loadfrag.setProgress(() -> loadingProgress.val);
+
+        Http.get(ghApi + "/repos/" + FICO_REPO + "/releases/latest", res -> {
+            var json = Jval.read(res.getResultAsString());
+            var assets = json.get("assets").asArray();
+
+            var dexedAsset = assets.find(j -> j.getString("name").startsWith("dexed") && j.getString("name").endsWith(".jar"));
+            var asset = dexedAsset == null ? assets.find(j -> j.getString("name").endsWith(".jar")) : dexedAsset;
+
+            if(asset != null){
+                var url = asset.getString("browser_download_url");
+
+                Http.get(url, result -> {
+                    try{
+                        Fi file = tmpDirectory.child(FICO_REPO.replace("/", "") + ".zip");
+                        long len = result.getContentLength();
+                        Floatc cons = len <= 0 ? f -> {} : p -> loadingProgress.val = p;
+
+                        try(var stream = file.write(false)){
+                            Streams.copyProgress(result.getResultAsStream(), stream, len, 4096, cons);
+                        }
+
+                        Core.settings.put("mod-" + "font-icon-lib" + "-enabled",true);
+
+                        var mod = mods.importMod(file);
+
+                        try {
+                            Class.forName("fonticolib.IconPropsParser").getMethod("start").invoke(null);
+                            Class.forName("fonticolib.IconPropsParser").getMethod("loadTeams").invoke(null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        mods.list().add(mod);
+                        mod.setRepo(FICO_REPO);
+                        file.delete();
+
+                        Reflect.set(mods,"requiresReload",false);
+
+                        ui.loadfrag.hide();
+                    }catch(Throwable e){
+                        modError(e);
+                    }
+                }, UpdateManager::importFail);
+            }else{
+                throw new ArcRuntimeException("No JAR file found in releases. Make sure you have a valid jar file in the mod's latest Github Release.");
+            }
+        }, UpdateManager::importFail);
+    }
+
     public static void begin() {
         Log.info("[Subvoyage] Fetching latest Updates...");
-        Http.get(ghApi+"/repos/"+ Subvoyage.repo+"/releases/latest", res -> {
+        Http.get(ghApi+"/repos/"+Subvoyage.GITHUB_REPO +"/releases/latest", res -> {
             var json = Jval.read(res.getResultAsString());
             String tagName = json.getString("tag_name");
             Log.info("[Subvoyage] Latest Release Tag: "+tagName);
@@ -25,16 +85,76 @@ public class UpdateManager {
             Log.info("[Subvoyage] "+(!upToDate ? "New update is available" : "Version is up-to-date"));
             if(!upToDate) {
                 String text = bundle.format("settings.sv-update-version.confirm",tagName,Subvoyage.currentTag);
-                ui.showConfirm("@update", text, () -> {
-                    ui.mods.show();
-                    ui.mods.githubImportMod(Subvoyage.repo, false, null);
-                });
+                ui.showConfirm("@update", text, UpdateManager::update);
             }
         },(err) -> {
             ui.showInfoOnHidden("@settings.sv-update-failed.show", () -> {
 
             });
         });
+    }
+    static float modImportProgress = 0f;
+    public static void update() {
+        ui.loadfrag.show();
+        ui.loadfrag.setProgress(() -> modImportProgress);
+
+        Http.get(ghApi + "/repos/" + Subvoyage.GITHUB_REPO + "/releases/latest", res -> {
+            var json = Jval.read(res.getResultAsString());
+            var assets = json.get("assets").asArray();
+
+            var dexedAsset = assets.find(j -> j.getString("name").startsWith("dexed") && j.getString("name").endsWith(".jar"));
+            var asset = dexedAsset == null ? assets.find(j -> j.getString("name").endsWith(".jar")) : dexedAsset;
+
+            if(asset != null){
+                var url = asset.getString("browser_download_url");
+
+                Http.get(url, result -> handleMod(Subvoyage.GITHUB_REPO, result), UpdateManager::importFail);
+            }else{
+                throw new ArcRuntimeException("No JAR file found in releases. Make sure you have a valid jar file in the mod's latest Github Release.");
+            }
+        }, UpdateManager::importFail);
+    }
+    private static void handleMod(String repo, Http.HttpResponse result){
+        try{
+            Fi file = tmpDirectory.child(repo.replace("/", "") + ".zip");
+            long len = result.getContentLength();
+            Floatc cons = len <= 0 ? f -> {} : p -> modImportProgress = p;
+
+            try(var stream = file.write(false)){
+                Streams.copyProgress(result.getResultAsStream(), stream, len, 4096, cons);
+            }
+
+            var mod = mods.importMod(file);
+            mod.setRepo(repo);
+            file.delete();
+            Core.app.post(() -> {
+                try{
+                    ui.loadfrag.hide();
+                    ui.showInfoOnHidden("@mods.reloadexit", () -> {
+                        Log.info("Exiting to reload mods.");
+                        Core.app.exit();
+                    });
+                }catch(Throwable e){
+                    ui.showException(e);
+                }
+            });
+        }catch(Throwable e){
+            modError(e);
+        }
+    }
+    private static void importFail(Throwable t){
+        Core.app.post(() -> modError(t));
+    }
+    static void modError(Throwable error){
+        ui.loadfrag.hide();
+
+        if(error instanceof NoSuchMethodError || Strings.getCauses(error).contains(t -> t.getMessage() != null && (t.getMessage().contains("trust anchor") || t.getMessage().contains("SSL") || t.getMessage().contains("protocol")))){
+            ui.showErrorMessage("@feature.unsupported");
+        }else if(error instanceof Http.HttpStatusException st){
+            ui.showErrorMessage(Core.bundle.format("connectfail", Strings.capitalize(st.status.toString().toLowerCase())));
+        }else{
+            ui.showException(error);
+        }
     }
 
     public static class VersionControl {
