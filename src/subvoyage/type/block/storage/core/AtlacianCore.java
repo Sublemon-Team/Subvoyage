@@ -1,84 +1,60 @@
 package subvoyage.type.block.storage.core;
 
+import arc.Core;
+import arc.audio.Music;
 import arc.func.Boolp;
+import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Interp;
 import arc.math.Mathf;
-import arc.math.geom.Vec2;
+import arc.scene.actions.Actions;
+import arc.scene.event.Touchable;
+import arc.scene.ui.Image;
 import arc.scene.ui.layout.Scl;
 import arc.struct.*;
-import arc.util.Reflect;
 import arc.util.Time;
+import arc.util.Tmp;
+import mindustry.Vars;
 import mindustry.content.*;
+import mindustry.ctype.UnlockableContent;
+import mindustry.entities.Effect;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
-import mindustry.world.Tile;
 import mindustry.world.blocks.storage.*;
+import subvoyage.content.block.SvLaser;
+import subvoyage.content.ost.SvMusic;
+import subvoyage.core.anno.LoadAnnoProcessor;
+import subvoyage.core.draw.SvFx;
 import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.SvDraw;
+import subvoyage.core.draw.SvRender;
 import subvoyage.core.draw.shader.SvShaders;
 
-import static arc.Core.*;
-import static arc.graphics.g2d.Lines.line;
 import static mindustry.Vars.*;
-import static subvoyage.core.draw.SvFx.rand;
 
 public class AtlacianCore extends CoreBlock {
     public Seq<Item> bannedItems = new Seq<>();
 
+    public @LoadAnnoProcessor.LoadAnno("@-border") TextureRegion border;
+
     public AtlacianCore(String name) {
         super(name);
     }
-    public static boolean cutscene = false;
-    public static final Boolp lock = () -> cutscene;
-    public static float landTime = 0f;
 
-    @Override
-    public void init() {
-        super.init();
-        lightRadius = 30f + 20f * (size+1);
-        fogRadius = Math.max(fogRadius, (int)(lightRadius / 8f * 3f) + 13);
-        emitLight = true;
-    }
-
-    @Override
-    public void drawLanding(CoreBuild build, float x, float y) {
-        Reflect.set(renderer,"camerascale", Scl.scl(4f));
-        Reflect.set(renderer,"landTime", 0f);
-
-        player.set(x,y);
-        camera.position.set(x,y);
-    }
-
-    @Override
-    public void drawShadow(Tile tile) {
-        if(tile.build instanceof SubvoyageCoreBuild) {
-            float fin = Interp.pow3.apply(1-landTime/coreLandDuration);
-            float s = region.height/4f*fin;
-            Draw.color(0f, 0f, 0f, BlockRenderer.shadowColor.a);
-            Draw.rect(
-                    variants == 0 ? customShadowRegion :
-                            variantShadowRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantShadowRegions.length - 1))],
-                    tile.drawx(), tile.drawy(),s,s, tile.build == null ? 0f : tile.build.drawrot());
-            Draw.color();
-            return;
-        }
-        Draw.color(0f, 0f, 0f, BlockRenderer.shadowColor.a);
-        Draw.rect(
-                variants == 0 ? customShadowRegion :
-                        variantShadowRegions[Mathf.randomSeed(tile.pos(), 0, Math.max(0, variantShadowRegions.length - 1))],
-                tile.drawx(), tile.drawy(), tile.build == null ? 0f : tile.build.drawrot());
-        Draw.color();
-    }
-
-    public class  SubvoyageCoreBuild extends CoreBuild {
+    public class AtlacianCoreBuild extends CoreBuild {
         @Override
         public void handleStack(Item item, int amount, Teamc source) {
             if(!bannedItems.contains(item) && item != Items.copper) super.handleStack(item, amount, source);
             else Fx.coreBurn.at(x, y);
+        }
+
+        @Override
+        public void draw() {
+            if(renderer.getLandTime() <= 0f) super.draw();
         }
 
         @Override
@@ -88,53 +64,170 @@ public class AtlacianCore extends CoreBlock {
         }
 
         @Override
-        public void draw() {
-            if(!cutscene) {
-                thrusterTime = 0f;
-                super.draw();
+        public void beginLaunch(boolean launching) {
+            if(launching){
+                Fx.coreLaunchConstruct.at(x, y, size);
             }
-            else drawLanding();
-        }
-        public void drawLanding() {
-            float fin = Interp.pow3.apply(1-landTime/coreLandDuration+0.2f);
-            float fin2 = Interp.smooth.apply(Interp.slope.apply(1-landTime/coreLandDuration));
-            float s = region.height/4f*fin;
-            Draw.z(Layer.floor+1);
-            SvDraw.applyCache(SvShaders.hardWaterLayer,() -> {
-                Draw.z(Layer.floor+1);
-                float pulse = Mathf.sin(10f,2f);
-                Draw.color(SvPal.hardWater.cpy().value(0.8f));
-                Fill.circle(x,y,fin2*tilesize*size+pulse+4f);
-                Draw.color(SvPal.hardWater.cpy().value(0.9f));
-                Fill.circle(x,y,fin2*tilesize*size+pulse+2f);
-                Draw.color(SvPal.hardWater);
-                Fill.circle(x,y,fin2*tilesize*size+pulse);
-            });
-            Draw.color();
-            if(fin >= 0.4f) {
-                Draw.color();
-                Draw.z(Layer.block);
-                Draw.rect(region,x,y,s,s);
-                if (this.block.teamRegion.found()) {
-                    renderer.bloom.capture();
-                    renderer.bloom.setBloomIntensity(fin2*4f);
-                    if (this.block.teamRegions[this.team.id] == this.block.teamRegion) {
-                        Draw.color(this.team.color);
-                    }
-                    Draw.rect(this.block.teamRegions[this.team.id], this.x, this.y,s,s);
-                    Draw.color();
-                    renderer.bloom.render();
+            if(!headless){
+                // Add fade-in and fade-out foreground when landing or launching.
+                if(renderer.isLaunching()){
+                    float margin = 30f;
+
+                    Image image = new Image();
+                    image.color.a = 0f;
+                    image.touchable = Touchable.disabled;
+                    image.setFillParent(true);
+                    image.actions(Actions.delay((launchDuration() - margin) / 60f), Actions.fadeIn(margin / 60f, Interp.pow2In), Actions.delay(6f / 60f), Actions.remove());
+                    image.update(() -> {
+                        image.toFront();
+                        ui.loadfrag.toFront();
+                        if(state.isMenu()){
+                            image.remove();
+                        }
+                    });
+                    Core.scene.add(image);
+                }else{
+                    Image image = new Image();
+                    image.color.a = 1f;
+                    image.touchable = Touchable.disabled;
+                    image.setFillParent(true);
+                    image.actions(Actions.fadeOut(35f / 60f), Actions.remove());
+                    image.update(() -> {
+                        image.toFront();
+                        ui.loadfrag.toFront();
+                        if(state.isMenu()){
+                            image.remove();
+                        }
+                    });
+                    Core.scene.add(image);
+
+                    Time.run(launchDuration(), () -> {
+                        launchEffect.at(this);
+                        Effect.shake(5f, 5f, this);
+
+                        if(state.isCampaign() && Vars.showSectorLandInfo && (state.rules.sector.preset == null || state.rules.sector.preset.showSectorLandInfo)){
+                            ui.announce("[accent]" + state.rules.sector.name() + "\n" +
+                                    (state.rules.sector.info.resources.any() ? "[lightgray]" + Core.bundle.get("sectors.resources") + "[white] " +
+                                            state.rules.sector.info.resources.toString(" ", UnlockableContent::emoji) : ""), 5);
+                        }
+                    });
                 }
-                Draw.draw(Layer.blockOver, () -> {
-                    Draw.scl(fin);
-                    Drawf.construct(this, unitType, 0, fin, 1, Time.time);
-                    Draw.scl(1);
-                });
             }
-            camera.position.add(rand.random(-fin2, fin2),rand.random(-fin2,fin2));
-            Reflect.set(renderer,"camerascale", Scl.scl(4f+2f*(1-fin)));
         }
 
+        @Override
+        public void drawLaunchGlobalZ() {
+            float fin = renderer.getLandTimeIn();
+            float fout = 1f - fin;
+
+            drawLanding(x, y);
+
+            Draw.color();
+            Draw.mixcol(Color.white, Interp.pow5In.apply(fout));
+
+            //accent tint indicating that the core was just constructed
+            if(renderer.isLaunching()){
+                float f = Mathf.clamp(1f - fout * 12f);
+                if(f > 0.001f){
+                    Draw.mixcol(Pal.accent, f);
+                }
+            }
+        }
+
+        @Override
+        public void drawLaunch() {
+
+        }
+
+        @Override
+        public void drawLanding(float x, float y) {
+            float fin = Interp.pow3.apply(renderer.getLandTimeIn()+0.2f);
+            float fin2 = Interp.smooth.apply(Interp.slope.apply(renderer.getLandTimeIn()));
+            float s = region.height/4f*fin;
+
+            Draw.z(SvRender.Layer.hardWater);
+
+            float pulse = Mathf.sin(10f,2f);
+            Draw.color(SvPal.hardWater.cpy().value(0.8f));
+            Fill.circle(x,y,fin2*tilesize*size+pulse+4f);
+            Draw.color(SvPal.hardWater.cpy().value(0.9f));
+            Fill.circle(x,y,fin2*tilesize*size+pulse+2f);
+            Draw.color(SvPal.hardWater);
+            Fill.circle(x,y,fin2*tilesize*size+pulse);
+
+            Draw.z(Layer.floor+1);
+            Draw.color();
+
+            Draw.alpha(Mathf.clamp(fin/0.4f));
+            Draw.mixcol(Color.blue.cpy().mul(0.2f),1f-Mathf.clamp(fin/0.6f));
+
+            Draw.z(Layer.block+0.5f);
+            if(fin > 0.2f)
+                Draw.rect(border,x,y,(s+2)*fin2,(s+2)*fin2);
+            Draw.rect(region,x,y,s,s);
+            if (teamRegions[team.id] == teamRegion)
+                Draw.color(team.color);
+            Draw.rect(teamRegions[team.id], x, y, s, s);
+
+            if(!renderer.isLaunching())
+                Draw.draw(Layer.blockOver, () -> {
+                    Draw.scl(fin);
+
+                    Shaders.blockbuild.region = unitType.fullIcon;
+                    Shaders.blockbuild.progress = renderer.getLandTimeIn();
+                    Shaders.blockbuild.time = Time.time;
+
+                    Draw.color(Pal.accent);
+                    Draw.shader(Shaders.blockbuild);
+                    Draw.rect(unitType.fullIcon, x, y, rotation);
+                    Draw.shader();
+
+                    Draw.reset();
+                    Draw.scl(1f);
+                });
+        }
+
+        @Override
+        public void updateLaunch() {
+            Effect.shake(0.3f, 5f, this);
+
+            float fin = Interp.pow3.apply(renderer.getLandTimeIn()+0.2f);
+
+            float in = renderer.getLandTimeIn() * launchDuration();
+            float tsize = Mathf.sample(thrusterSizes, (in + 35f) / launchDuration());
+            landParticleTimer += tsize * Time.delta;
+            if(landParticleTimer >= 1f){
+                tile.getLinkedTiles(t -> {
+                    if(Mathf.chance(0.4f)){
+                        float tx = t.worldx();
+                        float ty = t.worldy();
+                        float dtx = tx-x;
+                        float dty = ty-y;
+
+                        if(renderer.getLandTimeIn() < 0.6f && fin > 0.4f) SvFx.steam.at(x+dtx*fin*1.1f,y+dty*fin*1.1f);
+                    }
+                });
+
+                landParticleTimer = 0f;
+            }
+        }
+
+        @Override
+        public float zoomLaunch() {
+            Core.camera.position.set(this);
+            float fin = Interp.pow3.apply(renderer.getLandTimeIn()+0.2f);
+            return Scl.scl(4f+2f*(1-fin));
+        }
+
+        @Override
+        public Music launchMusic() {
+            return SvMusic.land;
+        }
+
+        @Override
+        public Music landMusic() {
+            return SvMusic.land;
+        }
 
         @Override
         public void handleItem(Building source, Item item) {

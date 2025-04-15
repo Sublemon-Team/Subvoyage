@@ -8,6 +8,8 @@ import arc.math.geom.Position;
 import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.ai.ControlPathfinder;
+import mindustry.ai.Pathfinder;
+import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.FlyingAI;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.part.DrawPart;
@@ -18,6 +20,7 @@ import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.world.blocks.environment.Floor;
 import subvoyage.type.unit.ai.HelicopterAI;
+import subvoyage.type.unit.ai.HelicopterCommandAI;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
 import subvoyage.type.unit.weapon.HydromechWeapon;
 
@@ -36,9 +39,11 @@ public class HelicopterUnitType extends AtlacianUnitType {
         rotateMoveFirst = false;
         drag = 0.15f;
         strafePenalty = 1f;
-        pathCost = (team,tile) -> 100;
+        pathCost = (t,b) -> 100;
 
         aiController = HelicopterAI::new;
+
+        controller = u -> !playerControllable || (u.team.isAI() && !u.team.rules().rtsAi) ? aiController.get() : new HelicopterCommandAI();
     }
 
     @Override

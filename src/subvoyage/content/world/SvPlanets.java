@@ -73,8 +73,7 @@ public class SvPlanets{
             ruleSetter = r -> {
                 r.waveTeam = Team.malis;
                 r.defaultTeam = SvTeam.melius;
-                r.placeRangeCheck = false;
-                r.enemyCoreBuildRadius = 300f;
+
                 r.showSpawns = true;
                 r.fog = true;
                 r.staticFog = true;
@@ -91,20 +90,17 @@ public class SvPlanets{
             minZoom = 0.2f;
             camRadius = 0.5f;
             startSector = 221;
-            defaultEnv = SvEnvironment.legarytic | Env.terrestrial;
+            defaultEnv = Env.terrestrial;
 
             clearSectorOnLose = true;
 
             alwaysUnlocked = true;
             landCloudColor = SvPal.atlacianLandCloud;
 
-            hiddenItems.addAll(Items.erekirItems).addAll(Items.serpuloItems)
-                    .removeAll(SvItems.atlacianItems);
-
             enemyBuildSpeedMultiplier = 0.4f;
-        }};
 
-        serpulo.hiddenItems.addAll(SvItems.atlacianItems);
-        erekir.hiddenItems.addAll(SvItems.atlacianItems);
+            campaignRuleDefaults.fog = true;
+            campaignRuleDefaults.showSpawns = true;
+        }};
     }
 }

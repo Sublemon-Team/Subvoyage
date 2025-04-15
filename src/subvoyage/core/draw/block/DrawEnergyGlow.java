@@ -41,7 +41,7 @@ public class DrawEnergyGlow extends DrawBlock{
         float z = Draw.z();
         if(layer > 0) Draw.z(layer);
         Draw.blend(Blending.additive);
-        Draw.color(color, Mathf.clamp(build.power().status) * (color.a * (build.power().status - pulse + Mathf.absin(scl, pulse))));
+        Draw.color(color, Mathf.clamp(build.power.status) * (color.a * (build.power.status - pulse + Mathf.absin(scl, pulse))));
         Draw.rect(glow, build.x, build.y);
         Draw.blend();
         Draw.color();

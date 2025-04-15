@@ -18,7 +18,7 @@ import static mindustry.graphics.Shaders.getShaderFi;
 
 
 public class SvShaders{
-    public static SurfaceShader hardWater;
+    public static SurfaceShader hardWater, hardWaterCache;
     public static SurfaceShader powerBubbles;
     public static SurfaceShader underwaterRegion;
     public static SurfaceShader laser;
@@ -34,6 +34,29 @@ public class SvShaders{
 
     public static void init(){
         hardWater = new SurfaceShader("hard-water");
+        hardWaterCache = new SurfaceShader("hard-water") {
+            @Override
+            public void apply() {
+                setUniformf("u_campos", Core.camera.position.x - Core.camera.width / 2, Core.camera.position.y - Core.camera.height / 2);
+                setUniformf("u_resolution", Core.camera.width, Core.camera.height);
+                setUniformf("u_time", Time.time);
+
+                setUniformf("u_ww",world.width()*tilesize);
+                setUniformf("u_wh",world.height()*tilesize);
+
+                if(hasUniform("u_noise")){
+                    if(noiseTex == null){
+                        noiseTex = Core.assets.get("sprites/" + textureName() + ".png", Texture.class);
+                    }
+
+                    noiseTex.bind(1);
+
+                    renderer.effectBuffer.getTexture().bind(0);
+
+                    setUniformi("u_noise", 1);
+                }
+            }
+        };
         planetTextureShader = new PlanetTextureShader();
         underwaterRegion = new SurfaceShader("underwater-region") {
 
@@ -139,13 +162,17 @@ public class SvShaders{
             }
         };
         CacheLayer.addLast(
-                hardWaterLayer = new CacheLayer.ShaderLayer(hardWater)
+                hardWaterLayer = new CacheLayer.ShaderLayer(hardWaterCache)
         );
     }
 
     public static void dispose(){
         if(!headless){
             hardWater.dispose();
+            planetTextureShader.dispose();
+            underwaterRegion.dispose();
+            powerBubbles.dispose();
+            laser.dispose();
         }
     }
 
@@ -240,8 +267,8 @@ public class SvShaders{
 
                 noiseTex.bind(1);
 
-                SvRender.buffer.getTexture().bind(0);
-                renderer.effectBuffer.getTexture().bind(0);
+                if(SvVars.effectBuffer != null) SvVars.effectBuffer.getTexture().bind(0);
+                else renderer.effectBuffer.getTexture().bind(0);
 
                 setUniformi("u_noise", 1);
             }

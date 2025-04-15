@@ -29,7 +29,7 @@ public class SvStorage {
 
     public static void load() {
         corePuffer = new AtlacianCore("core-puffer"){{
-            requirements(Category.effect,atl(), with(spaclanium,600,corallite,600,clay,300,sulfur,300));
+            requirements(Category.effect,atl(), with(spaclanium,400,corallite,400,clay,150));
             alwaysUnlocked = true;
             buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;

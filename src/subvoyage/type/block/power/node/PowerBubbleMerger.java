@@ -88,7 +88,7 @@ public class PowerBubbleMerger extends PowerBlock {
             Building other = world.build(value);
             boolean contains = power.links.contains(value), valid = other != null && other.power != null;
             if(other == null) return;
-            if(!(other.block() instanceof PowerBubbleNode)) return;
+            if(!(other.block instanceof PowerBubbleNode)) return;
             if(contains){
                 //unlink
                 power.links.removeValue(value);

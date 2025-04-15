@@ -67,7 +67,7 @@ public class OffloadDemolisherAI extends FlyingAI {
     public Teamc targetFlag(float x, float y, BlockFlag flag, boolean enemy, boolean offload) {
         if (unit.team == Team.derelict) return null;
         Seq<Building>   found = enemy ? indexer.getEnemy(unit.team, flag) : indexer.getFlagged(unit.team, flag);
-                        found.filter((e) -> !offload || e instanceof OffloadCore.OffloadCoreBuilding);
+                        found.select((e) -> !offload || e instanceof OffloadCore.OffloadCoreBuilding);
         return Geometry.findClosest(x, y, found);
     }
 }

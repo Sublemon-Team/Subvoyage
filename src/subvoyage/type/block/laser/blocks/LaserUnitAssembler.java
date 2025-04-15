@@ -83,7 +83,7 @@ public class LaserUnitAssembler extends UnitAssembler implements LaserBlock {
         }
 
         if(canBeBuilt() && requirements.length > 0){
-            stats.add(Stat.buildTime, buildCost / 60, StatUnit.seconds);
+            stats.add(Stat.buildTime, buildTime / 60, StatUnit.seconds);
             stats.add(Stat.buildCost, StatValues.items(false, requirements));
         }
 

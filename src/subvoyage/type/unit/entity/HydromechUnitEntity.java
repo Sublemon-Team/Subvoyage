@@ -107,11 +107,6 @@ public class HydromechUnitEntity extends LegsUnit {
     }
 
     @Override
-    public boolean emitWalkSound() {
-        return false;
-    }
-
-    @Override
     public void draw() {
         this.type.draw(this);
         if(isOnLiquid()) {
@@ -209,14 +204,6 @@ public class HydromechUnitEntity extends LegsUnit {
             }
 
             this.wasFlying = this.isFlying();
-        }
-
-        if (!this.hovering && this.isGrounded() && (this.splashTimer += Mathf.dst(this.deltaX(), this.deltaY())) >= 7.0F + this.hitSize() / 8.0F) {
-            floor.walkEffect.at(this.x, this.y, this.hitSize() / 8.0F, floor.mapColor);
-            this.splashTimer = 0.0F;
-            if (this.emitWalkSound()) {
-                floor.walkSound.at(this.x, this.y, Mathf.random(floor.walkSoundPitchMin, floor.walkSoundPitchMax), floor.walkSoundVolume);
-            }
         }
 
         this.updateDrowning();

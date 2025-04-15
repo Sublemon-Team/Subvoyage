@@ -43,6 +43,15 @@ public class SvFx{
     none = new Effect(0, 0f, e -> {
     }),
 
+    steam = new Effect(35f, e -> {
+        z(SvRender.Layer.hardWater+0.11f);
+        color(Color.white);
+
+        randLenVectors(e.id, 2, 2f + e.fin() * 7f, (x, y) -> {
+            Fill.circle(e.x + x, e.y + y, 0.2f + e.fslope() * 1.5f);
+        });
+    }),
+
     particle = new Effect(10f,e -> {
         stroke(e.fin(),e.color.cpy().value(1.1f));
         z(Layer.bullet+1f);

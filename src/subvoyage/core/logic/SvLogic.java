@@ -42,8 +42,6 @@ public class SvLogic {
         checkChanges();
 
         UpdateManager.checkFico();
-
-        control.input.addLock(AtlacianCore.lock);
         bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
 
         SvIcons.load();
@@ -57,8 +55,7 @@ public class SvLogic {
         var core = player.bestCore();
         if(core == null) return;
         if(!settings.getBool("skipcoreanimation") && !state.rules.pvp && state.rules.planet == atlacian){
-            //beginLandMusic();
-            beginLandCutscene();
+
         }
     }
 
@@ -69,12 +66,6 @@ public class SvLogic {
             Musics.land.stop();
             SvMusic.theAtlacian.play();
         }
-    }
-
-    public static void beginLandCutscene() {
-        AtlacianCore.cutscene = true;
-        AtlacianCore.landTime = 160f;
-        Time.run(160f,() -> AtlacianCore.cutscene = false);
     }
 
     /*Update*/
@@ -97,7 +88,6 @@ public class SvLogic {
             player.team(SvTeam.melius);
 
         LegionfieldAbility.update();
-        if(!state.isPaused() && AtlacianCore.cutscene) AtlacianCore.landTime-=Time.delta;
 
         if(state.rules.planet == atlacian) Advancement.welcome.unlock();
         if(state.rules.planet == atlacian && beta) Advancement.beta.unlock();
@@ -129,8 +119,6 @@ public class SvLogic {
     public static void worldLoad() {
         if(SvProduction.sifter instanceof Sifter sifter) sifter.worldReset();
         SvVars.atlacianMapControl.recalc();
-        AtlacianCore.cutscene = false;
-        AtlacianCore.landTime = 0f;
     }
 
     /*Updating*/

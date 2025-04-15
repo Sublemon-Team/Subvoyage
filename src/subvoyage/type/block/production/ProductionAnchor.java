@@ -239,11 +239,6 @@ public class ProductionAnchor extends Block {
             Draw.z(Layer.block);
         }
 
-        @Override
-        public boolean wasVisible() {
-            return true;
-        }
-
         Team cacheTeam = null;
         @Override
         public void damage(float damage) {

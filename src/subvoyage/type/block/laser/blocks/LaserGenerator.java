@@ -79,7 +79,7 @@ public class LaserGenerator extends Block implements LaserBlock {
         addBar("laser", (entity) -> {
             if(entity instanceof LaserBuild lb)
                 return new Bar(
-                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(entity.efficiency() * 100.0F + 0.01F)),
+                        () -> Core.bundle.format("bar.laserpercent", (int)(lb.rawLaser() + 0.01F), (int)(entity.efficiency * 100.0F + 0.01F)),
                         () -> LaserUtil.getLaserColor(lb.rawLaser()),
                         () -> lb.laser() / laserOutput);
             return new Bar();

@@ -261,17 +261,12 @@ public class ResistTurret extends BaseTurret implements LaserBlock {
 
 
         @Override
-        public boolean wasVisible() {
-            return true;
-        }
-
-        @Override
         public void updateTile() {
             super.updateTile();
             updateLaser(this);
             wasVisible = true;
-            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,Mathf.clamp(efficiency()));
-            int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
+            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,Mathf.clamp(efficiency));
+            int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency);
             smoothWarmup = Mathf.lerp(smoothWarmup,(float) estimatedRingCount/(minRingCount+boostRingCount),Time.delta/40f);
             float rr =ringRadius*1.5f;
             if(rings.size() > estimatedRingCount) rings = rings.subList(0,estimatedRingCount);
@@ -386,8 +381,8 @@ public class ResistTurret extends BaseTurret implements LaserBlock {
 
         @Override
         public float warmup() {
-            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency());
-            int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency());
+            int estDefRingCount = (int) Mathf.lerp(0,minRingCount,efficiency);
+            int estimatedRingCount = (int) Mathf.lerp(estDefRingCount,estDefRingCount+boostRingCount,boost()*efficiency);
             return smoothWarmup;
         }
 

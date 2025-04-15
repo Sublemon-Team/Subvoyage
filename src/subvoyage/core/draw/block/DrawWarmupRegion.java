@@ -38,7 +38,7 @@ public class DrawWarmupRegion extends DrawBlock{
     public void draw(Building build){
         float z = Draw.z();
         float smoothEfficiency = smoothEfficiencies.getOrDefault(build,0f);
-        smoothEfficiency = Mathf.lerp(smoothEfficiency,build.efficiency(),Time.delta/40f);
+        smoothEfficiency = Mathf.lerp(smoothEfficiency,build.efficiency,Time.delta/40f);
         smoothEfficiencies.put(build,smoothEfficiency);
         if(layer > 0) Draw.z(layer);
         if(spinSprite){

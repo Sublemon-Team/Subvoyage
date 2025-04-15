@@ -46,6 +46,8 @@ public class HelicopterUnitEntity extends PayloadUnit {
         return SvUnits.mapHelicopter;
     }
 
+
+
     @Override
     public void draw() {
         this.drawBuilding();
@@ -170,6 +172,10 @@ public class HelicopterUnitEntity extends PayloadUnit {
         return true;
     }
 
+    @Override
+    public CommandAI command() {
+        return super.command();
+    }
 
     @Override
     public boolean isPathImpassable(int tileX, int tileY) {
