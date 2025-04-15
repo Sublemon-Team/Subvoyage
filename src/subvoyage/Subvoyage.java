@@ -33,7 +33,7 @@ public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
 
     public static UpdateManager.VersionControl versionControl = new UpdateManager.VersionControl();
-    public static String currentTag = "v0.6b";
+    public static String currentTag = "v0.6fb";
     public static String GITHUB_REPO = "Sublemon-Team/Subvoyage";
 
     public Subvoyage(){
