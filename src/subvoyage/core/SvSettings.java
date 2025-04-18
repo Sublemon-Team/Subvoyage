@@ -59,11 +59,6 @@ public class SvSettings {
             switchPref(ID+"-power-bubble-node","subvoyage-power-bubble-shaders",true);
             switchPref(ID+"-phosphide-wall-large-full","subvoyage-wall-tiling",true);
 
-            separator("subvoyage-other");
-
-            switchPref(ID+"-energy-dock-ship","subvoyage-autoupdate",true);
-            buttonPref("subvoyage-autoupdate-btn",null,UpdateManager::begin);
-
             separator("subvoyage-fun");
 
             switchPref(ID+"-leeft-uwu","subvoyage-leeft-uwu",false, SvUnits::loadUwu);

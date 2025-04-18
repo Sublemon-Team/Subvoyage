@@ -38,7 +38,7 @@ public class SvLogic {
 
     /*Client Load*/
     public static void clientLoad() {
-        checkUpdates();
+        //checkUpdates();
         checkChanges();
 
         UpdateManager.checkFico();
