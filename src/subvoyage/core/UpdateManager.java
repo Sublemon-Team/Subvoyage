@@ -77,6 +77,7 @@ public class UpdateManager {
 
     public static void begin() {
         Log.info("[Subvoyage] Fetching latest Updates...");
+        System.out.println(Subvoyage.currentTag);
         Http.get(ghApi+"/repos/"+Subvoyage.GITHUB_REPO +"/releases/latest", res -> {
             var json = Jval.read(res.getResultAsString());
             String tagName = json.getString("tag_name");
@@ -84,7 +85,7 @@ public class UpdateManager {
             boolean upToDate = Subvoyage.versionControl.isUpToDate(Subvoyage.currentTag, tagName);
             Log.info("[Subvoyage] "+(!upToDate ? "New update is available" : "Version is up-to-date"));
             if(!upToDate) {
-                String text = bundle.format("settings.sv-update-version.confirm",tagName,Subvoyage.currentTag);
+                String text = bundle.format("settings.sv-update-version.confirm",tagName,Subvoyage.currentTag.replace("-beta","b").replace("-fix","f"));
                 ui.showConfirm("@update", text, UpdateManager::update);
             }
         },(err) -> {
@@ -192,10 +193,14 @@ public class UpdateManager {
         }
 
         public boolean isUpToDate(String originTag, String releaseTag) {
+            originTag = originTag.replace("-beta","b"); originTag = originTag.replace("-fix","f");
+            releaseTag = releaseTag.replace("-beta","b"); releaseTag = releaseTag.replace("-fix","f");
+
             originTag = originTag.replace("b","-beta"); originTag = originTag.replace("f","-fix");
             releaseTag = releaseTag.replace("b","-beta"); releaseTag = releaseTag.replace("f","-fix");
             if(originTag.startsWith("v")) originTag = originTag.substring(1);
             if(releaseTag.startsWith("v")) releaseTag = releaseTag.substring(1);
+
             boolean versionUptd = areVersionsUpToDate(originTag,releaseTag);
             if(!versionUptd) return false;
             boolean attributeUptd = areAttributeUpToDate(originTag,releaseTag);
