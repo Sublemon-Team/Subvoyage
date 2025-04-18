@@ -24,6 +24,8 @@ import mindustry.entities.Effect;
 import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
+import mindustry.world.blocks.LaunchAnimator;
+import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.block.SvLaser;
 import subvoyage.content.ost.SvMusic;
@@ -45,7 +47,7 @@ public class AtlacianCore extends CoreBlock {
         super(name);
     }
 
-    public class AtlacianCoreBuild extends CoreBuild {
+    public class AtlacianCoreBuild extends CoreBuild implements LaunchAnimator {
         @Override
         public void handleStack(Item item, int amount, Teamc source) {
             if(!bannedItems.contains(item) && item != Items.copper) super.handleStack(item, amount, source);
