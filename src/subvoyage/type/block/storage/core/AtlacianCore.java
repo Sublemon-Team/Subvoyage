@@ -52,7 +52,7 @@ public class AtlacianCore extends CoreBlock {
         landMusic = launchMusic = SvMusic.atlLand;
     }
 
-    public class AtlacianCoreBuild extends CoreBuild {
+    public class AtlacianCoreBuild extends CoreBuild implements LaunchAnimator {
         @Override
         public void handleStack(Item item, int amount, Teamc source) {
             if(!bannedItems.contains(item) && item != Items.copper) super.handleStack(item, amount, source);
