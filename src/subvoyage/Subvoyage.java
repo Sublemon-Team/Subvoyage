@@ -28,12 +28,13 @@ import subvoyage.core.SvSettings;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
 
 import static arc.Core.*;
+import static mindustry.Vars.mods;
 
 public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
 
     public static UpdateManager.VersionControl versionControl = new UpdateManager.VersionControl();
-    public static String currentTag = "v0.6fb";
+    public static String currentTag;
     public static String GITHUB_REPO = "Sublemon-Team/Subvoyage";
 
     public Subvoyage(){

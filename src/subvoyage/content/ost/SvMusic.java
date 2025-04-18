@@ -11,6 +11,7 @@ import mindustry.game.EventType;
 import mindustry.gen.Musics;
 import subvoyage.content.world.SvPlanets;
 import subvoyage.content.block.SvStorage;
+import subvoyage.type.block.storage.core.AtlacianCore;
 
 public class SvMusic {
     public static Music land;
@@ -26,13 +27,10 @@ public class SvMusic {
     public static void load() {
         land = Musics.land;
         Core.assets.load("music/atlacian.ogg", Music.class).loaded = (a) -> {
-            theAtlacian = a;
+            ambient1 = theAtlacian = a;
         };
         Core.assets.load("music/atl_land.ogg", Music.class).loaded = (a) -> {
             atlLand = a;
-        };
-        Core.assets.load("music/atl-ambient1.ogg", Music.class).loaded = (a) -> {
-            ambient1 = a;
         };
         Core.assets.load("music/atl-ambient2.ogg", Music.class).loaded = (a) -> {
             ambient2 = a;
@@ -42,8 +40,8 @@ public class SvMusic {
         };
 
         musicSets.put("vanillaAmbient",new Seq<>(Vars.control.sound.ambientMusic));
-        musicSets.put("atlacianAmbient", Seq.with(ambient1,ambient2,ambient3,theAtlacian));
-        musicSets.put("atlacianDark", Seq.with(ambient1,ambient2,ambient3,theAtlacian));
+        musicSets.put("atlacianAmbient", Seq.with(ambient1,ambient2,ambient3));
+        musicSets.put("atlacianDark", Seq.with(ambient1,ambient2,ambient3));
         musicSets.put("atlacianBoss", Seq.with());
 
         Events.on(EventType.WorldLoadEvent.class, e -> {
@@ -51,11 +49,10 @@ public class SvMusic {
             updatePlanetMusic();
         });
     }
-
     /** Updates landing music based on core block type. */
     private static void updateLandMusic() {
         Vars.state.rules.defaultTeam.cores().each(core ->
-                Musics.land = (core.block == SvStorage.corePuffer)
+                Musics.land = (core.block instanceof AtlacianCore)
                         ? atlLand
                         : land);
     }

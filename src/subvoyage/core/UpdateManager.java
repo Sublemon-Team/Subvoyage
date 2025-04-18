@@ -169,10 +169,8 @@ public class UpdateManager {
             int len = Math.max(originVersion.length,releaseVersion.length);
             boolean okay = true;
             for (int i = 0; i < len; i++) {
-                Integer orV = originVersion[i];
-                Integer reV = releaseVersion[i];
-                if(orV == null) orV = 0;
-                if(reV == null) reV = 0;
+                int orV = i >= originVersion.length ? 0 : originVersion[i];
+                int reV = i >= releaseVersion.length ? 0 : releaseVersion[i];
                 if(reV > orV) {okay = false; break;}
             }
             return okay;
