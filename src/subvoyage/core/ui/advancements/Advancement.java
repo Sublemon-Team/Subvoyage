@@ -14,7 +14,7 @@ public class Advancement {
 
     public static Advancement
             welcome,beta,
-            sector_thaw,
+            sectorf_thaw,
             sector_construction,
             sector_the_segment,
             unit_helio, unit_hydro, unit_rover,
@@ -35,7 +35,7 @@ public class Advancement {
                 "welcome","sublemon_frog", // Launching Subvoyage
                 "beta","sodilate-boulder1", // Launching Subvoyage
 
-                "sector_thaw","ceramic-burner", // Capturing Thaw
+                "sectorf_thaw","ceramic-burner", // Capturing Thaw
                 "sector_construction","power-bubble-node", // Capturing Construction
                 "sector_the_segment","build-tower-adv", // Capturing The Segment
 

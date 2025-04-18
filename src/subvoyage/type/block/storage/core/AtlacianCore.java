@@ -25,6 +25,7 @@ import mindustry.gen.*;
 import mindustry.graphics.*;
 import mindustry.type.*;
 import mindustry.world.blocks.LaunchAnimator;
+import mindustry.world.blocks.environment.StaticWall;
 import mindustry.world.blocks.power.PowerNode;
 import mindustry.world.blocks.storage.*;
 import subvoyage.content.block.SvLaser;
@@ -35,6 +36,7 @@ import subvoyage.core.draw.SvPal;
 import subvoyage.core.draw.SvDraw;
 import subvoyage.core.draw.SvRender;
 import subvoyage.core.draw.shader.SvShaders;
+import subvoyage.core.logic.SvLogic;
 
 import static mindustry.Vars.*;
 
@@ -46,6 +48,8 @@ public class AtlacianCore extends CoreBlock {
     public AtlacianCore(String name) {
         super(name);
         buildType = AtlacianCoreBuild::new;
+
+        landMusic = launchMusic = SvMusic.atlLand;
     }
 
     public class AtlacianCoreBuild extends CoreBuild {
@@ -71,6 +75,7 @@ public class AtlacianCore extends CoreBlock {
             if(launching){
                 Fx.coreLaunchConstruct.at(x, y, size);
             }
+            SvLogic.beginLandMusic();
             if(!headless){
                 // Add fade-in and fade-out foreground when landing or launching.
                 if(renderer.isLaunching()){
@@ -224,12 +229,12 @@ public class AtlacianCore extends CoreBlock {
 
         @Override
         public Music launchMusic() {
-            return SvMusic.land;
+            return SvMusic.atlLand;
         }
 
         @Override
         public Music landMusic() {
-            return SvMusic.land;
+            return SvMusic.atlLand;
         }
 
         @Override

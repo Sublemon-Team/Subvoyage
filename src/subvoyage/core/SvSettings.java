@@ -55,6 +55,8 @@ public class SvSettings {
                     });
             settings.defaults("subvoyage-planet-divisions", 6);
 
+            switchPref(ID+"-overdrive-projector","subvoyage-drawer-mode",true);
+
             switchPref(ID+"-laser-projector","subvoyage-laser-shaders",true);
             switchPref(ID+"-power-bubble-node","subvoyage-power-bubble-shaders",true);
             switchPref(ID+"-phosphide-wall-large-full","subvoyage-wall-tiling",true);
@@ -72,6 +74,7 @@ public class SvSettings {
         });
     }
 
+    public static boolean drawerMode() {return boolDef("drawer-mode",true);}
     public static boolean wallTiling() {
         return boolDef("wall-tiling",true);
     }

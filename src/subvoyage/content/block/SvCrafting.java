@@ -15,10 +15,7 @@ import mindustry.world.meta.Attribute;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
-import subvoyage.core.draw.block.DrawBurner;
-import subvoyage.core.draw.block.DrawColorWeave;
-import subvoyage.core.draw.block.DrawHeatGlow;
-import subvoyage.core.draw.block.DrawMixer;
+import subvoyage.core.draw.block.*;
 import subvoyage.core.draw.SvFx;
 import subvoyage.type.block.laser.blocks.*;
 import subvoyage.type.block.crafter.crude.CrudeSmelter;
@@ -45,12 +42,17 @@ public class SvCrafting {
             requirements(Category.crafting, atl(),with(corallite,150,spaclanium,120,finesand,30));
             researchCost = with(corallite,30,spaclanium,30);
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawBurner(),
-                    new DrawRegion("-top"),
-                    new DrawHeatGlow()
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawDefault(),
+                            new DrawRegion("-top")
+                    )
+                    .with(
+                            new DrawDefault(),
+                            new DrawBurner(),
+                            new DrawRegion("-top"),
+                            new DrawHeatGlow()
+                    );
             squareSprite = false;
             size = 3;
 
@@ -69,24 +71,28 @@ public class SvCrafting {
 
             hasLiquids = true;
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawLiquidRegion(argon),
-                    new DrawArcSmelt(){{
-                        flameColor = SvPal.argonFlame;
-                        midColor = SvPal.argonMidSmelt;
-                        flameRad = 1.0F;
-                        circleSpace = 1.0F;
-                        flameRadiusScl = 3.0F;
-                        flameRadiusMag = 0.3F;
-                        circleStroke = 1.25F;
-                        particles = 16;
-                        particleLife = 30.0F;
-                        particleRad = 5.2F;
-                        particleStroke = 0.8F;
-                        particleLen = 2.25F;
-                    }}
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawDefault()
+                    )
+                    .with(
+                            new DrawDefault(),
+                            new DrawLiquidRegion(argon),
+                            new DrawArcSmelt(){{
+                                flameColor = SvPal.argonFlame;
+                                midColor = SvPal.argonMidSmelt;
+                                flameRad = 1.0F;
+                                circleSpace = 1.0F;
+                                flameRadiusScl = 3.0F;
+                                flameRadiusMag = 0.3F;
+                                circleStroke = 1.25F;
+                                particles = 16;
+                                particleLife = 30.0F;
+                                particleRad = 5.2F;
+                                particleStroke = 0.8F;
+                                particleLen = 2.25F;
+                            }}
+                    );
 
             squareSprite = false;
             size = 3;
@@ -131,12 +137,18 @@ public class SvCrafting {
             hasLiquids = true;
             hasPower = true;
             envDisabled |= Env.scorching;
-            drawer = new DrawMulti(
-                    new DrawRegion("-bottom"),
-                    new DrawMixer(),
-                    new DrawRegion(),
-                    new DrawRegion("-top")
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawRegion("-bottom"),
+                            new DrawDefault(),
+                            new DrawRegion("-top")
+                    )
+                    .with(
+                            new DrawRegion("-bottom"),
+                            new DrawMixer(),
+                            new DrawDefault(),
+                            new DrawRegion("-top")
+                    );
 
             outputLiquid = new LiquidStack(hydrogen,18/60f);
 
@@ -157,10 +169,12 @@ public class SvCrafting {
             consumeItem(crude,1);
             consumePower(0.45f);
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawHeatGlow()
-            );
+            drawer = DrawSplit
+                    .withLow()
+                    .with(
+                        new DrawDefault(),
+                        new DrawHeatGlow()
+                    );
 
             outputLiquid = new LiquidStack(propane,48/60f);
             hasLiquids = true;
@@ -176,13 +190,15 @@ public class SvCrafting {
             craftEffect = Fx.smokePuff;
             recipes = recipes(corallite, 4, 80, spaclanium, 3, 60, iridium, 5, 90, chrome, 2, 120);
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawFlame(){{
-                        lightRadius = 70f;
-                        flameRadius = 6f;
-                    }}
-            );
+            drawer = DrawSplit
+                    .withLow()
+                    .with(
+                            new DrawDefault(),
+                            new DrawFlame(){{
+                                lightRadius = 70f;
+                                flameRadius = 6f;
+                            }}
+                    );
             consumeItem(crude, 2);
             consumeLiquid(hydrogen, 12f/60f);
             consumeLiquid(propane, 32f/60f);
@@ -206,10 +222,12 @@ public class SvCrafting {
             consumeLiquid(hydrogen,20/60f);
             consumePower(0.6f);
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawLiquidRegion(helium)
-            );
+            drawer = DrawSplit
+                    .withLow()
+                    .with(
+                        new DrawDefault(),
+                        new DrawLiquidRegion(helium)
+                    );
 
             outputLiquid = new LiquidStack(helium,52/60f);
             hasLiquids = true;
@@ -237,11 +255,16 @@ public class SvCrafting {
             inputRange = 8;
             drawInputs = false;
 
-            drawer = new DrawMulti(
-                    new DrawDefault(),
-                    new DrawPistons(),
-                    new DrawRegion("-top")
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawDefault(),
+                            new DrawRegion("-top")
+                    )
+                    .with(
+                            new DrawDefault(),
+                            new DrawPistons(),
+                            new DrawRegion("-top")
+                    );
 
             outputItem = new ItemStack(phosphide,3);
         }
@@ -272,18 +295,23 @@ public class SvCrafting {
             inputRange = 8;
             drawInputs = false;
 
-            drawer = new DrawMulti(
-                    new DrawRegion("-bottom"),
-                    new DrawArcSmelt() {{
-                        drawCenter = true;
-                        flameColor = SvPal.teslaCharge;
-                        midColor = SvPal.teslaCharge.cpy().lerp(Color.white,0.5f);
-                        particleStroke = circleStroke = 0.3f;
-                    }},
-                    new DrawRegion("") {{
-                        layer = Layer.blockOver;
-                    }}
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawRegion("-bottom"),
+                            new DrawDefault()
+                    )
+                    .with(
+                            new DrawRegion("-bottom"),
+                            new DrawArcSmelt() {{
+                                drawCenter = true;
+                                flameColor = SvPal.teslaCharge;
+                                midColor = SvPal.teslaCharge.cpy().lerp(Color.white,0.5f);
+                                particleStroke = circleStroke = 0.3f;
+                            }},
+                            new DrawRegion("") {{
+                                layer = Layer.blockOver;
+                            }}
+                    );
 
             outputItem = new ItemStack(nitride,2);
         }
@@ -308,7 +336,16 @@ public class SvCrafting {
             consumeLiquid(hydrogen,38/60f);
             consumeLiquid(argon,38/60f);
             consumePower(400/60f);
-            drawer = new DrawMulti(new DrawRegion("-bottom"), new DrawColorWeave(SvPal.quartzWeave), new DrawDefault());
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawRegion("-bottom"),
+                            new DrawDefault()
+                    )
+                    .with(
+                            new DrawRegion("-bottom"),
+                            new DrawColorWeave(SvPal.quartzWeave),
+                            new DrawDefault())
+            ;
             outputItem = new ItemStack(quartzFiber,2);
 
             laserRequirement = 120f;
@@ -340,20 +377,26 @@ public class SvCrafting {
             hasItems = true;
             hasLiquids = true;
             envDisabled |= Env.scorching;
-            drawer = new DrawMulti(
-                    new DrawRegion("-bottom"),
-                    new DrawLiquidTile(hardWater, 2f),
-                    new DrawBubbles(Color.valueOf("7693e3")){{
-                        sides = 10;
-                        recurrence = 3f;
-                        spread = 6;
-                        radius = 1.5f;
-                        amount = 20;
-                    }},
-                    new DrawBlurSpin("-rotator", 6f),
-                    new DrawRegion("-top"),
-                    new DrawDefault()
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawRegion("-bottom"),
+                            new DrawRegion("-top"),
+                            new DrawDefault()
+                    )
+                    .with(
+                            new DrawRegion("-bottom"),
+                            new DrawLiquidTile(hardWater, 2f),
+                            new DrawBubbles(Color.valueOf("7693e3")){{
+                                sides = 10;
+                                recurrence = 3f;
+                                spread = 6;
+                                radius = 1.5f;
+                                amount = 20;
+                            }},
+                            new DrawBlurSpin("-rotator", 6f),
+                            new DrawRegion("-top"),
+                            new DrawDefault()
+                    );
 
             consumeLiquid(hardWater, 16/60f);
         }};

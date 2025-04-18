@@ -11,6 +11,7 @@ import mindustry.core.Version;
 import mindustry.game.Team;
 import mindustry.gen.Musics;
 import mindustry.type.SectorPreset;
+import mindustry.ui.fragments.HudFragment;
 import subvoyage.Subvoyage;
 import subvoyage.content.SvItems;
 import subvoyage.core.SvSettings;
@@ -38,6 +39,8 @@ public class SvLogic {
 
     /*Client Load*/
     public static void clientLoad() {
+        Subvoyage.currentTag = mods.getMod(Subvoyage.ID).meta.version;
+
         checkUpdates();
         checkChanges();
 
@@ -55,17 +58,18 @@ public class SvLogic {
         var core = player.bestCore();
         if(core == null) return;
         if(!settings.getBool("skipcoreanimation") && !state.rules.pvp && state.rules.planet == atlacian){
-
+            beginLandMusic();
         }
     }
 
     /*Landing*/
     public static void beginLandMusic() {
-        SvMusic.theAtlacian.stop();
+        /*SvMusic.atlLand.stop();
         if(settings.getInt("musicvol") > 0){
             Musics.land.stop();
-            SvMusic.theAtlacian.play();
-        }
+            SvMusic.atlLand.setVolume(1f);
+            SvMusic.atlLand.play();
+        }*/
     }
 
     /*Update*/
@@ -97,6 +101,11 @@ public class SvLogic {
             if(sect.sector.isCaptured() && Advancement.get(id) != null) {
                 Advancement.get(id).unlock();
             }
+        }
+
+        if(state.getSector() != null && state.getSector().isBeingPlayed() && !state.rules.objectives.all.contains(e -> !e.isCompleted())) {
+            String id2 = "sectorf_" + state.getSector().preset.name.replace("subvoyage-", "").replace("-", "_");
+            Advancement.get(id2).unlock();
         }
 
         if(state.getSector() != null && state.getSector().preset == SvSectorPresets.segment) {
