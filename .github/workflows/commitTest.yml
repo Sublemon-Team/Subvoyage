@@ -19,6 +19,23 @@ jobs:
       run: |
         chmod +x ./gradlew
         ./gradlew deploy
+    - name: Verify Core Build Output
+      run: ls -la ./build/libs
+
+    - name: Send JAR and additional files to Discord
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      run: |
+        # Находим JAR файл из core/build/libs
+        JAR_FILE=$(ls build/libs/*.jar | head -n 1)  
+
+        # Находим все файлы в core/libs
+        ADDITIONAL_FILES=$(ls libs/* 2>/dev/null || echo "")
+
+        # Отправляем JAR файл
+        curl -F "payload_json={\"content\": \"<:u_leeftuwulegs:1259167302117490738>Subvoyage Build:  ${{ github.event.head_commit.message }}\"}" \
+             -F "file=@${JAR_FILE}" \
+             $DISCORD_WEBHOOK
     - name: Upload built jar file
       uses: actions/upload-artifact@v4
       with:

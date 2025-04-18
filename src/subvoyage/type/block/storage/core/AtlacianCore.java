@@ -45,9 +45,10 @@ public class AtlacianCore extends CoreBlock {
 
     public AtlacianCore(String name) {
         super(name);
+        buildType = AtlacianCoreBuild::new;
     }
 
-    public class AtlacianCoreBuild extends CoreBuild implements LaunchAnimator {
+    public class AtlacianCoreBuild extends CoreBuild {
         @Override
         public void handleStack(Item item, int amount, Teamc source) {
             if(!bannedItems.contains(item) && item != Items.copper) super.handleStack(item, amount, source);
