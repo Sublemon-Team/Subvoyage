@@ -66,7 +66,7 @@ public class Subvoyage extends Mod {
         SvSettings.load();
         Colors.put("sv-accent",Color.valueOf("7ede8a"));
         //we'll just break in and do our giggles
-        Vars.asyncCore.processes.add(new AsyncProcess() {
+        /*Vars.asyncCore.processes.add(new AsyncProcess() {
             @Override
             public void begin() {
                 AsyncProcess.super.begin();
@@ -76,7 +76,7 @@ public class Subvoyage extends Mod {
                     if(e instanceof HelicopterUnitEntity h) h.physref.body.layer = 2;
                 });
             }
-        });
+        });*/
 
         try {
             if(Version.isAtLeast("147")) {

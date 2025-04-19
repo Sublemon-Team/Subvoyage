@@ -8,6 +8,7 @@ import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
 import arc.struct.ObjectMap;
 import arc.util.Time;
+import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.entities.Effect;
@@ -20,6 +21,7 @@ import mindustry.entities.units.*;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.*;
+import mindustry.input.Binding;
 import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
@@ -28,11 +30,13 @@ import mindustry.world.meta.*;
 import subvoyage.content.ost.SvSounds;
 import subvoyage.core.draw.SvFx;
 import subvoyage.core.draw.SvPal;
+import subvoyage.core.draw.SvRender;
 import subvoyage.core.draw.part.SpinningBlurRegionPart;
 import subvoyage.Subvoyage;
 import subvoyage.type.bullet.BallisticBulletType;
 import subvoyage.type.unit.ability.LegionfieldAbility;
 import subvoyage.type.unit.ai.DefenderDroneAI;
+import subvoyage.type.unit.ai.HelicopterBoostAI;
 import subvoyage.type.unit.type.AtlacianUnitType;
 import subvoyage.type.unit.type.RoverUnitType;
 import subvoyage.core.ui.advancements.Advancement;
@@ -78,11 +82,19 @@ public class SvUnits{
     bulker,
     pisun; //shh, don't tell anyone
 
+    public static UnitCommand boostCommand;
+
     public static int mapHelicopter = 0;
     public static int mapHMech = 0;
     public static void load(){
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
+
+        boostCommand = new UnitCommand("boost", "up", Binding.unit_command_boost, u -> new HelicopterBoostAI()){{
+            switchToMove = false;
+            drawTarget = true;
+            resetTarget = false;
+        }};
 
         //core
         shift = new AtlacianUnitType("shift"){{
@@ -892,6 +904,8 @@ public class SvUnits{
 
                 color = SvPal.heatGlow;
                 particleColor = Pal.lightOrange.cpy();
+
+                layer = SvRender.Layer.effectGround;
             }});
 
             parts.add(copter, tail);

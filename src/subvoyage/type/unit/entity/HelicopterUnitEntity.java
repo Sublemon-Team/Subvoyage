@@ -11,11 +11,13 @@ import arc.math.geom.Vec2;
 import arc.scene.ui.layout.Table;
 import arc.struct.Seq;
 import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.ai.types.CommandAI;
 import mindustry.async.PhysicsProcess;
 import mindustry.content.Fx;
 import mindustry.entities.Effect;
+import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.bullet.ExplosionBulletType;
 import mindustry.entities.units.StatusEntry;
@@ -124,6 +126,33 @@ public class HelicopterUnitEntity extends PayloadUnit {
         this.y += Mathf.cos(Time.time + (float)(this.id() % 10 * 12), 25.0F, 0.05F) * Time.delta * this.elevation * accel();
     }
 
+    @Override
+    public void updateBoosting(boolean boost) {
+        if (type.canBoost && !dead) {
+            boolean shouldBoost = boost || (isFlying() && !canLand()) || (isFlying() && onSolid());
+            if(shouldBoost) accelSmooth = Mathf.lerpDelta(accelSmooth,Math.max(accelSmooth,0.75f),1/30f);
+        }
+    }
+
+    @Override
+    public boolean canShoot() {
+        return !this.disarmed;
+    }
+
+    public void steer() {
+        float steerX = Mathf.sinDeg(Time.time) * 12f;
+        float steerY = Mathf.cosDeg(Time.time) * 12f;
+
+        float len = 1f - Mathf.clamp(vel.len(), 0f, 0.3f) / 0.3f;
+
+        moveAt(new Vec2(steerX, steerY).times(new Vec2(len, len)));
+    }
+
+    @Override
+    public boolean canLand() {
+        return Units.count(this.x, this.y, this.physicSize(), (f) -> f != this && f.isGrounded()) == 0;
+    }
+
     public boolean reachedFullAltitude = false;
     public float accelSmooth = 0f;
 
@@ -155,7 +184,7 @@ public class HelicopterUnitEntity extends PayloadUnit {
             reachedFullAltitude = true;
         }
 
-        if(lastAccel > 0.25 && accel() <= 0.25 && accel()-lastAccel < 0 && reachedFullAltitude) {
+        if(lastAccel > 0.1 && accel() <= 0.1 && accel()-lastAccel < 0 && reachedFullAltitude) {
             Effect.shake(type.stepShake,type.stepShake,new Vec2(x,y));
             reachedFullAltitude = false;
         }

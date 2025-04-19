@@ -51,13 +51,8 @@ public class HelicopterAI extends FlyingAI {
             groundCooldown = -5f * 60f;
         }
 
-        if (heli.vel.len() < 0.3f && keepFlying || groundCooldown > 0f) {
-            float steerX = Mathf.sinDeg(Time.time) * 12f;
-            float steerY = Mathf.cosDeg(Time.time) * 12f;
-
-            float len = 1f - Mathf.clamp(heli.vel.len(), 0f, 0.3f) / 0.3f;
-
-            heli.movePref(new Vec2(steerX, steerY).times(new Vec2(len, len)));
+        if (keepFlying || groundCooldown > 0f) {
+            heli.updateBoosting(true);
         }
         if (!keepFlying) {
             groundCooldown += Time.delta;

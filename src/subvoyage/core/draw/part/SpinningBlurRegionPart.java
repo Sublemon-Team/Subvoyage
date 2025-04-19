@@ -34,7 +34,7 @@ public class SpinningBlurRegionPart extends DrawPart{
     public void draw(PartParams params){
         if(!draw) return;
         if(rotator.found()){
-            float layer = this.layer+ 3;
+            float layer = params.warmup > 0.1f ? this.layer + 3 : Layer.legUnit + 3;
             Vec2 vec = Tmp.v2.set(x,y).rotate(params.rotation - 90);
             float t = Time.time / 60f;
             float accel = Mathf.clamp(params.warmup,0f,1f);

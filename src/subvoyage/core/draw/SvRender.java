@@ -39,7 +39,9 @@ public class SvRender {
                 laser = 72.2f,
                 powerBubbles = 86.7f,
 
-                hardWater = 30.3f
+                hardWater = 30.3f,
+
+                effectGround = 74.5f
                 ;
     }
 
@@ -82,6 +84,14 @@ public class SvRender {
                         buffer.blit(SvShaders.powerBubbles);
                         Draw.blend();
                     });
+        if(settings.getBool("bloom") && bloom != null) {
+            renderer.bloom.resize(graphics.getWidth(), graphics.getHeight());
+            renderer.bloom.setBloomIntensity(settings.getInt("bloomintensity", 6) / 4f + 1f);
+            renderer.bloom.blurPasses = settings.getInt("bloomblur", 1);
+
+            Draw.drawRange(Layer.effectGround, 0.1f,
+                    renderer.bloom::capture, renderer.bloom::render);
+        }
         if(state.getPlanet() == atlacian) atlacianRenderer.run();
         SvVars.effectBuffer = buffer;
     }

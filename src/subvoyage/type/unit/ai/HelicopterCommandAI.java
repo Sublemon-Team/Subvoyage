@@ -5,6 +5,7 @@ import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.UnitStance;
+import mindustry.ai.types.BoostAI;
 import mindustry.ai.types.CommandAI;
 import mindustry.entities.Units;
 import mindustry.gen.*;
@@ -15,6 +16,11 @@ import static mindustry.Vars.*;
 import static mindustry.Vars.tilesize;
 
 public class HelicopterCommandAI extends CommandAI {
+    {
+        stopAtTarget = false;
+        stopWhenInRange = false;
+    }
+
     @Override
     public void defaultBehavior() {
         if(!net.client() && unit instanceof Payloadc pay){
@@ -100,7 +106,7 @@ public class HelicopterCommandAI extends CommandAI {
                             (command == UnitCommand.enterPayloadCommand && unit.within(targetPos, 4f) || (targetBuild != null && unit.within(targetBuild, targetBuild.block.size * tilesize/2f * 0.9f))) ||
                             (command == UnitCommand.loopPayloadCommand && unit.within(targetPos, 10f))
             ){
-                move = false;
+                //move = false;
             }
 
             vecOut.set(vecMovePos);
@@ -113,7 +119,7 @@ public class HelicopterCommandAI extends CommandAI {
                     moveTo(vecOut,
                             withinAttackRange ? engageRange :
                                     attackTarget != null && stance != UnitStance.ram ? engageRange : 0f,
-                            unit.isFlying() ? 40f : 100f, false, null, isFinalPoint || alwaysArrive);
+                            unit.isFlying() ? 40f : 100f, true, null, isFinalPoint || alwaysArrive);
                 }
             }
 

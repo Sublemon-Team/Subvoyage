@@ -9,16 +9,20 @@ import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.ai.ControlPathfinder;
 import mindustry.ai.Pathfinder;
+import mindustry.ai.UnitCommand;
 import mindustry.ai.types.CommandAI;
 import mindustry.ai.types.FlyingAI;
 import mindustry.entities.abilities.Ability;
 import mindustry.entities.part.DrawPart;
+import mindustry.entities.units.AIController;
 import mindustry.entities.units.WeaponMount;
 import mindustry.game.Team;
 import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
+import mindustry.type.unit.NeoplasmUnitType;
 import mindustry.world.blocks.environment.Floor;
+import subvoyage.content.SvUnits;
 import subvoyage.type.unit.ai.HelicopterAI;
 import subvoyage.type.unit.ai.HelicopterCommandAI;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
@@ -26,11 +30,13 @@ import subvoyage.type.unit.weapon.HydromechWeapon;
 
 import java.util.function.Consumer;
 
-import static mindustry.Vars.player;
 import static mindustry.Vars.world;
+
 
 public class HelicopterUnitType extends AtlacianUnitType {
     public Consumer<HelicopterUnitEntity> onUpdate = (e) -> {};
+
+    static final int impassable = -1;
 
     public HelicopterUnitType(String name) {
         super(name);
@@ -39,9 +45,11 @@ public class HelicopterUnitType extends AtlacianUnitType {
         rotateMoveFirst = false;
         drag = 0.15f;
         strafePenalty = 1f;
-        pathCost = (t,b) -> 100;
+        pathCost = (team,tile) -> 0;
 
         aiController = HelicopterAI::new;
+
+        canBoost = true;
 
         controller = u -> !playerControllable || (u.team.isAI() && !u.team.rules().rtsAi) ? aiController.get() : new HelicopterCommandAI();
     }
@@ -50,6 +58,9 @@ public class HelicopterUnitType extends AtlacianUnitType {
     public void init() {
         super.init();
         payloadCapacity = hitSize * hitSize * 0.85f;
+
+        commands.remove(UnitCommand.boostCommand);
+        commands.add(SvUnits.boostCommand);
     }
 
     @Override
@@ -57,13 +68,14 @@ public class HelicopterUnitType extends AtlacianUnitType {
         if(unit.inFogTo(Vars.player.team())) return;
 
         float scale = unit instanceof HelicopterUnitEntity h ? h.accel()*0.1f + 0.9f : 1f;
+
         boolean isPayload = !unit.isAdded();
 
         Mechc mech = unit instanceof Mechc ? (Mechc)unit : null;
-        float z = isPayload ? Draw.z() : lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit;
+        float z = isPayload ? Draw.z() : unit.isGrounded() ? Layer.legUnit : (lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit);
 
         if(!isPayload && (unit.isFlying() || shadowElevation > 0)){
-            Draw.z(Math.min(Layer.darkness, z - 1f));
+            Draw.z(Math.min(Layer.darkness, z - 2f));
             drawShadow(unit);
         }
 
@@ -126,10 +138,13 @@ public class HelicopterUnitType extends AtlacianUnitType {
                 var part = parts.get(i);
 
                 WeaponMount first = unit.mounts.length > part.weaponIndex ? unit.mounts[part.weaponIndex] : null;
+
+                float warm = unit instanceof HelicopterUnitEntity heli ? heli.accel() : unit.vel.len() / unit.speed();
+
                 if(first != null){
-                    DrawPart.params.set(unit.vel.len() / unit.speed(), first.reload / weapons.first().reload, first.smoothReload, first.heat, first.recoil, first.charge, unit.x, unit.y, unit.rotation);
+                    DrawPart.params.set(warm, first.reload / weapons.first().reload, first.smoothReload, first.heat, first.recoil, first.charge, unit.x, unit.y, unit.rotation);
                 }else{
-                    DrawPart.params.set(unit.vel.len() / unit.speed(), 0f, 0f, 0f, 0f, 0f, unit.x, unit.y, unit.rotation);
+                    DrawPart.params.set(warm, 0f, 0f, 0f, 0f, 0f, unit.x, unit.y, unit.rotation);
                 }
 
                 if(unit instanceof Scaled s){
