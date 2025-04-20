@@ -57,7 +57,7 @@ public class SvProduction {
         coralliteGrinder = new CoralliteGrinder("corallite-grinder") {{
             requirements(Category.production, atl(), with(corallite, 12));
             size = 2;
-            craftTime = 360f;
+            craftTime = 4.5f*60f;
             itemCapacity = 50;
 
             researchCost = with(corallite,5);

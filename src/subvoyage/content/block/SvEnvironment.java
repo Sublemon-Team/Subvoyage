@@ -10,6 +10,7 @@ import mindustry.world.draw.DrawRegion;
 import mindustry.world.meta.*;
 import subvoyage.content.SvItems;
 import subvoyage.content.other.SvAttribute;
+import subvoyage.core.draw.block.DrawSplit;
 import subvoyage.core.draw.shader.SvShaders;
 import subvoyage.core.draw.block.Draw3DSprite;
 import subvoyage.core.draw.block.Draw3DStem;
@@ -278,22 +279,28 @@ public class SvEnvironment {
         hauntedTree = new DrawerBlock("haunted-tree"){{
             clipSize = 128f;
             //shadowOffset = -2.5f;
-            drawer = new DrawMulti(
-                    new Draw3DSprite("-shadow") {{
-                        surfaceTime = 0f;
-                        camOffset = 0.001f;
-                        enableZOffset = false;
-                    }},
-                    new DrawRegion("-root"),
-                    new Draw3DStem("-stem") {{
-                        camOffset = 0.15f;
-                        segments = 4;
-                    }},
-                    new Draw3DSprite("-top") {{
-                        surfaceTime = 0f;
-                        camOffset = 0.15f;
-                    }}
-            );
+            drawer = DrawSplit
+                    .withLow(
+                            new DrawRegion("-root"),
+                            new DrawRegion("-shadow"),
+                            new DrawRegion("-top")
+                    )
+                    .with(
+                            new Draw3DSprite("-shadow") {{
+                                surfaceTime = 0f;
+                                camOffset = 0.001f;
+                                enableZOffset = false;
+                            }},
+                            new DrawRegion("-root"),
+                            new Draw3DStem("-stem") {{
+                                camOffset = 0.15f;
+                                segments = 4;
+                            }},
+                            new Draw3DSprite("-top") {{
+                                surfaceTime = 0f;
+                                camOffset = 0.15f;
+                            }}
+                    );
         }};
 
         floorToWallOre.put(oreSpaclanium,wallOreSpaclanium);

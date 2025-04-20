@@ -89,10 +89,10 @@ public class SvPayload {
             regionSuffix = "-fortified";
             researchCost = with(iridium,600,clay,600, chrome,120);
 
-            consumeLiquid(propane,0.45f);
+            consumeLiquid(propane,0.35f);
             configurable = false;
             plans = Seq.with(
-                    new UnitPlan(leeft, 60f * 25, with(iridium, 20))
+                    new UnitPlan(stunt, 60f * 25, with(iridium, 15))
             );
             size = 3;
             consumePower(1f);
