@@ -26,11 +26,11 @@ public class SvMusic {
 
     public static void load() {
         land = Musics.land;
-        Core.assets.load("music/atlacian.ogg", Music.class).loaded = (a) -> {
-            ambient1 = theAtlacian = a;
-        };
         Core.assets.load("music/atl_land.ogg", Music.class).loaded = (a) -> {
             atlLand = a;
+        };
+        Core.assets.load("music/atl-ambient1.ogg", Music.class).loaded = (a) -> {
+            ambient1 = theAtlacian = a;
         };
         Core.assets.load("music/atl-ambient2.ogg", Music.class).loaded = (a) -> {
             ambient2 = a;
