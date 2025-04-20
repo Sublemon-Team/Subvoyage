@@ -87,19 +87,36 @@ public class CoralliteGrinder extends GenericCrafter {
         public void craft() {
             consume();
 
-            if(outputItems != null)
-                for (var output : outputItems)
+            if(output() != null)
+                for (var output : output())
                     for (int i = 0; i < output.amount; i++)
-                        offload(output.item);
-            if(sulfurVariant != null)
-                for(var output : sulfurVariant)
-                    for(int i = 0; i < output.amount; i++)
                         offload(output.item);
 
             if(wasVisible){
                 craftEffect.at(x, y);
             }
             progress %= 1f;
+        }
+
+        @Override
+        public void dumpOutputs() {
+            if(output() != null && timer(timerDump, dumpTime / timeScale)){
+                for(ItemStack output : output()){
+                    dump(output.item);
+                }
+            }
+
+            if(outputLiquids != null){
+                for(int i = 0; i < outputLiquids.length; i++){
+                    int dir = liquidOutputDirections.length > i ? liquidOutputDirections[i] : -1;
+
+                    dumpLiquid(outputLiquids[i].liquid, 2f, dir);
+                }
+            }
+        }
+
+        public ItemStack[] output() {
+            return useSulfur() ? sulfurVariant : outputItems;
         }
 
         @Override
