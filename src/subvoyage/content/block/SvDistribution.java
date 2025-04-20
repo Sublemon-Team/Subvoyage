@@ -1,5 +1,6 @@
 package subvoyage.content.block;
 
+import arc.graphics.g2d.TextureRegion;
 import mindustry.io.SaveVersion;
 import mindustry.type.Category;
 import mindustry.world.Block;
@@ -38,7 +39,13 @@ public class SvDistribution {
             envDisabled |= Env.scorching;
 
             researchCost = with(corallite,2);
-        }};
+        }
+
+            @Override
+            public TextureRegion[] icons() {
+                return new TextureRegion[] {fullIcon};
+            }
+        };
 
         isolatedDuct = new Duct("isolated-duct") {{
             requirements(Category.distribution,atl(), with(corallite, 1,iridium,1));
@@ -49,6 +56,11 @@ public class SvDistribution {
 
             researchCost = with(corallite,20,iridium,20);
         }
+
+            @Override
+            public TextureRegion[] icons() {
+                return new TextureRegion[] {fullIcon};
+            }
 
             @Override
             public void load() {
