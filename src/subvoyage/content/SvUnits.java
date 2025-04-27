@@ -8,6 +8,7 @@ import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
 import arc.struct.ObjectMap;
 import arc.util.Time;
+import mindustry.Vars;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.content.*;
@@ -35,8 +36,7 @@ import subvoyage.core.draw.part.SpinningBlurRegionPart;
 import subvoyage.Subvoyage;
 import subvoyage.type.bullet.BallisticBulletType;
 import subvoyage.type.unit.ability.LegionfieldAbility;
-import subvoyage.type.unit.ai.DefenderDroneAI;
-import subvoyage.type.unit.ai.HelicopterBoostAI;
+import subvoyage.type.unit.ai.*;
 import subvoyage.type.unit.type.AtlacianUnitType;
 import subvoyage.type.unit.type.RoverUnitType;
 import subvoyage.core.ui.advancements.Advancement;
@@ -45,8 +45,6 @@ import subvoyage.type.shoot.ShootLeeft;
 import subvoyage.type.shoot.ShootSpreadForwardBackwards;
 import subvoyage.type.shoot.ShootStunt;
 import subvoyage.type.shoot.ShootUpsurge;
-import subvoyage.type.unit.ai.OffloadDemolisherAI;
-import subvoyage.type.unit.ai.StraightMissileAI;
 import subvoyage.type.unit.custom.HydromechState;
 import subvoyage.type.unit.custom.HydromechStateStats;
 import subvoyage.type.unit.entity.HelicopterUnitEntity;
@@ -80,7 +78,10 @@ public class SvUnits{
     stunt, zeal, gambit, covenant,
     //cargo,payload
     bulker,
-    pisun; //shh, don't tell anyone
+    pisun, //shh, don't tell anyone
+
+    diligence
+    ;
 
     public static UnitCommand boostCommand;
 
@@ -232,9 +233,11 @@ public class SvUnits{
         }};
 
         commute = new AtlacianUnitType("commute"){{
-            controller = u -> new BuilderAI(true, 300f) {{
+            aiController = () -> new BuilderAI(true, 300f) {{
                 buildRadius = 30*8f;
             }};
+
+            buildSpeed = 0.6f;
 
             constructor = PayloadUnit::create;
             isEnemy = false;
@@ -256,7 +259,6 @@ public class SvUnits{
             itemCapacity = 30;
             mineSpeed = 5f;
             mineTier = 2;
-            buildSpeed = 0.6f;
             drag = 0.05f;
             speed = 5f;
             rotateSpeed = 20f;
@@ -3164,6 +3166,46 @@ public class SvUnits{
             envEnabled = Env.any;
             envDisabled = Env.none;
         }};
+
+        diligence = new AtlacianUnitType("diligence"){{
+            constructor = UnitWaterMove::create;
+
+            controller = u -> new NavalBuilderAI();
+
+            hitSize = 24f;
+
+            buildRange = Vars.buildingRange/1.25f;
+            buildSpeed = 0.5f;
+
+            drawBuildBeam = false;
+
+            rotateSpeed = 90/60f;
+            speed = 0.7f;
+
+            omniMovement = false;
+
+            rotateToBuilding = true;
+            strafePenalty = 1f;
+
+            weapons.add(new BuildWeapon(name+"-tower") {{
+                x = 0;
+                y = 2f;
+
+                shootY = 9f;
+
+                rotate = false;
+
+                mirror = false;
+                top = false;
+            }});
+        }
+
+            @Override
+            public void init() {
+                super.init();
+                commands.add(UnitCommand.rebuildCommand, UnitCommand.assistCommand);
+            }
+        };
     }
 
     public static void helicopter(String id) {

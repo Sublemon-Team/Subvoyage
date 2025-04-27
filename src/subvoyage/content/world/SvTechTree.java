@@ -2,6 +2,7 @@ package subvoyage.content.world;
 
 import arc.Core;
 import arc.struct.*;
+import mindustry.Vars;
 import mindustry.ctype.UnlockableContent;
 import mindustry.game.*;
 import mindustry.type.*;
@@ -43,7 +44,7 @@ public class SvTechTree {
             cost(buoy,corallite,5);
             node(buoy,() -> {
                 cost(tower,clay,120,iridium,70,chrome,40);
-                node(tower,withNever(),() -> {});
+                node(tower,() -> {});
             });
             cost(coralliteGrinder,corallite,5);
             node(coralliteGrinder, with(onsector(thaw)), () -> {
@@ -53,7 +54,7 @@ public class SvTechTree {
                 cost(crudeDrill,corallite,300,clay,280,iridium,200,finesand,80);
                 node(crudeDrill,with(onsector(segment)),() -> {
                     cost(featherDrill,corallite,200,spaclanium,50,clay,250,iridium,250);
-                    node(featherDrill,withNever(),() -> {
+                    node(featherDrill,() -> {
 
                     });
                 });
@@ -87,7 +88,7 @@ public class SvTechTree {
                 cost(argonCentrifuge,corallite,100,spaclanium,80,clay,80,iridium,40);
                 node(argonCentrifuge,with(sector(construction)),() -> {
                     cost(heliumCompressor,corallite,250,iridium,200,clay,250);
-                    node(heliumCompressor,withNever(),() -> {
+                    node(heliumCompressor,() -> {
 
                     });
                     cost(circularCrusher,corallite,150,iridium,200,spaclanium,50);
@@ -95,14 +96,16 @@ public class SvTechTree {
 
                     });
                     cost(propanePyrolyzer,corallite,500,iridium,300,clay,250,chrome,100);
-                    node(propanePyrolyzer,withNever(),() -> {
+                    node(propanePyrolyzer,() -> {
                         cost(nitrideBlaster,iridium,500,clay,400,chrome,400,phosphide,120);
-                        node(nitrideBlaster,() -> {
+                        node(nitrideBlaster,withNever(),() -> {
 
                         });
 
                         cost(crudeCrucible, iridium,870,clay,740,chrome,300,nitride,400);
-                        node(crudeCrucible);
+                        node(crudeCrucible, withNever(), () -> {
+
+                        });
                     });
                     cost(phosphidePhotosynthesizer,spaclanium,500,iridium,300,clay,250,chrome,300);
                     node(phosphidePhotosynthesizer,withNever(),() -> {
@@ -139,9 +142,9 @@ public class SvTechTree {
                 cost(resonance,corallite,250,spaclanium,50,iridium,300,clay,250);
                 node(resonance,with(sector(segment)),() -> {
                     cost(cascade,corallite,500,iridium,400,spaclanium,120,clay,250,chrome,200);
-                    node(cascade,withNever(),() -> {
+                    node(cascade,() -> {
                         cost(upsurge,phosphide,600,iridium,800,spaclanium,500,clay,500,chrome,300);
-                        node(upsurge,() -> {
+                        node(upsurge,withNever(),() -> {
 
                         });
                     });
@@ -187,12 +190,12 @@ public class SvTechTree {
                 });
 
                 cost(hydromechFabricator,corallite,200,spaclanium,160,clay,250,iridium,120);
-                node(hydromechFabricator,withNever(),() -> {
+                node(hydromechFabricator,() -> {
                     noCost(leeft);
                     node(leeft);
 
                     cost(hydromechRefabricator,corallite,700,spaclanium,920,clay,800,iridium,500,phosphide,450);
-                    node(hydromechRefabricator,() -> {
+                    node(hydromechRefabricator,withNever(),() -> {
                         noCost(flagshi);
                         node(flagshi);
                     });
@@ -203,14 +206,14 @@ public class SvTechTree {
                         node(stunt);
 
                         cost(roverRefabricator,corallite,800,spaclanium,1020,clay,800,iridium,620,nitride,550);
-                        node(roverRefabricator,() -> {
+                        node(roverRefabricator,withNever(),() -> {
                             noCost(zeal);
                             node(zeal);
                         });
                     });
                 });
                 cost(coreDecoder,corallite,200,chrome,80,clay,150,iridium,150);
-                node(coreDecoder,withNever(),() -> {});
+                node(coreDecoder,() -> {});
 
                 cost(fortifiedPayloadConveyor, iridium,50,chrome,50);
                 node(fortifiedPayloadConveyor,() -> {
@@ -224,10 +227,12 @@ public class SvTechTree {
                     node(fortifiedPayloadRouter);
 
                     cost(payloadLaunchPad,clay,150,iridium,300,chrome,80);
-                    node(payloadLaunchPad);
+                    node(payloadLaunchPad, withNever(), () -> {
+
+                    });
 
                     cost(payloadLoader,corallite,350,iridium,300,chrome,80);
-                    node(payloadLoader,() -> {
+                    node(payloadLoader,withNever(),() -> {
                         noCost(payloadUnloader);
                         node(payloadUnloader);
                     });
