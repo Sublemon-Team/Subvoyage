@@ -3,9 +3,9 @@ package subvoyage.core;
 public class ContentStates {
     public static final float
     HU = 400f, //HEALTH UNIT
-    DU = 170f,
+    DU = 100f,
 
-    TURRET_DMG_U = DU*0.8f,
+    TURRET_DMG_U = HU*0.34f,
 
     WALL_HP_U = DU*2.5f, // for 1x1 wall
     WALL_LARGE_HP_U = WALL_HP_U*4f, // for 2x2 wall

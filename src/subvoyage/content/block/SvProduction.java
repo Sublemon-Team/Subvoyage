@@ -158,7 +158,7 @@ public class SvProduction {
             drillEffect = new MultiEffect(Fx.mineImpact, Fx.drillSteam, Fx.mineImpactWave.wrap(Pal.redLight, 40f));
             researchCost = with(corallite,200,spaclanium,100);
 
-            consumeLiquid(helium, 15/60f);
+            consumeLiquid(water, 15/60f);
             consumeLiquid(hydrogen,8f/60f).boost();
         }
             @Override

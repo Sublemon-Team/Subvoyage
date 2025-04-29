@@ -15,6 +15,7 @@ import mindustry.world.blocks.defense.BuildTurret;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.RegenProjector;
 import mindustry.world.blocks.units.UnitFactory;
+import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;

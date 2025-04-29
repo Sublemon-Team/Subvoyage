@@ -217,7 +217,9 @@ public class PowerBubbleMerger extends PowerBlock {
         if(!autolink) return;
 
         Boolf<Building> valid = other -> other != null && other.tile != tile && other.block.connectedPower && other.power != null &&
-                (other.block instanceof PowerBubbleNode) &&
+                (other.block instanceof PowerBubbleNode pn) &&
+                (other instanceof PowerBubbleNode.PowerBubbleNodeBuild pnb) &&
+                pnb.link() != null &&
                 overlaps(tile.x * tilesize + offset, tile.y * tilesize + offset, other.tile, range * tilesize) && other.team == team &&
                 !graphs.contains(other.power.graph) &&
                 !PowerBubbleMerger.insulated(tile, other.tile) &&
@@ -272,7 +274,7 @@ public class PowerBubbleMerger extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null || !(link.block instanceof PowerBubbleNode) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
+        if(tile == link || link == null || !(link instanceof PowerBubbleNode.PowerBubbleNodeBuild pbb) || pbb.link() == null || !(link.block instanceof PowerBubbleNode) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
         if(overlaps(tile, link, range * tilesize) || (link.block instanceof PowerBubbleNode node)){
             return true;
         }

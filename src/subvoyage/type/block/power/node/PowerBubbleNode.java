@@ -21,6 +21,7 @@ import mindustry.core.Renderer;
 import mindustry.core.UI;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
+import mindustry.gen.Call;
 import mindustry.gen.Unit;
 import mindustry.graphics.Drawf;
 import mindustry.graphics.Layer;
@@ -120,7 +121,7 @@ public class PowerBubbleNode extends PowerBlock {
     @Override
     public void init() {
         super.init();
-        clipSize = size * tilesize + range * tilesize * 2f;
+        clipSize = size * tilesize + range * tilesize * 4f;
     }
 
     private void drawLaser(float x1, float y1, float x2, float y2, int size1, int size2, float scl, float bloomIntensity){
@@ -203,6 +204,38 @@ public class PowerBubbleNode extends PowerBlock {
                 return world.build(link);
             }
             return null;
+        }
+
+        @Override
+        public void damage(float damage) {
+            if(hasLink && link() instanceof PowerBubbleNodeBuild pb) {
+                damageInner(damage/2f);
+                pb.damageInner(damage/2f);
+                return;
+            }
+            damageInner(damage);
+        }
+
+        public void damageInner(float damage) {
+            if (!this.dead()) {
+                float dm = Vars.state.rules.blockHealth(this.team);
+                this.lastDamageTime = Time.time;
+                if (Mathf.zero(dm)) {
+                    damage = this.health + 1.0F;
+                } else {
+                    damage /= dm;
+                }
+
+                if (!Vars.net.client()) {
+                    this.health -= this.handleDamage(damage);
+                }
+
+                this.healthChanged();
+                if (this.health <= 0.0F) {
+                    Call.buildDestroyed(this);
+                }
+
+            }
         }
 
         @Override
@@ -360,34 +393,17 @@ public class PowerBubbleNode extends PowerBlock {
             super.draw();
             var build = link();
 
-            if(build instanceof PowerBubbleNodeBuild pb) {
-                if(valid) {
-                    Draw.z(Layer.blockUnder);
-                    Draw.rect(region,build.x,y,0);
-                    Draw.rect(region,x,build.y,0);
+            if(!(build instanceof PowerBubbleNodeBuild pb)) return;
 
-                    Draw.z(SvRender.Layer.powerBubbles);
-                    Draw.color(SvPal.powerLaser.cpy().saturation(0.2f));
-                    if(!SvSettings.bool("power-bubble-shaders")){
-                        Draw.alpha(0.2f);
-                    }
-                    Fill.crect(x,y,build.x-x,build.y-y);
-                    Draw.z(Layer.block);
-                } else {
-                    Draw.z(Layer.blockUnder);
-                    Draw.rect(region,build.x,y,0);
-                    Draw.rect(region,x,build.y,0);
-
-                    Draw.z(SvRender.Layer.powerBubbles);
-                    Draw.color(Pal.remove);
-                    if(!SvSettings.bool("power-bubble-shaders")){
-                        Draw.alpha(0.2f);
-                    }
-                    Fill.crect(x,y,build.x-x,build.y-y);
-                    Draw.z(Layer.block);
-                }
-                Draw.reset();
+            Draw.z(SvRender.Layer.powerBubbles);
+            Draw.color(valid ? SvPal.powerLaser.cpy().saturation(0.2f) : Pal.remove);
+            if(!SvSettings.bool("power-bubble-shaders")){
+                Draw.alpha(0.2f);
             }
+            Fill.crect(x,y,build.x-x,build.y-y);
+            Draw.z(Layer.block);
+
+            Draw.reset();
         }
 
         @Override

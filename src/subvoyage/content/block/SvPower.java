@@ -12,6 +12,7 @@ import mindustry.world.draw.DrawMulti;
 import mindustry.world.draw.DrawWarmupRegion;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
+import subvoyage.core.ContentStates;
 import subvoyage.type.block.power.generator.WindTurbine;
 import subvoyage.type.block.power.node.PowerBubbleMerger;
 import subvoyage.type.block.power.node.PowerBubbleNode;
@@ -34,6 +35,8 @@ public class SvPower {
             consumesPower = true;
             squareSprite = false;
             buildCostMultiplier = 1.5f;
+
+            health = 425;
         }};
         powerBubbleMerger = new PowerBubbleMerger("power-bubble-merger") {{
             requirements(Category.power,atl(),with(iridium,20,corallite,20));
@@ -43,6 +46,8 @@ public class SvPower {
             buildCostMultiplier = 3f;
             consumesPower = outputsPower = true;
             squareSprite = false;
+
+            health = 285;
         }};
         windTurbine = new WindTurbine("wind-turbine") {{
             requirements(Category.power,atl(BuildVisibility.sandboxOnly),with(corallite,60,clay,15,iridium,30));

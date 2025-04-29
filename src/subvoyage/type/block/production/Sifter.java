@@ -8,6 +8,8 @@ import arc.math.Mathf;
 import arc.math.geom.*;
 import arc.struct.Seq;
 import arc.util.*;
+import arc.util.io.Reads;
+import arc.util.io.Writes;
 import mindustry.content.*;
 import mindustry.entities.units.*;
 import mindustry.game.*;
@@ -17,6 +19,7 @@ import mindustry.logic.LAccess;
 import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
+import mindustry.world.blocks.ConstructBlock;
 import mindustry.world.blocks.production.Drill;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
@@ -95,16 +98,21 @@ public class Sifter extends Block {
         return tile.floor().isLiquid && !hasNearbySelf(tile) && getPopulatedOreItemCached(tile.x,tile.y) != null;
     }
     public boolean hasNearbySelf(Tile tile) {
-        return isSelf(tile,0) || isSelf(tile,1) || isSelf(tile,2) || isSelf(tile,3);
-    }
-    public boolean isSelf(Tile tile, int dir) {
-        return switch (dir) {
-            case 0 -> tile.nearby(2,0) != null && tile.nearby(2,0).block() == this;
-            case 1 -> tile.nearby(0,2) != null && tile.nearby(0,2).block() == this;
-            case 2 -> tile.nearby(-1,0) != null && tile.nearby(-1,0).block() == this;
-            case 3 -> tile.nearby(0,-1) != null && tile.nearby(0,-1).block() == this;
-            default -> throw new IllegalStateException("Unexpected value: " + dir);
-        };
+        int baseX = tile.x;
+        int baseY = tile.y;
+
+        Seq<Building> neighbors = new Seq<>();
+
+        for(int dx = 0; dx < size; dx++){
+            neighbors.add(world.build(baseX + dx, baseY + size));
+            neighbors.add(world.build(baseX + dx, baseY - 1));
+        }
+        for(int dy = 0; dy < size; dy++){
+            neighbors.add(world.build(baseX + size, baseY + dy));
+            neighbors.add(world.build(baseX - 1, baseY + dy));
+        }
+
+        return neighbors.select(Objects::nonNull).contains(b -> b instanceof WaterSifterBuild || (b instanceof ConstructBlock.ConstructBuild cb && cb.current == this) || b.block == this);
     }
 
     public Item getPopulatedOreItem(Tile tile) {
@@ -238,6 +246,7 @@ public class Sifter extends Block {
     public class WaterSifterBuild extends Building {
 
         public float progress = 0f;
+        public int harvestCount = 0;
 
         @Override
         public void draw(){
@@ -263,7 +272,11 @@ public class Sifter extends Block {
             if(progress >= 1f) {
                 progress %= 1f;
                 harvest();
-                consume();
+                if(harvestCount > 3) {
+                    consume();
+                    harvestCount = 0;
+                }
+                harvestCount++;
             }
             dumpOutputs();
         }
@@ -304,6 +317,25 @@ public class Sifter extends Block {
                 Advancement.water_to_sifter.unlock();
             }
             return super.acceptLiquid(source, liquid);
+        }
+
+        @Override
+        public byte version() {
+            return 1;
+        }
+
+        @Override
+        public void read(Reads read, byte revision) {
+            if(revision >= 1) {
+                progress = read.f();
+                harvestCount = read.i();
+            }
+        }
+
+        @Override
+        public void write(Writes write) {
+            write.f(progress);
+            write.i(harvestCount);
         }
     }
 

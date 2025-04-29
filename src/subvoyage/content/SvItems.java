@@ -16,21 +16,21 @@ public class SvItems{
     public static Liquid argon,hardWater,propane,helium,hydrogen;
 
     public static void load() {
-        corallite = item("corallite",SvPal.corallite,0.5f);
-        spaclanium = item("spaclanium",SvPal.spaclanium,0.5f);
-        finesand = item("finesand",SvPal.finesand,0.4f);
-        sulfur = item("sulfur",SvPal.sulfur,0.4f);
+        corallite = item("corallite",SvPal.corallite,0.5f,0.05f);
+        spaclanium = item("spaclanium",SvPal.spaclanium,0.5f,0.05f);
+        finesand = item("finesand",SvPal.finesand,0.4f,-0.02f);
+        sulfur = item("sulfur",SvPal.sulfur,0.4f,0.1f);
 
-        clay = item("clay",SvPal.clay,0.6f);
-        iridium = item("iridium",SvPal.iridium,0.6f);
+        clay = item("clay",SvPal.clay,0.6f,0.1f);
+        iridium = item("iridium",SvPal.iridium,0.6f,0.17f);
         crude = item("crude",SvPal.crude);
 
-        chrome = item("chrome",SvPal.chrome,0.8f);
-        phosphide = item("phosphide",SvPal.phosphide,0.8f);
-        nitride = item("nitride",SvPal.nitride,0.8f);
+        chrome = item("chrome",SvPal.chrome,0.8f,0.21f);
+        phosphide = item("phosphide",SvPal.phosphide,0.8f,0.35f);
+        nitride = item("nitride",SvPal.nitride,0.8f,0.4f);
 
-        quartzFiber = item("quartz-fiber",SvPal.quartzFiber,1f);
-        tugSheet = item("tug-sheet",SvPal.tugSheet,1f);
+        quartzFiber = item("quartz-fiber",SvPal.quartzFiber,1f,0.25f);
+        tugSheet = item("tug-sheet",SvPal.tugSheet,1f,0.5f);
         
         argon = gas("argon",SvPal.argon,0.2f,0.5f);
         hardWater = gas("liquid-hard-water",SvPal.hardWater,0.05f,0.4f);
@@ -62,12 +62,13 @@ public class SvItems{
     }
 
     public static Item item(String id, Color col) {
-        return item(id,col,1f);
+        return item(id,col,1f,0f);
     }
 
-    public static Item item(String id, Color col, float costArg) {
+    public static Item item(String id, Color col, float costArg, float health) {
         Item item = new Item(id,col) {{
             cost = costArg;
+            healthScaling = health;
         }};
         atlacianItems.add(item);
         return item;

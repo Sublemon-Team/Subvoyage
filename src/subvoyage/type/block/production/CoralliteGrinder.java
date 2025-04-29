@@ -1,19 +1,26 @@
 package subvoyage.type.block.production;
 
 import arc.Core;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.TextureRegion;
 import arc.scene.ui.Image;
+import arc.struct.Seq;
 import arc.util.Eachable;
 import mindustry.Vars;
 import mindustry.content.Blocks;
+import mindustry.content.Fx;
+import mindustry.entities.Effect;
 import mindustry.entities.units.BuildPlan;
 import mindustry.game.Team;
 import mindustry.gen.Building;
+import mindustry.gen.Icon;
 import mindustry.type.Item;
 import mindustry.type.ItemStack;
 import mindustry.type.Liquid;
 import mindustry.world.Tile;
 
+import mindustry.world.blocks.distribution.Duct;
 import mindustry.world.blocks.production.AttributeCrafter;
 import mindustry.world.blocks.production.Drill;
 import mindustry.world.blocks.production.GenericCrafter;
@@ -26,6 +33,11 @@ import mindustry.world.meta.StatValues;
 import subvoyage.content.SvItems;
 import subvoyage.content.block.SvEnvironment;
 import subvoyage.core.anno.LoadAnnoProcessor.LoadAnno;
+import subvoyage.core.draw.SvRender;
+
+import java.util.Objects;
+
+import static mindustry.Vars.world;
 
 public class CoralliteGrinder extends GenericCrafter {
     public int maxLiquidTiles = 3;
@@ -123,6 +135,27 @@ public class CoralliteGrinder extends GenericCrafter {
         public void draw() {
             if(useSulfur()) sulfurDrawer.draw(this);
             else super.draw();
+
+            Seq<Building> neighbors = new Seq<>();
+            int baseX = tile.x;
+            int baseY = tile.y;
+
+            for(int dx = 0; dx < size; dx++){
+                neighbors.add(world.build(baseX + dx, baseY + size));
+                neighbors.add(world.build(baseX + dx, baseY - 1));
+            }
+            for(int dy = 0; dy < size; dy++){
+                neighbors.add(world.build(baseX + size, baseY + dy));
+                neighbors.add(world.build(baseX - 1, baseY + dy));
+            }
+
+            Draw.z(SvRender.Layer.overlayUI);
+            Draw.color(Color.scarlet);
+            neighbors.select(Objects::nonNull).select(e -> !(e instanceof Pump.PumpBuild) && e.block.outputsLiquid)
+                .each(e -> {
+                    Draw.rect(Icon.cancel.getRegion(), e.x, e.y);
+                });
+            Draw.color();
         }
 
         @Override

@@ -61,6 +61,12 @@ public class ItemPipeline extends ItemBridge {
     }
 
     @Override
+    public void init() {
+        super.init();
+        clipSize = size * tilesize + range * tilesize * 4f;
+    }
+
+    @Override
     public boolean positionsValid(int x1, int y1, int x2, int y2) {
         return Mathf.dst(x1, y1, x2, y2) <= range;
     }
