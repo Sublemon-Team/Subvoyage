@@ -1,17 +1,8 @@
 package subvoyage.core.logic;
 
-import arc.Core;
-import arc.util.Http;
 import arc.util.Log;
-import arc.util.Structs;
-import arc.util.Time;
-import arc.util.serialization.Jval;
-import mindustry.Vars;
-import mindustry.core.Version;
 import mindustry.game.Team;
-import mindustry.gen.Musics;
 import mindustry.type.SectorPreset;
-import mindustry.ui.fragments.HudFragment;
 import subvoyage.Subvoyage;
 import subvoyage.content.SvItems;
 import subvoyage.core.SvSettings;
@@ -20,71 +11,40 @@ import subvoyage.content.world.SvSectorPresets;
 import subvoyage.content.other.SvTeam;
 import subvoyage.content.SvUnits;
 import subvoyage.content.block.SvProduction;
-import subvoyage.content.ost.SvMusic;
 import subvoyage.core.ui.SvIcons;
 import subvoyage.core.UpdateManager;
-import subvoyage.type.block.storage.core.AtlacianCore;
 import subvoyage.type.block.production.Sifter;
 import subvoyage.type.unit.ability.LegionfieldAbility;
 import subvoyage.core.ui.SvUI;
 import subvoyage.core.ui.advancements.Advancement;
-import subvoyage.util.Var;
+import subvoyage.util.All;
 
-import static arc.Core.bundle;
-import static arc.Core.settings;
 import static mindustry.Vars.*;
 import static subvoyage.content.world.SvPlanets.atlacian;
+import static subvoyage.content.world.SvSectorPresets.*;
+import static subvoyage.core.UpdateManager.checkFico;
+import static subvoyage.core.ui.advancements.Advancement.unlock;
 
 public class SvLogic {
 
     /*Client Load*/
     public static void clientLoad() {
         Subvoyage.currentTag = mods.getMod(Subvoyage.ID).meta.version;
+        SvUI.load();
 
         checkUpdates();
-        checkChanges();
-
-        UpdateManager.checkFico();
-        bundle.getProperties().put("sector.curcapturefake","[lightgray]"+bundle.get("sector.curcapture")+"[]");
+        checkFico();
 
         SvIcons.load();
         SvUnits.loadUwu(SvSettings.unitUwu());
-
-        SvUI.load();
-    }
-
-    /*New game start*/
-    public static void newGame() {
-        var core = player.bestCore();
-        if(core == null) return;
-        if(!settings.getBool("skipcoreanimation") && !state.rules.pvp && state.rules.planet == atlacian){
-            beginLandMusic();
-        }
-    }
-
-    /*Landing*/
-    public static void beginLandMusic() {
-        /*SvMusic.atlLand.stop();
-        if(settings.getInt("musicvol") > 0){
-            Musics.land.stop();
-            SvMusic.atlLand.setVolume(1f);
-            SvMusic.atlLand.play();
-        }*/
     }
 
     /*Update*/
     public static void update() {
         if(state.isGame()) gameUpdate();
         if(state.isMenu()) menuUpdate();
-        SvVars.atlacianMapControl.update();
 
-        try {
-            if(state.rules.waves) {
-                state.rules.objectiveFlags.add("wave"+state.wave);
-            }
-        } catch (Exception e) {
-
-        }
+        All.unsafe(state.rules.waves,() -> state.rules.objectiveFlags.add("wave" + state.wave));
     }
 
     public static void gameUpdate() {
@@ -93,72 +53,47 @@ public class SvLogic {
 
         LegionfieldAbility.update();
 
-        if(state.rules.planet == atlacian) Advancement.welcome.unlock();
-        if(state.rules.planet == atlacian && beta) Advancement.beta.unlock();
-
-        for (SectorPreset sect : SvSectorPresets.all) {
-            String id = "sector_" + sect.name.replace("subvoyage-", "").replace("-", "_");
-            if(sect.sector.isCaptured() && Advancement.get(id) != null) {
-                Advancement.get(id).unlock();
-            }
-        }
-
-        if(state.getSector() != null && state.getSector().isBeingPlayed() && !state.rules.objectives.all.contains(e -> !e.isCompleted())) {
-            String id2 = "sectorf_" + state.getSector().preset.name.replace("subvoyage-", "").replace("-", "_");
-            if(Advancement.get(id2) != null) Advancement.get(id2).unlock();
-        }
-
-        if(state.getSector() != null && state.getSector().preset == SvSectorPresets.segment) {
-            if(state.wave > 100) Advancement.the_segment_hundred_wave.unlock();
-        }
-
-        if(SvItems.hardWater.unlocked())
-            Advancement.hard_water.unlock();
+        All.unsafe(SvLogic::updateAdvancements);
     }
     public static void menuUpdate() {
 
     }
 
+    public static void updateAdvancements() {
+        if(state.getSector() == null) return;
+        unlock(state.rules.planet == atlacian, Advancement.welcome);
+
+        unlock(segment,state.wave > 60, Advancement.the_segment_hundred_wave);
+        unlock(SvItems.hardWater.unlocked(), Advancement.hard_water);
+
+        unlock(state.getSector().isCaptured(),
+                sectorName(state.getSector().preset));
+
+        unlock(state.getSector().isBeingPlayed() &&
+                        state.rules.objectives.all.contains(e -> !e.isCompleted()),
+                sectorName(state.getSector().preset,"f"));
+    }
+    private static String sectorName(SectorPreset preset) {
+        return sectorName(preset,"");
+    }
+    private static String sectorName(SectorPreset preset, String postfix) {
+        return "sector" + postfix + "_" + preset.name.replace("subvoyage-", "").replace("-", "_");
+    }
+
     /*Reset*/
     public static void reset() {
-        SvVars.atlacianMapControl.stop();
+
     }
 
     /*World Loading*/
     public static void worldLoad() {
         if(SvProduction.sifter instanceof Sifter sifter) sifter.worldReset();
-        SvVars.atlacianMapControl.recalc();
     }
 
     /*Updating*/
-    public static boolean beta = false;
     public static void checkUpdates() {
         boolean autoUpdate = SvSettings.autoUpdate();
         Log.info("[Subvoyage] Autoupdate: "+(autoUpdate ? "Enabled" : "Disabled"));
         if(autoUpdate) UpdateManager.begin();
     }
-
-    static int currentVersion = 1;
-    public static void checkChanges() {
-        Var<Integer> prev = Var.stgInt("update-idx",0);
-
-        Log.info("[Subvoyage] Previous revision: "+prev.val);
-        Log.info("[Subvoyage] Current revision: "+currentVersion);
-
-        SvSettings.i("update-idx",currentVersion);
-
-        if(prev.val >= currentVersion) return;
-
-        ui.showInfoOnHidden("@settings.sv-update-id.confirm", () -> {
-            if(prev.val == 0) {
-                SvSettings.resetSaves(atlacian);
-                SvSettings.resetTree(atlacian.techTree);
-
-                Advancement.beta.unlock();
-
-                prev.val = 1;
-            }
-            Core.app.exit();
-        });
-    };
 }

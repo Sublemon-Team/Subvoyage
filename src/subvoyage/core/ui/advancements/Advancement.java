@@ -6,6 +6,7 @@ import arc.util.Log;
 import arc.util.Reflect;
 import arc.util.Structs;
 import mindustry.Vars;
+import mindustry.type.SectorPreset;
 import subvoyage.core.SvSettings;
 import subvoyage.core.ui.SvUI;
 
@@ -13,7 +14,7 @@ public class Advancement {
     public static Seq<Advancement> all = Seq.with();
 
     public static Advancement
-            welcome,beta,
+            welcome,
             sectorf_thaw,
             sector_construction,
             sector_the_segment,
@@ -33,7 +34,6 @@ public class Advancement {
     public static void load() {
         add(
                 "welcome","sublemon_frog", // Launching Subvoyage
-                "beta","sodilate-boulder1", // Launching Subvoyage
 
                 "sectorf_thaw","ceramic-burner", // Capturing Thaw
                 "sector_construction","power-bubble-node", // Capturing Construction
@@ -59,10 +59,19 @@ public class Advancement {
     public static Advancement get(String id) {
         return all.find(a -> a.id.equals(id));
     };
+    public static Advancement unlock(String id) {
+        if(get(id) != null) get(id).unlock();
+        return get(id);
+    };
     public static boolean unlocked(Advancement adv) {
         return SvSettings.bool(adv.id+"-adv-unlocked");
     };
     public static void unlock(Advancement adv) {
+        boolean test = false;
+        if(!Vars.state.isCampaign() && !test) return;
+        if(Vars.state.rules.infiniteResources && !test) return;
+
+        if(adv == null) return;
         if(!unlocked(adv)) toast(adv);
         SvSettings.bool(adv.id+"-adv-unlocked",true);
     };
@@ -83,6 +92,16 @@ public class Advancement {
         }
     }
 
+    public static void unlock(SectorPreset preset, boolean condition, Advancement adv) {
+        unlock(Vars.state.getSector() != null && Vars.state.getSector().preset == preset && condition,adv);
+    }
+    public static void unlock(boolean condition, Advancement adv) {
+        if(condition) unlock(adv);
+    }
+    public static void unlock(boolean condition, String id) {
+        if(condition) unlock(id);
+    }
+
     public static Advancement from(String title_, String icon_) {
         Advancement adv = new Advancement() {{
             this.id = title_;
@@ -95,9 +114,6 @@ public class Advancement {
     }
 
     public void unlock() {
-        boolean test = false;
-        if(!Vars.state.isCampaign() && !test) return;
-        if(Vars.state.rules.infiniteResources && !test) return;
         Advancement.unlock(this);
     }
 

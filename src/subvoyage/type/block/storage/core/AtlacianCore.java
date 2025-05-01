@@ -76,7 +76,6 @@ public class AtlacianCore extends CoreBlock {
             if(launching){
                 Fx.coreLaunchConstruct.at(x, y, size);
             }
-            SvLogic.beginLandMusic();
             if(!headless){
                 // Add fade-in and fade-out foreground when landing or launching.
                 if(renderer.isLaunching()){
@@ -272,7 +271,6 @@ public class AtlacianCore extends CoreBlock {
             if(launching){
                 Fx.coreLaunchConstruct.at(x, y, size);
             }
-            SvLogic.beginLandMusic();
             if(!headless){
                 // Add fade-in and fade-out foreground when landing or launching.
                 if(renderer.isLaunching()){

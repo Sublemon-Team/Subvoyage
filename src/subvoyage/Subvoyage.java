@@ -42,7 +42,6 @@ public class Subvoyage extends Mod {
         Events.on(ClientLoadEvent.class, e -> SvLogic.clientLoad());
         Events.on(WorldLoadEvent.class, e -> SvLogic.worldLoad());
         Events.on(EventType.ResetEvent.class, e -> SvLogic.reset());
-        Events.run(Trigger.newGame, SvLogic::newGame);
         Events.run(EventType.Trigger.draw, SvRender::draw);
 
         Events.on(UnitCreateEvent.class,e -> {
