@@ -3,7 +3,6 @@ package subvoyage.content;
 import arc.files.Fi;
 import arc.graphics.*;
 import arc.graphics.g2d.*;
-import arc.input.KeyBind;
 import arc.math.*;
 import arc.math.geom.Rect;
 import arc.math.geom.Vec2;
@@ -94,14 +93,9 @@ public class SvUnits{
         helicopter("lapetus", "skath", "charon", "callees", "ganymede");
         hmech("leeft", "flagshi", "vanguard", "squadron", "armada");
 
-        KeyBind boostBind;
+        String boostName = Version.isAtLeast("149") ? "unitCommandBoost" : "unit_command_boost";
 
-        if(Version.isAtLeast("149"))
-            boostBind = Reflect.get(Binding.class, "unitCommandBoost");
-        else
-            boostBind = Reflect.get(Binding.class, "unit_command_boost");
-
-        boostCommand = new UnitCommand("boost", "up", boostBind, u -> new HelicopterBoostAI()){{
+        boostCommand = new UnitCommand("boost", "up", Reflect.get(Binding.class,boostName), u -> new HelicopterBoostAI()){{
             switchToMove = false;
             drawTarget = true;
             resetTarget = false;
