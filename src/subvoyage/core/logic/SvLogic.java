@@ -103,7 +103,7 @@ public class SvLogic {
             }
         }
 
-        if(state.getSector() != null && state.getSector().isBeingPlayed() && !state.rules.objectives.all.contains(e -> !e.isCompleted())) {
+        if(state.getSector() != null && state.getSector().preset != null && state.getSector().isBeingPlayed() && !state.rules.objectives.all.contains(e -> !e.isCompleted())) {
             String id2 = "sectorf_" + state.getSector().preset.name.replace("subvoyage-", "").replace("-", "_");
             if(Advancement.get(id2) != null) Advancement.get(id2).unlock();
         }
