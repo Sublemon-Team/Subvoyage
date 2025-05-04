@@ -9,6 +9,7 @@ import mindustry.Vars;
 import mindustry.type.SectorPreset;
 import subvoyage.core.SvSettings;
 import subvoyage.core.ui.SvUI;
+import subvoyage.util.All;
 
 public class Advancement {
     public static Seq<Advancement> all = Seq.with();
@@ -67,9 +68,9 @@ public class Advancement {
         return SvSettings.bool(adv.id+"-adv-unlocked");
     };
     public static void unlock(Advancement adv) {
-        boolean test = false;
-        if(!Vars.state.isCampaign() && !test) return;
-        if(Vars.state.rules.infiniteResources && !test) return;
+        boolean devEnvironment = All.isDev();
+        if(!Vars.state.isCampaign() && !devEnvironment) return;
+        if(Vars.state.rules.infiniteResources && !devEnvironment) return;
 
         if(adv == null) return;
         if(!unlocked(adv)) toast(adv);

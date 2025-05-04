@@ -3,6 +3,7 @@ package subvoyage.content.other;
 import arc.graphics.Color;
 import arc.struct.Seq;
 import mindustry.game.Team;
+import subvoyage.util.All;
 
 public class SvTeam {
     public static Seq<Team> all = Seq.with();
@@ -11,7 +12,7 @@ public class SvTeam {
         melius = newTeam(181,"melius", Color.valueOf("7ede8a"));
         melius.hasPalette = true;
 
-        Team.baseTeams[5] = melius;
+        if(All.isDev()) Team.baseTeams[5] = melius;
     }
 
     private static Team newTeam(int id, String name, Color color) {

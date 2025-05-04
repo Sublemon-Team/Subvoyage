@@ -71,6 +71,7 @@ task runClient(type: JavaExec) {
     println "\u001B[32mStarting Mindustry client..\u001B[0m"
 
     environment "APPDATA", "${dataFolder}\\${project.archivesBaseName}";
+    environment "DEVELOPMENT", "true";
 
     classpath = files(clientFile.getAbsolutePath())
     main = 'mindustry.desktop.DesktopLauncher'

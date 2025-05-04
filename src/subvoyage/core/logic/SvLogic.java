@@ -66,10 +66,11 @@ public class SvLogic {
         unlock(segment,state.wave > 60, Advancement.the_segment_hundred_wave);
         unlock(SvItems.hardWater.unlocked(), Advancement.hard_water);
 
-        unlock(state.getSector().isCaptured(),
+        unlock(state.getSector().preset != null && state.getSector().isCaptured(),
                 sectorName(state.getSector().preset));
 
-        unlock(state.getSector().isBeingPlayed() &&
+        unlock(state.getSector().preset != null &&
+                        state.getSector().isBeingPlayed() &&
                         state.rules.objectives.all.contains(e -> !e.isCompleted()),
                 sectorName(state.getSector().preset,"f"));
     }

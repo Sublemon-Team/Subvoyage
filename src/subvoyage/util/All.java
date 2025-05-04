@@ -1,5 +1,7 @@
 package subvoyage.util;
 
+import java.util.Objects;
+
 public class All {
     public static void unsafe(Runnable runnable) {
         try {
@@ -14,5 +16,9 @@ public class All {
         } catch (Throwable ignored) {
 
         }
+    }
+
+    public static boolean isDev() {
+        return System.getenv("DEVELOPMENT") != null || !Objects.equals(System.getenv("DEVELOPMENT"), "false");
     }
 }
