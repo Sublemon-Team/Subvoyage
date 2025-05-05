@@ -94,32 +94,10 @@ public class SvEnvironment {
         };
         ((Floor) Blocks.water).supportsOverlay = true;
 
-        oreSpaclanium = new OreBlock(SvItems.spaclanium){{
-            oreDefault = false;
-            oreThreshold = 0.81f;
-            oreScale = 23.47619f;
-        }};
-        oreCorallite = new OreBlock(SvItems.corallite){{
-            oreDefault = false;
-            oreThreshold = 0.83f;
-            oreScale = 23.17619f;
-        }};
-        oreSulfur = new OreBlock(SvItems.sulfur){{
-            oreDefault = false;
-            oreThreshold = 0.83f;
-            oreScale = 22.17619f;
-        }};
-        oreIridium = new OreBlock(SvItems.iridium){{
-            oreDefault = false;
-            oreThreshold = 0.85f;
-            oreScale = 12.42614f;
-        }};
-        oreChromium = new OreBlock(SvItems.chrome) {{
-            oreDefault = false;
-            variants = 5;
-            oreThreshold = 0.9f;
-            oreScale = 10.42614f;
-        }};
+        oreSpaclanium = new OreBlock(SvItems.spaclanium);
+        oreCorallite = new OreBlock(SvItems.corallite);
+        oreIridium = new OreBlock(SvItems.iridium);
+        oreChromium = new OreBlock(SvItems.chrome);
 
         wallOreSpaclanium = new OreBlock("ore-wall-subvoyage-spaclanium", SvItems.spaclanium){{
             wallOre = true;

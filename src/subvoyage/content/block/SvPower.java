@@ -65,7 +65,7 @@ public class SvPower {
 
             researchCost = with(corallite,200,clay,150,iridium,100);
 
-            powerProduction = 5.4f;
+            powerProduction = 5.2f;
             envDisabled |= Env.scorching;
 
             ambientSound = Sounds.extractLoop;
@@ -83,9 +83,9 @@ public class SvPower {
                         color = Color.violet;
                     }}
             );
-            itemDuration = 1.8f*60f;
+            itemDuration = 1.6f*60f;
             consumeItem(spaclanium,2);
-            consumeLiquid(water,64/60f);
+            consumeLiquid(water,36/60f);
         }};
         hydrocarbonicGenerator = new ConsumeGenerator("hydrocarbonic-generator") {{
             requirements(Category.power,atl(),with(corallite,300,clay,100,iridium,200, chrome,10));

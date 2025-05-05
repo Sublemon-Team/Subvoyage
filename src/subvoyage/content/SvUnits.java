@@ -101,7 +101,7 @@ public class SvUnits{
             resetTarget = false;
         }};
         //core
-        shift = new AtlacianUnitType("shift"){{
+        /*shift = new AtlacianUnitType("shift"){{
             aiController = BuilderAI::new;
             constructor =  PayloadUnit::create;
             isEnemy = false;
@@ -233,7 +233,7 @@ public class SvUnits{
                     maxRange = 60f;
                 }};
             }});
-        }};
+        }};*/
 
         commute = new AtlacianUnitType("commute"){{
             aiController = () -> new BuilderAI(true, 300f) {{

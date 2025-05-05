@@ -11,6 +11,7 @@ import mindustry.graphics.Pal;
 import mindustry.type.Category;
 import mindustry.type.UnitType;
 import mindustry.world.Block;
+import mindustry.world.Tile;
 import mindustry.world.blocks.defense.BuildTurret;
 import mindustry.world.blocks.defense.MendProjector;
 import mindustry.world.blocks.defense.RegenProjector;
@@ -30,7 +31,7 @@ import static subvoyage.content.SvBlocks.atl;
 
 public class SvSpecial {
     public static Block
-        buoy,tower, //fog
+        buoy,phantomBuoy,tower, //fog
             mendProjector, //projectors
 
         offloadCore, coreDecoder,
@@ -52,6 +53,22 @@ public class SvSpecial {
 
             researchCost = with(corallite,3);
         }};
+
+        phantomBuoy = new Buoy("phantom-buoy") {{
+            requirements(Category.effect,atl(BuildVisibility.editorOnly), with());
+            fogRadius = 25;
+            envDisabled |= Env.scorching;
+
+            priority = TargetPriority.wall;
+            destructible = false;
+
+            hasShadow = false;
+        }
+            @Override
+            public void drawBase(Tile tile) {
+
+            }
+        };
 
         tower = new Buoy("tower") {{
             requirements(Category.effect,atl(BuildVisibility.fogOnly), with(chrome,30,clay,50,iridium,30));
@@ -105,6 +122,7 @@ public class SvSpecial {
                     }});
         }};
 
+        //TODO REWORK
         //offload
         offloadCore = new OffloadCore("offload-core") {{
             requirements(Category.logic, BuildVisibility.editorOnly, with());
@@ -119,7 +137,7 @@ public class SvSpecial {
             midTierUnits = new UnitType[] {skath,flagshi,zeal};
             highTierUnits = new UnitType[] {charon,vanguard,gambit};
 
-            unitType = shift;
+            unitType = commute;
         }
 
             @Override
@@ -127,7 +145,7 @@ public class SvSpecial {
                 return new TextureRegion[]{region, teamRegions[SvTeam.melius.id]};
             }
         };
-
+        //TODO REWORK
         coreDecoder = new UnitFactory("core-decoder") {{
             requirements(Category.effect,atl(),with(corallite,150,clay,120,iridium,150, chrome,90));
 

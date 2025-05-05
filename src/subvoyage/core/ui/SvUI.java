@@ -1,8 +1,11 @@
 package subvoyage.core.ui;
 
 import arc.scene.ui.layout.WidgetGroup;
+import mindustry.Vars;
+import mindustry.core.UI;
 import mindustry.ui.dialogs.PlanetDialog;
 import subvoyage.core.ui.advancements.*;
+import subvoyage.util.All;
 
 public class SvUI {
     public static AdvancementsDialog advancements;
@@ -18,6 +21,8 @@ public class SvUI {
 
         Advancement.load();
         AdvancementsHook.load();
+
+        PlanetDialog.debugSelect = All.isDev();
 
         advancementFrag = new AdvancementToastFragment();
         advancementFrag.build(overGroup);

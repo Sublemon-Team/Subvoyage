@@ -45,6 +45,7 @@ public class SvLogic {
         if(state.isMenu()) menuUpdate();
 
         All.unsafe(state.rules.waves,() -> state.rules.objectiveFlags.add("wave" + state.wave));
+        All.unsafe(() -> state.rules.objectiveFlags.add(state.rules.waveTeam.name+"_cores_"+state.rules.waveTeam.cores().size));
     }
 
     public static void gameUpdate() {

@@ -1,6 +1,9 @@
 package subvoyage.content.block;
 
 import arc.graphics.g2d.TextureRegion;
+import mindustry.Vars;
+import mindustry.content.Blocks;
+import mindustry.game.MapObjectives;
 import mindustry.game.Team;
 import mindustry.type.Category;
 import mindustry.world.Block;
@@ -29,9 +32,8 @@ public class SvStorage {
 
     public static void load() {
         corePuffer = new AtlacianCore("core-puffer"){{
-            requirements(Category.effect,atl(), with(spaclanium,400,corallite,400,clay,150));
+            requirements(Category.effect,atl(new BuildVisibility(() -> Vars.indexer.isBlockPresent(Blocks.coreZone) || (Vars.state.rules != null && Vars.state.rules.objectiveFlags != null && Vars.state.rules.objectiveFlags.contains("coreZone")))), with(spaclanium,400,corallite,400,clay,150));
             alwaysUnlocked = true;
-            buildVisibility = BuildVisibility.editorOnly;
             isFirstTier = true;
             unitType = commute;
             health = 4000;
@@ -40,7 +42,7 @@ public class SvStorage {
 
             incinerateNonBuildable = true;
             squareSprite = false;
-            requiresCoreZone = false;
+            requiresCoreZone = true;
             envDisabled |= Env.scorching;
             unitCapModifier = 12;
 

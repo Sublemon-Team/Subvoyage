@@ -11,8 +11,10 @@ import arc.util.io.Reads;
 import arc.util.io.Writes;
 import arc.util.serialization.Json;
 import arc.util.serialization.JsonReader;
+import mindustry.ai.RtsAI;
 import mindustry.content.*;
 import mindustry.core.Version;
+import mindustry.entities.units.AIController;
 import mindustry.game.*;
 import mindustry.graphics.*;
 import mindustry.graphics.g3d.*;
@@ -78,6 +80,9 @@ public class SvPlanets{
                 r.fog = true;
                 r.staticFog = true;
                 r.lighting = false;
+
+                r.coreIncinerates = true;
+                r.onlyDepositCore = true;
             };
 
             iconColor = Color.white;

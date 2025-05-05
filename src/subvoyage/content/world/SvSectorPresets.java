@@ -1,6 +1,7 @@
 package subvoyage.content.world;
 
 import arc.struct.Seq;
+import mindustry.content.Blocks;
 import mindustry.content.SectorPresets;
 import mindustry.type.*;
 import mindustry.ui.Fonts;
@@ -9,7 +10,7 @@ import subvoyage.type.world.SvSectorPreset;
 import static subvoyage.content.world.SvPlanets.atlacian;
 
 public class SvSectorPresets {
-    public static SectorPreset thaw, construction, segment;
+    public static SectorPreset thaw, construction, segment, narrows;
     public static Seq<SectorPreset> all = Seq.with();
 
     public static void load() {
@@ -54,6 +55,8 @@ public class SvSectorPresets {
                 r.attackMode = true;
             };
         }};
+
+        // narrows - 214
 
         all.addAll(thaw,construction,segment);
     }

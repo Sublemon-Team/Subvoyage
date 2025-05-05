@@ -14,6 +14,7 @@ import mindustry.world.blocks.units.UnitCargoUnloadPoint;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
+import subvoyage.type.block.distribution.AtlConduit;
 import subvoyage.type.block.distribution.ItemPipeline;
 import subvoyage.type.block.distribution.LiquidPipeline;
 
@@ -159,7 +160,7 @@ public class SvDistribution {
         }};*/
 
 
-        fortifiedConduit = new Conduit("clay-conduit") {{
+        fortifiedConduit = new AtlConduit("clay-conduit") {{
             requirements(Category.liquid,atl(), with(corallite, 2));
 
             researchCost = with(corallite,3);
@@ -170,13 +171,15 @@ public class SvDistribution {
             health = 45;
         }};
 
-        isolatedConduit = new ArmoredConduit("isolated-conduit") {{
+        isolatedConduit = new AtlConduit("isolated-conduit") {{
             requirements(Category.liquid,atl(), with(corallite, 2,iridium,1));
 
             researchCost = with(corallite,30,iridium,30);
             envDisabled |= Env.scorching;
             botColor = SvPal.veryDarkViolet;
             health = 125;
+
+            armored = true;
         }};
 
 

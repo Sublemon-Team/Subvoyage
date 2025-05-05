@@ -21,6 +21,7 @@ import mindustry.world.blocks.power.*;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
 import mindustry.world.modules.*;
+import subvoyage.content.other.SvTeam;
 import subvoyage.core.draw.SvPal;
 
 import static mindustry.Vars.*;
@@ -274,7 +275,7 @@ public class PowerBubbleMerger extends PowerBlock {
     }
 
     public boolean linkValid(Building tile, Building link, boolean checkMaxNodes){
-        if(tile == link || link == null || !(link instanceof PowerBubbleNode.PowerBubbleNodeBuild pbb) || pbb.link() == null || !(link.block instanceof PowerBubbleNode) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
+        if(tile == link || link == null || !(link instanceof PowerBubbleNode.PowerBubbleNodeBuild pbb) || (pbb.link() == null && pbb.team == SvTeam.melius) || !(link.block instanceof PowerBubbleNode) || !link.block.hasPower || !link.block.connectedPower || tile.team != link.team) return false;
         if(overlaps(tile, link, range * tilesize) || (link.block instanceof PowerBubbleNode node)){
             return true;
         }

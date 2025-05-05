@@ -7,14 +7,14 @@ public class All {
         try {
             runnable.run();
         } catch (Throwable ignored) {
-
+            ignored.printStackTrace();
         }
     }
     public static void unsafe(boolean bool, Runnable runnable) {
         try {
             if(bool) runnable.run();
         } catch (Throwable ignored) {
-
+            ignored.printStackTrace();
         }
     }
 

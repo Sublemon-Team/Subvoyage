@@ -23,6 +23,13 @@ public class DrawerBlock extends Block {
 
         priority = -1000f;
         targetable = false;
+
+        privileged = true;
+    }
+
+    @Override
+    public void drawBase(Tile tile) {
+
     }
 
     @Override
