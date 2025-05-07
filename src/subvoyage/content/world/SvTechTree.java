@@ -88,7 +88,7 @@ public class SvTechTree {
                 cost(argonCentrifuge,corallite,100,spaclanium,80,clay,80,iridium,40);
                 node(argonCentrifuge,with(sector(construction)),() -> {
                     cost(heliumCompressor,corallite,250,iridium,200,clay,250);
-                    node(heliumCompressor,() -> {
+                    node(heliumCompressor,with(research(hydrogenElectrolyzer)),() -> {
 
                     });
                     cost(circularCrusher,corallite,150,iridium,200,spaclanium,50);
@@ -96,7 +96,7 @@ public class SvTechTree {
 
                     });
                     cost(propanePyrolyzer,corallite,500,iridium,300,clay,250,chrome,100);
-                    node(propanePyrolyzer,() -> {
+                    node(propanePyrolyzer,with(research(hydrogenElectrolyzer)),() -> {
                         cost(nitrideBlaster,iridium,500,clay,400,chrome,400,phosphide,120);
                         node(nitrideBlaster,withNever(),() -> {
 
@@ -111,8 +111,8 @@ public class SvTechTree {
                     node(phosphidePhotosynthesizer,withNever(),() -> {
 
                     });
-                    cost(hydrogenElectrolyzer,iridium,400,clay,400,chrome,300,phosphide,80);
-                    node(hydrogenElectrolyzer,withNever(),() -> {
+                    cost(hydrogenElectrolyzer,iridium,400,clay,400,corallite,300);
+                    node(hydrogenElectrolyzer,() -> {
 
                     });
                 });

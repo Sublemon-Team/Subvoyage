@@ -37,7 +37,7 @@ public class SvRender {
     public static class Layer extends mindustry.graphics.Layer {
         public static final float
                 laser = 72.2f,
-                powerBubbles = 86.7f,
+                powerBubbles = 76.7f,
 
                 hardWater = 30.3f,
 

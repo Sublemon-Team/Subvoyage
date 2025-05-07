@@ -72,7 +72,7 @@ public class SvLogic {
 
         unlock(state.getSector().preset != null &&
                         state.getSector().isBeingPlayed() &&
-                        state.rules.objectives.all.contains(e -> !e.isCompleted()),
+                        !state.rules.objectives.all.contains(e -> !e.isCompleted()),
                 sectorName(state.getSector().preset,"f"));
     }
     private static String sectorName(SectorPreset preset) {

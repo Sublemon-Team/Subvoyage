@@ -212,14 +212,6 @@ public class HelicopterUnitEntity extends PayloadUnit {
     }
 
     @Override
-    public void collision(Hitboxc other, float x, float y) {
-        super.collision(other, x, y);
-        if(other instanceof Bullet b && b.owner() instanceof Turret.TurretBuild tb && tb.block instanceof Turret t && !t.targetGround && isGrounded()) {
-            Advancement.helicopter_tricked.unlock();
-        }
-    }
-
-    @Override
     public boolean isGrounded() {
         return accel() < 0.1f;
     }

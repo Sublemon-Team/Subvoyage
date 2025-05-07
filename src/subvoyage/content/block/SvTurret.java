@@ -1,9 +1,12 @@
 package subvoyage.content.block;
 
 import arc.graphics.Color;
+import arc.math.Angles;
 import arc.math.Interp;
 import arc.math.Mathf;
 import arc.struct.IntSeq;
+import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.bullet.*;
@@ -11,7 +14,7 @@ import mindustry.entities.effect.MultiEffect;
 import mindustry.entities.effect.WaveEffect;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.*;
-import mindustry.gen.Sounds;
+import mindustry.gen.*;
 import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.Category;
@@ -107,6 +110,55 @@ public class SvTurret {
                         trailLength = 5;
 
                         ammoMultiplier = 2f;
+
+                        buildingDamageMultiplier = 0.5f;
+                    }},
+                    iridium, new BasicBulletType(2.7f, mainDamage*1.05f) {{
+                        width = 17f;
+                        height = 15f;
+                        lifetime = 2.7f*8*8f;
+                        hitEffect = Fx.blastExplosion;
+                        despawnEffect = Fx.blastExplosion;
+                        shootEffect = SvFx.pulverize;
+                        smokeEffect = Fx.none;
+                        hitColor = backColor = trailColor = SvPal.iridium;
+                        frontColor = SvPal.iridium.cpy().mul(1.5f);
+
+                        intervalBullet = new BasicBulletType(2f,mainDamage * 0.1f) {{
+                            width = 8f;
+                            height = 8f;
+
+                            lifetime = 0.1f*60f;
+
+                            hitEffect = Fx.blastExplosion;
+                            despawnEffect = Fx.blastExplosion;
+                            shootEffect = SvFx.pulverize;
+                            smokeEffect = Fx.none;
+                            hitColor = backColor = trailColor = SvPal.iridium;
+                            frontColor = SvPal.iridium.cpy().mul(1.5f);
+
+                            status = StatusEffects.slow;
+                            statusDuration = 5f;
+
+                            impact = true;
+                            knockback = 1f;
+                        }};
+                        intervalBullets = 1;
+                        intervalDelay = 10;
+                        bulletInterval = 10;
+                        intervalSpread = 0;
+                        intervalRandomSpread = 360;
+
+
+                        trailWidth = 5f;
+                        trailLength = 7;
+
+                        pierce = true;
+                        pierceCap = 3;
+
+                        inaccuracy = 5;
+
+                        buildingDamageMultiplier = 0.5f;
                     }}
             );
 
@@ -265,7 +317,7 @@ public class SvTurret {
 
             shootType = new ExplosionBulletType(mainDamage,range) {{
                 collidesAir = true;
-                buildingDamageMultiplier = 1.1f;
+                buildingDamageMultiplier = 0.1f;
                 ammoMultiplier = 1f;
                 speed = 0;
                 lifetime = 1f;
@@ -280,6 +332,8 @@ public class SvTurret {
                 lightningDamage = 6;
                 lightning = 8;
                 lightningLength = 10;
+
+                knockback = 10f;
 
 
                 fragBullet = new BasicBulletType(6f, subDamage*0.7f) {{
@@ -312,7 +366,15 @@ public class SvTurret {
                     homingPower = 0.08f;
                     homingRange = 80f;
                 }};
-            }};
+            }
+
+                @Override
+                public void hitEntity(Bullet b, Hitboxc entity, float health) {
+                    super.hitEntity(b, entity, health);
+                    boolean wasDead = entity instanceof Unit u && u.dead;
+                    if(!wasDead && entity instanceof Unit u)  u.rotation(u.rotation()+30f);
+                }
+            };
             consumePower(3.3f);
             coolant = consume(new ConsumeLiquid(hydrogen, 20f / 60f));
             coolantMultiplier = 8f;

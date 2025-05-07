@@ -125,7 +125,7 @@ public class SvCrafting {
             hasPower = true;
         }};
         hydrogenElectrolyzer = new GenericCrafter("hydrogen-electrolyzer") {{
-            requirements(Category.crafting, atl(), with(iridium,200,clay,250,chrome,100,phosphide,80));
+            requirements(Category.crafting, atl(), with(iridium,200,clay,250,corallite,100));
             craftTime = 60f;
 
             researchCost = with(corallite,720,spaclanium,720,iridium,340,clay,340);

@@ -1,5 +1,6 @@
 package subvoyage.type.world;
 
+import arc.Core;
 import arc.Events;
 import arc.func.Cons;
 import arc.graphics.Color;
@@ -11,6 +12,7 @@ import mindustry.content.Fx;
 import mindustry.core.GameState;
 import mindustry.game.EventType;
 import mindustry.game.Team;
+import mindustry.gen.Icon;
 import mindustry.type.Planet;
 import mindustry.type.Sector;
 import mindustry.type.SectorPreset;
@@ -34,6 +36,13 @@ public class SvSectorPreset extends SectorPreset {
     }
     public SvSectorPreset(String name, Planet planet, int sector) {
         super(name, planet, sector);
+    }
+
+    @Override
+    public void loadIcon() {
+        if(Icon.terrain != null){
+            uiIcon = fullIcon = Core.atlas.find("subvoyage-sector-" + name.replace("subvoyage-",""), Icon.terrain.getRegion());
+        }
     }
 
     /**

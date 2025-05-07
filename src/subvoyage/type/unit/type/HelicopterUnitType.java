@@ -75,7 +75,7 @@ public class HelicopterUnitType extends AtlacianUnitType {
         float z = isPayload ? Draw.z() : unit.isGrounded() ? Layer.legUnit : (lowAltitude ? Layer.flyingUnitLow : Layer.flyingUnit);
 
         if(!isPayload && (unit.isFlying() || shadowElevation > 0)){
-            Draw.z(Math.min(Layer.darkness, z - 2f));
+            Draw.z(Math.min(Layer.darkness, z - 10f));
             drawShadow(unit);
         }
 

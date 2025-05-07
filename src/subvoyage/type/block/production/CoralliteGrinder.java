@@ -151,7 +151,7 @@ public class CoralliteGrinder extends GenericCrafter {
 
             Draw.z(SvRender.Layer.overlayUI);
             Draw.color(Color.scarlet);
-            neighbors.select(Objects::nonNull).select(e -> !(e instanceof Pump.PumpBuild) && e.block.outputsLiquid)
+            neighbors.select(Objects::nonNull).select(e -> !(e instanceof Pump.PumpBuild) && e.block.outputsLiquid && e.front() == this)
                 .each(e -> {
                     Draw.rect(Icon.cancel.getRegion(), e.x, e.y);
                 });

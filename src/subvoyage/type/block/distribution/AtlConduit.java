@@ -1,8 +1,6 @@
 package subvoyage.type.block.distribution;
 
-import arc.Core;
 import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.Lines;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
@@ -13,7 +11,6 @@ import arc.util.Tmp;
 import mindustry.content.Blocks;
 import mindustry.entities.units.BuildPlan;
 import mindustry.gen.Building;
-import mindustry.graphics.Drawf;
 import mindustry.input.Placement;
 import mindustry.type.Liquid;
 import mindustry.world.Block;
@@ -67,10 +64,19 @@ public class AtlConduit extends Conduit {
             if(liquids.currentAmount() > 0.0001f && timer(timerFlow, 1)){
                 moveLiquidForward(leaks, liquids.current());
                 noSleep();
-            }else{
+            } else {
                 sleep();
             }
+            if(front() instanceof ConduitBuild) {
+                front().noSleep();
+                if(timer(timerFlow, 1)) front().moveLiquidForward(leaks, front().liquids.current());
+            }
+            if(back() instanceof ConduitBuild) {
+                back().noSleep();
+                if(timer(timerFlow, 1)) back().moveLiquidForward(leaks, back().liquids.current());
+            }
         }
+
         float[] smoothieLiquids = new float[4];
         @Override
         protected void drawAt(float x, float y, int bits, int rotation, SliceMode slice) {
@@ -96,29 +102,42 @@ public class AtlConduit extends Conduit {
             float xscl = Draw.xscl, yscl = Draw.yscl;
             Draw.scl(1f,1f);
 
+            float smoothLiqs = 0f;
+            int count = 0;
+            for (float smoothieLiquid : smoothieLiquids) {
+                smoothLiqs += smoothieLiquid;
+                if(smoothieLiquid > 0.0001f) count++;
+            }
+            smoothLiqs /= Math.max(1,count);
+
             int rot = -1;
             for (Point2 dir : Geometry.d4) {
                 rot++;
                 if(!blends(tile,rotation,null,Mathf.mod(rotation-rot,4),true) && rot != rotation) {
+                    smoothieLiquids[rot] = 0f;
                     continue;
                 }
 
-                float smLiq = liquids.currentAmount() / liquidCapacity;
+                float smLiq = liquidFullness(this, liquids.current());
                 Building bui = world.build(tileX() + dir.x, tileY() + dir.y);
                 if(rot != rotation && bui != null)
-                    smLiq = bui.liquids.currentAmount() / bui.block.liquidCapacity;
+                    smLiq = liquidFullness(bui, liquids.current());
                 smLiq = Mathf.clamp(smLiq);
 
-                smoothieLiquids[rot] = Mathf.lerpDelta(smoothieLiquids[rot], smLiq, 0.05f);
+                smoothieLiquids[rot] = Mathf.lerpDelta(smoothieLiquids[rot], Math.max(smLiq,0.0001f), 0.05f);
 
-                Lines.stroke(smoothieLiquids[rot] * 4.125f,liquids.current().color.write(Tmp.c2).a(Mathf.clamp(smoothieLiquids[rot] * 4f)));
-                Lines.line(x,y,x + dir.x * 4f, y + dir.y * 4f, rotation != rot || front() instanceof ConduitBuild);
+                Lines.stroke(smoothLiqs * 4.125f,liquids.current().color.write(Tmp.c2).a(Mathf.clamp(smoothLiqs * 2f)));
+                Lines.line(x,y,x + dir.x * 4f, y + dir.y * 4f, false);
             }
             Draw.color();
             //Drawf.liquid(sliced(liquidr, slice), x + ox, y + oy, Mathf.clamp(smoothLiquid*2f), liquids.current().color.write(Tmp.c1).a(1f));
             Draw.scl(xscl, yscl);
 
             Draw.rect(sliced(topRegions[bits], slice), x, y, angle);
+        }
+
+        private float liquidFullness(Building building, Liquid liquid) {
+            return building.liquids.currentAmount() / building.block.liquidCapacity;
         }
 
         @Override
