@@ -56,6 +56,9 @@ public class SvPal {
     laserRed = Color.valueOf("FF5451"),
     laserGreen = Color.valueOf("72FF77"),
     laserBlue = Color.valueOf("263FFF"),
-    laserViolet = Color.valueOf("7F30FF")
+    laserViolet = Color.valueOf("7F30FF"),
+
+    cascadeBack = Color.valueOf("70A2A2"),
+    cascade = Color.valueOf("D5FFDE")
     ;
 }

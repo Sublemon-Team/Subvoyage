@@ -1,7 +1,9 @@
 package subvoyage.content;
 
+import arc.Core;
 import mindustry.world.Block;
 import subvoyage.content.block.*;
+import subvoyage.content.other.SvEffects;
 import subvoyage.content.world.SvPlanets;
 import subvoyage.content.world.SvSectorPresets;
 import subvoyage.core.anno.LoadAnnoProcessor;
@@ -15,6 +17,8 @@ public class SvContent {
 
     public static void load() {
         SvTeam.load();
+
+        SvEffects.load();
 
         SvMusic.load();
         SvSounds.load();

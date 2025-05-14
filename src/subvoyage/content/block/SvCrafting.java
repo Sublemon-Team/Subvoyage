@@ -162,7 +162,7 @@ public class SvCrafting {
             itemCapacity = 20;
             size = 3;
             craftEffect = Fx.fireSmoke;
-            craftTime = 0.8f*60f;
+            craftTime = 1.1f*60f;
             envDisabled |= Env.scorching;
 
             consumeLiquid(hydrogen,18/60f);

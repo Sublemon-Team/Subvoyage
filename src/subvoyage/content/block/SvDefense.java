@@ -4,12 +4,18 @@ import mindustry.type.Category;
 import mindustry.world.Block;
 import mindustry.world.blocks.defense.ShieldWall;
 import mindustry.world.blocks.defense.Wall;
+import mindustry.world.draw.DrawDefault;
+import mindustry.world.draw.DrawMulti;
 import mindustry.world.meta.Env;
 import subvoyage.core.draw.SvPal;
+import subvoyage.core.draw.SvRender;
+import subvoyage.core.draw.block.Draw3DSprite;
 import subvoyage.type.block.defense.PowerWall;
+import subvoyage.type.block.defense.UnitJammer;
 
 import static mindustry.type.ItemStack.mult;
 import static mindustry.type.ItemStack.with;
+import static subvoyage.content.SvBlocks.propanePyrolyzer;
 import static subvoyage.core.ContentStates.*;
 import static subvoyage.content.SvItems.*;
 import static subvoyage.content.SvBlocks.atl;
@@ -18,7 +24,9 @@ public class SvDefense {
     public static Block
             clayWall,clayWallLarge,
             phosphideWall,phosphideWallLarge,
-            tugSheetWall, tugSheetWallLarge
+            tugSheetWall, tugSheetWallLarge,
+
+            aviationJammer
             ;
 
     public static void load() {
@@ -100,6 +108,15 @@ public class SvDefense {
             health = (int) TUGSHEET_WALL_LARGE_HP;
             envDisabled |= Env.scorching;
             size = 2;
+        }};
+
+        aviationJammer = new UnitJammer("aviation-jammer") {{
+            requirements(Category.defense,atl(),with(iridium, 6));
+
+            size = 3;
+
+            consumeLiquid(propane, 24f / 60f);
+            consumePower(72 / 60f);
         }};
     }
 }

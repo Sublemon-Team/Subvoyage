@@ -23,6 +23,7 @@ import mindustry.world.blocks.defense.turrets.ItemTurret;
 import mindustry.world.blocks.defense.turrets.PowerTurret;
 import mindustry.world.consumers.ConsumeLiquid;
 import mindustry.world.draw.DrawTurret;
+import subvoyage.content.other.SvEffects;
 import subvoyage.core.draw.DataEffect;
 import subvoyage.core.draw.SvPal;
 import subvoyage.content.ost.SvSounds;
@@ -223,6 +224,8 @@ public class SvTurret {
                         fragVelocityMin = 1f;
 
                         knockback = -3f;
+
+                        collidesGround = false;
                     }}
             );
 
@@ -393,7 +396,7 @@ public class SvTurret {
             targetAir = true;
             squareSprite = false;
 
-            inputs = IntSeq.with(1,2,3);
+            inputs = IntSeq.with(0,1,2,3);
             laserRequirement = 30;
             laserMaxEfficiency = 2f;
             laserOverpowerScale = 0.5f;
@@ -401,64 +404,46 @@ public class SvTurret {
 
             consumePower(1.2f);
 
-            reload = 40f;
-            shoot = new ShootSpread(2,30);
+            shootWarmupSpeed = 0.02f;
+            minWarmup = 0.5f;
+            reload = 60f;
+            shoot = new ShootAlternate() {{
+                spread = 6f;
+                firstShotDelay = 10f;
+
+                shotDelay = 8f;
+
+                shots = 4;
+            }};
 
             float BPS = 60f/(reload+shoot.firstShotDelay+shoot.shots*shoot.shotDelay)*(shoot.shots);
             float mainDamage = CASCADE_DPS/BPS*0.6f;
-            float subDamage = CASCADE_DPS/BPS*0.4f/(5f*2f);
+            float subDamage = CASCADE_DPS/BPS*0.4f;
 
-            shootType = new BasicBulletType(6f, mainDamage){{
-                        sprite = "large-orb";
-                        inaccuracy = 1f;
-                        ammoMultiplier = 3f;
-                        ammoPerShot = 2;
+            shootType = new BasicBulletType(6f, mainDamage) {{
+                lifetime = 80f;
 
-                        width = 12f;
-                        height = 12f;
-                        lifetime = 120f;
-                        shootEffect = SvFx.pulverize;
-                        smokeEffect = Fx.none;
+                accel = -0.1f;
 
-                        hitColor = backColor = trailColor = SvPal.chromiumLightish;
-                        frontColor = Color.white;
+                status = SvEffects.jammed;
+                statusDuration = 10f;
 
-                        fragBullets = intervalBullets = 5;
-                        fragVelocityMin = 1f;
-                        fragVelocityMax = 1f;
-                        bulletInterval = 40f;
-                        intervalDelay = 10f;
-                        fragBullet = intervalBullet = new LaserBulletType(subDamage){{
-                            colors = new Color[]{SvPal.chromiumLightish.cpy().a(0.4f), SvPal.chromiumLightish, Color.white};
-                            chargeEffect = new MultiEffect(Fx.lancerLaserCharge, Fx.lancerLaserChargeBegin);
+                inaccuracy = 2f;
+                randomAngleOffset = 3f;
 
-                            buildingDamageMultiplier = 0.25f;
-                            hitEffect = Fx.hitLancer;
-                            hitSize = 4;
-                            lifetime = 16f;
-                            drawSize = 400f;
-                            collidesAir = false;
-                            length = 5*8f;
-                            ammoMultiplier = 1f;
-                            pierceCap = 4;
+                height = 18f;
+                width = 6f;
+                trailWidth = 3f;
+                trailLength = 8;
 
-                            status = StatusEffects.electrified;
-                        }};
+                backColor = hitColor = trailColor = heatColor = SvPal.cascadeBack;
+                frontColor = SvPal.cascade;
 
-                        homingPower = 0.18f;
-                        homingRange = 16f;
+                pierce = true;
+                pierceCap = 2;
+            }};
 
-                        trailRotation = true;
-                        trailEffect = Fx.disperseTrail;
-                        trailInterval = 3f;
-                        trailWidth = 6f;
-                        trailLength = 6;
-                        trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
-
-                        hitEffect = despawnEffect = Fx.hitBulletColor;
-                    }};
-
-            smokeEffect = Fx.shootSmokeSmite;
+            smokeEffect = Fx.shootSmokeSquare;
             drawer = new DrawTurret("atlacian-"){{
                 var heatp = DrawPart.PartProgress.warmup.blend(p -> Mathf.absin(2f, 1f) * p.warmup, 0.2f);
                 var haloProgress = DrawPart.PartProgress.warmup.delay(0.5f);

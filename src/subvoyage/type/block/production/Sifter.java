@@ -6,6 +6,7 @@ import arc.graphics.*;
 import arc.graphics.g2d.*;
 import arc.math.Mathf;
 import arc.math.geom.*;
+import arc.struct.ObjectFloatMap;
 import arc.struct.Seq;
 import arc.util.*;
 import arc.util.io.Reads;
@@ -20,10 +21,15 @@ import mindustry.type.*;
 import mindustry.ui.*;
 import mindustry.world.*;
 import mindustry.world.blocks.ConstructBlock;
+import mindustry.world.blocks.distribution.ItemBridge;
+import mindustry.world.blocks.environment.Floor;
+import mindustry.world.blocks.environment.StaticWall;
+import mindustry.world.blocks.production.BeamDrill;
 import mindustry.world.blocks.production.Drill;
 import mindustry.world.consumers.ConsumePower;
 import mindustry.world.draw.*;
 import mindustry.world.meta.*;
+import subvoyage.content.SvItems;
 import subvoyage.core.ui.advancements.Advancement;
 import subvoyage.type.ConsumesOr;
 
@@ -42,6 +48,9 @@ public class Sifter extends Block {
     public float harvestTime = 60f;
     public float liquidOutput = 10/60f;
     public int oreSearchRadius = 5;
+
+    /** Multipliers of drill speed for each item. Defaults to 1. */
+    public ObjectFloatMap<Item> drillMultipliers = new ObjectFloatMap<>();
 
     public Sifter(String name) {
         super(name);
@@ -63,10 +72,31 @@ public class Sifter extends Block {
     }
 
     @Override
+    public void init() {
+        super.init();
+        for (Item item : SvItems.atlacianItems) {
+            float time = harvestTime + (item.cost - 0.5f) * 30f;
+            float mult = harvestTime / time;
+            System.out.println(item);
+            System.out.println(mult);
+            drillMultipliers.put(item, mult);
+        }
+    }
+
+    @Override
     public void setStats() {
         super.setStats();
+
         stats.add(Stat.mineSpeed,60f/harvestTime, StatUnit.itemsSecond);
+        stats.add(Stat.drillTier, StatValues.drillables(harvestTime, 0f, 1, drillMultipliers, b ->
+                (b instanceof Floor f && f.wallOre && f.itemDrop != null && isAtlacian(f.itemDrop)) ||
+                        (b instanceof StaticWall w && w.itemDrop != null && isAtlacian(w.itemDrop))
+        ));
         stats.add(Stat.output, StatValues.liquid(Liquids.water,liquidOutput*60f,true));
+    }
+
+    public boolean isAtlacian(Item item) {
+        return item != null && SvItems.atlacianItems.contains(item);
     }
 
     @Override
@@ -151,7 +181,7 @@ public class Sifter extends Block {
     public Item getPopulatedOreItemCached(int x, int y) {
         int pos = Point2.pack(x,y);
         Item item;
-        if(!populatedOres.containsKey(pos)) populatedOres.put(pos,getPopulatedOreItem(world.tile(x,y)));
+        populatedOres.putIfAbsent(pos,getPopulatedOreItem(world.tile(x,y)));
         item = populatedOres.get(pos);
         return item;
     }
@@ -283,7 +313,7 @@ public class Sifter extends Block {
 
         public float getHarvestTime() {
             Item item = getPopulatedOreItemCached(tile.x,tile.y);
-            return item != null ? harvestTime + item.hardness * 15f : 0;
+            return harvestTime / drillMultipliers.get(item, 1f);
         }
 
         public void dumpOutputs() {

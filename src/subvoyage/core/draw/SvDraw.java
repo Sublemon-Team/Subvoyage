@@ -1,17 +1,19 @@
 package subvoyage.core.draw;
 
 import arc.Core;
-import arc.graphics.Color;
-import arc.graphics.Texture;
+import arc.files.Fi;
+import arc.graphics.*;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.g2d.TextureRegion;
 import arc.graphics.gl.FrameBuffer;
 import arc.graphics.gl.Shader;
+import arc.math.geom.Vec2;
 import mindustry.graphics.CacheLayer;
 import mindustry.graphics.Layer;
 import arc.math.*;
 import mindustry.*;
+import mindustry.graphics.Shaders;
 
 import static arc.Core.*;
 import static arc.math.Mathf.*;
@@ -42,6 +44,7 @@ public class SvDraw {
         applyBloom(1f,draw);
     }
 
+
     public static void applyBloom(float intensity, Runnable draw) {
         int w = Core.graphics.getWidth();
         int h = Core.graphics.getHeight();
@@ -58,7 +61,6 @@ public class SvDraw {
         draw.run();
         Draw.z(z);
     }
-
     private static final float[] vertices = new float[24];
     /** {@link Fill#quad} with region and colors. */
     public static void quad(TextureRegion region, float x1, float y1, float c1, float x2, float y2, float c2, float x3, float y3, float c3, float x4, float y4, float c4){
