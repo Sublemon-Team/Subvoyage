@@ -257,13 +257,7 @@ public class SvEnvironment {
         hauntedTree = new DrawerBlock("haunted-tree"){{
             clipSize = 128f;
             //shadowOffset = -2.5f;
-            drawer = DrawSplit
-                    .withLow(
-                            new DrawRegion("-root"),
-                            new DrawRegion("-shadow"),
-                            new DrawRegion("-top")
-                    )
-                    .with(
+            drawer = new DrawMulti(
                             new Draw3DSprite("-shadow") {{
                                 surfaceTime = 0f;
                                 camOffset = 0.001f;

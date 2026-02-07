@@ -23,6 +23,8 @@ public class HelicopterAI extends FlyingAI {
 
     public float groundCooldown = 0f;
 
+    public float noHeadTime = 0f;
+
     @Override
     public void updateMovement() {
         unloadPayloads();
@@ -94,10 +96,14 @@ public class HelicopterAI extends FlyingAI {
         if(head != null && getHeadAi() != null && getHeadAi().head != null) head = getHeadAi().head; // we found a better leader
         if(head != null && (head.maxHealth == unit.maxHealth || head.hitSize == unit.hitSize)) head = null; //we're equal
         if(head != null && getHeadAi() != null && getHeadAi().head == unit) head = null; // we don't want loops
+
+        if(head == null) noHeadTime += Time.delta;
+        else noHeadTime -= Time.delta;
+        noHeadTime = Math.max(noHeadTime,0);
     }
 
     public Unit findMain(float x, float y, float range) {
-        return Units.closest(unit.team,x,y,range,u -> u instanceof HelicopterUnitEntity,(u,xo,yo) -> -u.hitSize -u.health);
+        return Units.closest(unit.team,x,y,range,u -> u instanceof HelicopterUnitEntity,(u,xo,yo) -> -u.hitSize -u.health - u.maxHealth);
     }
     public Unit findTroop(float x, float y, float range, float minRange) {
         return Units.closest(unit.team,x,y,range,u -> u instanceof HelicopterUnitEntity && Mathf.dst(x,y,u.getX(),u.getY()) > minRange,(u,xo,yo) -> -u.hitSize -u.health);

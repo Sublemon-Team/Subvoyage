@@ -9,17 +9,20 @@ import arc.math.geom.Vec2;
 import arc.struct.ObjectMap;
 import arc.util.Reflect;
 import arc.util.Time;
+import arc.util.Tmp;
 import mindustry.Vars;
 import mindustry.ai.UnitCommand;
 import mindustry.ai.types.*;
 import mindustry.content.*;
 import mindustry.core.Version;
 import mindustry.entities.Effect;
+import mindustry.entities.Puddles;
 import mindustry.entities.abilities.*;
 import mindustry.entities.bullet.*;
 import mindustry.entities.effect.*;
 import mindustry.entities.part.*;
 import mindustry.entities.pattern.ShootBarrel;
+import mindustry.entities.pattern.ShootSpread;
 import mindustry.entities.units.*;
 import mindustry.game.Team;
 import mindustry.gen.*;
@@ -29,6 +32,7 @@ import mindustry.type.*;
 import mindustry.type.ammo.*;
 import mindustry.type.unit.*;
 import mindustry.type.weapons.*;
+import mindustry.world.Tile;
 import mindustry.world.meta.*;
 import subvoyage.content.ost.SvSounds;
 import subvoyage.core.draw.SvFx;
@@ -65,6 +69,7 @@ import static arc.graphics.g2d.Lines.lineAngle;
 import static arc.graphics.g2d.Lines.stroke;
 import static arc.math.Angles.randLenVectors;
 import static mindustry.Vars.tilesize;
+import static mindustry.Vars.world;
 import static subvoyage.core.ContentStates.*;
 
 public class SvUnits{
@@ -1284,11 +1289,17 @@ public class SvUnits{
             float BPS = 3f;
             float weaponDamage = HYDRO_T1_DPS/BPS;
 
+            abilities.addAll(
+                    new ArmorPlateAbility() {{
+                        drawShine = false;
+                        healthMultiplier = 0.5f;
+                    }}
+            );
+
             weapons.add(new HydromechWeapon(name + "-weapon") {{
-                shoot = new ShootLeeft() {{shots = 2;}};
+                shoot = new ShootSpread(3,20f);
                 reload = 40f;
                 recoil = 3f;
-                inaccuracy = 10f;
                 shootY = 0;
                 x = 0;
                 y = 0.25f;
@@ -1301,22 +1312,66 @@ public class SvUnits{
 
                 groundStat = new HydromechWeaponStateStats() {{
                     damage = weaponDamage;
-                    lifetime = 40f;
                 }};
                 waterStat = new HydromechWeaponStateStats() {{
                     damage = weaponDamage;
-                    lifetime = 68f;
                 }};
-                bullet = new DecayingBulletType(4f,weaponDamage,2f) {{
-                    shootEffect = SvFx.pulverize;
-                    smokeEffect = Fx.none;
-                    hitColor = backColor = trailColor = Pal.missileYellow;
-                    frontColor = Color.white;
-                    lifetime = 40f;
-                    trailWidth = 5f;
-                    trailLength = 8;
-                    trailInterp = v -> Math.max(Mathf.slope(v), 0.8f);
-                    hitEffect = despawnEffect = Fx.hitBulletColor;
+                range = 70f;
+
+                bullet = new RailBulletType() {{
+                    length = 8*8f;
+                    damage = weaponDamage;
+
+                    hitColor = SvPal.hydromech;
+                    hitEffect = endEffect = Fx.hitBulletColor;
+                    pierceDamageFactor = 1.05f;
+                    pointEffectSpace = 60f;
+
+                    smokeEffect = Fx.colorSpark;
+
+                    endEffect = new Effect(14f, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        Drawf.tri(e.x, e.y, e.fout() * 6f, 5f, e.rotation);
+                    });
+
+                    shootEffect = new Effect(10, e -> {
+                        color(e.color);
+                        z(Layer.bullet);
+                        float w = 1.6f + 10 * e.fout();
+
+                        Drawf.tri(e.x, e.y, w, 30f * e.fout(), e.rotation);
+                        color(e.color);
+
+                        for(int i : Mathf.signs){
+                            Drawf.tri(e.x, e.y, w * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                        }
+
+                        Drawf.tri(e.x, e.y, w, 4f * e.fout(), e.rotation + 180f);
+                    });
+
+                    lineEffect = new Effect(20f, e -> {
+                        if(!(e.data instanceof Vec2 v)) return;
+                        z(Layer.bullet);
+                        color(e.color);
+                        stroke(e.fout() * 3f + 1f);
+
+                        Fx.rand.setSeed(e.id);
+                        for(int i = 0; i < 7; i++){
+                            Fx.v.trns(e.rotation, Fx.rand.random(8f, v.dst(e.x, e.y) - 8f));
+                            Lines.lineAngleCenter(e.x + Fx.v.x, e.y + Fx.v.y, e.rotation + e.finpow(), e.foutpowdown() * 20f * Fx.rand.random(0.5f, 1f) + 0.3f);
+                        }
+
+                        e.scaled(14f, b -> {
+                            stroke(b.fout() * 3f);
+                            color(e.color);
+                            Lines.line(e.x, e.y, v.x, v.y);
+
+                            for(int i : Mathf.signs){
+                                Drawf.tri(e.x, e.y, b.fout() * 0.9f, 18f * e.fout(), e.rotation + i * 90f);
+                            }
+                        });
+                    });
                 }};
             }});
             //researchCostMultiplier = 0f;
