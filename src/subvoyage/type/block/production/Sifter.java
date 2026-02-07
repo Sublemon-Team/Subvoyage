@@ -257,9 +257,9 @@ public class Sifter extends Block {
         int i = 0;
         for (String info : infos) {
             WorldLabel.drawAt("-",x - 70/2f + 3f,y - i * 6,
-                    Layer.overlayUI+1,WorldLabel.flagOutline,0.8f);
+                    Layer.overlayUI+1,WorldLabel.flagOutline,0.8f, Align.center, Align.center);
             WorldLabel.drawAt(Core.bundle.get(info),x,y - i * 6,
-                    Layer.overlayUI+1,WorldLabel.flagOutline,0.8f);
+                    Layer.overlayUI+1,WorldLabel.flagOutline,0.8f, Align.center, Align.center);
             i++;
         }
 

@@ -382,7 +382,7 @@ public class HydromechUnitEntity extends LegsUnit {
                         this.buildSpeedMultiplier *= entry.effect.buildSpeedMultiplier;
                         this.dragMultiplier *= entry.effect.dragMultiplier;
                         this.disarmed |= entry.effect.disarm;
-                        entry.effect.update(this, entry.time);
+                        entry.effect.update(this, entry);
                     } else {
                         Pools.free(entry);
                         --index;

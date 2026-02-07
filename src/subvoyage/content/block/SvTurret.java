@@ -83,7 +83,7 @@ public class SvTurret {
                 };
             }};
 
-            shootSound = Sounds.blaster;
+            shootSound = Sounds.shootCleroi;
             reload = 60f;
             shoot = new ShootUpsurge() {{
                 shots = 2;
@@ -274,7 +274,7 @@ public class SvTurret {
 
             }};
 
-            shootSound = Sounds.railgun;
+            shootSound = Sounds.shootLancer;
             shootY = 12f;
             recoil = 0.5f;
             range = 260f;
@@ -297,12 +297,12 @@ public class SvTurret {
             targetAir = true;
             fogRadius = 8;
             health = 540;
-            shootSound = Sounds.cannon;
+            shootSound = Sounds.shootArtillery;
             range = 12*10f;
             velocityRnd = 0;
             reload = 160f;
             shake = 5f;
-            chargeSound = Sounds.lasercharge;
+            chargeSound = Sounds.chargeLancer;
             shootY = 0f;
             rotateSpeed = 0;
             drawer = new DrawTurret("atlacian-");
@@ -540,7 +540,7 @@ public class SvTurret {
                         }});
             }};
 
-            shootSound = Sounds.railgun;
+            shootSound = Sounds.shootLancer;
             shootY = 8f;
 
             recoil = 0.5f;
@@ -561,7 +561,7 @@ public class SvTurret {
 
             size = 4;
             rotateSpeed = 1.4f;
-            shootSound = Sounds.shotgun;
+            shootSound = Sounds.shootDisperse;
 
             ammoPerShot = 2;
             maxAmmo = ammoPerShot * 3;
@@ -651,7 +651,7 @@ public class SvTurret {
 
             size = 4;
             rotateSpeed = 1.4f;
-            shootSound = Sounds.mediumCannon;
+            shootSound = Sounds.shootArtillery;
             ammoPerShot = 2;
             maxAmmo = ammoPerShot * 3;
 
@@ -756,7 +756,7 @@ public class SvTurret {
                     backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
                     frontColor = Color.white;
                     ammoMultiplier = 1f;
-                    hitSound = Sounds.titanExplosion;
+                    hitSound = Sounds.explosionTitan;
 
                     status = StatusEffects.blasted;
 
@@ -793,7 +793,7 @@ public class SvTurret {
                     backColor = hitColor = trailColor = Color.valueOf("ea8878").lerp(Pal.redLight, 0.5f);
                     frontColor = Color.white;
                     ammoMultiplier = 1f;
-                    hitSound = Sounds.titanExplosion;
+                    hitSound = Sounds.explosionTitan;
 
                     status = StatusEffects.blasted;
 
@@ -840,7 +840,7 @@ public class SvTurret {
                 hitSound = despawnSound = SvSounds.flashExplosion;
 
                 fragBullet = new BasicBulletType(6f, RESIST_DPS*0.2f/10f,"shell") {{
-                    hitSound = despawnSound = Sounds.bang;
+                    hitSound = despawnSound = Sounds.explosionPlasmaSmall;
                     width = 9f;
                     hitSize = 5f;
                     height = 15f;

@@ -64,7 +64,6 @@ public class SvPlanets{
             sectorSeed = 6;
 
             allowSectorInvasion = false;
-            allowWaveSimulation = true;
             allowLaunchSchematics = false;
             //enemyCoreSpawnReplace = true;
             allowLaunchLoadout = false;

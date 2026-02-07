@@ -86,7 +86,7 @@ public class HelicopterCommandAI extends CommandAI {
         boolean alwaysArrive = false;
 
         float engageRange = unit.type.range - 10f;
-        boolean withinAttackRange = attackTarget != null && unit.within(attackTarget, engageRange) && stance != UnitStance.ram;
+        boolean withinAttackRange = attackTarget != null && unit.within(attackTarget, engageRange) && hasStance(UnitStance.ram);
 
         if(targetPos != null){
             boolean move = true, isFinalPoint = commandQueue.size == 0;
@@ -102,7 +102,7 @@ public class HelicopterCommandAI extends CommandAI {
 
             //TODO: should the unit stop when it finds a target?
             if(
-                    (stance == UnitStance.patrol && target != null && unit.within(target, unit.type.range - 2f) && !unit.type.circleTarget) ||
+                    (hasStance(UnitStance.patrol) && target != null && unit.within(target, unit.type.range - 2f) && !unit.type.circleTarget) ||
                             (command == UnitCommand.enterPayloadCommand && unit.within(targetPos, 4f) || (targetBuild != null && unit.within(targetBuild, targetBuild.block.size * tilesize/2f * 0.9f))) ||
                             (command == UnitCommand.loopPayloadCommand && unit.within(targetPos, 10f))
             ){
@@ -118,7 +118,7 @@ public class HelicopterCommandAI extends CommandAI {
                 }else{
                     moveTo(vecOut,
                             withinAttackRange ? engageRange :
-                                    attackTarget != null && stance != UnitStance.ram ? engageRange : 0f,
+                                    attackTarget != null && !hasStance(UnitStance.ram) ? engageRange : 0f,
                             unit.isFlying() ? 40f : 100f, true, null, isFinalPoint || alwaysArrive);
                 }
             }
@@ -210,7 +210,7 @@ public class HelicopterCommandAI extends CommandAI {
                 commandPosition(position);
             }
 
-            if(prev != null && (stance == UnitStance.patrol || command == UnitCommand.loopPayloadCommand)){
+            if(prev != null && (hasStance(UnitStance.patrol) || command == UnitCommand.loopPayloadCommand)){
                 commandQueue.add(prev.cpy());
             }
 

@@ -154,7 +154,7 @@ public class SvSpecial {
             configurable = false;
             plans.add(new UnitPlan(demolish, 60f*30f, with()));
             update = true;
-            ambientSound = Sounds.electricHum;
+            ambientSound = Sounds.loopElectricHum;
 
             health = 2560;
             priority = TargetPriority.core;
@@ -171,7 +171,7 @@ public class SvSpecial {
             health = 2100;
             size = 3;
 
-            ambientSound = Sounds.electricHum;
+            ambientSound = Sounds.loopElectricHum;
 
             fogRadius = 6;
 

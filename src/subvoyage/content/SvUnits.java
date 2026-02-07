@@ -497,7 +497,7 @@ public class SvUnits{
                 y = -2f + 1/4f;
                 reload = 60f;
                 recoil = 1f;
-                shootSound = Sounds.missileLaunch;
+                shootSound = Sounds.shootMissile;
                 velocityRnd = 0f;
                 inaccuracy = 0f;
                 top = false;
@@ -563,7 +563,7 @@ public class SvUnits{
                 y = -1/4f;
                 reload = 160f;
                 recoil = 1f;
-                shootSound = Sounds.mediumCannon;
+                shootSound = Sounds.shootArtillery;
 
                 top = false;
                 alternate = true;
@@ -594,7 +594,7 @@ public class SvUnits{
                     weaveScale = 60f;
                     weaveRandom = false;
 
-                    hitSound = Sounds.plasmaboom;
+                    hitSound = Sounds.explosionPlasmaSmall;
 
                     backColor = SvPal.heatGlow;
 
@@ -674,7 +674,7 @@ public class SvUnits{
                 shootY = 128/8f-12/4f;
                 reload = 10f;
                 recoil = 2f;
-                shootSound = Sounds.bolt;
+                shootSound = Sounds.shootBreach;
                 shoot = new ShootBarrel() {{
                     barrels = new float[] {
                             -4f, 1f, -10f,
@@ -1051,7 +1051,7 @@ public class SvUnits{
                                         trailRotation = true;
                                         trailInterp = Interp.fastSlow;
                                         status = StatusEffects.electrified;
-                                        hitSound = Sounds.plasmaboom;
+                                        hitSound = Sounds.explosionPlasmaSmall;
 
                                         trailEffect = new Effect(16f, e -> {
                                             color(SvPal.heatGlow);
@@ -1185,7 +1185,7 @@ public class SvUnits{
                 rotationLimit = 22f;
                 shootCone = 360f;
 
-                shootSound = Sounds.bolt;
+                shootSound = Sounds.shootBreach;
 
                 shoot = new ShootBarrel() {{
                     barrels = new float[] {
@@ -1306,7 +1306,7 @@ public class SvUnits{
 
                 top = true;
                 mirror = false;
-                shootSound = Sounds.blaster;
+                shootSound = Sounds.shootCleroi;
                 soundPitchMin = 0.5f;
                 soundPitchMax = 0.55f;
 
@@ -1464,7 +1464,7 @@ public class SvUnits{
                 mirror = true;
                 flipSprite = true;
                 x = 9f;
-                shootSound = Sounds.blaster;
+                shootSound = Sounds.shootCleroi;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.45f;
 
@@ -1577,7 +1577,7 @@ public class SvUnits{
                 mirror = false;
                 alternate = false;
                 top = false;
-                shootSound = Sounds.missileSmall;
+                shootSound = Sounds.shootMissileSmall;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.25f;
 
@@ -1687,7 +1687,7 @@ public class SvUnits{
                 mirror = false;
                 alternate = false;
                 top = false;
-                shootSound = Sounds.missileSmall;
+                shootSound = Sounds.shootMissileSmall;
                 soundPitchMin = 0.4f;
                 soundPitchMax = 0.25f;
 
@@ -2242,7 +2242,7 @@ public class SvUnits{
                 mirror = true;
                 rotate = true;
                 rotateSpeed = 90f/60f;
-                shootSound = Sounds.blaster;
+                shootSound = Sounds.shootCleroi;
                 soundPitchMin = 0.5f;
                 soundPitchMax = 0.55f;
 
@@ -2635,7 +2635,7 @@ public class SvUnits{
                     fragLifeMin = 1;
                     fragBullets = 1;
 
-                    shootSound = Sounds.shootAlt;
+                    shootSound = Sounds.shootLocus;
 
                     fragBullet = new BombBulletType(damageMain,20f) {{
                         width = 12f;
@@ -2663,7 +2663,7 @@ public class SvUnits{
 
                         keepVelocity = false;
 
-                        shootSound = Sounds.laser;
+                        shootSound = Sounds.shootLaser;
 
                         hitColor = backColor = trailColor = Pal.sap.cpy().a(0.7f);
                         frontColor = SvPal.spaclanium.cpy().a(0.7f);
@@ -2906,7 +2906,7 @@ public class SvUnits{
                         backColor = trailColor = hitColor = SvPal.phosphide;
                         frontColor = Color.white;
 
-                        hitSound = Sounds.plasmaboom;
+                        hitSound = Sounds.explosionPlasmaSmall;
 
                         shootCone = 180f;
                         ejectEffect = Fx.none;

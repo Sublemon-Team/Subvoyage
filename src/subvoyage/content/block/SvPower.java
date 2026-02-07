@@ -68,7 +68,7 @@ public class SvPower {
             powerProduction = 5.2f;
             envDisabled |= Env.scorching;
 
-            ambientSound = Sounds.extractLoop;
+            ambientSound = Sounds.loopExtract;
             ambientSoundVolume = 0.03f;
 
             size = 2;
@@ -94,7 +94,7 @@ public class SvPower {
 
             size = 2;
 
-            ambientSound = Sounds.glow;
+            ambientSound = Sounds.loopGlow;
             ambientSoundVolume = 0.05f;
 
             drawer = new DrawMulti(

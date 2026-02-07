@@ -34,7 +34,7 @@ public class OffloadDemolisherAI extends FlyingAI {
                 for (WeaponMount mount : unit.mounts) {
                     if(mount.warmup >= (mount.weapon.minWarmup-0.1f) && target instanceof OffloadCore.OffloadCoreBuilding of) {
                         if(of.tryBreakLayer()) {
-                            Sounds.pulseBlast.at(unit.x,unit.y);
+                            Sounds.shootPulsar.at(unit.x,unit.y);
                             new MultiEffect(Fx.drillSteam, SvFx.decoderWave).create(unit.x, unit.y, 0, Pal.accent, 8f * tilesize);
                             SvFx.point.create(unit.x,unit.y,0,Pal.redLight,new Object());
                             SvFx.point.create(of.x,of.y,0,Pal.redLight,new Object());

@@ -45,8 +45,6 @@ public class PayloadLaunchPad extends PayloadBlock {
 
     public Effect shootEffect = Fx.shootBig2;
     public Effect smokeEffect = Fx.shootPayloadDriver;
-    public Effect receiveEffect = Fx.payloadReceive;
-    public Sound shootSound = Sounds.shootBig;
 
     public float shake = 3f;
 
@@ -233,7 +231,7 @@ public class PayloadLaunchPad extends PayloadBlock {
                             cachePayload = pay;
                             payload = null;
                             //spawn rocket launching at this
-                            Sounds.release.at(x,y,0.5f,0.05f);
+                            Sounds.shootMissileShort.at(x,y,0.5f,0.05f);
                             Fx.launchPod.create(x,y,0,Pal.accent,new Object());
                             SvFx.payloadLaunchPadRocketLaunch.create(x,y,0,Pal.accent,new Object());
 
@@ -252,7 +250,7 @@ public class PayloadLaunchPad extends PayloadBlock {
                                 other.lastOther = this;
                                 other.loaded = true;
                                 other.updatePayload();
-                                Sounds.missileLaunch.at(x,y,0.5f,0.05f);
+                                Sounds.shootMissileLarge.at(x,y,0.5f,0.05f);
 
                                 this.inProgress = false;
 

@@ -66,14 +66,27 @@ public class AtlacianPlanetGenerator extends PlanetGenerator {
         return Math.min(Mathf.pow(rawHeight(position),heightPow) * heightVal + 0.1f,1.2f);
     }
 
+
     @Override
-    public Color getColor(Vec3 position) {
+    public void getColor(Vec3 position, Color out) {
         Block block = getVisualBlock(position);
-        if(block == legartyteStone) return SvPal.legartyte.value(0.2f).saturation(0.5f);
-        if(block == agaryteStone) return SvPal.agaryte.cpy().value(0.2f);
-        if(block == archalyteStone) return SvPal.corallite.cpy().value(0.3f);
-        if(block == sodilateStone) Tmp.c1.set(block.mapColor).a(1f - block.albedo).value(0.5f);
-        return Tmp.c1.set(block.mapColor).a(1f - block.albedo);
+        if(block == legartyteStone) {
+            out.set(SvPal.legartyte.value(0.2f).saturation(0.5f));
+            return;
+        }
+        if(block == agaryteStone) {
+            out.set(SvPal.agaryte.cpy().value(0.2f));
+            return;
+        }
+        if(block == archalyteStone) {
+            out.set(SvPal.corallite.cpy().value(0.3f));
+            return;
+        }
+        if(block == sodilateStone) {
+            out.set(block.mapColor).a(1f - block.albedo).value(0.5f);
+            return;
+        }
+        out.set(block.mapColor).a(1f - block.albedo);
     }
 
     @Override

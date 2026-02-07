@@ -50,7 +50,7 @@ public class AtlacianCore extends CoreBlock {
         if(mobile) buildType = AtlacianCoreMobileBuild::new;
         else buildType = AtlacianCoreBuild::new;
 
-        landMusic = launchMusic = SvMusic.atlLand;
+        landMusic = SvMusic.atlLand;
     }
 
     public class AtlacianCoreBuild extends CoreBuild {
@@ -225,11 +225,6 @@ public class AtlacianCore extends CoreBlock {
             Core.camera.position.set(this);
             float fin = Interp.pow3.apply(renderer.getLandTimeIn()+0.2f);
             return Scl.scl(4f+2f*(1-fin));
-        }
-
-        @Override
-        public Music launchMusic() {
-            return SvMusic.atlLand;
         }
 
         @Override
@@ -415,11 +410,6 @@ public class AtlacianCore extends CoreBlock {
             Core.camera.position.set(this);
             float fin = Interp.pow3.apply(renderer.getLandTimeIn()+0.2f);
             return Scl.scl(4f+2f*(1-fin));
-        }
-
-        @Override
-        public Music launchMusic() {
-            return SvMusic.atlLand;
         }
 
         @Override

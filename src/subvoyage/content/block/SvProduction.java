@@ -111,7 +111,7 @@ public class SvProduction {
             outputItem = new ItemStack(crude, 3);
             hasPower = true;
             hasLiquids = false;
-            ambientSound = Sounds.drill;
+            ambientSound = Sounds.loopDrill;
             ambientSoundVolume = 0.15f;
 
             consumeLiquid(hydrogen,4f/60f).boost();
