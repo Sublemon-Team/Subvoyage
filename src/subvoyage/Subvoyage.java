@@ -3,6 +3,7 @@ package subvoyage;
 import arc.*;
 import arc.graphics.Color;
 import arc.graphics.Colors;
+import arc.graphics.Texture;
 import arc.util.*;
 import mindustry.Vars;
 import mindustry.async.AsyncProcess;
@@ -29,6 +30,7 @@ import subvoyage.type.unit.entity.HelicopterUnitEntity;
 
 import static arc.Core.*;
 import static mindustry.Vars.mods;
+import static mindustry.Vars.tree;
 
 public class Subvoyage extends Mod {
     public static String ID = "subvoyage";
@@ -36,6 +38,7 @@ public class Subvoyage extends Mod {
     public static UpdateManager.VersionControl versionControl = new UpdateManager.VersionControl();
     public static String currentTag;
     public static String GITHUB_REPO = "Sublemon-Team/Subvoyage";
+    public static Texture auroraTexture;
 
     public Subvoyage(){
         Events.run(Trigger.update, SvLogic::update);
@@ -76,6 +79,8 @@ public class Subvoyage extends Mod {
         SvRender.initEnv();
 
         SvTechTree.load();
+
+        auroraTexture = new Texture(tree.get("sprites-raw/aurora.png"));
     }
 
 }

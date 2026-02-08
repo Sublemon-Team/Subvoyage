@@ -45,10 +45,10 @@ public class SvPlanets{
             );
 
             atmosphereMesh = () -> new MultiMesh(
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), 1.9f/0.6f, 0.2f, -3f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), 1.2f/0.6f, 1f, 1f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (160/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), -1.9f/0.6f, 0.2f, -5f, ringPos),
-                    new AuroraMesh(atlas.find("subvoyage-aurora"), this, (int) (120/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), -1.2f/0.6f, 1f, 3f, ringPos)
+                    new AuroraMesh(this, (int) (160/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), 1.9f/0.6f, 0.2f, -3f, ringPos),
+                    new AuroraMesh(this, (int) (120/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), 1.2f/0.6f, 1f, 1f, ringPos),
+                    new AuroraMesh(this, (int) (160/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), -1.9f/0.6f, 0.2f, -5f, ringPos),
+                    new AuroraMesh(this, (int) (120/0.2f*((Mathf.clamp(SvSettings.iDef("planet-divisions",6),5,8) -5)/3f*0.8f+0.2f)), -1.2f/0.6f, 1f, 3f, ringPos)
             );
 
             cloudMeshLoader = () -> new MultiMesh(

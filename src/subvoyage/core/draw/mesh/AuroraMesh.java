@@ -9,17 +9,16 @@ import arc.math.geom.*;
 import arc.util.*;
 import mindustry.graphics.g3d.*;
 import mindustry.type.*;
+import subvoyage.Subvoyage;
 import subvoyage.core.draw.shader.SvShaders;
 
 public class AuroraMesh extends PlanetMesh{
     public final Mesh mesh;
-    public TextureRegion region;
     public Texture texture;
     public Color color = Color.white.cpy();
     float speed;
-    public AuroraMesh(TextureRegion region, Planet planet, int sides, float radiusIn, float off, float speed, Vec3 axis){
+    public AuroraMesh(Planet planet, int sides, float radiusIn, float off, float speed, Vec3 axis){
         this.planet = planet;
-        this.region = region;
 
         MeshUtils.begin(sides * 6/*points amount*/ * (3/*pos*/ + 3/*normal*/ + 2/*texCords*/) * 2/*top and bottom normal*/);
 
@@ -114,6 +113,8 @@ public class AuroraMesh extends PlanetMesh{
         preRender(params);
         if(texture == null){
             //todo fix
+
+            texture = Subvoyage.auroraTexture;
             //texture = new Texture(Core.atlas.getPixmap(region).crop());
             return;
         }
