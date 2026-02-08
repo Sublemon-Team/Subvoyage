@@ -113,7 +113,9 @@ public class AuroraMesh extends PlanetMesh{
 
         preRender(params);
         if(texture == null){
-            texture = new Texture(Core.atlas.getPixmap(region).crop());
+            //todo fix
+            //texture = new Texture(Core.atlas.getPixmap(region).crop());
+            return;
         }
         texture.setWrap(Texture.TextureWrap.repeat);
 

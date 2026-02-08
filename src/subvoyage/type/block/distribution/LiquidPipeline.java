@@ -14,14 +14,16 @@ public class LiquidPipeline extends ItemPipeline {
         canOverdrive = false;
         group = BlockGroup.liquids;
         envEnabled = Env.any;
+
+        transportTime = 2f;
     }
 
     public class LiquidPipelineBuild extends ItemPipelineBuild {
         @Override
         public void updateTransport(Building other){
             super.updateTransport(other);
-            if(warmup >= 0.25f){
-                moved |= moveLiquid(other, liquids.current()) > 0.05f;
+            if(liquids.currentAmount() > 0.01f){
+                dumpLiquid(liquids.current());
             }
         }
 

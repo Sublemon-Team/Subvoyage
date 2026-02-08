@@ -37,7 +37,9 @@ import subvoyage.core.draw.SvRender;
 
 import java.util.Objects;
 
+import static mindustry.Vars.tilesize;
 import static mindustry.Vars.world;
+import static subvoyage.type.block.production.Sifter.drawErrorInfo;
 
 public class CoralliteGrinder extends GenericCrafter {
     public int maxLiquidTiles = 3;
@@ -155,6 +157,7 @@ public class CoralliteGrinder extends GenericCrafter {
                 .each(e -> {
                     Draw.rect(Icon.cancel.getRegion(), e.x, e.y);
                 });
+            Draw.color();
             Draw.color();
         }
 
