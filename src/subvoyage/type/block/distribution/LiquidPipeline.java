@@ -22,8 +22,8 @@ public class LiquidPipeline extends ItemPipeline {
         @Override
         public void updateTransport(Building other){
             super.updateTransport(other);
-            if(liquids.currentAmount() > 0.01f){
-                dumpLiquid(liquids.current());
+            if(warmup >= 0.25f){
+                moved |= moveLiquid(other, liquids.current()) > 0.05f;
             }
         }
 

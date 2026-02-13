@@ -56,8 +56,18 @@ public class SvSectorPresets {
             };
         }};
 
-        // narrows - 214
+        narrows = new SvSectorPreset("narrows", atlacian, 214, state -> {
 
-        all.addAll(thaw,construction,segment);
+        }) {{
+            captureWave = 0;
+
+            difficulty = 3;
+
+            rules = (r) -> {
+                r.attackMode = true;
+            };
+        }};
+
+        all.addAll(thaw,construction,segment,narrows);
     }
 }

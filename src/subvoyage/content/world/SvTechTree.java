@@ -300,7 +300,9 @@ public class SvTechTree {
             node(thaw,() -> {
                 node(construction,with(sector(thaw)), () -> {
                     node(segment,with(sector(construction),research(argonCentrifuge)), () -> {
+                        node(narrows, with(sector(segment)), () -> {
 
+                        });
                     });
                 });
             });
